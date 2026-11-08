@@ -119,7 +119,7 @@ export const INITIAL_ASSETS: MarketAsset[] = [
     changeValue: 890.00,
     high24h: 133100.00,
     low24h: 131800.00,
-    volume: 'R$ 29.8B',
+    volume: '29.8B pts',
     sparkline: [131500, 131800, 132100, 132300, 132450],
     flag: '🇧🇷',
   },
