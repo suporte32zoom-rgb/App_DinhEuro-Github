@@ -20,13 +20,23 @@ const STATIC_PRECACHE_URLS = [
   '/pwa-512x512.png',
 ];
 
-// Instalação do Service Worker e pré-cache de assets essenciais
+// Instalação do Service Worker e pré-cache defensivo de assets essenciais
 self.addEventListener('install', (event) => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => {
-      return cache.addAll(STATIC_PRECACHE_URLS).catch((err) => {
-        console.warn('[DinhEuro SW] Falha ao pré-cachear alguns itens:', err);
-      });
+    caches.open(CACHE_NAME).then(async (cache) => {
+      // Usa Promise.allSettled para que uma falha isolada de asset não interrompa a ativação do SW
+      await Promise.allSettled(
+        STATIC_PRECACHE_URLS.map(async (url) => {
+          try {
+            const res = await fetch(url);
+            if (res && res.status === 200) {
+              await cache.put(url, res);
+            }
+          } catch {
+            // ignore
+          }
+        })
+      );
     }).then(() => {
       // Ativa imediatamente o novo service worker sem esperar fechamento das abas
       return self.skipWaiting();
@@ -125,12 +135,12 @@ self.addEventListener('fetch', (event) => {
   }
 
   // 3. Assets Estáticos (JS, CSS, Imagens, Fontes):
-  // Estratégia Stale-While-Revalidate para velocidade máxima
+  // Estratégia Stale-While-Revalidate segura contra respostas undefined
   event.respondWith(
     caches.match(req).then((cachedResponse) => {
-      const fetchPromise = fetch(req)
+      const networkFetch = fetch(req)
         .then((networkResponse) => {
-          if (networkResponse && networkResponse.status === 200 && networkResponse.type === 'basic') {
+          if (networkResponse && networkResponse.status === 200) {
             const responseToCache = networkResponse.clone();
             caches.open(CACHE_NAME).then((cache) => {
               cache.put(req, responseToCache);
@@ -138,9 +148,12 @@ self.addEventListener('fetch', (event) => {
           }
           return networkResponse;
         })
-        .catch(() => cachedResponse);
+        .catch(() => {
+          if (cachedResponse) return cachedResponse;
+          return new Response('', { status: 408, statusText: 'Network Timeout' });
+        });
 
-      return cachedResponse || fetchPromise;
+      return cachedResponse || networkFetch;
     })
   );
 });

@@ -16,7 +16,11 @@ export const CookiePolicyView: React.FC = () => {
   const { setActiveTab } = useMarket();
 
   const handleResetCookieConsent = () => {
-    localStorage.removeItem('dinheuro_lgpd_accepted');
+    try {
+      localStorage.removeItem('dinheuro_lgpd_accepted');
+    } catch {
+      // ignore
+    }
     window.dispatchEvent(new Event('dinheuro_reopen_cookie_banner'));
   };
 

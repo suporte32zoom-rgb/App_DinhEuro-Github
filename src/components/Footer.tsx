@@ -22,7 +22,11 @@ export const Footer: React.FC = () => {
 
   const handleReopenCookieBanner = (e: React.MouseEvent) => {
     e.preventDefault();
-    localStorage.removeItem('dinheuro_lgpd_accepted');
+    try {
+      localStorage.removeItem('dinheuro_lgpd_accepted');
+    } catch {
+      // ignore
+    }
     window.dispatchEvent(new Event('dinheuro_reopen_cookie_banner'));
   };
 

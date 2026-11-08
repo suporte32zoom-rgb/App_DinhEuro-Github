@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { MarketProvider, useMarket } from './context/MarketContext';
 import { Header } from './components/Header';
 import { TickerTape } from './components/TickerTape';
@@ -44,22 +44,24 @@ const MainContent: React.FC = () => {
           : 'max-w-7xl mx-auto px-3 sm:px-6 pt-5 sm:pt-6 flex-1 w-full'
       }`}
     >
-      {activeTab === 'dashboard' && <DashboardView />}
-      {activeTab === 'mercados' && <MarketsView />}
-      {activeTab === 'carteiras' && <PortfolioView />}
-      {activeTab === 'daytrade' && <DayTradeView />}
-      {activeTab === 'tape_reading' && <TapeReadingView />}
-      {activeTab === 'renda_fixa' && <FixedIncomeDerivativesView />}
-      {activeTab === 'noticias' && <NewsView />}
-      {activeTab === 'corretoras' && <BrokersView />}
-      {activeTab === 'graficos' && <AdvancedChartsView />}
-      {activeTab === 'ferramentas' && <ToolsView />}
-      {activeTab === 'academy' && <AcademyView />}
-      {activeTab === 'sobre' && <AboutView />}
-      {activeTab === 'termos' && <TermsOfUseView />}
-      {activeTab === 'privacidade' && <PrivacyPolicyView />}
-      {activeTab === 'cookies' && <CookiePolicyView />}
-      {activeTab === 'disclaimer' && <DisclaimerView />}
+      <ErrorBoundary>
+        {activeTab === 'dashboard' && <DashboardView />}
+        {activeTab === 'mercados' && <MarketsView />}
+        {activeTab === 'carteiras' && <PortfolioView />}
+        {activeTab === 'daytrade' && <DayTradeView />}
+        {activeTab === 'tape_reading' && <TapeReadingView />}
+        {activeTab === 'renda_fixa' && <FixedIncomeDerivativesView />}
+        {activeTab === 'noticias' && <NewsView />}
+        {activeTab === 'corretoras' && <BrokersView />}
+        {activeTab === 'graficos' && <AdvancedChartsView />}
+        {activeTab === 'ferramentas' && <ToolsView />}
+        {activeTab === 'academy' && <AcademyView />}
+        {activeTab === 'sobre' && <AboutView />}
+        {activeTab === 'termos' && <TermsOfUseView />}
+        {activeTab === 'privacidade' && <PrivacyPolicyView />}
+        {activeTab === 'cookies' && <CookiePolicyView />}
+        {activeTab === 'disclaimer' && <DisclaimerView />}
+      </ErrorBoundary>
     </main>
   );
 };
@@ -67,6 +69,21 @@ const MainContent: React.FC = () => {
 const AppShell: React.FC = () => {
   const { theme, activeTab } = useMarket();
   const isTerminalMode = activeTab === 'daytrade' || activeTab === 'tape_reading';
+
+  // Quando o React montar a interface no DOM com sucesso, dissolve o splash screen suavemente
+  useEffect(() => {
+    const splash = document.getElementById('dinheuro-splash');
+    if (splash) {
+      splash.style.transition = 'opacity 0.3s ease-out';
+      splash.style.opacity = '0';
+      const timer = setTimeout(() => {
+        if (splash && splash.parentElement) {
+          splash.parentElement.removeChild(splash);
+        }
+      }, 300);
+      return () => clearTimeout(timer);
+    }
+  }, []);
 
   return (
     <div
@@ -77,27 +94,35 @@ const AppShell: React.FC = () => {
       }`}
     >
       {/* Real-time Top Marquee Ribbon (Hidden in Day Trade Pro to use its integrated continuous ticker bar) */}
-      {activeTab !== 'daytrade' && <TickerTape />}
-
-      {/* Global Responsive Navigation Header (Hidden in Day Trade Pro to faithfully replicate the full-screen terminal header) */}
-      {activeTab !== 'daytrade' && <Header />}
-
-      {/* Dynamic Route View */}
       <ErrorBoundary>
-        <MainContent />
+        {activeTab !== 'daytrade' && <TickerTape />}
       </ErrorBoundary>
 
+      {/* Global Responsive Navigation Header (Hidden in Day Trade Pro to faithfully replicate the full-screen terminal header) */}
+      <ErrorBoundary>
+        {activeTab !== 'daytrade' && <Header />}
+      </ErrorBoundary>
+
+      {/* Dynamic Route View */}
+      <MainContent />
+
       {/* Interactive Asset Detail & Candlestick Modal */}
-      <AssetDetailModal />
+      <ErrorBoundary>
+        <AssetDetailModal />
+      </ErrorBoundary>
 
       {/* PWA Offline Mode Indicator */}
       <OfflineIndicator />
 
       {/* Institutional Footer (Hidden in Terminal Pro mode to eliminate vertical scroll) */}
-      {!isTerminalMode && <Footer />}
+      <ErrorBoundary>
+        {!isTerminalMode && <Footer />}
+      </ErrorBoundary>
 
       {/* LGPD & Cookie Consent Persistent Banner */}
-      <LgpdConsentBanner />
+      <ErrorBoundary>
+        <LgpdConsentBanner />
+      </ErrorBoundary>
     </div>
   );
 };

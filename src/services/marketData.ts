@@ -1787,15 +1787,23 @@ const FINNHUB_KEY_STORAGE = 'dinheuro_finnhub_key';
 
 export function getStoredFinnhubKey(): string {
   if (typeof window === 'undefined') return '';
-  return localStorage.getItem(FINNHUB_KEY_STORAGE) || '';
+  try {
+    return localStorage.getItem(FINNHUB_KEY_STORAGE) || '';
+  } catch {
+    return '';
+  }
 }
 
 export function setStoredFinnhubKey(key: string): void {
   if (typeof window === 'undefined') return;
-  if (key) {
-    localStorage.setItem(FINNHUB_KEY_STORAGE, key.trim());
-  } else {
-    localStorage.removeItem(FINNHUB_KEY_STORAGE);
+  try {
+    if (key) {
+      localStorage.setItem(FINNHUB_KEY_STORAGE, key.trim());
+    } else {
+      localStorage.removeItem(FINNHUB_KEY_STORAGE);
+    }
+  } catch {
+    // ignore
   }
 }
 
@@ -2176,7 +2184,12 @@ export async function obterCotacaoFinnhub(
   if (!token) return null;
 
   try {
-    const response = await fetch(`https://finnhub.io/api/v1/quote?symbol=${encodeURIComponent(symbol)}&token=${token}`);
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 3000);
+    const response = await fetch(`https://finnhub.io/api/v1/quote?symbol=${encodeURIComponent(symbol)}&token=${token}`, {
+      signal: controller.signal,
+    });
+    clearTimeout(timeoutId);
     if (!response.ok) return null;
 
     const data = await response.json();
@@ -2192,8 +2205,7 @@ export async function obterCotacaoFinnhub(
       abertura: data.o,
       fechamentoAnterior: data.pc,
     };
-  } catch (error) {
-    console.error(`Erro ao buscar cotação Finnhub para ${symbol}:`, error);
+  } catch {
     return null;
   }
 }

@@ -10,13 +10,16 @@ export const LgpdConsentBanner: React.FC = () => {
 
   useEffect(() => {
     // Check initial acceptance
-    const accepted = localStorage.getItem(LGPD_STORAGE_KEY);
-    if (!accepted) {
-      // Delay slightly for smooth entrance
-      const timer = setTimeout(() => {
-        setIsVisible(true);
-      }, 600);
-      return () => clearTimeout(timer);
+    try {
+      const accepted = localStorage.getItem(LGPD_STORAGE_KEY);
+      if (!accepted) {
+        const timer = setTimeout(() => {
+          setIsVisible(true);
+        }, 600);
+        return () => clearTimeout(timer);
+      }
+    } catch {
+      // ignore
     }
   }, []);
 
