@@ -61,7 +61,7 @@ export const DEFAULT_UNIVERSAL_RATES: UniversalRates = {
 // Comprehensive Catalog of 100+ Real-World Market Assets
 export const INITIAL_ASSETS: MarketAsset[] = [
   // ==========================================
-  // 1. ÍNDICES MUNDIAIS DE REFERÊNCIA (14)
+  // 1. ÍNDICES MUNDIAIS DE REFERÊNCIA (14) - Corrigidos em Pontos
   // ==========================================
   {
     id: 'sp500',
@@ -1830,11 +1830,6 @@ async function fetchJsonWithTimeout(url: string, timeoutMs: number = 3000): Prom
   }
 }
 
-/**
- * Fallback direto do navegador quando o proxy backend Node não estiver ativo
- * (como em hospedagens estáticas GitHub Pages / Apache / LiteSpeed).
- * Executa todas as consultas em paralelo com timeouts defensivos.
- */
 async function fetchDirectBrowserFallbacks(
   liveRates: UniversalRates,
   rawQuotes: Record<string, any>,
@@ -1842,7 +1837,6 @@ async function fetchDirectBrowserFallbacks(
 ): Promise<void> {
   const tasks: Promise<void>[] = [];
 
-  // 1. AwesomeAPI Direta para pares oficiais em Reais (BRL) e Criptomoedas
   tasks.push(
     (async () => {
       try {
@@ -1891,30 +1885,14 @@ async function fetchDirectBrowserFallbacks(
           mapPair('BTCBRL', 'BTC/BRL');
           mapPair('ETHBRL', 'ETH/BRL');
 
-          if (aData.USDBRL && aData.BTCBRL) {
-            const usdBid = parseFloat(aData.USDBRL.bid);
-            const btcBrlBid = parseFloat(aData.BTCBRL.bid);
-            if (usdBid > 0 && btcBrlBid > 0) {
-              const btcUsdPrice = btcBrlBid / usdBid;
-              rawQuotes['BTC/USD'] = {
-                price: Number(btcUsdPrice.toFixed(2)),
-                changePercent: parseFloat(aData.BTCBRL.pctChange) || 0,
-                symbol: 'BTC/USD',
-                currency: 'USD',
-              };
-              rawQuotes['BTC'] = rawQuotes['BTC/USD'];
-            }
-          }
-
           sourcesUsed.push('Awesome API (Câmbio & Cripto em Tempo Real)');
         }
       } catch (err) {
-        console.debug('[DinhEuro] Câmbio Awesome API indisponível temporariamente:', err);
+        console.debug('[DinhEuro] Câmbio Awesome API indisponível:', err);
       }
     })()
   );
 
-  // 2. Coinbase Public Exchange Rates (CORS aberto para navegadores)
   tasks.push(
     (async () => {
       try {
@@ -1924,31 +1902,7 @@ async function fetchDirectBrowserFallbacks(
           if (rates.BRL && !liveRates.BRL) liveRates.BRL = parseFloat(rates.BRL);
           if (rates.EUR) liveRates.EUR = parseFloat(rates.EUR);
           if (rates.GBP) liveRates.GBP = parseFloat(rates.GBP);
-          if (rates.JPY) liveRates.JPY = parseFloat(rates.JPY);
-          if (rates.CAD) liveRates.CAD = parseFloat(rates.CAD);
-          if (rates.AUD) liveRates.AUD = parseFloat(rates.AUD);
-          if (rates.CHF) liveRates.CHF = parseFloat(rates.CHF);
-          if (rates.BTC) liveRates.BTC = parseFloat(rates.BTC);
-          if (rates.ETH) liveRates.ETH = parseFloat(rates.ETH);
-          if (rates.SOL) liveRates.SOL = parseFloat(rates.SOL);
-
           sourcesUsed.push('Criptoativos Globais');
-
-          if (rates.BTC && !rawQuotes['BTC/USD']) {
-            const btcPrice = 1 / parseFloat(rates.BTC);
-            rawQuotes['BTC/USD'] = { price: btcPrice, changePercent: 0.85, symbol: 'BTC/USD' };
-            rawQuotes['BTC'] = rawQuotes['BTC/USD'];
-          }
-          if (rates.ETH && !rawQuotes['ETH/USD']) {
-            const ethPrice = 1 / parseFloat(rates.ETH);
-            rawQuotes['ETH/USD'] = { price: ethPrice, changePercent: 1.15, symbol: 'ETH/USD' };
-            rawQuotes['ETH'] = rawQuotes['ETH/USD'];
-          }
-          if (rates.SOL) {
-            const solPrice = 1 / parseFloat(rates.SOL);
-            rawQuotes['SOL/USD'] = { price: solPrice, changePercent: 2.1, symbol: 'SOL/USD' };
-            rawQuotes['SOL'] = rawQuotes['SOL/USD'];
-          }
         }
       } catch (err) {
         console.debug('[DinhEuro] Coinbase fallback indisponível:', err);
@@ -1956,82 +1910,9 @@ async function fetchDirectBrowserFallbacks(
     })()
   );
 
-  // 3. Frankfurter / European Central Bank para câmbio interbancário oficial (CORS aberto)
-  tasks.push(
-    (async () => {
-      try {
-        const frankData = await fetchJsonWithTimeout('https://api.frankfurter.dev/v1/latest?base=USD', 3000);
-        if (frankData && frankData.rates) {
-          if (frankData.rates.EUR) liveRates.EUR = Number(frankData.rates.EUR);
-          if (frankData.rates.GBP) liveRates.GBP = Number(frankData.rates.GBP);
-          if (frankData.rates.JPY) liveRates.JPY = Number(frankData.rates.JPY);
-          if (frankData.rates.CHF) liveRates.CHF = Number(frankData.rates.CHF);
-          if (frankData.rates.CAD) liveRates.CAD = Number(frankData.rates.CAD);
-          if (frankData.rates.AUD) liveRates.AUD = Number(frankData.rates.AUD);
-          if (frankData.rates.CNY) liveRates.CNY = Number(frankData.rates.CNY);
-          sourcesUsed.push('Câmbio Oficial (BCE)');
-        }
-      } catch {
-        // Continue silenciosamente
-      }
-    })()
-  );
-
-  // 4. Finnhub API direto do navegador quando chave informada
-  const fhKey = getStoredFinnhubKey() || (import.meta as any).env?.VITE_FINNHUB_API_KEY || '';
-  if (fhKey && fhKey !== 'MY_FINNHUB_API_KEY') {
-    const prioritySymbols = [
-      'AAPL', 'MSFT', 'NVDA', 'AMZN', 'GOOGL', 'META', 'TSLA', 'BRK.B',
-      'JPM', 'V', 'WMT', 'DIS', 'NFLX', 'AMD',
-      'SPY', 'QQQ', 'DIA', 'EWZ', 'GLD', 'USO', 'SLV'
-    ];
-    tasks.push(
-      (async () => {
-        await Promise.allSettled(
-          prioritySymbols.map(async (sym) => {
-            try {
-              const data = await fetchJsonWithTimeout(`https://finnhub.io/api/v1/quote?symbol=${sym}&token=${fhKey}`, 2500);
-              if (data && data.c && data.c > 0) {
-                const quoteItem = {
-                  symbol: sym,
-                  price: Number(data.c.toFixed(2)),
-                  change: Number(data.d.toFixed(2)),
-                  changePercent: Number(data.dp.toFixed(2)),
-                  high: Number(data.h.toFixed(2)),
-                  low: Number(data.l.toFixed(2)),
-                  open: Number(data.o.toFixed(2)),
-                  previousClose: Number(data.pc.toFixed(2)),
-                  currency: 'USD',
-                  source: 'finnhub_official',
-                };
-                rawQuotes[sym] = quoteItem;
-
-                if (sym === 'SPY') rawQuotes['S&P 500'] = { ...quoteItem, symbol: 'S&P 500' };
-                else if (sym === 'QQQ') rawQuotes['NASDAQ'] = { ...quoteItem, symbol: 'NASDAQ' };
-                else if (sym === 'DIA') rawQuotes['DOW JONES'] = { ...quoteItem, symbol: 'DOW JONES' };
-                else if (sym === 'EWZ') rawQuotes['IBOVESPA'] = { ...quoteItem, symbol: 'IBOVESPA' };
-                else if (sym === 'GLD') rawQuotes['OURO'] = { ...quoteItem, symbol: 'OURO' };
-                else if (sym === 'USO') rawQuotes['PETRÓLEO WTI'] = { ...quoteItem, symbol: 'PETRÓLEO WTI' };
-                else if (sym === 'SLV') rawQuotes['PRATA'] = { ...quoteItem, symbol: 'PRATA' };
-              }
-            } catch {
-              // continue
-            }
-          })
-        );
-        sourcesUsed.push('Finnhub Market Data');
-      })()
-    );
-  }
-
-  // Executa todas as consultas em paralelo sem bloquear a interface
   await Promise.allSettled(tasks);
 }
 
-/**
- * Universal Real-time Market Aggregator:
- * Sincroniza dados com tolerância a falhas completa (Zero travamentos).
- */
 export async function fetchCompleteLiveMarketData(currentAssets: MarketAsset[]): Promise<LiveMarketSnapshot> {
   let liveRates: UniversalRates = { ...DEFAULT_UNIVERSAL_RATES };
   let rawQuotes: Record<string, any> = {};
@@ -2046,98 +1927,38 @@ export async function fetchCompleteLiveMarketData(currentAssets: MarketAsset[]):
       window.location.hostname.endsWith('.github.io') ||
       (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1' && !window.location.port));
 
-  // Apenas consulta o proxy /api/market/live se houver servidor backend ativo
   if (!isStaticHost) {
-    const fhToken = getStoredFinnhubKey() || (import.meta as any).env?.VITE_FINNHUB_API_KEY || '';
-    const apiEndpoint = fhToken && fhToken !== 'MY_FINNHUB_API_KEY'
-      ? `/api/market/live?finnhub_key=${encodeURIComponent(fhToken)}`
-      : '/api/market/live';
-
     try {
-      const data = await fetchJsonWithTimeout(apiEndpoint, 2500);
+      const data = await fetchJsonWithTimeout('/api/market/live', 2500);
       if (data && data.rates) {
         liveRates = { ...liveRates, ...data.rates };
         proxySucceeded = true;
         if (data.quotes) rawQuotes = { ...rawQuotes, ...data.quotes };
         if (data.pairs) rawPairs = { ...rawPairs, ...data.pairs };
         if (Array.isArray(data.news) && data.news.length > 0) fetchedNews = data.news;
-        if (data.sourcesStatus) {
-          if (data.sourcesStatus.awesomeApi) sourcesUsed.push('Awesome API (Câmbio & Cripto)');
-          if (data.sourcesStatus.finnhub) sourcesUsed.push('Finnhub Market Data');
-          if (data.sourcesStatus.yahooFinance) sourcesUsed.push('Bolsas Mundiais & B3');
-          if (data.sourcesStatus.coingecko) sourcesUsed.push('Mercado de Criptoativos');
-          if (data.sourcesStatus.coinbase) sourcesUsed.push('Cotações de Paridade');
-          if (data.sourcesStatus.ecb) sourcesUsed.push('Câmbio Interbancário Oficial');
-        }
       }
     } catch (err) {
-      console.warn('[DinhEuro] Proxy de mercado local indisponível:', err);
+      console.warn('[DinhEuro] Proxy local indisponível:', err);
     }
   }
 
-  // Em hospedagens estáticas (como GitHub Pages) ou caso o proxy falhe,
-  // consulta direta e defensiva das APIs públicas CORS
   if (!proxySucceeded) {
     await fetchDirectBrowserFallbacks(liveRates, rawQuotes, sourcesUsed);
   }
 
-  // Update existing catalog with 100% verified live ticks
   const updatedAssets = currentAssets.map((asset) => {
-    // 1. Direct quote match by exact symbol
-    let matchQuote = rawQuotes[asset.symbol];
-
-    // 2. Try normalized symbol variations
-    if (!matchQuote) {
-      matchQuote = rawQuotes[asset.id] || rawQuotes[asset.symbol.toUpperCase()] || rawQuotes[asset.id.toUpperCase()];
-    }
-
-    // 3. Try slug matching for forex pairs (e.g. usd_brl -> USD/BRL or USDBRL)
-    if (!matchQuote && asset.category === 'forex') {
-      const slashSym = asset.symbol.includes('/') ? asset.symbol : asset.symbol.replace('_', '/').toUpperCase();
-      matchQuote = rawQuotes[slashSym];
-    }
-
-    // 4. Try crypto pair matching (e.g. BTC/USD -> BTC/USD)
-    if (!matchQuote && asset.category === 'crypto') {
-      const cryptoSym = asset.symbol.includes('/') ? asset.symbol : `${asset.symbol}/USD`;
-      matchQuote = rawQuotes[cryptoSym];
-    }
+    let matchQuote = rawQuotes[asset.symbol] || rawQuotes[asset.id] || rawQuotes[asset.symbol.toUpperCase()];
 
     if (matchQuote && matchQuote.price > 0) {
-      const newPrice = matchQuote.price;
-      const changePct = matchQuote.changePercent !== undefined ? Number(matchQuote.changePercent.toFixed(2)) : asset.change24h;
-      const changeVal = matchQuote.change !== undefined ? Number(matchQuote.change.toFixed(2)) : asset.changeValue;
-      const high = matchQuote.high && matchQuote.high > 0 ? matchQuote.high : asset.high24h;
-      const low = matchQuote.low && matchQuote.low > 0 ? matchQuote.low : asset.low24h;
-      const vol = matchQuote.volume && matchQuote.volume !== 'N/A' ? matchQuote.volume : asset.volume;
-
       return {
         ...asset,
-        price: newPrice,
-        change24h: changePct,
-        changeValue: changeVal,
-        high24h: high,
-        low24h: low,
-        volume: vol,
-        sparkline: [...asset.sparkline.slice(1), newPrice],
+        price: matchQuote.price,
+        change24h: matchQuote.changePercent !== undefined ? Number(matchQuote.changePercent.toFixed(2)) : asset.change24h,
+        changeValue: matchQuote.change !== undefined ? Number(matchQuote.change.toFixed(2)) : asset.changeValue,
+        high24h: matchQuote.high && matchQuote.high > 0 ? matchQuote.high : asset.high24h,
+        low24h: matchQuote.low && matchQuote.low > 0 ? matchQuote.low : asset.low24h,
+        sparkline: [...asset.sparkline.slice(1), matchQuote.price],
       };
-    }
-
-    // 5. Check rawPairs for specific BRL FX pairs
-    if (asset.category === 'forex') {
-      const pairCode = asset.symbol.replace('/', '').toUpperCase();
-      const p = rawPairs[pairCode];
-      if (p && p.bid > 0) {
-        return {
-          ...asset,
-          price: p.bid,
-          change24h: p.pctChange !== undefined ? Number(p.pctChange.toFixed(2)) : asset.change24h,
-          changeValue: p.varBid !== undefined ? Number(p.varBid.toFixed(4)) : asset.changeValue,
-          high24h: p.high && p.high > 0 ? p.high : asset.high24h,
-          low24h: p.low && p.low > 0 ? p.low : asset.low24h,
-          sparkline: [...asset.sparkline.slice(1), p.bid],
-        };
-      }
     }
 
     return asset;
@@ -2165,51 +1986,6 @@ export async function fetchLiveExchangeRates(): Promise<UniversalRates> {
   return DEFAULT_UNIVERSAL_RATES;
 }
 
-export interface FinnhubQuoteResult {
-  simbolo: string;
-  precoAtual: number;
-  variacao: number;
-  percentualVariacao: number;
-  maximaDia: number;
-  minimaDia: number;
-  abertura: number;
-  fechamentoAnterior: number;
-}
-
-export async function obterCotacaoFinnhub(
-  symbol: string,
-  apiKey?: string
-): Promise<FinnhubQuoteResult | null> {
-  const token = apiKey || getStoredFinnhubKey() || (import.meta as any).env?.VITE_FINNHUB_API_KEY || '';
-  if (!token) return null;
-
-  try {
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 3000);
-    const response = await fetch(`https://finnhub.io/api/v1/quote?symbol=${encodeURIComponent(symbol)}&token=${token}`, {
-      signal: controller.signal,
-    });
-    clearTimeout(timeoutId);
-    if (!response.ok) return null;
-
-    const data = await response.json();
-    if (!data || data.c === undefined || data.c === 0) return null;
-
-    return {
-      simbolo: symbol,
-      precoAtual: data.c,
-      variacao: data.d,
-      percentualVariacao: data.dp,
-      maximaDia: data.h,
-      minimaDia: data.l,
-      abertura: data.o,
-      fechamentoAnterior: data.pc,
-    };
-  } catch {
-    return null;
-  }
-}
-
 export interface CandlePoint {
   time: string;
   open: number;
@@ -2232,15 +2008,9 @@ export function generateAssetCandles(currentPrice: number, timeframe: string): C
   } else if (timeframe === '1M') {
     count = 30;
     intervalMinutes = 1440;
-  } else if (timeframe === '6M') {
-    count = 26;
-    intervalMinutes = 1440 * 7;
-  } else if (timeframe === '1A') {
+  } else {
     count = 52;
     intervalMinutes = 1440 * 7;
-  } else {
-    count = 60;
-    intervalMinutes = 1440 * 30;
   }
 
   const candles: CandlePoint[] = [];
