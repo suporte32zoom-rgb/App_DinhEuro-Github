@@ -8,14 +8,19 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
+  pages: write
+  id-token: write
 
 concurrency:
-  group: 'gh-pages'
+  group: "pages"
   cancel-in-progress: true
 
 jobs:
   build-and-deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
 
     steps:
@@ -36,12 +41,17 @@ jobs:
         run: |
           npm run build
         env:
+          FINNHUB_API_KEY: ${{ secrets.FINNHUB_API_KEY }}
           VITE_FINNHUB_API_KEY: ${{ secrets.VITE_FINNHUB_API_KEY || secrets.FINNHUB_API_KEY }}
-          FINNHUB_API_KEY: ${{ secrets.FINNHUB_API_KEY || secrets.VITE_FINNHUB_API_KEY }}
+          FINNHUB_WEBHOOK_SECRET: ${{ secrets.FINNHUB_WEBHOOK_SECRET }}
+          FMP_API_KEY: ${{ secrets.FMP_API_KEY }}
+          VITE_FMP_API_KEY: ${{ secrets.VITE_FMP_API_KEY || secrets.FMP_API_KEY }}
+          VITE_AWESOME_ECONOMY_URL: ${{ secrets.VITE_AWESOME_ECONOMY_URL }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          VITE_GEMINI_API_KEY: ${{ secrets.VITE_GEMINI_API_KEY || secrets.GEMINI_API_KEY }}
 
       - name: Prepare Static Artifacts for GitHub Pages
         run: |
-          # Garante o CNAME para o domínio customizado dinheuro.com
           if [ -f public/CNAME ]; then
             cp public/CNAME dist/CNAME
           elif [ -f CNAME ]; then
@@ -50,22 +60,23 @@ jobs:
             echo "dinheuro.com" > dist/CNAME
           fi
 
-          # Garante o arquivo .nojekyll para evitar filtragem de arquivos pelo Jekyll
           touch dist/.nojekyll
 
-          # Garante o arquivo 404.html para suportar roteamento SPA no GitHub Pages
           if [ -f dist/index.html ] && [ ! -f dist/404.html ]; then
             cp dist/index.html dist/404.html
           fi
 
-      - name: Deploy to GitHub Pages via peaceiris/actions-gh-pages
-        uses: peaceiris/actions-gh-pages@v4
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./dist
-          publish_branch: gh-pages
-          cname: dinheuro.com
-          user_name: 'github-actions[bot]'
-          user_email: 'github-actions[bot]@users.noreply.github.com'
-          keep_files: false
-          allow_empty_commit: false
+          name: dinheuro-page
+          path: './dist'
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+        with:
+          artifact_name: dinheuro-page
