@@ -12,7 +12,7 @@ export const TickerTape: React.FC = () => {
   const displayItems = [...tickerItems, ...tickerItems];
 
   return (
-    <div className="bg-[#070d18] border-b border-slate-800/80 text-xs py-1.5 overflow-hidden select-none relative group">
+    <div className="bg-[#070d18] border-b border-slate-800/80 text-xs py-1.5 overflow-hidden select-none relative group max-w-[100vw]">
       <div className="flex items-center">
         {/* Live Badge */}
         <div className="flex items-center gap-1.5 px-3 py-0.5 bg-slate-900 border-r border-slate-800 z-10 flex-shrink-0 text-[10px] font-semibold text-slate-400">
@@ -26,7 +26,8 @@ export const TickerTape: React.FC = () => {
           <div className="animate-ticker flex items-center gap-6">
             {displayItems.map((item, idx) => {
               const isPositive = item.change24h >= 0;
-              const dual = getDualCurrencyDisplay(item.price, item.currency, universalRates);
+              const isIndex = item.category === 'indices' || item.currency === 'PTS';
+              const dual = getDualCurrencyDisplay(item.price, item.currency, universalRates, isIndex);
 
               return (
                 <button
@@ -37,9 +38,11 @@ export const TickerTape: React.FC = () => {
                   <span className="font-bold text-slate-200">{item.symbol}</span>
                   <div className="flex items-baseline gap-1.5 font-mono-numbers">
                     <span className="text-slate-100 font-bold">{dual.primaryFormatted}</span>
-                    <span className="text-[10px] text-emerald-400/90 font-semibold">
-                      (≈ {dual.secondaryFormatted})
-                    </span>
+                    {!isIndex && dual.secondaryFormatted && (
+                      <span className="text-[10px] text-emerald-400/90 font-semibold">
+                        (≈ {dual.secondaryFormatted})
+                      </span>
+                    )}
                   </div>
                   <span
                     className={`flex items-center text-[11px] font-semibold font-mono-numbers ${

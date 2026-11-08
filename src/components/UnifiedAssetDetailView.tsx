@@ -21,7 +21,7 @@ import {
 } from 'lucide-react';
 import { MarketAsset } from '../services/marketData';
 import { useMarket } from '../context/MarketContext';
-import { getDualCurrencyDisplay } from '../utils/finance';
+import { getDualCurrencyDisplay, formatPointsValue } from '../utils/finance';
 import { getAssetMetadata } from '../utils/assetProfiles';
 import { D3AdvancedChart } from './D3AdvancedChart';
 
@@ -47,15 +47,17 @@ export const UnifiedAssetDetailView: React.FC<UnifiedAssetDetailViewProps> = ({
 
   const meta = getAssetMetadata(asset);
   const isPositive = asset.change24h >= 0;
+  const isIndex = asset.category === 'indices' || asset.currency === 'PTS';
 
   // Dual Currency calculations
-  const dual = getDualCurrencyDisplay(asset.price, asset.currency, universalRates);
-  const refRate =
-    asset.currency === 'USD'
-      ? `1 USD = R$ ${universalRates.BRL.toFixed(4)}`
-      : asset.currency === 'EUR'
-      ? `1 EUR = R$ ${(universalRates.BRL / (universalRates.EUR || 0.895)).toFixed(4)}`
-      : `1 USD = R$ ${universalRates.BRL.toFixed(4)}`;
+  const dual = getDualCurrencyDisplay(asset.price, asset.currency, universalRates, isIndex);
+  const refRate = isIndex
+    ? 'Índice de mercado medido em pontos (pts) • Sem paridade cambial direta'
+    : asset.currency === 'USD'
+    ? `1 USD = R$ ${universalRates.BRL.toFixed(4)}`
+    : asset.currency === 'EUR'
+    ? `1 EUR = R$ ${(universalRates.BRL / (universalRates.EUR || 0.895)).toFixed(4)}`
+    : `1 USD = R$ ${universalRates.BRL.toFixed(4)}`;
 
   const nowFormatted = new Date().toLocaleTimeString('pt-BR', {
     hour: '2-digit',
@@ -210,28 +212,37 @@ export const UnifiedAssetDetailView: React.FC<UnifiedAssetDetailViewProps> = ({
         {/* Primary and Converted Values */}
         <div className="space-y-2">
           <span className="text-[11px] uppercase tracking-wider font-bold text-slate-400">
-            Cotação Atual & Dupla Conversão
+            {isIndex ? 'Pontuação Oficial do Índice' : 'Cotação Atual & Dupla Conversão'}
           </span>
           <div className="flex flex-wrap items-baseline gap-3">
-            {/* Moeda Principal */}
+            {/* Valor Principal */}
             <span className="text-3xl sm:text-4xl font-black font-mono-numbers text-white tracking-tight">
               {dual.primaryFormatted}
             </span>
-            {/* Moeda Convertida Equivalente (Secundária) */}
-            <span className="text-sm sm:text-base font-mono-numbers font-bold text-emerald-400 bg-emerald-500/10 px-2.5 py-1 rounded-lg border border-emerald-500/25 shadow-sm">
-              ≈ {dual.secondaryFormatted}
-            </span>
-            {/* Moeda Convertida Equivalente (Terciária - EUR) */}
-            {dual.tertiaryFormatted && (
+            {/* Moeda Convertida Equivalente (Secundária) - Apenas se não for índice */}
+            {!isIndex && dual.secondaryFormatted && (
+              <span className="text-sm sm:text-base font-mono-numbers font-bold text-emerald-400 bg-emerald-500/10 px-2.5 py-1 rounded-lg border border-emerald-500/25 shadow-sm">
+                ≈ {dual.secondaryFormatted}
+              </span>
+            )}
+            {/* Moeda Convertida Equivalente (Terciária - EUR) - Apenas se não for índice */}
+            {!isIndex && dual.tertiaryFormatted && (
               <span className="text-sm sm:text-base font-mono-numbers font-bold text-sky-400 bg-sky-500/10 px-2.5 py-1 rounded-lg border border-sky-500/25 shadow-sm">
                 ≈ {dual.tertiaryFormatted}
               </span>
             )}
+            {isIndex && (
+              <span className="text-xs font-mono font-bold text-emerald-400 bg-emerald-500/10 px-2.5 py-1 rounded-lg border border-emerald-500/25">
+                Pontos de Índice
+              </span>
+            )}
           </div>
 
-          {/* Taxa de câmbio de referência visível */}
+          {/* Taxa de câmbio de referência ou nota institucional */}
           <div className="flex items-center gap-2 text-xs text-slate-400 font-mono-numbers">
-            <span className="font-semibold text-slate-300">Taxa de Câmbio de Referência:</span>
+            <span className="font-semibold text-slate-300">
+              {isIndex ? 'Regime de Cotação:' : 'Taxa de Câmbio de Referência:'}
+            </span>
             <span className="text-slate-300 font-bold bg-slate-900 px-2 py-0.5 rounded border border-slate-800">
               {refRate}
             </span>
@@ -253,7 +264,7 @@ export const UnifiedAssetDetailView: React.FC<UnifiedAssetDetailViewProps> = ({
             {isPositive ? <TrendingUp className="w-5 h-5" /> : <TrendingDown className="w-5 h-5" />}
             <span>
               {isPositive ? '+' : ''}
-              {asset.changeValue.toFixed(2)} ({isPositive ? '+' : ''}
+              {isIndex ? formatPointsValue(asset.changeValue) : asset.changeValue.toFixed(2)} ({isPositive ? '+' : ''}
               {asset.change24h.toFixed(2)}%)
             </span>
           </div>
@@ -298,36 +309,48 @@ export const UnifiedAssetDetailView: React.FC<UnifiedAssetDetailViewProps> = ({
           <div className="bg-[#0b1322] border border-slate-800 rounded-xl p-3 sm:p-4 space-y-1">
             <span className="text-[11px] uppercase font-bold text-slate-400">Abertura</span>
             <p className="text-base sm:text-lg font-bold font-mono-numbers text-white">
-              {asset.currency === 'BRL' ? 'R$' : '$'} {meta.openPrice.toFixed(2)}
+              {isIndex ? formatPointsValue(meta.openPrice) : `${asset.currency === 'BRL' ? 'R$' : '$'} ${meta.openPrice.toFixed(2)}`}
             </p>
-            <p className="text-[10px] font-mono-numbers text-emerald-400/90 font-medium">
-              {asset.currency === 'BRL' ? `≈ $ ${(meta.openPrice / universalRates.BRL).toFixed(2)}` : `≈ R$ ${(meta.openPrice * universalRates.BRL).toFixed(2)}`}
-            </p>
-            <span className="text-[9px] text-slate-500 font-medium block">Preço na abertura do pregão</span>
+            {!isIndex && (
+              <p className="text-[10px] font-mono-numbers text-emerald-400/90 font-medium">
+                {asset.currency === 'BRL' ? `≈ $ ${(meta.openPrice / universalRates.BRL).toFixed(2)}` : `≈ R$ ${(meta.openPrice * universalRates.BRL).toFixed(2)}`}
+              </p>
+            )}
+            <span className="text-[9px] text-slate-500 font-medium block">
+              {isIndex ? 'Pontos na abertura do pregão' : 'Preço na abertura do pregão'}
+            </span>
           </div>
 
           {/* 2. Máxima do Dia */}
           <div className="bg-[#0b1322] border border-slate-800 rounded-xl p-3 sm:p-4 space-y-1">
             <span className="text-[11px] uppercase font-bold text-slate-400">Máxima do Dia</span>
             <p className="text-base sm:text-lg font-bold font-mono-numbers text-emerald-400">
-              {asset.currency === 'BRL' ? 'R$' : '$'} {asset.high24h.toFixed(2)}
+              {isIndex ? formatPointsValue(asset.high24h) : `${asset.currency === 'BRL' ? 'R$' : '$'} ${asset.high24h.toFixed(2)}`}
             </p>
-            <p className="text-[10px] font-mono-numbers text-emerald-400/90 font-medium">
-              {asset.currency === 'BRL' ? `≈ $ ${(asset.high24h / universalRates.BRL).toFixed(2)}` : `≈ R$ ${(asset.high24h * universalRates.BRL).toFixed(2)}`}
-            </p>
-            <span className="text-[9px] text-slate-500 font-medium block">Pico nas últimas 24h</span>
+            {!isIndex && (
+              <p className="text-[10px] font-mono-numbers text-emerald-400/90 font-medium">
+                {asset.currency === 'BRL' ? `≈ $ ${(asset.high24h / universalRates.BRL).toFixed(2)}` : `≈ R$ ${(asset.high24h * universalRates.BRL).toFixed(2)}`}
+              </p>
+            )}
+            <span className="text-[9px] text-slate-500 font-medium block">
+              {isIndex ? 'Pico em pontos (24h)' : 'Pico nas últimas 24h'}
+            </span>
           </div>
 
           {/* 3. Mínima do Dia */}
           <div className="bg-[#0b1322] border border-slate-800 rounded-xl p-3 sm:p-4 space-y-1">
             <span className="text-[11px] uppercase font-bold text-slate-400">Mínima do Dia</span>
             <p className="text-base sm:text-lg font-bold font-mono-numbers text-rose-400">
-              {asset.currency === 'BRL' ? 'R$' : '$'} {asset.low24h.toFixed(2)}
+              {isIndex ? formatPointsValue(asset.low24h) : `${asset.currency === 'BRL' ? 'R$' : '$'} ${asset.low24h.toFixed(2)}`}
             </p>
-            <p className="text-[10px] font-mono-numbers text-rose-300/90 font-medium">
-              {asset.currency === 'BRL' ? `≈ $ ${(asset.low24h / universalRates.BRL).toFixed(2)}` : `≈ R$ ${(asset.low24h * universalRates.BRL).toFixed(2)}`}
-            </p>
-            <span className="text-[9px] text-slate-500 font-medium block">Vale nas últimas 24h</span>
+            {!isIndex && (
+              <p className="text-[10px] font-mono-numbers text-rose-300/90 font-medium">
+                {asset.currency === 'BRL' ? `≈ $ ${(asset.low24h / universalRates.BRL).toFixed(2)}` : `≈ R$ ${(asset.low24h * universalRates.BRL).toFixed(2)}`}
+              </p>
+            )}
+            <span className="text-[9px] text-slate-500 font-medium block">
+              {isIndex ? 'Vale em pontos (24h)' : 'Vale nas últimas 24h'}
+            </span>
           </div>
 
           {/* 4. Volume Negociado */}
@@ -336,31 +359,41 @@ export const UnifiedAssetDetailView: React.FC<UnifiedAssetDetailViewProps> = ({
             <p className="text-base sm:text-lg font-bold font-mono-numbers text-white">
               {asset.volume}
             </p>
-            <span className="text-[10px] text-slate-500 font-medium">Liquidez de transações</span>
+            <span className="text-[10px] text-slate-500 font-medium">
+              {isIndex ? 'Volume total em pontos' : 'Liquidez de transações'}
+            </span>
           </div>
 
           {/* 5. Máx 52 Semanas */}
           <div className="bg-[#0b1322] border border-slate-800 rounded-xl p-3 sm:p-4 space-y-1">
             <span className="text-[11px] uppercase font-bold text-slate-400">Máx. 52 Semanas</span>
             <p className="text-base sm:text-lg font-bold font-mono-numbers text-emerald-300">
-              {asset.currency === 'BRL' ? 'R$' : '$'} {meta.week52High.toFixed(2)}
+              {isIndex ? formatPointsValue(meta.week52High) : `${asset.currency === 'BRL' ? 'R$' : '$'} ${meta.week52High.toFixed(2)}`}
             </p>
-            <p className="text-[10px] font-mono-numbers text-emerald-400/90 font-medium">
-              {asset.currency === 'BRL' ? `≈ $ ${(meta.week52High / universalRates.BRL).toFixed(2)}` : `≈ R$ ${(meta.week52High * universalRates.BRL).toFixed(2)}`}
-            </p>
-            <span className="text-[9px] text-slate-500 font-medium block">Topo anual histórico</span>
+            {!isIndex && (
+              <p className="text-[10px] font-mono-numbers text-emerald-400/90 font-medium">
+                {asset.currency === 'BRL' ? `≈ $ ${(meta.week52High / universalRates.BRL).toFixed(2)}` : `≈ R$ ${(meta.week52High * universalRates.BRL).toFixed(2)}`}
+              </p>
+            )}
+            <span className="text-[9px] text-slate-500 font-medium block">
+              {isIndex ? 'Pico anual em pontos' : 'Topo anual histórico'}
+            </span>
           </div>
 
           {/* 6. Mín 52 Semanas */}
           <div className="bg-[#0b1322] border border-slate-800 rounded-xl p-3 sm:p-4 space-y-1">
             <span className="text-[11px] uppercase font-bold text-slate-400">Mín. 52 Semanas</span>
             <p className="text-base sm:text-lg font-bold font-mono-numbers text-rose-300">
-              {asset.currency === 'BRL' ? 'R$' : '$'} {meta.week52Low.toFixed(2)}
+              {isIndex ? formatPointsValue(meta.week52Low) : `${asset.currency === 'BRL' ? 'R$' : '$'} ${meta.week52Low.toFixed(2)}`}
             </p>
-            <p className="text-[10px] font-mono-numbers text-rose-300/90 font-medium">
-              {asset.currency === 'BRL' ? `≈ $ ${(meta.week52Low / universalRates.BRL).toFixed(2)}` : `≈ R$ ${(meta.week52Low * universalRates.BRL).toFixed(2)}`}
-            </p>
-            <span className="text-[9px] text-slate-500 font-medium block">Fundo anual histórico</span>
+            {!isIndex && (
+              <p className="text-[10px] font-mono-numbers text-rose-300/90 font-medium">
+                {asset.currency === 'BRL' ? `≈ $ ${(meta.week52Low / universalRates.BRL).toFixed(2)}` : `≈ R$ ${(meta.week52Low * universalRates.BRL).toFixed(2)}`}
+              </p>
+            )}
+            <span className="text-[9px] text-slate-500 font-medium block">
+              {isIndex ? 'Fundo anual em pontos' : 'Fundo anual histórico'}
+            </span>
           </div>
 
           {/* 7. P/L (Preço / Lucro) */}
@@ -418,20 +451,24 @@ export const UnifiedAssetDetailView: React.FC<UnifiedAssetDetailViewProps> = ({
             <div>
               <span className="text-[10px] text-slate-400 font-bold uppercase block">Suporte Imediato</span>
               <span className="text-sm font-bold font-mono-numbers text-rose-400">
-                {asset.currency === 'BRL' ? 'R$' : '$'} {meta.aiDiagnosis.supportLevel.toFixed(2)}
+                {isIndex ? formatPointsValue(meta.aiDiagnosis.supportLevel) : `${asset.currency === 'BRL' ? 'R$' : '$'} ${meta.aiDiagnosis.supportLevel.toFixed(2)}`}
               </span>
-              <span className="text-[10px] font-mono-numbers text-slate-400 block">
-                {asset.currency === 'BRL' ? `≈ $ ${(meta.aiDiagnosis.supportLevel / universalRates.BRL).toFixed(2)}` : `≈ R$ ${(meta.aiDiagnosis.supportLevel * universalRates.BRL).toFixed(2)}`}
-              </span>
+              {!isIndex && (
+                <span className="text-[10px] font-mono-numbers text-slate-400 block">
+                  {asset.currency === 'BRL' ? `≈ $ ${(meta.aiDiagnosis.supportLevel / universalRates.BRL).toFixed(2)}` : `≈ R$ ${(meta.aiDiagnosis.supportLevel * universalRates.BRL).toFixed(2)}`}
+                </span>
+              )}
             </div>
             <div>
               <span className="text-[10px] text-slate-400 font-bold uppercase block">Resistência Técnica</span>
               <span className="text-sm font-bold font-mono-numbers text-emerald-400">
-                {asset.currency === 'BRL' ? 'R$' : '$'} {meta.aiDiagnosis.resistanceLevel.toFixed(2)}
+                {isIndex ? formatPointsValue(meta.aiDiagnosis.resistanceLevel) : `${asset.currency === 'BRL' ? 'R$' : '$'} ${meta.aiDiagnosis.resistanceLevel.toFixed(2)}`}
               </span>
-              <span className="text-[10px] font-mono-numbers text-slate-400 block">
-                {asset.currency === 'BRL' ? `≈ $ ${(meta.aiDiagnosis.resistanceLevel / universalRates.BRL).toFixed(2)}` : `≈ R$ ${(meta.aiDiagnosis.resistanceLevel * universalRates.BRL).toFixed(2)}`}
-              </span>
+              {!isIndex && (
+                <span className="text-[10px] font-mono-numbers text-slate-400 block">
+                  {asset.currency === 'BRL' ? `≈ $ ${(meta.aiDiagnosis.resistanceLevel / universalRates.BRL).toFixed(2)}` : `≈ R$ ${(meta.aiDiagnosis.resistanceLevel * universalRates.BRL).toFixed(2)}`}
+                </span>
+              )}
             </div>
             <div>
               <span className="text-[10px] text-slate-400 font-bold uppercase block">Liquidez & Giro</span>
@@ -545,7 +582,9 @@ export const UnifiedAssetDetailView: React.FC<UnifiedAssetDetailViewProps> = ({
             </p>
             <form onSubmit={handleCreateAlert} className="space-y-3">
               <div>
-                <label className="text-xs text-slate-400 block mb-1">Preço Alvo ({asset.currency}):</label>
+                <label className="text-xs text-slate-400 block mb-1">
+                  {isIndex ? 'Pontuação Alvo (pts):' : `Preço Alvo (${asset.currency}):`}
+                </label>
                 <input
                   type="number"
                   step="0.01"

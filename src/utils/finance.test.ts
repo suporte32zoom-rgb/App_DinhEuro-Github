@@ -6,6 +6,7 @@ import {
   calculateInflationImpact,
   calculateProfitAndTax,
   getDualCurrencyDisplay,
+  formatPointsValue,
   CurrencyRates
 } from './finance';
 
@@ -107,4 +108,27 @@ test('getDualCurrencyDisplay formats USD assets with BRL converted values', () =
   assert.ok(dualBrl.primaryFormatted.includes('35'));
   assert.ok(dualBrl.secondaryFormatted.includes('6.36') || dualBrl.secondaryFormatted.includes('6,36'));
 });
+
+test('formatPointsValue and index points display format strictly in points (pts)', () => {
+  const rates: CurrencyRates = { USD: 1.0, BRL: 5.50 };
+
+  // IBOVESPA points formatting
+  const ibovPoints = formatPointsValue(132450);
+  assert.ok(ibovPoints.includes('132.450 pts') || ibovPoints.includes('132450 pts'));
+  assert.ok(!ibovPoints.includes('R$'));
+  assert.ok(!ibovPoints.includes('$'));
+
+  // S&P 500 points formatting
+  const spPoints = formatPointsValue(5885.25);
+  assert.ok(spPoints.includes('pts'));
+  assert.ok(!spPoints.includes('$'));
+
+  // getDualCurrencyDisplay for indices with PTS currency
+  const dualIndex = getDualCurrencyDisplay(132450, 'PTS', rates, true);
+  assert.equal(dualIndex.primaryCurrency, 'PTS');
+  assert.equal(dualIndex.secondaryFormatted, '');
+  assert.ok(dualIndex.primaryFormatted.includes('pts'));
+  assert.ok(!dualIndex.primaryFormatted.includes('R$'));
+});
+
 

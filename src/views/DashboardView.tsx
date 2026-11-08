@@ -124,7 +124,7 @@ export const DashboardView: React.FC = () => {
                   </span>
                 </div>
                 <p className="text-sm font-bold font-mono-numbers text-slate-200">
-                  {sp500Asset?.price ? sp500Asset.price.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : '7.688,62'}
+                  {sp500Asset?.price ? `${sp500Asset.price.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} pts` : '5.885,25 pts'}
                 </p>
               </div>
 
@@ -283,6 +283,7 @@ export const DashboardView: React.FC = () => {
                   price={index.price}
                   currency={index.currency}
                   rates={universalRates}
+                  isIndex={true}
                   layout="stacked"
                   primaryClassName="font-mono-numbers text-sm font-extrabold text-slate-900 dark:text-slate-100"
                   secondaryClassName="text-[11px] font-mono-numbers text-emerald-500/90 font-medium"

@@ -4,19 +4,21 @@ import {
   Globe,
   TrendingUp,
   Clock,
-  Sparkles,
-  ChevronDown,
   X,
   Menu,
-  Check,
-  ShieldCheck,
-  Zap,
   Sun,
   Moon,
+  Home,
+  Briefcase,
+  Zap,
+  Layers,
+  Percent,
+  BarChart2,
+  Calculator,
+  Info,
+  ChevronRight,
 } from 'lucide-react';
 import { useMarket, NavigationTab } from '../context/MarketContext';
-import { PWAInstallButton } from './PWAInstallButton';
-import { formatCurrencyValue } from '../utils/finance';
 import { DualPrice } from './DualPrice';
 
 export const Header: React.FC = () => {
@@ -32,12 +34,11 @@ export const Header: React.FC = () => {
     universalRates,
     refreshData,
     lastUpdated,
-    isSyncing,
-    syncStatus,
   } = useMarket();
 
   const [searchQuery, setSearchQuery] = useState('');
   const [showSearchModal, setShowSearchModal] = useState(false);
+  const [isMobileDrawerOpen, setIsMobileDrawerOpen] = useState(false);
   const [worldTimes, setWorldTimes] = useState({
     sp: '',
     ny: '',
@@ -63,20 +64,35 @@ export const Header: React.FC = () => {
     return () => clearInterval(timer);
   }, []);
 
-  const navItems: { id: NavigationTab; label: string; badge?: string }[] = [
-    { id: 'dashboard', label: 'Início' },
-    { id: 'mercados', label: 'Mercados' },
-    { id: 'carteiras', label: 'Carteiras' },
-    { id: 'daytrade', label: 'Day Trade & Scalping', badge: 'PRO' },
-    { id: 'tape_reading', label: 'Fluxo & Tape Reading', badge: 'DOM' },
-    { id: 'renda_fixa', label: 'Renda Fixa & Derivativos' },
-    { id: 'noticias', label: 'Notícias & Análises' },
-    { id: 'corretoras', label: 'Corretoras' },
-    { id: 'graficos', label: 'Gráficos Avançados' },
-    { id: 'ferramentas', label: 'Ferramentas' },
-    { id: 'academy', label: 'Academy' },
-    { id: 'sobre', label: 'Sobre o DinhEuro' },
+  // Prevent background scrolling when mobile drawer is open
+  useEffect(() => {
+    if (isMobileDrawerOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isMobileDrawerOpen]);
+
+  // Essential Navigation items for Desktop and Mobile Drawer
+  const navItems: { id: NavigationTab; label: string; badge?: string; icon: React.ReactNode }[] = [
+    { id: 'dashboard', label: 'Início', icon: <Home className="w-4 h-4" /> },
+    { id: 'mercados', label: 'Mercados', icon: <TrendingUp className="w-4 h-4" /> },
+    { id: 'carteiras', label: 'Carteiras', icon: <Briefcase className="w-4 h-4" /> },
+    { id: 'daytrade', label: 'Day Trade & Scalping', badge: 'PRO', icon: <Zap className="w-4 h-4 text-emerald-400" /> },
+    { id: 'tape_reading', label: 'Fluxo & Tape Reading', badge: 'DOM', icon: <Layers className="w-4 h-4 text-cyan-400" /> },
+    { id: 'renda_fixa', label: 'Renda Fixa & Derivativos', icon: <Percent className="w-4 h-4" /> },
+    { id: 'graficos', label: 'Gráficos Avançados', icon: <BarChart2 className="w-4 h-4" /> },
+    { id: 'ferramentas', label: 'Ferramentas', icon: <Calculator className="w-4 h-4" /> },
+    { id: 'sobre', label: 'Sobre o DinhEuro', icon: <Info className="w-4 h-4" /> },
   ];
+
+  const handleNavClick = (tabId: NavigationTab) => {
+    setActiveTab(tabId);
+    setIsMobileDrawerOpen(false);
+  };
 
   // Filter assets for search
   const filteredAssets = searchQuery.trim()
@@ -88,7 +104,7 @@ export const Header: React.FC = () => {
     : assets.slice(0, 6);
 
   return (
-    <header className="sticky top-0 z-40 bg-[#0B1320]/95 backdrop-blur-md border-b border-slate-800 shadow-xl">
+    <header className="sticky top-0 z-40 bg-[#0B1320]/95 backdrop-blur-md border-b border-slate-800 shadow-xl max-w-[100vw] overflow-x-hidden">
       {/* Top Utility Bar */}
       <div className="border-b border-slate-800/60 bg-[#070e1a]/80 px-3 sm:px-6 py-1.5 text-[11px] text-slate-400">
         <div className="max-w-7xl mx-auto flex items-center justify-between gap-4">
@@ -96,7 +112,7 @@ export const Header: React.FC = () => {
           <div className="flex items-center gap-3 overflow-x-auto no-scrollbar py-0.5 flex-nowrap">
             <span className="flex items-center gap-1 font-semibold text-slate-300 flex-shrink-0">
               <Clock className="w-3 h-3 text-amber-400" />
-              <span>Centros Financeiros:</span>
+              <span className="hidden xs:inline">Centros Financeiros:</span>
             </span>
             <span className="flex-shrink-0 text-slate-400">
               🇧🇷 SP <strong className="text-slate-200 font-mono-numbers">{worldTimes.sp}</strong>
@@ -115,10 +131,9 @@ export const Header: React.FC = () => {
             </span>
           </div>
 
-          {/* Real-time status indicator & manual sync */}
+          {/* Sync Timestamp indicator */}
           <div className="flex items-center gap-2 flex-shrink-0 text-[10px]">
             <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-            <span className="text-emerald-400 font-bold hidden sm:inline">AO VIVO</span>
             <button
               type="button"
               onClick={() => refreshData()}
@@ -136,32 +151,32 @@ export const Header: React.FC = () => {
         {/* Brand Logo & Name */}
         <div
           onClick={() => setActiveTab('dashboard')}
-          className="flex items-center gap-3 cursor-pointer group flex-shrink-0"
+          className="flex items-center gap-2.5 sm:gap-3 cursor-pointer group flex-shrink-0"
         >
           <div className="relative">
             <img
-              src="/logo.png"
+              src="./logo.png"
               alt="DinhEuro Logo"
-              className="w-10 h-10 sm:w-11 sm:h-11 rounded-full object-contain shadow-lg shadow-emerald-950/50 group-hover:scale-105 transition duration-200 border-2 border-amber-400/30 bg-white/5"
+              className="w-9 h-9 sm:w-11 sm:h-11 rounded-full object-contain shadow-lg shadow-emerald-950/50 group-hover:scale-105 transition duration-200 border-2 border-amber-400/30 bg-white/5"
             />
-            <span className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-emerald-500 border-2 border-[#0B1320] rounded-full"></span>
+            <span className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 bg-emerald-500 border-2 border-[#0B1320] rounded-full"></span>
           </div>
           <div className="flex flex-col">
             <div className="flex items-center gap-1.5 leading-none">
-              <span className="text-xl sm:text-2xl font-black tracking-tight text-white">
+              <span className="text-lg sm:text-2xl font-black tracking-tight text-white">
                 Dinh<span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-teal-300 to-amber-400">Euro</span>
               </span>
-              <span className="text-[10px] px-1.5 py-0.5 rounded bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 font-bold uppercase tracking-wider hidden xs:inline">
+              <span className="text-[9px] px-1.5 py-0.5 rounded bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 font-bold uppercase tracking-wider hidden xs:inline">
                 Global
               </span>
             </div>
             <span className="text-[10px] sm:text-[11px] font-medium text-slate-400 tracking-wide">
-              Hub Financeiro Global & Mercados
+              Hub Financeiro em Tempo Real
             </span>
           </div>
         </div>
 
-        {/* Global Asset Search Bar */}
+        {/* Global Asset Search Bar (Desktop) */}
         <div className="flex-1 max-w-md hidden md:block">
           <div className="relative">
             <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
@@ -185,12 +200,12 @@ export const Header: React.FC = () => {
         </div>
 
         {/* Header Right Actions */}
-        <div className="flex items-center gap-2 sm:gap-3 flex-shrink-0">
+        <div className="flex items-center gap-1.5 sm:gap-2.5 flex-shrink-0">
           {/* Mobile Search trigger */}
           <button
             onClick={() => setShowSearchModal(true)}
-            className="md:hidden p-2 rounded-lg bg-slate-800 text-slate-300 hover:text-white"
-            aria-label="Abrir busca"
+            className="md:hidden p-2 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 hover:text-white transition cursor-pointer"
+            aria-label="Abrir busca de ativos"
           >
             <Search className="w-4 h-4" />
           </button>
@@ -217,7 +232,7 @@ export const Header: React.FC = () => {
             onClick={toggleTheme}
             aria-label={theme === 'dark' ? 'Alternar para tema claro' : 'Alternar para tema escuro'}
             title={theme === 'dark' ? 'Alternar para tema claro (Clean Finance)' : 'Alternar para tema escuro (Terminal)'}
-            className="p-1.5 sm:px-2 sm:py-1.5 rounded-lg border border-slate-700/80 bg-slate-900/90 hover:bg-slate-800 text-slate-300 hover:text-white transition flex items-center gap-1.5 text-xs font-medium cursor-pointer shadow-sm flex-shrink-0"
+            className="p-1.5 sm:px-2.5 sm:py-1.5 rounded-lg border border-slate-700/80 bg-slate-900/90 hover:bg-slate-800 text-slate-300 hover:text-white transition flex items-center gap-1.5 text-xs font-medium cursor-pointer shadow-sm flex-shrink-0"
           >
             {theme === 'dark' ? (
               <>
@@ -232,37 +247,21 @@ export const Header: React.FC = () => {
             )}
           </button>
 
-          {/* Real-time Sync Status Button */}
+          {/* Mobile Hamburger Menu Button */}
           <button
-            onClick={() => refreshData()}
-            disabled={isSyncing}
-            aria-label="Atualizar cotações em tempo real"
-            title={syncStatus === 'live' ? 'Sincronizado com mercado global. Clique para atualizar agora.' : 'Clique para reconectar ao mercado'}
-            className="flex items-center gap-1.5 px-2 py-1.5 rounded-lg border border-slate-700/80 bg-slate-900/90 hover:bg-slate-800 text-slate-300 hover:text-white transition text-xs font-medium cursor-pointer shadow-sm flex-shrink-0"
+            type="button"
+            onClick={() => setIsMobileDrawerOpen(true)}
+            className="md:hidden p-2 rounded-xl bg-slate-900 border border-slate-700/80 hover:border-emerald-500/50 text-slate-200 hover:text-white transition cursor-pointer flex items-center justify-center shadow-sm"
+            aria-label="Abrir menu de navegação"
           >
-            <span
-              className={`w-2 h-2 rounded-full ${
-                isSyncing
-                  ? 'bg-amber-400 animate-ping'
-                  : syncStatus === 'live'
-                  ? 'bg-emerald-400 animate-pulse'
-                  : 'bg-rose-400'
-              }`}
-            />
-            <span className="hidden sm:inline text-[11px] font-mono">
-              {isSyncing ? 'Sincronizando...' : syncStatus === 'live' ? 'Ao Vivo' : 'Offline'}
-            </span>
+            <Menu className="w-5 h-5 text-emerald-400" />
           </button>
-
-          {/* PWA Install Button */}
-          <PWAInstallButton />
         </div>
       </div>
 
-      {/* Universal Responsive Horizontal Navigation Bar
-          Strictly prevents wrapping, button clipping or horizontal layout breaking on any device */}
+      {/* Universal Desktop Horizontal Navigation Bar */}
       <nav
-        className="w-full border-t border-slate-800/80 bg-[#08101e]/90 px-3 sm:px-6"
+        className="hidden md:flex w-full border-t border-slate-800/80 bg-[#08101e]/90 px-3 sm:px-6"
         style={{
           display: 'flex',
           flexWrap: 'nowrap',
@@ -287,7 +286,7 @@ export const Header: React.FC = () => {
                 onClick={(e) => {
                   e.preventDefault();
                   e.stopPropagation();
-                  setActiveTab(item.id);
+                  handleNavClick(item.id);
                 }}
                 className={`px-3 py-1.5 rounded-lg text-xs font-medium transition cursor-pointer flex-shrink-0 select-none flex items-center gap-1.5 ${
                   isActive
@@ -308,23 +307,125 @@ export const Header: React.FC = () => {
         </div>
       </nav>
 
+      {/* Mobile Drawer (Gaveta Lateral Moderna e Responsiva) */}
+      {isMobileDrawerOpen && (
+        <div className="fixed inset-0 z-50 md:hidden flex">
+          {/* Backdrop Blur Overlay */}
+          <div
+            className="fixed inset-0 bg-black/80 backdrop-blur-sm transition-opacity"
+            onClick={() => setIsMobileDrawerOpen(false)}
+          />
+
+          {/* Drawer Content */}
+          <div className="relative w-[85%] max-w-xs bg-[#0B1320] border-r border-slate-800 p-5 flex flex-col justify-between shadow-2xl z-10 h-full overflow-y-auto no-scrollbar">
+            <div className="space-y-6">
+              {/* Drawer Top Header */}
+              <div className="flex items-center justify-between border-b border-slate-800 pb-4">
+                <div className="flex items-center gap-2.5">
+                  <img
+                    src="./logo.png"
+                    alt="DinhEuro"
+                    className="w-8 h-8 rounded-full border border-emerald-500/40"
+                  />
+                  <div>
+                    <h3 className="text-base font-black text-white leading-tight">
+                      Dinh<span className="text-emerald-400">Euro</span>
+                    </h3>
+                    <p className="text-[10px] text-slate-400 font-medium">Menu Institucional</p>
+                  </div>
+                </div>
+                <button
+                  onClick={() => setIsMobileDrawerOpen(false)}
+                  className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition cursor-pointer"
+                  aria-label="Fechar menu"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+
+              {/* Navigation Links List */}
+              <div className="space-y-1">
+                <p className="text-[10px] uppercase font-bold text-slate-500 tracking-wider px-2 mb-2">
+                  Navegação Principal
+                </p>
+                {navItems.map((item) => {
+                  const isActive = activeTab === item.id;
+                  return (
+                    <button
+                      key={item.id}
+                      onClick={() => handleNavClick(item.id)}
+                      className={`w-full flex items-center justify-between p-2.5 rounded-xl text-xs font-semibold transition cursor-pointer ${
+                        isActive
+                          ? 'bg-emerald-500/15 text-emerald-300 border border-emerald-500/30'
+                          : 'text-slate-300 hover:bg-slate-800/80 hover:text-white'
+                      }`}
+                    >
+                      <div className="flex items-center gap-2.5">
+                        <span className={isActive ? 'text-emerald-400' : 'text-slate-400'}>
+                          {item.icon}
+                        </span>
+                        <span>{item.label}</span>
+                      </div>
+                      <div className="flex items-center gap-1.5">
+                        {item.badge && (
+                          <span className="text-[9px] px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300 font-bold border border-amber-500/30">
+                            {item.badge}
+                          </span>
+                        )}
+                        <ChevronRight className="w-3.5 h-3.5 text-slate-500" />
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Drawer Footer Actions */}
+            <div className="pt-6 mt-6 border-t border-slate-800 space-y-3">
+              <div className="flex items-center justify-between text-xs text-slate-400">
+                <span>Moeda de Exibição</span>
+                <span className="font-bold text-emerald-400">{displayCurrency}</span>
+              </div>
+              <div className="flex items-center gap-2">
+                {(['BRL', 'EUR', 'USD'] as const).map((curr) => (
+                  <button
+                    key={curr}
+                    onClick={() => setDisplayCurrency(curr)}
+                    className={`flex-1 py-1.5 rounded-lg text-xs font-bold transition cursor-pointer ${
+                      displayCurrency === curr
+                        ? 'bg-emerald-500 text-slate-950 shadow-md'
+                        : 'bg-slate-900 border border-slate-800 text-slate-300 hover:text-white'
+                    }`}
+                  >
+                    {curr}
+                  </button>
+                ))}
+              </div>
+              <p className="text-[10px] text-slate-500 text-center pt-2">
+                DinhEuro &bull; Cotações em Tempo Real
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Instant Search Results Modal */}
       {showSearchModal && (
         <div
-          className="fixed inset-0 z-50 flex items-start justify-center pt-20 bg-black/75 backdrop-blur-sm p-4"
+          className="fixed inset-0 z-50 flex items-start justify-center pt-16 sm:pt-20 bg-black/80 backdrop-blur-sm p-4"
           onClick={() => setShowSearchModal(false)}
         >
           <div
-            className="w-full max-w-xl rounded-2xl bg-slate-900 border border-slate-700 p-5 shadow-2xl text-slate-100 animate-in fade-in duration-150"
+            className="w-full max-w-xl rounded-2xl bg-slate-900 border border-slate-700 p-4 sm:p-5 shadow-2xl text-slate-100 animate-in fade-in duration-150"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-center gap-3 border-b border-slate-800 pb-3 mb-3">
-              <Search className="w-5 h-5 text-emerald-400" />
+              <Search className="w-5 h-5 text-emerald-400 flex-shrink-0" />
               <input
                 ref={searchInputRef}
                 autoFocus
                 type="text"
-                placeholder="Digite o código (ex: PETR4, AAPL, BTC, EUR/BRL, OURO)..."
+                placeholder="Buscar ações (AAPL, PETR4), pares forex, cripto, índices..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="w-full bg-transparent text-sm text-white placeholder:text-slate-500 focus:outline-none"
@@ -349,6 +450,7 @@ export const Header: React.FC = () => {
               ) : (
                 filteredAssets.map((asset) => {
                   const isPositive = asset.change24h >= 0;
+                  const isIndex = asset.category === 'indices' || asset.currency === 'PTS';
                   return (
                     <div
                       key={asset.id}
@@ -359,7 +461,7 @@ export const Header: React.FC = () => {
                       className="flex items-center justify-between p-2.5 rounded-xl hover:bg-slate-800 transition cursor-pointer border border-transparent hover:border-slate-700"
                     >
                       <div className="flex items-center gap-3">
-                        <span className="text-xl">{asset.flag || '📈'}</span>
+                        <span className="text-xl flex-shrink-0">{asset.flag || '📈'}</span>
                         <div>
                           <div className="flex items-center gap-2">
                             <span className="font-bold text-white text-xs">{asset.symbol}</span>
@@ -367,17 +469,18 @@ export const Header: React.FC = () => {
                               {asset.category}
                             </span>
                           </div>
-                          <p className="text-[11px] text-slate-400 truncate max-w-[200px] sm:max-w-xs">
+                          <p className="text-[11px] text-slate-400 truncate max-w-[160px] sm:max-w-xs">
                             {asset.name}
                           </p>
                         </div>
                       </div>
 
-                      <div className="text-right">
+                      <div className="text-right flex-shrink-0">
                         <DualPrice
                           price={asset.price}
                           currency={asset.currency}
                           rates={universalRates}
+                          isIndex={isIndex}
                           layout="compact"
                           primaryClassName="font-mono-numbers text-xs font-semibold text-white"
                           secondaryClassName="text-[10px] font-mono-numbers text-emerald-400"

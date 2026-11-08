@@ -236,6 +236,23 @@ export function formatCurrencyValue(
   }
 }
 
+/**
+ * Formata pontuação de índices mundiais (IBOVESPA, S&P 500, etc.) em PONTOS (pts).
+ * Índices nunca devem ser exibidos em formato monetário (R$ ou $).
+ */
+export function formatPointsValue(value: number): string {
+  if (value === undefined || value === null || isNaN(value)) return '0 pts';
+  const decimals = value % 1 === 0 ? 0 : 2;
+  try {
+    return `${new Intl.NumberFormat('pt-BR', {
+      minimumFractionDigits: decimals,
+      maximumFractionDigits: 2,
+    }).format(value)} pts`;
+  } catch {
+    return `${value.toFixed(decimals)} pts`;
+  }
+}
+
 export interface DualCurrencyInfo {
   primaryFormatted: string;
   secondaryFormatted: string;
@@ -255,6 +272,7 @@ export interface DualCurrencyInfo {
 /**
  * Standardized Multicurrency Engine (BRL, USD and EUR):
  * For every asset listed on DinhEuro:
+ * - If asset is an index (category 'indices' or currency 'PTS'): strictly formatted in PONTOS (pts).
  * - If asset is in USD: displays native in USD, and converted in BRL and EUR.
  * - If asset is in BRL: displays native in BRL, and converted in USD and EUR.
  * - If asset is in EUR: displays native in EUR, and converted in BRL and USD.
@@ -263,9 +281,31 @@ export interface DualCurrencyInfo {
 export function getDualCurrencyDisplay(
   price: number,
   currency: string = 'USD',
-  rates: CurrencyRates = { USD: 1.0, BRL: 5.485, EUR: 0.8905 }
+  rates: CurrencyRates = { USD: 1.0, BRL: 5.485, EUR: 0.8905 },
+  isIndex?: boolean
 ): DualCurrencyInfo {
   const normCur = (currency || 'USD').toUpperCase();
+  const isPointAsset = isIndex || normCur === 'PTS' || normCur === 'PONTOS';
+
+  if (isPointAsset) {
+    const ptsFormatted = formatPointsValue(price);
+    return {
+      primaryFormatted: ptsFormatted,
+      secondaryFormatted: '',
+      tertiaryFormatted: '',
+      primaryCurrency: 'PTS',
+      secondaryCurrency: 'PTS',
+      tertiaryCurrency: 'PTS',
+      primaryValue: price,
+      secondaryValue: price,
+      tertiaryValue: price,
+      convertedBRL: price,
+      convertedUSD: price,
+      convertedEUR: price,
+      summaryTriCurrency: ptsFormatted,
+    };
+  }
+
   const brlRate = rates['BRL'] && rates['BRL'] > 0 ? rates['BRL'] : 5.485;
   const eurRate = rates['EUR'] && rates['EUR'] > 0 ? rates['EUR'] : 0.8905;
   const curRate = rates[normCur] && rates[normCur] > 0 ? rates[normCur] : 1.0;

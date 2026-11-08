@@ -5,6 +5,7 @@ interface DualPriceProps {
   price: number;
   currency: string;
   rates: CurrencyRates;
+  isIndex?: boolean;
   layout?: 'stacked' | 'inline' | 'compact' | 'tri-currency';
   primaryClassName?: string;
   secondaryClassName?: string;
@@ -18,6 +19,7 @@ export const DualPrice: React.FC<DualPriceProps> = ({
   price,
   currency,
   rates,
+  isIndex = false,
   layout = 'stacked',
   primaryClassName = 'font-bold font-mono-numbers text-white',
   secondaryClassName = 'text-[11px] font-mono-numbers text-emerald-400/90 font-medium',
@@ -26,7 +28,18 @@ export const DualPrice: React.FC<DualPriceProps> = ({
   showSecondaryBadge = false,
   showEur = false,
 }) => {
-  const dual = getDualCurrencyDisplay(price, currency, rates);
+  const normCur = (currency || 'USD').toUpperCase();
+  const isPointAsset = isIndex || normCur === 'PTS' || normCur === 'PONTOS';
+  const dual = getDualCurrencyDisplay(price, currency, rates, isPointAsset);
+
+  // Índices mundiais (IBOVESPA, S&P 500, etc.) são obrigatoriamente exibidos apenas em PONTOS (pts)
+  if (isPointAsset) {
+    return (
+      <span className={`inline-flex items-baseline ${className}`}>
+        <span className={primaryClassName}>{dual.primaryFormatted}</span>
+      </span>
+    );
+  }
 
   if (layout === 'inline') {
     return (
