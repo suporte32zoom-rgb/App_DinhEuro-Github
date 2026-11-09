@@ -210,22 +210,7 @@ export const Header: React.FC = () => {
             <Search className="w-4 h-4" />
           </button>
 
-          {/* Currency Switcher */}
-          <div className="flex items-center bg-slate-900 border border-slate-700/80 rounded-lg p-0.5 text-xs font-semibold">
-            {(['BRL', 'EUR', 'USD'] as const).map((curr) => (
-              <button
-                key={curr}
-                onClick={() => setDisplayCurrency(curr)}
-                className={`px-2 py-1 rounded-md transition cursor-pointer text-[11px] ${
-                  displayCurrency === curr
-                    ? 'bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-sm'
-                    : 'text-slate-400 hover:text-slate-200'
-                }`}
-              >
-                {curr === 'BRL' ? 'R$' : curr === 'EUR' ? '€' : '$'}
-              </button>
-            ))}
-          </div>
+
 
           {/* Theme Toggle (Light / Dark) */}
           <button

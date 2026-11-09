@@ -363,7 +363,7 @@ import { fileURLToPath } from "url";
 var cachedData = null;
 var lastCacheTime = 0;
 var isRefreshing = false;
-var CACHE_TTL_MS = 6e3;
+var CACHE_TTL_MS = 3e4;
 var webhookQuoteOverrides = {};
 var YAHOO_SYMBOLS_MAP = {
   // 1. World Indices (14)
@@ -483,10 +483,25 @@ async function getAggregatedMarketData(customFinnhubKey) {
   if (cachedData && now - lastCacheTime < CACHE_TTL_MS) {
     return cachedData;
   }
+  if (cachedData && !isRefreshing) {
+    isRefreshing = true;
+    fetchRealTimeMarketData(customFinnhubKey).then((fresh) => {
+      cachedData = fresh;
+      lastCacheTime = Date.now();
+    }).catch(() => {
+    }).finally(() => {
+      isRefreshing = false;
+    });
+    return cachedData;
+  }
   if (isRefreshing && cachedData) {
     return cachedData;
   }
   isRefreshing = true;
+  return await fetchRealTimeMarketData(customFinnhubKey);
+}
+async function fetchRealTimeMarketData(customFinnhubKey) {
+  const now = Date.now();
   try {
     const finnhubKey = customFinnhubKey || process.env.FINNHUB_API_KEY || process.env.VITE_FINNHUB_API_KEY || "";
     const fmpKey = process.env.FMP_API_KEY || "";
@@ -845,30 +860,37 @@ async function getAggregatedMarketData(customFinnhubKey) {
         "SPY",
         "QQQ"
       ];
-      for (const sym of priorityStocks) {
-        try {
-          const fhRes = await fetch(`https://finnhub.io/api/v1/quote?symbol=${sym}&token=${finnhubKey}`);
-          if (fhRes.ok) {
-            const data = await fhRes.json();
-            if (data && data.c && data.c > 0) {
-              sourcesStatus.finnhub = true;
-              quotes[sym] = {
-                symbol: sym,
-                price: Number(data.c.toFixed(2)),
-                change: Number(data.d.toFixed(2)),
-                changePercent: Number(data.dp.toFixed(2)),
-                high: Number(data.h.toFixed(2)),
-                low: Number(data.l.toFixed(2)),
-                open: Number(data.o.toFixed(2)),
-                previousClose: Number(data.pc.toFixed(2)),
-                currency: "USD",
-                source: "finnhub_official"
-              };
+      await Promise.allSettled(
+        priorityStocks.map(async (sym) => {
+          try {
+            const controller = new AbortController();
+            const timer = setTimeout(() => controller.abort(), 1800);
+            const fhRes = await fetch(`https://finnhub.io/api/v1/quote?symbol=${sym}&token=${finnhubKey}`, {
+              signal: controller.signal
+            });
+            clearTimeout(timer);
+            if (fhRes.ok) {
+              const data = await fhRes.json();
+              if (data && data.c && data.c > 0) {
+                sourcesStatus.finnhub = true;
+                quotes[sym] = {
+                  symbol: sym,
+                  price: Number(data.c.toFixed(2)),
+                  change: Number((data.d ?? 0).toFixed(2)),
+                  changePercent: Number((data.dp ?? 0).toFixed(2)),
+                  high: Number((data.h ?? data.c).toFixed(2)),
+                  low: Number((data.l ?? data.c).toFixed(2)),
+                  open: Number((data.o ?? data.c).toFixed(2)),
+                  previousClose: Number((data.pc ?? data.c).toFixed(2)),
+                  currency: "USD",
+                  source: "finnhub_official"
+                };
+              }
             }
+          } catch {
           }
-        } catch {
-        }
-      }
+        })
+      );
     }
     let newsList = [];
     if (finnhubKey && finnhubKey !== "MY_FINNHUB_API_KEY") {

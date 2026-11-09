@@ -16,6 +16,7 @@ import {
   Flame,
   ArrowRightLeft,
   ChevronDown,
+  ChevronUp,
   Home,
   Globe,
   BarChart3,
@@ -203,6 +204,10 @@ export const DayTradeView: React.FC = () => {
   // Market Watch Tab in Right Column (Ações, Futuros, Forex, Cripto, BDRs)
   const [marketWatchCategory, setMarketWatchCategory] = useState<'Todos' | 'Ações' | 'Futuros' | 'Forex' | 'Cripto' | 'BDRs'>('Todos');
   const [marketWatchSearch, setMarketWatchSearch] = useState<string>('');
+
+  // Mobile Responsiveness: Tabs and Accordion Controls
+  const [mobileBottomSection, setMobileBottomSection] = useState<'boleta' | 'mercado' | 'book' | 'tape' | 'posicoes'>('boleta');
+  const [isMobilePanelCollapsed, setIsMobilePanelCollapsed] = useState<boolean>(false);
 
   // Modals
   const [showRiskModal, setShowRiskModal] = useState<boolean>(false);
@@ -713,7 +718,7 @@ export const DayTradeView: React.FC = () => {
         {/* =======================================================================
             2A. SLIM LEFT SIDEBAR MENU (Icons with Institutional Seal)
            ======================================================================= */}
-        <aside className="w-11 sm:w-12 bg-[#050a14] border-r border-slate-800/90 flex flex-col items-center justify-between py-2 shrink-0 select-none z-10">
+        <aside className="hidden lg:flex w-11 sm:w-12 bg-[#050a14] border-r border-slate-800/90 flex-col items-center justify-between py-2 shrink-0 select-none z-10">
           <div className="flex flex-col items-center gap-1 w-full">
             {sidebarItems.slice(0, 10).map((item) => {
               const IconComp = item.icon;
@@ -765,7 +770,7 @@ export const DayTradeView: React.FC = () => {
         {/* =======================================================================
             2B. CENTRAL WORKSPACE: (TOP TABS & CONTROLS + CHART/VIEW + BOTTOM DOCK)
            ======================================================================= */}
-        <div className="flex-1 min-h-0 flex flex-col overflow-hidden">
+        <div className="hidden lg:flex flex-1 min-h-0 flex-col overflow-hidden">
           {/* Top Asset & Function Tabs Header Strip */}
           <div className="bg-[#09111e] border-b border-slate-800 px-3 py-1.5 flex items-center justify-between gap-2 flex-wrap shrink-0">
             {/* Left: Asset Select Dropdown & Current Price with Dual/Tri Conversion */}
@@ -1383,7 +1388,7 @@ export const DayTradeView: React.FC = () => {
         {/* =======================================================================
             2D. RIGHT COLUMN: "MERCADO EM TEMPO REAL" + BOLETA DE EXECUÇÃO RÁPIDA
            ======================================================================= */}
-        <div className="w-64 sm:w-72 bg-[#050a14] border-l border-slate-800/90 flex flex-col shrink-0 select-none overflow-hidden">
+        <div className="hidden lg:flex w-64 sm:w-72 bg-[#050a14] border-l border-slate-800/90 flex-col shrink-0 select-none overflow-hidden">
           {/* Upper Right: Mercado em Tempo Real */}
           <div className="h-56 flex flex-col border-b border-slate-800 p-2 overflow-hidden shrink-0">
             <div className="flex items-center justify-between pb-1 mb-1">
@@ -1672,6 +1677,717 @@ export const DayTradeView: React.FC = () => {
               </div>
             </div>
           </div>
+        </div>
+
+        {/* =======================================================================
+            2E. MOBILE WORKSPACE (100% Width Chart + Abas/Accordion for Boleta & Mercado)
+           ======================================================================= */}
+        <div className="lg:hidden flex-1 min-h-0 flex flex-col overflow-y-auto w-full bg-[#050a14]">
+          {/* Mobile Top Asset Strip */}
+          <div className="bg-[#09111e] border-b border-slate-800 px-3 py-2 flex flex-col gap-1.5 shrink-0">
+            <div className="flex items-center justify-between gap-2">
+              <div className="relative flex-1">
+                <select
+                  value={selectedSymbol}
+                  onChange={(e) => setSelectedSymbol(e.target.value)}
+                  aria-label="Selecionar ativo para Day Trade"
+                  className="w-full bg-[#060c18] border border-slate-700 hover:border-emerald-500 rounded px-2 pr-6 py-1.5 text-xs font-black text-white font-mono-numbers outline-none cursor-pointer"
+                >
+                  <optgroup label="Futuros B3">
+                    <option value="WINFUT">WINFUT • Mini Índice B3</option>
+                    <option value="WDOFUT">WDOFUT • Mini Dólar B3</option>
+                  </optgroup>
+                  <optgroup label="Ações Brasil (B3)">
+                    {dayTradeAssets
+                      .filter((a) => a.category === 'stocks_br')
+                      .map((a) => (
+                        <option key={a.id} value={a.symbol}>
+                          {a.symbol} • {a.name}
+                        </option>
+                      ))}
+                  </optgroup>
+                  <optgroup label="Wall Street & BDRs">
+                    {dayTradeAssets
+                      .filter((a) => a.category === 'stocks_us')
+                      .map((a) => (
+                        <option key={a.id} value={a.symbol}>
+                          {a.symbol} • {a.name}
+                        </option>
+                      ))}
+                  </optgroup>
+                  <optgroup label="Criptoativos">
+                    {dayTradeAssets
+                      .filter((a) => a.category === 'crypto')
+                      .map((a) => (
+                        <option key={a.id} value={a.symbol}>
+                          {a.symbol} • {a.name}
+                        </option>
+                      ))}
+                  </optgroup>
+                  <optgroup label="Câmbio & Moedas">
+                    {dayTradeAssets
+                      .filter((a) => a.category === 'forex')
+                      .map((a) => (
+                        <option key={a.id} value={a.symbol}>
+                          {a.symbol} • {a.name}
+                        </option>
+                      ))}
+                  </optgroup>
+                  <optgroup label="Índices Globais & Commodities">
+                    {dayTradeAssets
+                      .filter((a) => a.category === 'indices' || a.category === 'commodities')
+                      .map((a) => (
+                        <option key={a.id} value={a.symbol}>
+                          {a.symbol} • {a.name}
+                        </option>
+                      ))}
+                  </optgroup>
+                </select>
+                <ChevronDown className="w-3 h-3 text-slate-400 absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none" />
+              </div>
+
+              {/* Price & Variation */}
+              <div className="flex items-baseline gap-1.5 font-mono-numbers shrink-0">
+                <span className="text-sm font-black text-white">
+                  {formatCurrencyValue(currentMarketPrice, currentAsset.currency)}
+                </span>
+                <span
+                  className={`text-[10px] font-bold px-1.5 py-0.5 rounded ${
+                    currentAsset.change24h >= 0 ? 'text-emerald-400 bg-emerald-500/10' : 'text-rose-400 bg-rose-500/10'
+                  }`}
+                >
+                  {currentAsset.change24h >= 0 ? '+' : ''}
+                  {currentAsset.change24h}%
+                </span>
+              </div>
+            </div>
+
+            {/* Timeframes & Dual Conversion */}
+            <div className="flex items-center justify-between text-[10px] font-mono-numbers">
+              <div className="flex items-center gap-1 bg-[#060c18] p-0.5 rounded border border-slate-800">
+                {(['1m', '5m', '15m', '1h', '1D'] as const).map((tf) => (
+                  <button
+                    key={tf}
+                    onClick={() => setChartInterval(tf)}
+                    className={`px-2 py-0.5 rounded transition cursor-pointer ${
+                      chartInterval === tf ? 'bg-slate-800 text-emerald-400 font-black' : 'text-slate-400'
+                    }`}
+                  >
+                    {tf}
+                  </button>
+                ))}
+              </div>
+              <div className="text-[9px] text-emerald-400/90 font-medium truncate max-w-[170px]">
+                ≈ {dualAssetDisplay.secondaryFormatted} | {dualAssetDisplay.tertiaryFormatted}
+              </div>
+            </div>
+          </div>
+
+          {/* 100% Width Main Chart Container (Smartphones & Tablets) */}
+          <div className="w-full h-[320px] sm:h-[380px] shrink-0 relative bg-[#060c18] border-b border-slate-800 p-1.5 overflow-hidden flex flex-col">
+            <svg className="w-full h-full flex-1" viewBox="0 0 700 280" preserveAspectRatio="none">
+              <defs>
+                <linearGradient id="vol-grad-mob" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor="#10b981" stopOpacity="0.4" />
+                  <stop offset="100%" stopColor="#10b981" stopOpacity="0.05" />
+                </linearGradient>
+              </defs>
+
+              {/* Gridlines */}
+              <line x1="0" y1="50" x2="700" y2="50" stroke="#1e293b" strokeDasharray="3 3" opacity="0.4" />
+              <line x1="0" y1="100" x2="700" y2="100" stroke="#1e293b" strokeDasharray="3 3" opacity="0.4" />
+              <line x1="0" y1="150" x2="700" y2="150" stroke="#1e293b" strokeDasharray="3 3" opacity="0.4" />
+              <line x1="0" y1="200" x2="700" y2="200" stroke="#1e293b" strokeDasharray="3 3" opacity="0.4" />
+
+              {/* Candlesticks & Volume */}
+              {Array.from({ length: 35 }).map((_, i) => {
+                const x = 12 + i * 19.4;
+                const isUp = i % 2 === 0 || i % 5 === 0;
+                const open = 115 + Math.sin(i * 0.35) * 45;
+                const close = isUp ? open - 18 : open + 16;
+                const high = Math.min(open, close) - 12;
+                const low = Math.max(open, close) + 12;
+                const color = isUp ? '#10B981' : '#EF4444';
+                const volHeight = Math.abs(Math.sin(i * 0.5)) * 38 + 8;
+
+                return (
+                  <g key={i}>
+                    {showVolume && (
+                      <rect
+                        x={x}
+                        y={275 - volHeight}
+                        width="8.5"
+                        height={volHeight}
+                        fill={color}
+                        opacity="0.35"
+                        rx="0.5"
+                      />
+                    )}
+                    <line x1={x + 4.2} y1={high} x2={x + 4.2} y2={low} stroke={color} strokeWidth="1.2" />
+                    <rect
+                      x={x}
+                      y={Math.min(open, close)}
+                      width="8.5"
+                      height={Math.max(3, Math.abs(close - open))}
+                      fill={color}
+                      rx="0.5"
+                    />
+                  </g>
+                );
+              })}
+
+              {/* Indicator Lines */}
+              {showMA9 && (
+                <path d="M 12 118 Q 180 85, 360 98 T 685 92" fill="none" stroke="#38BDF8" strokeWidth="1.8" opacity="0.95" />
+              )}
+              {showMA21 && (
+                <path d="M 12 126 Q 200 100, 380 112 T 685 106" fill="none" stroke="#C084FC" strokeWidth="1.8" opacity="0.9" />
+              )}
+              {showMA200 && (
+                <path d="M 12 142 Q 220 130, 420 128 T 685 120" fill="none" stroke="#F59E0B" strokeWidth="2.2" opacity="0.85" />
+              )}
+              {showVWAP && (
+                <path d="M 12 112 Q 170 92, 340 104 T 685 98" fill="none" stroke="#E879F9" strokeWidth="1.8" strokeDasharray="4 3" opacity="0.85" />
+              )}
+
+              {/* Position Overlay Line */}
+              {positions.length > 0 && (
+                <g>
+                  <line x1="0" y1="95" x2="700" y2="95" stroke="#3B82F6" strokeWidth="1.5" strokeDasharray="5 3" />
+                  <text x="8" y="90" fill="#60A5FA" fontSize="10" fontWeight="bold">
+                    PM ({positions[0].side}): {formatCurrencyValue(positions[0].entryPrice, currentAsset.currency)}
+                  </text>
+                </g>
+              )}
+            </svg>
+
+            {/* Overlaid Badges */}
+            <div className="absolute top-2 left-2 flex items-center gap-1 text-[8px] font-mono-numbers">
+              {showMA9 && <span className="text-sky-400 bg-sky-950/80 px-1 py-0.2 rounded border border-sky-500/30">MA9</span>}
+              {showMA21 && <span className="text-purple-400 bg-purple-950/80 px-1 py-0.2 rounded border border-purple-500/30">MA21</span>}
+              {showMA200 && <span className="text-amber-400 bg-amber-950/80 px-1 py-0.2 rounded border border-amber-500/30">MA200</span>}
+              {showVWAP && <span className="text-fuchsia-400 bg-fuchsia-950/80 px-1 py-0.2 rounded border border-fuchsia-500/30">VWAP</span>}
+            </div>
+          </div>
+
+          {/* Mobile Module Navigation (Abas / Accordion Header) */}
+          <div className="bg-[#09111e] border-b border-slate-800 px-2.5 py-2 flex items-center justify-between gap-2 shrink-0 sticky top-0 z-20 shadow-md">
+            <div className="flex items-center gap-1 overflow-x-auto no-scrollbar text-xs font-bold">
+              <button
+                type="button"
+                onClick={() => { setMobileBottomSection('boleta'); setIsMobilePanelCollapsed(false); }}
+                className={`px-2.5 py-1 rounded transition cursor-pointer flex items-center gap-1 shrink-0 ${
+                  mobileBottomSection === 'boleta' && !isMobilePanelCollapsed
+                    ? 'bg-emerald-600 text-white shadow'
+                    : 'bg-[#060c18] border border-slate-800 text-slate-300 hover:text-white'
+                }`}
+              >
+                <SlidersHorizontal className="w-3.5 h-3.5 text-emerald-400" />
+                <span>Boleta</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => { setMobileBottomSection('mercado'); setIsMobilePanelCollapsed(false); }}
+                className={`px-2.5 py-1 rounded transition cursor-pointer flex items-center gap-1 shrink-0 ${
+                  mobileBottomSection === 'mercado' && !isMobilePanelCollapsed
+                    ? 'bg-emerald-600 text-white shadow'
+                    : 'bg-[#060c18] border border-slate-800 text-slate-300 hover:text-white'
+                }`}
+              >
+                <Globe className="w-3.5 h-3.5 text-emerald-400" />
+                <span>Mercado</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => { setMobileBottomSection('book'); setIsMobilePanelCollapsed(false); }}
+                className={`px-2.5 py-1 rounded transition cursor-pointer flex items-center gap-1 shrink-0 ${
+                  mobileBottomSection === 'book' && !isMobilePanelCollapsed
+                    ? 'bg-emerald-600 text-white shadow'
+                    : 'bg-[#060c18] border border-slate-800 text-slate-300 hover:text-white'
+                }`}
+              >
+                <Layers className="w-3.5 h-3.5 text-emerald-400" />
+                <span>Book DOM</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => { setMobileBottomSection('tape'); setIsMobilePanelCollapsed(false); }}
+                className={`px-2.5 py-1 rounded transition cursor-pointer flex items-center gap-1 shrink-0 ${
+                  mobileBottomSection === 'tape' && !isMobilePanelCollapsed
+                    ? 'bg-emerald-600 text-white shadow'
+                    : 'bg-[#060c18] border border-slate-800 text-slate-300 hover:text-white'
+                }`}
+              >
+                <Activity className="w-3.5 h-3.5 text-emerald-400" />
+                <span>Tape</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => { setMobileBottomSection('posicoes'); setIsMobilePanelCollapsed(false); }}
+                className={`px-2.5 py-1 rounded transition cursor-pointer flex items-center gap-1 shrink-0 ${
+                  mobileBottomSection === 'posicoes' && !isMobilePanelCollapsed
+                    ? 'bg-emerald-600 text-white shadow'
+                    : 'bg-[#060c18] border border-slate-800 text-slate-300 hover:text-white'
+                }`}
+              >
+                <Briefcase className="w-3.5 h-3.5 text-emerald-400" />
+                <span>Posições ({positions.length})</span>
+              </button>
+            </div>
+
+            {/* Accordion Collapse/Expand Button */}
+            <button
+              type="button"
+              onClick={() => setIsMobilePanelCollapsed(!isMobilePanelCollapsed)}
+              className="p-1 rounded bg-[#060c18] border border-slate-800 text-slate-400 hover:text-white shrink-0 cursor-pointer"
+              title={isMobilePanelCollapsed ? 'Expandir painel de operações' : 'Recolher painel de operações'}
+            >
+              {isMobilePanelCollapsed ? <ChevronDown className="w-4 h-4 text-emerald-400" /> : <ChevronUp className="w-4 h-4" />}
+            </button>
+          </div>
+
+          {/* Mobile Panel Content Body (When Not Collapsed) */}
+          {!isMobilePanelCollapsed && (
+            <div className="p-3 bg-[#060c18] flex-1">
+              {/* 1. BOLETA DE EXECUÇÃO */}
+              {mobileBottomSection === 'boleta' && (
+                <div className="space-y-3 bg-[#09111e] p-3 rounded-xl border border-slate-800">
+                  <div className="flex items-center justify-between pb-1.5 border-b border-slate-800">
+                    <span className="font-bold text-white uppercase text-xs tracking-wider flex items-center gap-1.5">
+                      <SlidersHorizontal className="w-4 h-4 text-emerald-400" />
+                      Boleta de Execução Rápida • {currentAsset.symbol}
+                    </span>
+                    <span className="text-[10px] text-slate-400 font-mono-numbers">
+                      Spread: {currentAsset.symbol.includes('WIN') ? '5 pts' : '0.5 pt'}
+                    </span>
+                  </div>
+
+                  {/* Compra / Venda Tabs */}
+                  <div className="grid grid-cols-2 gap-1.5 bg-[#060c18] p-1 rounded-lg border border-slate-800 text-xs font-black">
+                    <button
+                      type="button"
+                      onClick={() => setOrderTicketTab('BUY')}
+                      className={`py-2 rounded-md transition cursor-pointer flex items-center justify-center gap-1 ${
+                        orderTicketTab === 'BUY'
+                          ? 'bg-emerald-600 text-white shadow'
+                          : 'text-slate-400 hover:text-white'
+                      }`}
+                    >
+                      <ArrowUpRight className="w-4 h-4" /> COMPRA
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setOrderTicketTab('SELL')}
+                      className={`py-2 rounded-md transition cursor-pointer flex items-center justify-center gap-1 ${
+                        orderTicketTab === 'SELL'
+                          ? 'bg-rose-600 text-white shadow'
+                          : 'text-slate-400 hover:text-white'
+                      }`}
+                    >
+                      <ArrowDownRight className="w-4 h-4" /> VENDA
+                    </button>
+                  </div>
+
+                  {/* Mercado / Limitada Tabs */}
+                  <div className="grid grid-cols-2 gap-1.5 text-xs font-bold">
+                    <button
+                      type="button"
+                      onClick={() => setOrderType('MARKET')}
+                      className={`py-1.5 rounded-lg border transition cursor-pointer ${
+                        orderType === 'MARKET'
+                          ? 'bg-slate-800 border-slate-700 text-white'
+                          : 'bg-[#060c18] border-slate-800 text-slate-400 hover:text-white'
+                      }`}
+                    >
+                      A Mercado
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setOrderType('LIMIT')}
+                      className={`py-1.5 rounded-lg border transition cursor-pointer ${
+                        orderType === 'LIMIT'
+                          ? 'bg-slate-800 border-slate-700 text-white'
+                          : 'bg-[#060c18] border-slate-800 text-slate-400 hover:text-white'
+                      }`}
+                    >
+                      Ordem Limitada
+                    </button>
+                  </div>
+
+                  {/* Contratos */}
+                  <div>
+                    <div className="flex items-center justify-between text-xs text-slate-400 mb-1">
+                      <span>Quantidade de Contratos:</span>
+                      <span className="font-mono-numbers text-white font-bold">{contracts}x</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <input
+                        type="number"
+                        min="1"
+                        max="500"
+                        value={contracts}
+                        onChange={(e) => setContracts(Math.max(1, Number(e.target.value)))}
+                        className="w-20 bg-[#060c18] border border-slate-700 rounded-lg px-2 py-1.5 text-white font-mono-numbers text-sm font-bold outline-none text-center"
+                      />
+                      <div className="flex-1 grid grid-cols-5 gap-1">
+                        {[1, 5, 10, 25, 50].map((q) => (
+                          <button
+                            key={q}
+                            type="button"
+                            onClick={() => setContracts(q)}
+                            className={`py-1.5 rounded-lg text-xs font-bold border transition cursor-pointer ${
+                              contracts === q
+                                ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40'
+                                : 'bg-slate-900 border-slate-800 text-slate-400 hover:text-white'
+                            }`}
+                          >
+                            {q}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Limit Price if selected */}
+                  {orderType === 'LIMIT' && (
+                    <div className="space-y-1">
+                      <span className="text-xs text-slate-400">Preço Limite:</span>
+                      <input
+                        type="number"
+                        step={currentAsset.symbol.includes('WIN') ? 5 : 0.5}
+                        value={limitPrice}
+                        onChange={(e) => setLimitPrice(Number(e.target.value))}
+                        className="w-full bg-[#060c18] border border-slate-700 rounded-lg px-3 py-2 text-white font-mono-numbers text-sm font-bold outline-none"
+                      />
+                    </div>
+                  )}
+
+                  {/* Stop Loss & Take Profit */}
+                  <div className="grid grid-cols-2 gap-2 text-xs">
+                    <div className="bg-[#060c18] p-2 rounded-lg border border-slate-800 flex items-center justify-between">
+                      <label className="text-rose-400 font-bold flex items-center gap-1.5 cursor-pointer">
+                        <input
+                          type="checkbox"
+                          checked={useStopLoss}
+                          onChange={(e) => setUseStopLoss(e.target.checked)}
+                          className="accent-rose-500 cursor-pointer"
+                        />
+                        <span>SL</span>
+                      </label>
+                      {useStopLoss && (
+                        <input
+                          type="number"
+                          value={stopLossOffset}
+                          onChange={(e) => setStopLossOffset(Number(e.target.value))}
+                          className="w-16 bg-slate-900 border border-slate-700 rounded px-1.5 py-0.5 text-white font-mono-numbers text-right text-xs"
+                        />
+                      )}
+                    </div>
+
+                    <div className="bg-[#060c18] p-2 rounded-lg border border-slate-800 flex items-center justify-between">
+                      <label className="text-emerald-400 font-bold flex items-center gap-1.5 cursor-pointer">
+                        <input
+                          type="checkbox"
+                          checked={useTakeProfit}
+                          onChange={(e) => setUseTakeProfit(e.target.checked)}
+                          className="accent-emerald-500 cursor-pointer"
+                        />
+                        <span>TP</span>
+                      </label>
+                      {useTakeProfit && (
+                        <input
+                          type="number"
+                          value={takeProfitOffset}
+                          onChange={(e) => setTakeProfitOffset(Number(e.target.value))}
+                          className="w-16 bg-slate-900 border border-slate-700 rounded px-1.5 py-0.5 text-white font-mono-numbers text-right text-xs"
+                        />
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Big Execution Button */}
+                  {orderTicketTab === 'BUY' ? (
+                    <button
+                      type="button"
+                      onClick={() => handleExecuteOrder('BUY')}
+                      className="w-full py-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-black text-sm uppercase tracking-wider transition cursor-pointer flex flex-col items-center justify-center shadow-lg shadow-emerald-950 active:scale-98"
+                    >
+                      <div className="flex items-center gap-1.5">
+                        <ArrowUpRight className="w-4 h-4" />
+                        <span>COMPRAR {contracts}x {currentAsset.symbol}</span>
+                      </div>
+                      <span className="text-[11px] font-mono-numbers opacity-90">
+                        {formatCurrencyValue(currentMarketPrice, currentAsset.currency)}
+                      </span>
+                    </button>
+                  ) : (
+                    <button
+                      type="button"
+                      onClick={() => handleExecuteOrder('SELL')}
+                      className="w-full py-3 rounded-xl bg-rose-600 hover:bg-rose-500 text-white font-black text-sm uppercase tracking-wider transition cursor-pointer flex flex-col items-center justify-center shadow-lg shadow-rose-950 active:scale-98"
+                    >
+                      <div className="flex items-center gap-1.5">
+                        <ArrowDownRight className="w-4 h-4" />
+                        <span>VENDER {contracts}x {currentAsset.symbol}</span>
+                      </div>
+                      <span className="text-[11px] font-mono-numbers opacity-90">
+                        {formatCurrencyValue(currentMarketPrice, currentAsset.currency)}
+                      </span>
+                    </button>
+                  )}
+
+                  {/* Zerar & Inverter Emergency Controls */}
+                  <div className="grid grid-cols-2 gap-2 pt-1">
+                    <button
+                      type="button"
+                      onClick={() => handleCloseAllPositions()}
+                      className="py-2.5 px-3 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs uppercase tracking-wide transition cursor-pointer flex items-center justify-center gap-1.5 shadow-md shadow-amber-950"
+                    >
+                      <Square className="w-3.5 h-3.5 fill-current" />
+                      <span>ZERAR TUDO</span>
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={handleReversePosition}
+                      className="py-2.5 px-3 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 font-bold text-xs uppercase tracking-wide transition cursor-pointer flex items-center justify-center gap-1.5"
+                    >
+                      <ArrowRightLeft className="w-3.5 h-3.5" />
+                      <span>Inverter</span>
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {/* 2. MERCADO EM TEMPO REAL */}
+              {mobileBottomSection === 'mercado' && (
+                <div className="space-y-2 bg-[#09111e] p-3 rounded-xl border border-slate-800">
+                  <div className="flex items-center justify-between pb-1 border-b border-slate-800">
+                    <span className="font-bold text-white uppercase text-xs tracking-wider flex items-center gap-1.5">
+                      <Globe className="w-4 h-4 text-emerald-400" />
+                      Mercado em Tempo Real
+                    </span>
+                    <span className="text-[10px] text-slate-500 font-mono-numbers">{filteredMarketWatch.length} Ativos</span>
+                  </div>
+
+                  {/* Categories */}
+                  <div className="flex items-center gap-1 overflow-x-auto no-scrollbar py-0.5 text-xs font-bold">
+                    {(['Todos', 'Ações', 'Futuros', 'Forex', 'Cripto', 'BDRs'] as const).map((cat) => (
+                      <button
+                        key={cat}
+                        onClick={() => setMarketWatchCategory(cat)}
+                        className={`px-2.5 py-1 rounded-lg transition cursor-pointer shrink-0 ${
+                          marketWatchCategory === cat
+                            ? 'bg-emerald-600 text-white font-bold'
+                            : 'bg-[#060c18] text-slate-400 hover:text-white border border-slate-800'
+                        }`}
+                      >
+                        {cat}
+                      </button>
+                    ))}
+                  </div>
+
+                  {/* Search */}
+                  <div className="relative">
+                    <Search className="w-3.5 h-3.5 text-slate-500 absolute left-2.5 top-1/2 -translate-y-1/2" />
+                    <input
+                      type="text"
+                      placeholder="Filtrar ativos para operar..."
+                      value={marketWatchSearch}
+                      onChange={(e) => setMarketWatchSearch(e.target.value)}
+                      className="w-full bg-[#060c18] border border-slate-800 rounded-lg pl-8 pr-3 py-1.5 text-xs text-white placeholder:text-slate-600 outline-none"
+                    />
+                  </div>
+
+                  {/* Asset List */}
+                  <div className="space-y-1 max-h-[360px] overflow-y-auto no-scrollbar font-mono-numbers text-xs">
+                    {filteredMarketWatch.map((item) => {
+                      const isSelected = item.symbol === selectedSymbol;
+                      const isPos = item.change24h >= 0;
+                      return (
+                        <div
+                          key={item.id}
+                          onClick={() => {
+                            setSelectedSymbol(item.symbol);
+                            setMobileBottomSection('boleta');
+                          }}
+                          className={`flex items-center justify-between px-2.5 py-2 rounded-lg transition cursor-pointer border ${
+                            isSelected
+                              ? 'bg-emerald-950/60 border-emerald-500/50'
+                              : 'bg-[#060c18] border-slate-800/80 hover:bg-slate-800/50'
+                          }`}
+                        >
+                          <div>
+                            <span className="font-bold text-white block text-xs">{item.symbol}</span>
+                            <span className="text-[10px] text-slate-400">{item.name}</span>
+                          </div>
+                          <div className="text-right">
+                            <span className="font-bold text-white text-xs block">
+                              {formatCurrencyValue(item.price, item.currency)}
+                            </span>
+                            <span className={`text-[10px] font-bold ${isPos ? 'text-emerald-400' : 'text-rose-400'}`}>
+                              {isPos ? '+' : ''}{item.change24h}%
+                            </span>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+
+              {/* 3. BOOK DE OFERTAS (DOM) */}
+              {mobileBottomSection === 'book' && (
+                <div className="space-y-2 bg-[#09111e] p-3 rounded-xl border border-slate-800">
+                  <div className="flex items-center justify-between pb-1 border-b border-slate-800">
+                    <span className="font-bold text-white uppercase text-xs tracking-wider flex items-center gap-1.5">
+                      <Layers className="w-4 h-4 text-emerald-400" />
+                      Book de Ofertas (DOM) • {currentAsset.symbol}
+                    </span>
+                    <span className="text-[10px] font-mono-numbers text-slate-400">
+                      Preço: <strong className="text-white">{formatCurrencyValue(currentMarketPrice, currentAsset.currency)}</strong>
+                    </span>
+                  </div>
+
+                  <div className="grid grid-cols-3 py-1 px-2 text-[10px] font-bold text-slate-400 border-b border-slate-800 uppercase">
+                    <span>Compra (Bid)</span>
+                    <span className="text-center">Preço</span>
+                    <span className="text-right">Venda (Ask)</span>
+                  </div>
+
+                  <div className="space-y-1 font-mono-numbers text-xs">
+                    {bookOffers.slice(0, 10).map((row, idx) => (
+                      <div key={idx} className="grid grid-cols-3 items-center py-1 px-2 rounded bg-[#060c18] border border-slate-800/60 relative overflow-hidden">
+                        {/* Bid depth bar */}
+                        <div
+                          className="absolute left-0 top-0 bottom-0 bg-emerald-500/15 pointer-events-none"
+                          style={{ width: `${Math.min(100, row.bidVolPct * 1.5)}%` }}
+                        />
+                        {/* Ask depth bar */}
+                        <div
+                          className="absolute right-0 top-0 bottom-0 bg-rose-500/15 pointer-events-none"
+                          style={{ width: `${Math.min(100, row.askVolPct * 1.5)}%` }}
+                        />
+
+                        <span className="text-emerald-400 font-bold z-10">{row.bidQty}</span>
+                        <span className="text-center font-bold text-white z-10">
+                          {formatCurrencyValue(row.price, currentAsset.currency)}
+                        </span>
+                        <span className="text-right text-rose-400 font-bold z-10">{row.askQty}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* 4. TAPE READING */}
+              {mobileBottomSection === 'tape' && (
+                <div className="space-y-2 bg-[#09111e] p-3 rounded-xl border border-slate-800">
+                  <div className="flex items-center justify-between pb-1 border-b border-slate-800">
+                    <span className="font-bold text-white uppercase text-xs tracking-wider flex items-center gap-1.5">
+                      <Activity className="w-4 h-4 text-emerald-400" />
+                      Tape Reading (Times & Trades) • {currentAsset.symbol}
+                    </span>
+                    <span className="text-[10px] font-mono-numbers text-emerald-400 font-bold">
+                      Fluxo em tempo real
+                    </span>
+                  </div>
+
+                  <div className="grid grid-cols-4 py-1 px-2 text-[10px] font-bold text-slate-400 border-b border-slate-800 uppercase">
+                    <span>Horário</span>
+                    <span>Preço</span>
+                    <span className="text-center">Qtd</span>
+                    <span className="text-right">Agressor</span>
+                  </div>
+
+                  <div className="space-y-1 max-h-[340px] overflow-y-auto no-scrollbar font-mono-numbers text-xs">
+                    {timesAndTrades.map((t) => (
+                      <div
+                        key={t.id}
+                        className={`grid grid-cols-4 py-1 px-2 rounded items-center ${
+                          t.aggressor === 'BUY' ? 'bg-emerald-950/30 text-emerald-300' : 'bg-rose-950/30 text-rose-300'
+                        }`}
+                      >
+                        <span className="text-slate-400 text-[10px]">{t.time}</span>
+                        <span className="font-bold text-white">{formatCurrencyValue(t.price, currentAsset.currency)}</span>
+                        <span className="text-center font-bold">{t.qty}</span>
+                        <span className="text-right font-black">{t.aggressor}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* 5. MINHAS POSIÇÕES */}
+              {mobileBottomSection === 'posicoes' && (
+                <div className="space-y-2 bg-[#09111e] p-3 rounded-xl border border-slate-800">
+                  <div className="flex items-center justify-between pb-1 border-b border-slate-800">
+                    <span className="font-bold text-white uppercase text-xs tracking-wider flex items-center gap-1.5">
+                      <Briefcase className="w-4 h-4 text-emerald-400" />
+                      Minhas Posições ({positions.length})
+                    </span>
+                    {positions.length > 0 && (
+                      <button
+                        type="button"
+                        onClick={() => handleCloseAllPositions()}
+                        className="px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/40 text-[10px] font-bold"
+                      >
+                        Zerar Todas
+                      </button>
+                    )}
+                  </div>
+
+                  {positions.length === 0 ? (
+                    <div className="py-8 text-center text-slate-500 text-xs">
+                      Nenhuma posição aberta no momento. Utilize a Boleta para abrir novas ordens.
+                    </div>
+                  ) : (
+                    <div className="space-y-2 font-mono-numbers text-xs">
+                      {positions.map((pos) => {
+                        const isWin = pos.symbol.includes('WIN');
+                        const isWdo = pos.symbol.includes('WDO');
+                        const diff = pos.side === 'BUY' ? currentMarketPrice - pos.entryPrice : pos.entryPrice - currentMarketPrice;
+                        const pnlBrl = isWin ? diff * 0.2 * pos.contracts : isWdo ? diff * 10 * pos.contracts : diff * pos.contracts;
+
+                        return (
+                          <div key={pos.id} className="p-2.5 rounded-lg bg-[#060c18] border border-slate-800 flex items-center justify-between">
+                            <div>
+                              <div className="flex items-center gap-1.5">
+                                <span className="font-bold text-white text-xs">{pos.symbol}</span>
+                                <span className={`px-1 py-0.2 rounded text-[9px] font-bold ${pos.side === 'BUY' ? 'text-emerald-400 bg-emerald-500/10' : 'text-rose-400 bg-rose-500/10'}`}>
+                                  {pos.side}
+                                </span>
+                                <span className="text-[10px] text-slate-400 font-bold">{pos.contracts}x</span>
+                              </div>
+                              <div className="text-[10px] text-slate-400 mt-0.5">
+                                Entrada: {pos.entryPrice} | Atual: {currentMarketPrice}
+                              </div>
+                            </div>
+                            <div className="text-right">
+                              <span className={`block font-black text-xs ${pnlBrl >= 0 ? 'text-emerald-400' : 'text-rose-400'}`}>
+                                {pnlBrl >= 0 ? '+' : ''}{pnlBrl.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
+                              </span>
+                              <button
+                                type="button"
+                                onClick={() => handleClosePosition(pos.id)}
+                                className="text-[9px] text-rose-400 hover:text-rose-300 underline font-bold mt-0.5"
+                              >
+                                Fechar
+                              </button>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+          )}
         </div>
       </div>
 

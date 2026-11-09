@@ -41,14 +41,14 @@ jobs:
         run: |
           npm run build
         env:
-          FINNHUB_API_KEY: ${{ secrets.FINNHUB_API_KEY }}
           VITE_FINNHUB_API_KEY: ${{ secrets.VITE_FINNHUB_API_KEY || secrets.FINNHUB_API_KEY }}
-          FINNHUB_WEBHOOK_SECRET: ${{ secrets.FINNHUB_WEBHOOK_SECRET }}
-          FMP_API_KEY: ${{ secrets.FMP_API_KEY }}
           VITE_FMP_API_KEY: ${{ secrets.VITE_FMP_API_KEY || secrets.FMP_API_KEY }}
+          VITE_AWESOME_ECONOMY_URL: ${{ secrets.VITE_AWESOME_ECONOMY_URL }}
+          FINNHUB_API_KEY: ${{ secrets.FINNHUB_API_KEY }}
+          FMP_API_KEY: ${{ secrets.FMP_API_KEY }}
+          FINNHUB_WEBHOOK_SECRET: ${{ secrets.FINNHUB_WEBHOOK_SECRET }}
           ALPHA_VANTAGE_KEY: ${{ secrets.ALPHA_VANTAGE_KEY || 'HH8UFEY234T7JFRH' }}
           VITE_ALPHA_VANTAGE_KEY: ${{ secrets.VITE_ALPHA_VANTAGE_KEY || 'HH8UFEY234T7JFRH' }}
-          VITE_AWESOME_ECONOMY_URL: ${{ secrets.VITE_AWESOME_ECONOMY_URL }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           VITE_GEMINI_API_KEY: ${{ secrets.VITE_GEMINI_API_KEY || secrets.GEMINI_API_KEY }}
 

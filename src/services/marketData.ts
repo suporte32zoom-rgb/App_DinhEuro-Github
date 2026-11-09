@@ -337,16 +337,25 @@ const FMP_KEY_STORAGE = 'dinheuro_fmp_key';
 const ALPHA_VANTAGE_KEY_STORAGE = 'dinheuro_alphavantage_key';
 
 export function getStoredFinnhubKey(): string {
-  if (typeof window === 'undefined') return '';
-  try {
-    return (
-      localStorage.getItem(FINNHUB_KEY_STORAGE) ||
-      (import.meta as any).env?.VITE_FINNHUB_API_KEY ||
-      ''
-    );
-  } catch {
-    return (import.meta as any).env?.VITE_FINNHUB_API_KEY || '';
+  let key = '';
+  if (typeof window !== 'undefined') {
+    try {
+      key = localStorage.getItem(FINNHUB_KEY_STORAGE)?.trim() || '';
+    } catch {
+      // ignore
+    }
   }
+  if (!key) {
+    try {
+      key = (import.meta as any).env?.VITE_FINNHUB_API_KEY || (import.meta as any).env?.FINNHUB_API_KEY || '';
+    } catch {
+      // ignore
+    }
+  }
+  if (!key && typeof process !== 'undefined') {
+    key = process.env?.VITE_FINNHUB_API_KEY || process.env?.FINNHUB_API_KEY || '';
+  }
+  return key ? key.trim() : '';
 }
 
 export function setStoredFinnhubKey(key: string): void {
@@ -363,16 +372,25 @@ export function setStoredFinnhubKey(key: string): void {
 }
 
 export function getStoredFmpKey(): string {
-  if (typeof window === 'undefined') return '';
-  try {
-    return (
-      localStorage.getItem(FMP_KEY_STORAGE) ||
-      (import.meta as any).env?.VITE_FMP_API_KEY ||
-      ''
-    );
-  } catch {
-    return (import.meta as any).env?.VITE_FMP_API_KEY || '';
+  let key = '';
+  if (typeof window !== 'undefined') {
+    try {
+      key = localStorage.getItem(FMP_KEY_STORAGE)?.trim() || '';
+    } catch {
+      // ignore
+    }
   }
+  if (!key) {
+    try {
+      key = (import.meta as any).env?.VITE_FMP_API_KEY || (import.meta as any).env?.FMP_API_KEY || '';
+    } catch {
+      // ignore
+    }
+  }
+  if (!key && typeof process !== 'undefined') {
+    key = process.env?.VITE_FMP_API_KEY || process.env?.FMP_API_KEY || '';
+  }
+  return key ? key.trim() : '';
 }
 
 export function setStoredFmpKey(key: string): void {
@@ -470,10 +488,43 @@ export async function fetchLiveMarketDataFromAPIs(
   tasks.push(
     (async () => {
       try {
-        const awesomeData = await fetchJsonWithTimeout(
-          'https://economia.awesomeapi.com.br/last/USD-BRL,EUR-BRL,GBP-BRL,BTC-BRL,ETH-BRL,CAD-BRL,AUD-BRL,CHF-BRL,JPY-BRL,CNY-BRL,ARS-BRL',
-          3500
-        );
+        const awesomeBaseUrl =
+          (import.meta as any).env?.VITE_AWESOME_ECONOMY_URL ||
+          'https://economia.awesomeapi.com.br/last';
+        const awesomeEndpoint = awesomeBaseUrl.includes('?') || awesomeBaseUrl.includes('/USD-BRL')
+          ? awesomeBaseUrl
+          : `${awesomeBaseUrl.replace(/\/$/, '')}/USD-BRL,EUR-BRL,GBP-BRL,BTC-BRL,ETH-BRL,CAD-BRL,AUD-BRL,CHF-BRL,JPY-BRL,CNY-BRL,ARS-BRL`;
+
+        let awesomeData = await fetchJsonWithTimeout(awesomeEndpoint, 3500);
+        if (!awesomeData && awesomeBaseUrl !== 'https://economia.awesomeapi.com.br/last') {
+          awesomeData = await fetchJsonWithTimeout('https://economia.awesomeapi.com.br/last/USD-BRL,EUR-BRL,GBP-BRL,BTC-BRL,ETH-BRL,CAD-BRL,AUD-BRL,CHF-BRL,JPY-BRL,CNY-BRL,ARS-BRL', 3500);
+        }
+
+        // Secondary fallback provider for zero downtime in GitHub Pages deploy
+        if (!awesomeData || !awesomeData.USDBRL) {
+          try {
+            const openRates = await fetchJsonWithTimeout('https://open.er-api.com/v6/latest/USD', 3000);
+            if (openRates?.rates) {
+              if (openRates.rates.BRL) liveRates.BRL = openRates.rates.BRL;
+              if (openRates.rates.EUR) liveRates.EUR = openRates.rates.EUR;
+              if (openRates.rates.GBP) liveRates.GBP = openRates.rates.GBP;
+              if (openRates.rates.CAD) liveRates.CAD = openRates.rates.CAD;
+              if (openRates.rates.AUD) liveRates.AUD = openRates.rates.AUD;
+              if (openRates.rates.CHF) liveRates.CHF = openRates.rates.CHF;
+              if (openRates.rates.JPY) liveRates.JPY = openRates.rates.JPY;
+              if (openRates.rates.CNY) liveRates.CNY = openRates.rates.CNY;
+              if (openRates.rates.ARS) liveRates.ARS = openRates.rates.ARS;
+
+              const usdBrlVal = openRates.rates.BRL;
+              rawQuotes['USD/BRL'] = { price: Number(usdBrlVal.toFixed(4)), change: 0, changePercent: 0, source: 'open_er_api_live' };
+              rawQuotes['EUR/BRL'] = { price: Number((usdBrlVal / openRates.rates.EUR).toFixed(4)), change: 0, changePercent: 0, source: 'open_er_api_live' };
+              rawQuotes['GBP/BRL'] = { price: Number((usdBrlVal / openRates.rates.GBP).toFixed(4)), change: 0, changePercent: 0, source: 'open_er_api_live' };
+            }
+          } catch {
+            // ignore
+          }
+        }
+
         if (awesomeData) {
           let usdToBrl = liveRates.BRL;
           if (awesomeData.USDBRL && awesomeData.USDBRL.bid) {
@@ -696,6 +747,18 @@ export async function fetchLiveMarketDataFromAPIs(
     ['ASX 200', '%5EAXJO'],
     ['RUSSELL 2000', '%5ERUT'],
     ['VIX', '%5EVIX'],
+    ['AAPL', 'AAPL'],
+    ['MSFT', 'MSFT'],
+    ['NVDA', 'NVDA'],
+    ['AMZN', 'AMZN'],
+    ['GOOGL', 'GOOGL'],
+    ['META', 'META'],
+    ['TSLA', 'TSLA'],
+    ['PETR4', 'PETR4.SA'],
+    ['VALE3', 'VALE3.SA'],
+    ['ITUB4', 'ITUB4.SA'],
+    ['BBDC4', 'BBDC4.SA'],
+    ['BBAS3', 'BBAS3.SA'],
   ];
 
   tasks.push(
