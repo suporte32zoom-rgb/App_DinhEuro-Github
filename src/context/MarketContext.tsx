@@ -165,7 +165,21 @@ const INITIAL_DEMO_PORTFOLIO: PortfolioPosition[] = [
 ];
 
 export const MarketProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [assets, setAssets] = useState<MarketAsset[]>(INITIAL_ASSETS);
+  const [assets, setAssets] = useState<MarketAsset[]>(() => {
+    if (typeof window === 'undefined') return INITIAL_ASSETS;
+    try {
+      const cached = localStorage.getItem('dinheuro_live_assets_cache');
+      if (cached) {
+        const parsed = JSON.parse(cached);
+        if (Array.isArray(parsed) && parsed.length > 0 && parsed.some((a) => a.price > 0)) {
+          return parsed;
+        }
+      }
+    } catch {
+      // fallback
+    }
+    return INITIAL_ASSETS;
+  });
   const [universalRates, setUniversalRates] = useState<UniversalRates>(DEFAULT_UNIVERSAL_RATES);
   const [news, setNews] = useState<NewsItem[]>(INITIAL_NEWS);
   // Active Tab State with URL routing support

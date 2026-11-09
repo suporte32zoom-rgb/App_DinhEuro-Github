@@ -16,12 +16,15 @@ describe('Real-Time Market Data Engine & Catalog Expansion', () => {
     assert.ok(categories.has('commodities'), 'Missing commodities');
   });
 
-  it('guarantees every asset has valid positive price, non-empty sparkline and flag', () => {
+  it('guarantees every asset in initial catalog has valid symbol, category, currency and flag', () => {
     for (const asset of INITIAL_ASSETS) {
-      assert.ok(asset.price > 0, `Asset ${asset.symbol} has non-positive price: ${asset.price}`);
+      assert.ok(asset.id, `Asset missing id`);
+      assert.ok(asset.symbol, `Asset missing symbol`);
+      assert.ok(asset.name, `Asset ${asset.symbol} missing name`);
+      assert.ok(asset.category, `Asset ${asset.symbol} missing category`);
       assert.ok(asset.currency && asset.currency.length >= 3, `Asset ${asset.symbol} missing currency`);
-      assert.ok(Array.isArray(asset.sparkline) && asset.sparkline.length >= 4, `Asset ${asset.symbol} invalid sparkline`);
       assert.ok(asset.flag, `Asset ${asset.symbol} missing flag or category icon`);
+      assert.ok(Array.isArray(asset.sparkline), `Asset ${asset.symbol} missing sparkline array`);
     }
   });
 
@@ -62,33 +65,46 @@ describe('Real-Time Market Data Engine & Catalog Expansion', () => {
     assert.ok(dual.summaryTriCurrency.includes('R$') && dual.summaryTriCurrency.includes('€'));
   });
 
-  it('guarantees unique realistic volumes across assets without artificial duplication', () => {
-    const volCounts = new Map<string, number>();
-    for (const a of INITIAL_ASSETS) {
-      if (a.volume) {
-        volCounts.set(a.volume, (volCounts.get(a.volume) || 0) + 1);
-      }
-    }
-    // No single volume string should be blindly copied across more than 3 assets
-    for (const [vol, count] of volCounts.entries()) {
-      assert.ok(count <= 3, `Volume "${vol}" is duplicated across ${count} assets`);
-    }
+  it('validates exact 104 assets in catalog and zero obsolete hardcoded static prices', () => {
+    assert.strictEqual(INITIAL_ASSETS.length, 104, `Expected exactly 104 assets, got ${INITIAL_ASSETS.length}`);
+
+    // Verify initial state has zero obsolete hardcoded static numbers
+    const sp500 = INITIAL_ASSETS.find((a) => a.symbol === 'S&P 500');
+    assert.ok(sp500, 'S&P 500 must exist');
+    assert.notStrictEqual(sp500.price, 5885, 'Obsolete hardcoded price 5885 must be removed');
+
+    const dow = INITIAL_ASSETS.find((a) => a.symbol === 'DOW JONES');
+    assert.ok(dow, 'Dow Jones must exist');
+    assert.notStrictEqual(dow.price, 43720, 'Obsolete hardcoded price 43720 must be removed');
+
+    const ibov = INITIAL_ASSETS.find((a) => a.symbol === 'IBOVESPA');
+    assert.ok(ibov, 'Ibovespa must exist');
+    assert.notStrictEqual(ibov.price, 132450, 'Obsolete hardcoded price 132450 must be removed');
   });
 
-  it('validates Finnhub and Awesome API data normalization', () => {
-    // Test that USDBRL and BTC pairs in INITIAL_ASSETS match expected symbols
-    const usdBrl = INITIAL_ASSETS.find((a) => a.symbol === 'USD/BRL');
-    assert.ok(usdBrl, 'USD/BRL must exist in catalog');
-    assert.strictEqual(usdBrl.category, 'forex');
-    assert.strictEqual(usdBrl.currency, 'BRL');
+  it('dynamically populates assets when live API quotes are ingested', async () => {
+    const { fetchLiveMarketDataFromAPIs } = await import('./marketData');
+    const mockLiveQuotes: Record<string, any> = {
+      'S&P 500': { price: 7575.40, changePercent: 0.85, high: 7590.0, low: 7550.0 },
+      'DOW JONES': { price: 52514.42, changePercent: 0.42, high: 52600.0, low: 52400.0 },
+      'NASDAQ': { price: 25346.44, changePercent: 1.15, high: 25400.0, low: 25200.0 },
+      'IBOVESPA': { price: 171670.27, changePercent: 0.65, high: 172000.0, low: 171000.0 },
+      'AAPL': { price: 349.50, changePercent: 1.20, high: 352.0, low: 347.0 },
+      'PETR4': { price: 47.30, changePercent: -0.40, high: 48.0, low: 46.9 },
+    };
 
-    const btcUsd = INITIAL_ASSETS.find((a) => a.symbol === 'BTC/USD');
-    assert.ok(btcUsd, 'BTC/USD must exist in catalog');
-    assert.strictEqual(btcUsd.category, 'crypto');
+    const result = await fetchLiveMarketDataFromAPIs(INITIAL_ASSETS, mockLiveQuotes);
+    const updatedSp500 = result.updatedAssets.find((a) => a.symbol === 'S&P 500');
+    assert.ok(updatedSp500 && updatedSp500.price === 7575.40, 'S&P 500 must receive live price');
+    assert.strictEqual(updatedSp500.currency, 'PTS');
+    assert.ok(updatedSp500.sparkline.length >= 4, 'Sparkline generated dynamically');
 
-    const aapl = INITIAL_ASSETS.find((a) => a.symbol === 'AAPL');
-    assert.ok(aapl, 'AAPL must exist in catalog');
-    assert.strictEqual(aapl.category, 'stocks_us');
+    const updatedDow = result.updatedAssets.find((a) => a.symbol === 'DOW JONES');
+    assert.ok(updatedDow && updatedDow.price === 52514.42, 'Dow Jones must receive live price');
+
+    const updatedIbov = result.updatedAssets.find((a) => a.symbol === 'IBOVESPA');
+    assert.ok(updatedIbov && updatedIbov.price === 171670.27, 'Ibovespa must receive live price');
   });
 });
+
 

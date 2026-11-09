@@ -134,7 +134,7 @@ const FUTURES_CONTRACTS: FutureContract[] = [
     code: 'WINQ26',
     name: 'Mini Índice B3',
     market: 'B3 Brasil',
-    price: 132450,
+    price: 171670,
     change: +0.65,
     tickValue: 'R$ 1,00 a cada 5 pts',
     marginReq: 'R$ 100,00 / contrato (Day Trade)',
@@ -145,7 +145,7 @@ const FUTURES_CONTRACTS: FutureContract[] = [
     code: 'WDOQ26',
     name: 'Mini Dólar B3',
     market: 'B3 Brasil',
-    price: 5780.0,
+    price: 5500.0,
     change: -0.32,
     tickValue: 'R$ 5,00 a cada 0,5 pt',
     marginReq: 'R$ 150,00 / contrato (Day Trade)',
@@ -178,7 +178,7 @@ const FUTURES_CONTRACTS: FutureContract[] = [
     code: 'ES1!',
     name: 'S&P 500 E-mini Futuro',
     market: 'CME Chicago',
-    price: 5885.25,
+    price: 7575.40,
     change: +0.48,
     tickValue: '$ 12,50 a cada 0,25 pt',
     marginReq: '$ 500 (Intraday)',
@@ -296,11 +296,11 @@ export const FixedIncomeDerivativesView: React.FC = () => {
     const usdBrl = assets.find((a) => a.symbol === 'USD/BRL');
     const sp500 = assets.find((a) => a.symbol === 'S&P 500');
 
-    const winPrice = ibov ? Math.round(ibov.price / 5) * 5 : 132450;
+    const winPrice = ibov && ibov.price > 0 ? Math.round(ibov.price / 5) * 5 : 171670;
     const winChange = ibov ? ibov.change24h : +0.65;
-    const wdoPrice = usdBrl ? Number((usdBrl.price * 1000).toFixed(1)) : 5780.0;
+    const wdoPrice = usdBrl && usdBrl.price > 0 ? Number((usdBrl.price * 1000).toFixed(1)) : 5500.0;
     const wdoChange = usdBrl ? usdBrl.change24h : -0.32;
-    const spPrice = sp500 ? sp500.price : 5885.25;
+    const spPrice = sp500 && sp500.price > 0 ? sp500.price : 7575.40;
     const spChange = sp500 ? sp500.change24h : +0.48;
 
     return FUTURES_CONTRACTS.map((contract) => {

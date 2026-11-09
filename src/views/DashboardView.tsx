@@ -124,7 +124,7 @@ export const DashboardView: React.FC = () => {
                   </span>
                 </div>
                 <p className="text-sm font-bold font-mono-numbers text-slate-200">
-                  {sp500Asset?.price ? `${sp500Asset.price.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} pts` : '5.885,25 pts'}
+                  {sp500Asset?.price ? `${sp500Asset.price.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} pts` : '-- pts'}
                 </p>
               </div>
 
@@ -144,7 +144,7 @@ export const DashboardView: React.FC = () => {
                   </span>
                 </div>
                 <p className="text-sm font-bold font-mono-numbers text-emerald-400">
-                  {ibovAsset?.price ? `${Math.round(ibovAsset.price).toLocaleString('pt-BR')} pts` : '167.526 pts'}
+                  {ibovAsset?.price ? `${Math.round(ibovAsset.price).toLocaleString('pt-BR')} pts` : '-- pts'}
                 </p>
               </div>
             </div>

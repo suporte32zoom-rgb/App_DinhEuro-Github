@@ -28,8 +28,8 @@ interface TapeReadingAsset {
 }
 
 const TAPE_ASSETS: TapeReadingAsset[] = [
-  { symbol: 'WIN$', name: 'Mini Índice B3 (Futuro)', type: 'Futuros B3', tickSize: 5, basePrice: 132450, unit: 'pts' },
-  { symbol: 'WDO$', name: 'Mini Dólar B3 (Futuro)', type: 'Futuros B3', tickSize: 0.5, basePrice: 5780.0, unit: 'pts' },
+  { symbol: 'WIN$', name: 'Mini Índice B3 (Futuro)', type: 'Futuros B3', tickSize: 5, basePrice: 171670, unit: 'pts' },
+  { symbol: 'WDO$', name: 'Mini Dólar B3 (Futuro)', type: 'Futuros B3', tickSize: 0.5, basePrice: 5500.0, unit: 'pts' },
   { symbol: 'PETR4', name: 'Petrobras PN', type: 'Ação B3', tickSize: 0.01, basePrice: 38.65, unit: 'R$' },
   { symbol: 'VALE3', name: 'Vale ON', type: 'Ação B3', tickSize: 0.01, basePrice: 62.40, unit: 'R$' },
   { symbol: 'BTC/USD', name: 'Bitcoin Perpétuo', type: 'Cripto', tickSize: 1, basePrice: 89500, unit: '$' },

@@ -105,11 +105,11 @@ export const DayTradeView: React.FC = () => {
     const ibov = assets.find((a) => a.symbol === 'IBOVESPA');
     const usdBrl = assets.find((a) => a.symbol === 'USD/BRL');
 
-    const winPrice = ibov ? Math.round(ibov.price / 5) * 5 : 132450;
+    const winPrice = ibov && ibov.price > 0 ? Math.round(ibov.price / 5) * 5 : 171670;
     const winChange = ibov ? ibov.change24h : 0.68;
-    const winHigh = ibov ? Math.round(ibov.high24h / 5) * 5 : 133100;
-    const winLow = ibov ? Math.round(ibov.low24h / 5) * 5 : 131800;
-    const winSpark = ibov?.sparkline?.length ? ibov.sparkline.map((v) => Math.round(v / 5) * 5) : [131900, 132100, 132300, 132450];
+    const winHigh = ibov && ibov.high24h > 0 ? Math.round(ibov.high24h / 5) * 5 : 172000;
+    const winLow = ibov && ibov.low24h > 0 ? Math.round(ibov.low24h / 5) * 5 : 171200;
+    const winSpark = ibov?.sparkline?.length ? ibov.sparkline.map((v) => Math.round(v / 5) * 5) : [171000, 171300, 171500, 171670];
 
     const wdoPrice = usdBrl ? Number((usdBrl.price * 1000).toFixed(1)) : 5482.5;
     const wdoChange = usdBrl ? usdBrl.change24h : -0.32;
@@ -562,30 +562,30 @@ export const DayTradeView: React.FC = () => {
       {
         symbol: 'IBOVESPA',
         label: 'IBOV',
-        price: ibov ? ibov.price.toLocaleString('pt-BR', { maximumFractionDigits: 0 }) : '132.450',
+        price: ibov && ibov.price > 0 ? ibov.price.toLocaleString('pt-BR', { maximumFractionDigits: 0 }) : '171.670',
         change: ibov ? ibov.change24h : +0.68,
-        spark: ibov?.sparkline?.length ? ibov.sparkline : [131500, 131800, 132100, 132450],
+        spark: ibov?.sparkline?.length ? ibov.sparkline : [171000, 171300, 171500, 171670],
       },
       {
         symbol: 'USD/BRL',
         label: 'DÓLAR',
-        price: usdBrl ? `R$ ${usdBrl.price.toFixed(3).replace('.', ',')}` : 'R$ 5,459',
+        price: usdBrl ? `R$ ${usdBrl.price.toFixed(3).replace('.', ',')}` : 'R$ 5,500',
         change: usdBrl ? usdBrl.change24h : -0.52,
-        spark: usdBrl?.sparkline?.length ? usdBrl.sparkline : [5.50, 5.48, 5.47, 5.459],
+        spark: usdBrl?.sparkline?.length ? usdBrl.sparkline : [5.50, 5.48, 5.47, 5.500],
       },
       {
         symbol: 'EUR/BRL',
         label: 'EURO',
-        price: eurBrl ? `R$ ${eurBrl.price.toFixed(3).replace('.', ',')}` : 'R$ 6,154',
+        price: eurBrl ? `R$ ${eurBrl.price.toFixed(3).replace('.', ',')}` : 'R$ 5,978',
         change: eurBrl ? eurBrl.change24h : +0.21,
-        spark: eurBrl?.sparkline?.length ? eurBrl.sparkline : [6.12, 6.13, 6.14, 6.154],
+        spark: eurBrl?.sparkline?.length ? eurBrl.sparkline : [5.95, 5.96, 5.97, 5.978],
       },
       {
         symbol: 'S&P 500',
         label: 'S&P 500',
-        price: sp500 ? sp500.price.toLocaleString('pt-BR', { minimumFractionDigits: 1, maximumFractionDigits: 1 }) : '5.885,2',
+        price: sp500 && sp500.price > 0 ? sp500.price.toLocaleString('pt-BR', { minimumFractionDigits: 1, maximumFractionDigits: 1 }) : '7.575,4',
         change: sp500 ? sp500.change24h : +0.48,
-        spark: sp500?.sparkline?.length ? sp500.sparkline : [5840, 5860, 5875, 5885],
+        spark: sp500?.sparkline?.length ? sp500.sparkline : [7520, 7540, 7560, 7575],
       },
       {
         symbol: 'BTC/USD',
