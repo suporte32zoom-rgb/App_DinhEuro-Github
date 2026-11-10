@@ -41,14 +41,20 @@ jobs:
         run: |
           npm run build
         env:
-          VITE_FINNHUB_API_KEY: ${{ secrets.VITE_FINNHUB_API_KEY || secrets.FINNHUB_API_KEY }}
-          VITE_FMP_API_KEY: ${{ secrets.VITE_FMP_API_KEY || secrets.FMP_API_KEY }}
+          VITE_COINGECKO_API_KEY: ${{ secrets.VITE_COINGECKO_API_KEY || secrets.COINGECKO_API_KEY }}
+          COINGECKO_API_KEY: ${{ secrets.COINGECKO_API_KEY }}
+          VITE_BRAPI_API_KEY: ${{ secrets.VITE_BRAPI_API_KEY || secrets.BRAPI_API_KEY || secrets.BRAPI_TOKEN }}
+          BRAPI_API_KEY: ${{ secrets.BRAPI_API_KEY || secrets.BRAPI_TOKEN }}
+          VITE_YAHOO_FINANCE_API_KEY: ${{ secrets.VITE_YAHOO_FINANCE_API_KEY || secrets.YAHOO_FINANCE_API_KEY }}
+          YAHOO_FINANCE_API_KEY: ${{ secrets.YAHOO_FINANCE_API_KEY }}
           VITE_AWESOME_ECONOMY_URL: ${{ secrets.VITE_AWESOME_ECONOMY_URL }}
+          VITE_FINNHUB_API_KEY: ${{ secrets.VITE_FINNHUB_API_KEY || secrets.FINNHUB_API_KEY }}
           FINNHUB_API_KEY: ${{ secrets.FINNHUB_API_KEY }}
+          VITE_FMP_API_KEY: ${{ secrets.VITE_FMP_API_KEY || secrets.FMP_API_KEY }}
           FMP_API_KEY: ${{ secrets.FMP_API_KEY }}
           FINNHUB_WEBHOOK_SECRET: ${{ secrets.FINNHUB_WEBHOOK_SECRET }}
-          ALPHA_VANTAGE_KEY: ${{ secrets.ALPHA_VANTAGE_KEY || 'HH8UFEY234T7JFRH' }}
-          VITE_ALPHA_VANTAGE_KEY: ${{ secrets.VITE_ALPHA_VANTAGE_KEY || 'HH8UFEY234T7JFRH' }}
+          ALPHA_VANTAGE_KEY: ${{ secrets.ALPHA_VANTAGE_KEY }}
+          VITE_ALPHA_VANTAGE_KEY: ${{ secrets.VITE_ALPHA_VANTAGE_KEY || secrets.ALPHA_VANTAGE_KEY }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           VITE_GEMINI_API_KEY: ${{ secrets.VITE_GEMINI_API_KEY || secrets.GEMINI_API_KEY }}
 

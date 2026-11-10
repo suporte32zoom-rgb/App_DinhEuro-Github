@@ -31,7 +31,7 @@ async function startServer() {
       (req.headers['X-Finnhub-Secret'] as string) ||
       (req.query.secret as string) ||
       req.body?.secret;
-    const expectedSecret = process.env.FINNHUB_WEBHOOK_SECRET || 'dbfsnl9r01qiahublh4g';
+    const expectedSecret = process.env.FINNHUB_WEBHOOK_SECRET || '';
 
     // 1. Validação de Segurança do Cabeçalho com o FINNHUB_WEBHOOK_SECRET
     const validation = validateWebhookHeader(secretHeader, expectedSecret);

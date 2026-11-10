@@ -1060,7 +1060,7 @@ function updateQuoteFromWebhook(rawSymbol, price, volume, timestamp) {
 
 // src/server/webhookHandler.ts
 var recentWebhookEvents = [];
-function validateWebhookHeader(secretHeader, expectedSecret = process.env.FINNHUB_WEBHOOK_SECRET || "dbfsnl9r01qiahublh4g") {
+function validateWebhookHeader(secretHeader, expectedSecret = process.env.FINNHUB_WEBHOOK_SECRET || "") {
   const headerValue = Array.isArray(secretHeader) ? secretHeader[0] : secretHeader;
   if (!headerValue || headerValue.trim() !== expectedSecret.trim()) {
     return {
@@ -1097,7 +1097,7 @@ async function processarEventoEmBackground(data) {
   }
 }
 function getWebhookStatus() {
-  const expectedSecret = process.env.FINNHUB_WEBHOOK_SECRET || "dbfsnl9r01qiahublh4g";
+  const expectedSecret = process.env.FINNHUB_WEBHOOK_SECRET || "";
   return {
     status: "active",
     endpoint: "/api/webhook/finnhub",
@@ -1119,7 +1119,7 @@ async function startServer() {
   app.use(express.json());
   app.post("/api/webhook/finnhub", (req, res) => {
     const secretHeader = req.headers["x-finnhub-secret"] || req.headers["X-Finnhub-Secret"] || req.query.secret || req.body?.secret;
-    const expectedSecret = process.env.FINNHUB_WEBHOOK_SECRET || "dbfsnl9r01qiahublh4g";
+    const expectedSecret = process.env.FINNHUB_WEBHOOK_SECRET || "";
     const validation = validateWebhookHeader(secretHeader, expectedSecret);
     if (!validation.isValid) {
       console.warn("[DinhEuro Webhook] Tentativa n\xE3o autorizada recebida no endpoint Finnhub.");

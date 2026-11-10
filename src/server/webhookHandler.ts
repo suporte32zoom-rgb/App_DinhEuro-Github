@@ -34,7 +34,7 @@ export const recentWebhookEvents: {
  */
 export function validateWebhookHeader(
   secretHeader: string | undefined | string[],
-  expectedSecret: string = process.env.FINNHUB_WEBHOOK_SECRET || 'dbfsnl9r01qiahublh4g'
+  expectedSecret: string = process.env.FINNHUB_WEBHOOK_SECRET || ''
 ): WebhookValidationResult {
   const headerValue = Array.isArray(secretHeader) ? secretHeader[0] : secretHeader;
 
@@ -87,7 +87,7 @@ export async function processarEventoEmBackground(data: FinnhubWebhookEvent): Pr
  * Returns diagnostic metadata and health status for the Finnhub webhook integration
  */
 export function getWebhookStatus() {
-  const expectedSecret = process.env.FINNHUB_WEBHOOK_SECRET || 'dbfsnl9r01qiahublh4g';
+  const expectedSecret = process.env.FINNHUB_WEBHOOK_SECRET || '';
   return {
     status: 'active',
     endpoint: '/api/webhook/finnhub',

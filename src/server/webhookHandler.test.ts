@@ -103,6 +103,7 @@ test('crypto and forex symbols are normalized and synchronized from Finnhub webh
 });
 
 test('getWebhookStatus returns operational status and diagnostic metadata', () => {
+  process.env.FINNHUB_WEBHOOK_SECRET = 'test-suite-secret';
   const status = getWebhookStatus();
   assert.equal(status.status, 'active');
   assert.equal(status.endpoint, '/api/webhook/finnhub');
