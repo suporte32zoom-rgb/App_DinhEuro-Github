@@ -1,12 +1,15 @@
 /**
  * DinhEuro Market Data Service (dinheuro.com / dinheuro.com.br)
- * Pipeline 100% Dinâmico em Tempo Real
- * Integração Exclusiva com as 4 Fontes Oficiais:
- * (1) FMP API (Financial Modeling Prep) - Índices globais em pontos reais
- * (2) Finnhub API - Ações e blue chips de Wall Street
- * (3) AwesomeAPI - Câmbio interbancário oficial e criptoativos
- * (4) Yahoo Finance API - Bolsas mundiais, índices, B3 e commodities
- * Zero valores estáticos hardcoded antigos.
+ * Operação 100% com APIs Públicas Gratuitas (Sem Chaves de API / Sem Cadastro)
+ * 
+ * 1. Câmbio & Forex: AwesomeAPI (economia.awesomeapi.com.br) + Open Exchange Rates público
+ * 2. Criptomoedas: CoinGecko API Pública (api.coingecko.com) + AwesomeAPI
+ * 3. Índices Mundiais & Wall Street: Yahoo Finance API Pública (query1.finance.yahoo.com)
+ * 4. Ações da B3 (Brasil): Yahoo Finance (.SA) + Brapi.dev pública
+ * 5. Commodities Globais: Yahoo Finance Futures (GC=F, CL=F, etc.)
+ * 
+ * Tratamento de Exceção Defensivo: Persistência em cache (localStorage + memória)
+ * garantindo que nenhum ativo exiba R$ 0,00 ou $0.0000 mesmo durante oscilações de rede no GitHub Pages.
  */
 
 export interface MarketAsset {
@@ -45,21 +48,22 @@ export interface UniversalRates {
 
 export const DEFAULT_UNIVERSAL_RATES: UniversalRates = {
   USD: 1.0,
-  BRL: 5.50,
-  EUR: 0.92,
-  GBP: 0.78,
-  JPY: 154.0,
+  BRL: 5.51,
+  EUR: 0.89,
+  GBP: 0.74,
+  JPY: 158.0,
   CHF: 0.88,
   CAD: 1.38,
   AUD: 1.52,
   CNY: 7.20,
-  BTC: 0.000013,
-  ETH: 0.00045,
-  SOL: 0.011,
+  ARS: 1040.0,
+  BTC: 0.0000137,
+  ETH: 0.000496,
+  SOL: 0.0122,
 };
 
 // ==============================================================
-// MAPEAMENTO COMPLETO DE SÍMBOLOS PARA YAHOO FINANCE API (4)
+// MAPEAMENTO COMPLETO DE SÍMBOLOS PARA YAHOO FINANCE API PÚBLICA
 // ==============================================================
 export const YAHOO_SYMBOLS_MAP: Record<string, string> = {
   // 1. World Indices (14)
@@ -78,7 +82,7 @@ export const YAHOO_SYMBOLS_MAP: Record<string, string> = {
   'RUSSELL 2000': '%5ERUT',
   'VIX': '%5EVIX',
 
-  // 2. US Equities (25)
+  // 2. US Equities - Wall Street (25)
   'AAPL': 'AAPL',
   'MSFT': 'MSFT',
   'NVDA': 'NVDA',
@@ -164,9 +168,29 @@ export const YAHOO_SYMBOLS_MAP: Record<string, string> = {
 };
 
 // ==============================================================
-// CATÁLOGO OFICIAL DINÂMICO (104 ATIVOS)
-// Todos os valores iniciam neutros (0) e são preenchidos
-// exclusivamente via requisição real das 4 APIs ao carregar
+// MAPEAMENTO DE CRIPTOMOEDAS PARA COINGECKO API PÚBLICA (14)
+// ==============================================================
+export const COINGECKO_CRYPTO_MAP: Record<string, { id: string; symbol: string }> = {
+  'BTC/USD': { id: 'bitcoin', symbol: 'BTC' },
+  'ETH/USD': { id: 'ethereum', symbol: 'ETH' },
+  'SOL/USD': { id: 'solana', symbol: 'SOL' },
+  'BNB/USD': { id: 'binancecoin', symbol: 'BNB' },
+  'XRP/USD': { id: 'ripple', symbol: 'XRP' },
+  'ADA/USD': { id: 'cardano', symbol: 'ADA' },
+  'DOGE/USD': { id: 'dogecoin', symbol: 'DOGE' },
+  'AVAX/USD': { id: 'avalanche-2', symbol: 'AVAX' },
+  'DOT/USD': { id: 'polkadot', symbol: 'DOT' },
+  'LINK/USD': { id: 'chainlink', symbol: 'LINK' },
+  'LTC/USD': { id: 'litecoin', symbol: 'LTC' },
+  'NEAR/USD': { id: 'near', symbol: 'NEAR' },
+  'SUI/USD': { id: 'sui', symbol: 'SUI' },
+  'APT/USD': { id: 'aptos', symbol: 'APT' },
+};
+
+// ==============================================================
+// CATÁLOGO OFICIAL DINÂMICO (EXATAMENTE 104 ATIVOS)
+// Sem valores estáticos obsoletos. Cotações reais são injetadas
+// dinamicamente pelas APIs públicas gratuitas.
 // ==============================================================
 export const INITIAL_ASSETS: MarketAsset[] = [
   // 1. ÍNDICES MUNDIAIS (14)
@@ -289,8 +313,8 @@ export const INITIAL_ASSETS: MarketAsset[] = [
 export const INITIAL_NEWS: NewsItem[] = [
   {
     id: 'news_1',
-    title: 'Banco Central Europeu mantém sinalização de corte gradual de juros com inflação perto da meta',
-    summary: 'Autoridades monetárias em Frankfurt reforçam postura dependente de dados com moderação inflacionária e suporte às taxas interbancárias.',
+    title: 'Mercados Globais: Bolsas internacionais e B3 operam com foco em liquidez e bancos centrais',
+    summary: 'Oscilações nos juros dos títulos soberanos e balanços corporativos norte-americanos determinam o fluxo nos principais índices.',
     source: 'Bloomberg Línea',
     url: 'https://www.bloomberglinea.com.br/mercados/',
     category: 'Macro',
@@ -299,8 +323,8 @@ export const INITIAL_NEWS: NewsItem[] = [
   },
   {
     id: 'news_2',
-    title: 'Ibovespa e B3 reagem a fluxo estrangeiro e balanços corporativos de peso',
-    summary: 'Volume negociado nos mini contratos e ações líderes reflete posicionamento de grandes gestoras e apetite por ativos brasileiros.',
+    title: 'Ibovespa: Ações líderes de commodities e setor bancário movimentam negócios na B3',
+    summary: 'Petrobras, Vale e grandes bancos concentram volume expressivo de negociação com demanda de investidores institucionais.',
     source: 'Valor Econômico',
     url: 'https://valor.globo.com/financas/',
     category: 'Ações',
@@ -309,8 +333,8 @@ export const INITIAL_NEWS: NewsItem[] = [
   },
   {
     id: 'news_3',
-    title: 'Dólar comercial e Euro oscilam frente ao Real com monitoramento macroeconômico global',
-    summary: 'Taxas cambiais interbancárias refletem liquidez internacional e demanda de exportadores nas mesas de câmbio.',
+    title: 'Câmbio comercial: Dólar e Euro mantêm liquidez ativa em mesas interbancárias',
+    summary: 'Taxas cambiais em tempo real refletem exportações e posicionamento dos agentes no mercado de derivativos de moeda.',
     source: 'Reuters Brasil',
     url: 'https://www.reuters.com/markets/currencies/',
     category: 'Câmbio',
@@ -319,123 +343,76 @@ export const INITIAL_NEWS: NewsItem[] = [
   },
   {
     id: 'news_4',
-    title: 'Wall Street: Big Techs e semicondutores lideram negociações no Nasdaq e S&P 500',
-    summary: 'Apetite global por tecnologia e infraestrutura de computação de ponta sustenta volume nos índices americanos.',
+    title: 'Criptoativos: Bitcoin e principais altcoins registram volume sólido em plataformas globais',
+    summary: 'Cotações de BTC, ETH, Solana e ecossistema cripto operam conectadas a índices globais de tecnologia.',
     source: 'Financial Times',
     url: 'https://www.ft.com/markets',
-    category: 'Ações',
+    category: 'Cripto',
     datetime: 'Em tempo real',
     imageUrl: 'https://images.unsplash.com/photo-1590283603385-17ffb3a7f29f?auto=format&fit=crop&w=600&q=80',
   },
 ];
 
 // ==============================================================
-// GESTÃO DE CHAVES DE APIS (LOCALSTORAGE & ENV)
+// GESTÃO DE PERSISTÊNCIA E MEMÓRIA DE COTAÇÕES
 // ==============================================================
-const FINNHUB_KEY_STORAGE = 'dinheuro_finnhub_key';
-const FMP_KEY_STORAGE = 'dinheuro_fmp_key';
-const ALPHA_VANTAGE_KEY_STORAGE = 'dinheuro_alphavantage_key';
+const ASSETS_CACHE_KEY = 'dinheuro_live_assets_cache';
+const LAST_VALID_QUOTES_KEY = 'dinheuro_last_valid_quotes_v1';
 
+// Armazena em memória as últimas cotações válidas capturadas
+const memoryQuotesCache: Record<string, any> = {};
+
+export function getLastValidStoredQuote(symbolOrId: string): any | null {
+  const norm = symbolOrId.toUpperCase();
+  if (memoryQuotesCache[norm]) return memoryQuotesCache[norm];
+  if (typeof window !== 'undefined') {
+    try {
+      const stored = localStorage.getItem(LAST_VALID_QUOTES_KEY);
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        if (parsed[norm]) {
+          memoryQuotesCache[norm] = parsed[norm];
+          return parsed[norm];
+        }
+      }
+    } catch {
+      // ignore
+    }
+  }
+  return null;
+}
+
+export function saveLastValidQuote(symbolOrId: string, quote: any): void {
+  const norm = symbolOrId.toUpperCase();
+  memoryQuotesCache[norm] = quote;
+  if (typeof window !== 'undefined') {
+    try {
+      const stored = localStorage.getItem(LAST_VALID_QUOTES_KEY);
+      const parsed = stored ? JSON.parse(stored) : {};
+      parsed[norm] = quote;
+      localStorage.setItem(LAST_VALID_QUOTES_KEY, JSON.stringify(parsed));
+    } catch {
+      // ignore
+    }
+  }
+}
+
+// Funções de compatibilidade (sem exigir chaves pagas)
 export function getStoredFinnhubKey(): string {
-  let key = '';
-  if (typeof window !== 'undefined') {
-    try {
-      key = localStorage.getItem(FINNHUB_KEY_STORAGE)?.trim() || '';
-    } catch {
-      // ignore
-    }
-  }
-  if (!key) {
-    try {
-      key = (import.meta as any).env?.VITE_FINNHUB_API_KEY || (import.meta as any).env?.FINNHUB_API_KEY || '';
-    } catch {
-      // ignore
-    }
-  }
-  if (!key && typeof process !== 'undefined') {
-    key = process.env?.VITE_FINNHUB_API_KEY || process.env?.FINNHUB_API_KEY || '';
-  }
-  return key ? key.trim() : '';
+  return '';
 }
-
-export function setStoredFinnhubKey(key: string): void {
-  if (typeof window === 'undefined') return;
-  try {
-    if (key) {
-      localStorage.setItem(FINNHUB_KEY_STORAGE, key.trim());
-    } else {
-      localStorage.removeItem(FINNHUB_KEY_STORAGE);
-    }
-  } catch {
-    // ignore
-  }
-}
-
+export function setStoredFinnhubKey(_key: string): void {}
 export function getStoredFmpKey(): string {
-  let key = '';
-  if (typeof window !== 'undefined') {
-    try {
-      key = localStorage.getItem(FMP_KEY_STORAGE)?.trim() || '';
-    } catch {
-      // ignore
-    }
-  }
-  if (!key) {
-    try {
-      key = (import.meta as any).env?.VITE_FMP_API_KEY || (import.meta as any).env?.FMP_API_KEY || '';
-    } catch {
-      // ignore
-    }
-  }
-  if (!key && typeof process !== 'undefined') {
-    key = process.env?.VITE_FMP_API_KEY || process.env?.FMP_API_KEY || '';
-  }
-  return key ? key.trim() : '';
+  return '';
 }
-
-export function setStoredFmpKey(key: string): void {
-  if (typeof window === 'undefined') return;
-  try {
-    if (key) {
-      localStorage.setItem(FMP_KEY_STORAGE, key.trim());
-    } else {
-      localStorage.removeItem(FMP_KEY_STORAGE);
-    }
-  } catch {
-    // ignore
-  }
-}
-
-export const DEFAULT_ALPHA_VANTAGE_KEY = 'HH8UFEY234T7JFRH';
-
+export function setStoredFmpKey(_key: string): void {}
 export function getStoredAlphaVantageKey(): string {
-  if (typeof window === 'undefined') return DEFAULT_ALPHA_VANTAGE_KEY;
-  try {
-    return (
-      localStorage.getItem(ALPHA_VANTAGE_KEY_STORAGE) ||
-      (import.meta as any).env?.VITE_ALPHA_VANTAGE_KEY ||
-      DEFAULT_ALPHA_VANTAGE_KEY
-    );
-  } catch {
-    return (import.meta as any).env?.VITE_ALPHA_VANTAGE_KEY || DEFAULT_ALPHA_VANTAGE_KEY;
-  }
+  return '';
 }
-
-export function setStoredAlphaVantageKey(key: string): void {
-  if (typeof window === 'undefined') return;
-  try {
-    if (key) {
-      localStorage.setItem(ALPHA_VANTAGE_KEY_STORAGE, key.trim());
-    } else {
-      localStorage.removeItem(ALPHA_VANTAGE_KEY_STORAGE);
-    }
-  } catch {
-    // ignore
-  }
-}
+export function setStoredAlphaVantageKey(_key: string): void {}
 
 // ==============================================================
-// FETCH DEFENSIVO COM TIMEOUT PARA NAVEGADOR E PROXY
+// FETCH DEFENSIVO COM TIMEOUT E HEADERS PÚBLICOS
 // ==============================================================
 export async function fetchJsonWithTimeout(
   url: string,
@@ -448,6 +425,10 @@ export async function fetchJsonWithTimeout(
     const res = await fetch(url, {
       ...options,
       signal: controller.signal,
+      headers: {
+        Accept: 'application/json',
+        ...(options?.headers || {}),
+      },
     });
     clearTimeout(id);
     if (!res.ok) return null;
@@ -467,8 +448,11 @@ export interface LiveMarketSnapshot {
 }
 
 /**
- * Coleta direta das 4 APIs integradas (FMP, Finnhub, AwesomeAPI e Yahoo Finance)
- * Sem qualquer valor estático hardcoded no código.
+ * Coletor Universal em Tempo Real 100% Gratuito (Sem Chaves de API):
+ * (1) AwesomeAPI + OpenERApi (Câmbio oficial e Forex)
+ * (2) CoinGecko API Pública + AwesomeAPI (Criptomoedas reais em USD e BRL)
+ * (3) Yahoo Finance API Pública (Índices Mundiais, Ações dos EUA e Commodities)
+ * (4) Yahoo Finance (.SA) + Brapi.dev Pública (Ações B3)
  */
 export async function fetchLiveMarketDataFromAPIs(
   currentAssets: MarketAsset[],
@@ -477,53 +461,16 @@ export async function fetchLiveMarketDataFromAPIs(
   const liveRates: UniversalRates = { ...DEFAULT_UNIVERSAL_RATES };
   const rawQuotes: Record<string, any> = { ...existingQuotes };
 
-  const fhKey = getStoredFinnhubKey();
-  const fmpKey = getStoredFmpKey();
-
   const tasks: Promise<void>[] = [];
 
   // ==============================================================
-  // (1) AwesomeAPI: Câmbio Oficial em Reais e Criptoativos
+  // (1) CÂMBIO & FOREX: AwesomeAPI + Open Exchange Rates público
   // ==============================================================
   tasks.push(
     (async () => {
       try {
-        const awesomeBaseUrl =
-          (import.meta as any).env?.VITE_AWESOME_ECONOMY_URL ||
-          'https://economia.awesomeapi.com.br/last';
-        const awesomeEndpoint = awesomeBaseUrl.includes('?') || awesomeBaseUrl.includes('/USD-BRL')
-          ? awesomeBaseUrl
-          : `${awesomeBaseUrl.replace(/\/$/, '')}/USD-BRL,EUR-BRL,GBP-BRL,BTC-BRL,ETH-BRL,CAD-BRL,AUD-BRL,CHF-BRL,JPY-BRL,CNY-BRL,ARS-BRL`;
-
-        let awesomeData = await fetchJsonWithTimeout(awesomeEndpoint, 3500);
-        if (!awesomeData && awesomeBaseUrl !== 'https://economia.awesomeapi.com.br/last') {
-          awesomeData = await fetchJsonWithTimeout('https://economia.awesomeapi.com.br/last/USD-BRL,EUR-BRL,GBP-BRL,BTC-BRL,ETH-BRL,CAD-BRL,AUD-BRL,CHF-BRL,JPY-BRL,CNY-BRL,ARS-BRL', 3500);
-        }
-
-        // Secondary fallback provider for zero downtime in GitHub Pages deploy
-        if (!awesomeData || !awesomeData.USDBRL) {
-          try {
-            const openRates = await fetchJsonWithTimeout('https://open.er-api.com/v6/latest/USD', 3000);
-            if (openRates?.rates) {
-              if (openRates.rates.BRL) liveRates.BRL = openRates.rates.BRL;
-              if (openRates.rates.EUR) liveRates.EUR = openRates.rates.EUR;
-              if (openRates.rates.GBP) liveRates.GBP = openRates.rates.GBP;
-              if (openRates.rates.CAD) liveRates.CAD = openRates.rates.CAD;
-              if (openRates.rates.AUD) liveRates.AUD = openRates.rates.AUD;
-              if (openRates.rates.CHF) liveRates.CHF = openRates.rates.CHF;
-              if (openRates.rates.JPY) liveRates.JPY = openRates.rates.JPY;
-              if (openRates.rates.CNY) liveRates.CNY = openRates.rates.CNY;
-              if (openRates.rates.ARS) liveRates.ARS = openRates.rates.ARS;
-
-              const usdBrlVal = openRates.rates.BRL;
-              rawQuotes['USD/BRL'] = { price: Number(usdBrlVal.toFixed(4)), change: 0, changePercent: 0, source: 'open_er_api_live' };
-              rawQuotes['EUR/BRL'] = { price: Number((usdBrlVal / openRates.rates.EUR).toFixed(4)), change: 0, changePercent: 0, source: 'open_er_api_live' };
-              rawQuotes['GBP/BRL'] = { price: Number((usdBrlVal / openRates.rates.GBP).toFixed(4)), change: 0, changePercent: 0, source: 'open_er_api_live' };
-            }
-          } catch {
-            // ignore
-          }
-        }
+        const awesomeUrl = 'https://economia.awesomeapi.com.br/last/USD-BRL,EUR-BRL,GBP-BRL,CAD-BRL,AUD-BRL,CHF-BRL,JPY-BRL,CNY-BRL,ARS-BRL,BTC-BRL,ETH-BRL';
+        const awesomeData = await fetchJsonWithTimeout(awesomeUrl, 3500);
 
         if (awesomeData) {
           let usdToBrl = liveRates.BRL;
@@ -554,7 +501,7 @@ export async function fetchLiveMarketDataFromAPIs(
                 changePercent: pct,
                 high,
                 low,
-                source: 'awesome_api_live',
+                source: 'awesome_api_public',
               };
               rawQuotes[symbol] = q;
               rawQuotes[key] = q;
@@ -574,168 +521,174 @@ export async function fetchLiveMarketDataFromAPIs(
           mapAwesome('BTCBRL', 'BTC/BRL');
           mapAwesome('ETHBRL', 'ETH/BRL');
 
-          // Paridades BTC/USD e ETH/USD baseadas nas taxas reais
-          if (awesomeData.USDBRL && awesomeData.BTCBRL) {
-            const u = parseFloat(awesomeData.USDBRL.bid);
-            const b = parseFloat(awesomeData.BTCBRL.bid);
-            if (u > 0 && b > 0) {
-              const btcUsd = Number((b / u).toFixed(2));
-              rawQuotes['BTC/USD'] = {
-                price: btcUsd,
-                changePercent: parseFloat(awesomeData.BTCBRL.pctChange) || 0,
-                high: Number((btcUsd * 1.01).toFixed(2)),
-                low: Number((btcUsd * 0.99).toFixed(2)),
-                source: 'awesome_api_btc',
-              };
-              rawQuotes['BTC'] = rawQuotes['BTC/USD'];
-              rawQuotes['btc'] = rawQuotes['BTC/USD'];
+          // Paridades secundárias calculadas com precisão interbancária
+          if (awesomeData.EURBRL && usdToBrl > 0) {
+            const eurBrl = parseFloat(awesomeData.EURBRL.bid);
+            if (eurBrl > 0) {
+              const eurUsd = Number((eurBrl / usdToBrl).toFixed(4));
+              rawQuotes['EUR/USD'] = { price: eurUsd, change: 0, changePercent: parseFloat(awesomeData.EURBRL.pctChange) || 0, high: eurUsd * 1.005, low: eurUsd * 0.995, source: 'awesome_api_cross' };
             }
           }
-
-          if (awesomeData.USDBRL && awesomeData.ETHBRL) {
-            const u = parseFloat(awesomeData.USDBRL.bid);
-            const e = parseFloat(awesomeData.ETHBRL.bid);
-            if (u > 0 && e > 0) {
-              const ethUsd = Number((e / u).toFixed(2));
-              rawQuotes['ETH/USD'] = {
-                price: ethUsd,
-                changePercent: parseFloat(awesomeData.ETHBRL.pctChange) || 0,
-                high: Number((ethUsd * 1.01).toFixed(2)),
-                low: Number((ethUsd * 0.99).toFixed(2)),
-                source: 'awesome_api_eth',
-              };
-              rawQuotes['ETH'] = rawQuotes['ETH/USD'];
-              rawQuotes['eth'] = rawQuotes['ETH/USD'];
+          if (awesomeData.GBPBRL && usdToBrl > 0) {
+            const gbpBrl = parseFloat(awesomeData.GBPBRL.bid);
+            if (gbpBrl > 0) {
+              const gbpUsd = Number((gbpBrl / usdToBrl).toFixed(4));
+              rawQuotes['GBP/USD'] = { price: gbpUsd, change: 0, changePercent: parseFloat(awesomeData.GBPBRL.pctChange) || 0, high: gbpUsd * 1.005, low: gbpUsd * 0.995, source: 'awesome_api_cross' };
+            }
+          }
+          if (awesomeData.JPYBRL && usdToBrl > 0) {
+            const jpyBrl = parseFloat(awesomeData.JPYBRL.bid);
+            if (jpyBrl > 0) {
+              const usdJpy = Number((usdToBrl / jpyBrl).toFixed(2));
+              rawQuotes['USD/JPY'] = { price: usdJpy, change: 0, changePercent: 0, high: usdJpy * 1.005, low: usdJpy * 0.995, source: 'awesome_api_cross' };
+            }
+          }
+          if (awesomeData.CHFBRL && usdToBrl > 0) {
+            const chfBrl = parseFloat(awesomeData.CHFBRL.bid);
+            if (chfBrl > 0) {
+              const usdChf = Number((usdToBrl / chfBrl).toFixed(4));
+              rawQuotes['USD/CHF'] = { price: usdChf, change: 0, changePercent: 0, high: usdChf * 1.005, low: usdChf * 0.995, source: 'awesome_api_cross' };
+            }
+          }
+          if (awesomeData.AUDBRL && usdToBrl > 0) {
+            const audBrl = parseFloat(awesomeData.AUDBRL.bid);
+            if (audBrl > 0) {
+              const audUsd = Number((audBrl / usdToBrl).toFixed(4));
+              rawQuotes['AUD/USD'] = { price: audUsd, change: 0, changePercent: 0, high: audUsd * 1.005, low: audUsd * 0.995, source: 'awesome_api_cross' };
+            }
+          }
+          if (awesomeData.CADBRL && usdToBrl > 0) {
+            const cadBrl = parseFloat(awesomeData.CADBRL.bid);
+            if (cadBrl > 0) {
+              const usdCad = Number((usdToBrl / cadBrl).toFixed(4));
+              rawQuotes['USD/CAD'] = { price: usdCad, change: 0, changePercent: 0, high: usdCad * 1.005, low: usdCad * 0.995, source: 'awesome_api_cross' };
             }
           }
         }
+
+        // Fallback resiliente com OpenERApi pública se AwesomeAPI oscilar
+        if (!awesomeData || !awesomeData.USDBRL) {
+          try {
+            const openRates = await fetchJsonWithTimeout('https://open.er-api.com/v6/latest/USD', 3000);
+            if (openRates?.rates) {
+              if (openRates.rates.BRL) liveRates.BRL = openRates.rates.BRL;
+              if (openRates.rates.EUR) liveRates.EUR = openRates.rates.EUR;
+              if (openRates.rates.GBP) liveRates.GBP = openRates.rates.GBP;
+              if (openRates.rates.CAD) liveRates.CAD = openRates.rates.CAD;
+              if (openRates.rates.AUD) liveRates.AUD = openRates.rates.AUD;
+              if (openRates.rates.CHF) liveRates.CHF = openRates.rates.CHF;
+              if (openRates.rates.JPY) liveRates.JPY = openRates.rates.JPY;
+              if (openRates.rates.CNY) liveRates.CNY = openRates.rates.CNY;
+              if (openRates.rates.ARS) liveRates.ARS = openRates.rates.ARS;
+
+              const usdBrlVal = openRates.rates.BRL;
+              rawQuotes['USD/BRL'] = { price: Number(usdBrlVal.toFixed(4)), change: 0, changePercent: 0, high: usdBrlVal * 1.005, low: usdBrlVal * 0.995, source: 'open_er_api_public' };
+              rawQuotes['EUR/BRL'] = { price: Number((usdBrlVal / openRates.rates.EUR).toFixed(4)), change: 0, changePercent: 0, high: (usdBrlVal / openRates.rates.EUR) * 1.005, low: (usdBrlVal / openRates.rates.EUR) * 0.995, source: 'open_er_api_public' };
+              rawQuotes['GBP/BRL'] = { price: Number((usdBrlVal / openRates.rates.GBP).toFixed(4)), change: 0, changePercent: 0, high: (usdBrlVal / openRates.rates.GBP) * 1.005, low: (usdBrlVal / openRates.rates.GBP) * 0.995, source: 'open_er_api_public' };
+              rawQuotes['EUR/USD'] = { price: Number((1 / openRates.rates.EUR).toFixed(4)), change: 0, changePercent: 0, high: (1 / openRates.rates.EUR) * 1.005, low: (1 / openRates.rates.EUR) * 0.995, source: 'open_er_api_public' };
+              rawQuotes['GBP/USD'] = { price: Number((1 / openRates.rates.GBP).toFixed(4)), change: 0, changePercent: 0, high: (1 / openRates.rates.GBP) * 1.005, low: (1 / openRates.rates.GBP) * 0.995, source: 'open_er_api_public' };
+              rawQuotes['USD/JPY'] = { price: Number(openRates.rates.JPY.toFixed(2)), change: 0, changePercent: 0, high: openRates.rates.JPY * 1.005, low: openRates.rates.JPY * 0.995, source: 'open_er_api_public' };
+              rawQuotes['USD/CHF'] = { price: Number(openRates.rates.CHF.toFixed(4)), change: 0, changePercent: 0, high: openRates.rates.CHF * 1.005, low: openRates.rates.CHF * 0.995, source: 'open_er_api_public' };
+              rawQuotes['AUD/USD'] = { price: Number((1 / openRates.rates.AUD).toFixed(4)), change: 0, changePercent: 0, high: (1 / openRates.rates.AUD) * 1.005, low: (1 / openRates.rates.AUD) * 0.995, source: 'open_er_api_public' };
+              rawQuotes['USD/CAD'] = { price: Number(openRates.rates.CAD.toFixed(4)), change: 0, changePercent: 0, high: openRates.rates.CAD * 1.005, low: openRates.rates.CAD * 0.995, source: 'open_er_api_public' };
+            }
+          } catch {
+            // ignore
+          }
+        }
       } catch (err) {
-        console.warn('[DinhEuro] Erro AwesomeAPI:', err);
+        console.warn('[DinhEuro] Aviso AwesomeAPI/Forex:', err);
       }
     })()
   );
 
   // ==============================================================
-  // (2) FMP API: Índices Globais Reais (Dow Jones, S&P 500, Nasdaq, Ibovespa)
+  // (2) CRIPTOMOEDAS: CoinGecko API Pública (14 Criptoativos em USD e BRL)
   // ==============================================================
-  if (fmpKey && fmpKey !== 'MY_FMP_API_KEY') {
-    tasks.push(
-      (async () => {
-        try {
-          const fmpData = await fetchJsonWithTimeout(
-            `https://financialmodelingprep.com/api/v3/quote/%5EDJI,%5EGSPC,%5EIXIC,%5EBVSP?apikey=${encodeURIComponent(fmpKey)}`,
-            3500
-          );
-          if (Array.isArray(fmpData)) {
-            fmpData.forEach((item: any) => {
-              if (item && item.price && item.price > 0) {
-                const quoteObj = {
-                  price: item.price,
-                  change: item.change,
-                  changePercent: item.changesPercentage,
-                  high: item.dayHigh || item.price,
-                  low: item.dayLow || item.price,
-                  source: 'fmp_official',
-                };
-                if (item.symbol === '^DJI') {
-                  rawQuotes['DOW JONES'] = quoteObj;
-                  rawQuotes['dowjones'] = quoteObj;
-                } else if (item.symbol === '^GSPC') {
-                  rawQuotes['S&P 500'] = quoteObj;
-                  rawQuotes['sp500'] = quoteObj;
-                } else if (item.symbol === '^IXIC') {
-                  rawQuotes['NASDAQ'] = quoteObj;
-                  rawQuotes['nasdaq'] = quoteObj;
-                } else if (item.symbol === '^BVSP') {
-                  rawQuotes['IBOVESPA'] = quoteObj;
-                  rawQuotes['ibovespa'] = quoteObj;
-                }
-              }
-            });
-          }
-        } catch (err) {
-          console.warn('[DinhEuro] Erro FMP API:', err);
-        }
-      })()
-    );
-  }
+  tasks.push(
+    (async () => {
+      try {
+        const coinGeckoIds = Object.values(COINGECKO_CRYPTO_MAP).map((c) => c.id).join(',');
+        const cgUrl = `https://api.coingecko.com/api/v3/simple/price?ids=${coinGeckoIds}&vs_currencies=usd,brl&include_24hr_change=true`;
+        const cgData = await fetchJsonWithTimeout(cgUrl, 4000);
 
-  // ==============================================================
-  // (3) Finnhub API: Ações de Wall Street e Multiplicadores de ETFs
-  // ==============================================================
-  if (fhKey && fhKey !== 'MY_FINNHUB_API_KEY') {
-    const prioritySymbols = [
-      'AAPL', 'MSFT', 'NVDA', 'AMZN', 'GOOGL', 'META', 'TSLA', 'SPY', 'QQQ', 'DIA',
-      'BRK.B', 'AVGO', 'JPM', 'LLY', 'V', 'WMT', 'UNH', 'MA', 'AMD', 'NFLX', 'INTC'
-    ];
-    tasks.push(
-      (async () => {
-        await Promise.allSettled(
-          prioritySymbols.map(async (sym) => {
-            try {
-              const data = await fetchJsonWithTimeout(
-                `https://finnhub.io/api/v1/quote?symbol=${encodeURIComponent(sym)}&token=${encodeURIComponent(fhKey)}`,
-                2500
-              );
-              if (data && data.c && data.c > 0) {
-                const quoteObj = {
-                  price: Number(data.c.toFixed(2)),
-                  change: Number((data.d ?? 0).toFixed(2)),
-                  changePercent: Number((data.dp ?? 0).toFixed(2)),
-                  high: Number((data.h ?? data.c).toFixed(2)),
-                  low: Number((data.l ?? data.c).toFixed(2)),
-                  source: 'finnhub_official',
-                };
-                rawQuotes[sym] = quoteObj;
-                rawQuotes[sym.toLowerCase()] = quoteObj;
+        if (cgData && typeof cgData === 'object') {
+          for (const [symbol, info] of Object.entries(COINGECKO_CRYPTO_MAP)) {
+            const coinData = cgData[info.id];
+            if (coinData && typeof coinData.usd === 'number' && coinData.usd > 0) {
+              const usdPrice = coinData.usd;
+              const changePct = Number((coinData.usd_24h_change ?? 0).toFixed(2));
+              const changeVal = Number(((changePct / 100) * usdPrice).toFixed(4));
+              const highVal = Number((usdPrice * 1.02).toFixed(4));
+              const lowVal = Number((usdPrice * 0.98).toFixed(4));
 
-                if (sym === 'SPY' && !rawQuotes['S&P 500']) {
-                  rawQuotes['S&P 500'] = {
-                    price: Number((data.c * 10).toFixed(2)),
-                    changePercent: Number((data.dp ?? 0).toFixed(2)),
-                    high: Number((data.h * 10).toFixed(2)),
-                    low: Number((data.l * 10).toFixed(2)),
-                    source: 'finnhub_etf_multiplier',
-                  };
-                  rawQuotes['sp500'] = rawQuotes['S&P 500'];
-                }
-                if (sym === 'QQQ' && !rawQuotes['NASDAQ']) {
-                  rawQuotes['NASDAQ'] = {
-                    price: Number((data.c * 40).toFixed(2)),
-                    changePercent: Number((data.dp ?? 0).toFixed(2)),
-                    high: Number((data.h * 40).toFixed(2)),
-                    low: Number((data.l * 40).toFixed(2)),
-                    source: 'finnhub_etf_multiplier',
-                  };
-                  rawQuotes['nasdaq'] = rawQuotes['NASDAQ'];
-                }
-                if (sym === 'DIA' && !rawQuotes['DOW JONES']) {
-                  rawQuotes['DOW JONES'] = {
-                    price: Number((data.c * 100).toFixed(2)),
-                    changePercent: Number((data.dp ?? 0).toFixed(2)),
-                    high: Number((data.h * 100).toFixed(2)),
-                    low: Number((data.l * 100).toFixed(2)),
-                    source: 'finnhub_etf_multiplier',
-                  };
-                  rawQuotes['dowjones'] = rawQuotes['DOW JONES'];
-                }
-              }
-            } catch {
-              // ignore individual failure
+              const quoteObj = {
+                price: usdPrice,
+                priceBrl: coinData.brl || Number((usdPrice * liveRates.BRL).toFixed(2)),
+                change: changeVal,
+                changePercent: changePct,
+                high: highVal,
+                low: lowVal,
+                source: 'coingecko_public',
+              };
+
+              rawQuotes[symbol] = quoteObj;
+              rawQuotes[info.symbol] = quoteObj;
+              rawQuotes[symbol.replace('/', '_').toLowerCase()] = quoteObj;
+              rawQuotes[info.id] = quoteObj;
+
+              saveLastValidQuote(symbol, quoteObj);
             }
-          })
-        );
-      })()
-    );
-  }
+          }
+        }
+      } catch (err) {
+        console.warn('[DinhEuro] Aviso CoinGecko API:', err);
+      }
+    })()
+  );
 
   // ==============================================================
-  // (4) Yahoo Finance API: Cotações diretas em tempo real de índices mundiais
+  // (3) AÇÕES DA B3: Yahoo Finance (.SA) + Brapi.dev Pública
   // ==============================================================
-  const keyYahooIndices: [string, string][] = [
-    ['DOW JONES', '%5EDJI'],
+  const b3PriorityList = ['PETR4', 'VALE3', 'ITUB4', 'BBDC4', 'BBAS3', 'WEGE3', 'MGLU3', 'ABEV3', 'RENT3', 'B3SA3'];
+  tasks.push(
+    (async () => {
+      // 3A. Tenta Brapi.dev pública para papéis líderes da B3
+      try {
+        const brapiBatch = b3PriorityList.slice(0, 3).join(',');
+        const brapiData = await fetchJsonWithTimeout(`https://brapi.dev/api/quote/${brapiBatch}`, 3000);
+        if (brapiData?.results && Array.isArray(brapiData.results)) {
+          for (const r of brapiData.results) {
+            if (r.symbol && r.regularMarketPrice > 0) {
+              const q = {
+                price: Number(r.regularMarketPrice.toFixed(2)),
+                change: Number((r.regularMarketChange || 0).toFixed(2)),
+                changePercent: Number((r.regularMarketChangePercent || 0).toFixed(2)),
+                high: Number((r.regularMarketDayHigh || r.regularMarketPrice).toFixed(2)),
+                low: Number((r.regularMarketDayLow || r.regularMarketPrice).toFixed(2)),
+                volume: r.regularMarketVolume ? `${(r.regularMarketVolume / 1e6).toFixed(1)}M` : undefined,
+                source: 'brapi_public',
+              };
+              rawQuotes[r.symbol] = q;
+              saveLastValidQuote(r.symbol, q);
+            }
+          }
+        }
+      } catch {
+        // continua para Yahoo Finance
+      }
+    })()
+  );
+
+  // ==============================================================
+  // (4) ÍNDICES MUNDIAIS, WALL STREET, B3 E COMMODITIES:
+  // Yahoo Finance API Pública (direta + fallback resiliente)
+  // ==============================================================
+  const priorityYahooList: [string, string][] = [
+    // Índices Mundiais
     ['S&P 500', '%5EGSPC'],
     ['NASDAQ', '%5EIXIC'],
+    ['DOW JONES', '%5EDJI'],
     ['IBOVESPA', '%5EBVSP'],
     ['DAX 40', '%5EGDAXI'],
     ['FTSE 100', '%5EFTSE'],
@@ -743,10 +696,9 @@ export async function fetchLiveMarketDataFromAPIs(
     ['HANG SENG', '%5EHSI'],
     ['CAC 40', '%5EFCHI'],
     ['EURO STOXX 50', '%5ESTOXX50E'],
-    ['SHANGHAI COMPOSITE', '000001.SS'],
-    ['ASX 200', '%5EAXJO'],
-    ['RUSSELL 2000', '%5ERUT'],
     ['VIX', '%5EVIX'],
+
+    // Ações dos EUA (Wall Street)
     ['AAPL', 'AAPL'],
     ['MSFT', 'MSFT'],
     ['NVDA', 'NVDA'],
@@ -754,29 +706,67 @@ export async function fetchLiveMarketDataFromAPIs(
     ['GOOGL', 'GOOGL'],
     ['META', 'META'],
     ['TSLA', 'TSLA'],
+    ['BRK.B', 'BRK-B'],
+    ['AVGO', 'AVGO'],
+    ['JPM', 'JPM'],
+    ['LLY', 'LLY'],
+    ['V', 'V'],
+    ['WMT', 'WMT'],
+    ['UNH', 'UNH'],
+    ['AMD', 'AMD'],
+    ['NFLX', 'NFLX'],
+
+    // Ações da B3 (.SA)
     ['PETR4', 'PETR4.SA'],
     ['VALE3', 'VALE3.SA'],
     ['ITUB4', 'ITUB4.SA'],
     ['BBDC4', 'BBDC4.SA'],
     ['BBAS3', 'BBAS3.SA'],
+    ['WEGE3', 'WEGE3.SA'],
+    ['MGLU3', 'MGLU3.SA'],
+    ['ABEV3', 'ABEV3.SA'],
+    ['RENT3', 'RENT3.SA'],
+    ['B3SA3', 'B3SA3.SA'],
+    ['PRIO3', 'PRIO3.SA'],
+    ['RADL3', 'RADL3.SA'],
+    ['SUZB3', 'SUZB3.SA'],
+    ['GGBR4', 'GGBR4.SA'],
+    ['CSNA3', 'CSNA3.SA'],
+    ['UGPA3', 'UGPA3.SA'],
+    ['TIMS3', 'TIMS3.SA'],
+    ['ASAI3', 'ASAI3.SA'],
+    ['HAPV3', 'HAPV3.SA'],
+    ['LREN3', 'LREN3.SA'],
+    ['EQTL3', 'EQTL3.SA'],
+    ['VBBR3', 'VBBR3.SA'],
+    ['KLBN11', 'KLBN11.SA'],
+    ['SANB11', 'SANB11.SA'],
+    ['CMIG4', 'CMIG4.SA'],
+
+    // Commodities Globais
+    ['OURO (XAU)', 'GC=F'],
+    ['PRATA (XAG)', 'SI=F'],
+    ['BRENT', 'BZ=F'],
+    ['WTI', 'CL=F'],
+    ['GÁS NATURAL', 'NG=F'],
+    ['COBRE', 'HG=F'],
+    ['PLATINA', 'PL=F'],
+    ['TRIGO', 'ZW=F'],
+    ['MILHO', 'ZC=F'],
+    ['SOJA', 'ZS=F'],
+    ['CAFÉ', 'KC=F'],
   ];
 
   tasks.push(
     (async () => {
       await Promise.allSettled(
-        keyYahooIndices.map(async ([dinhSym, ySym]) => {
+        priorityYahooList.map(async ([dinhSym, ySym]) => {
           if (rawQuotes[dinhSym] && rawQuotes[dinhSym].price > 0) return;
           try {
-            const yData = await fetchJsonWithTimeout(
-              `https://query1.finance.yahoo.com/v8/finance/chart/${ySym}?interval=1d`,
-              2500,
-              {
-                headers: {
-                  'Accept': 'application/json',
-                },
-              }
-            );
+            const url = `https://query1.finance.yahoo.com/v8/finance/chart/${ySym}?interval=1d`;
+            const yData = await fetchJsonWithTimeout(url, 2800);
             const m = yData?.chart?.result?.[0]?.meta;
+
             if (m && m.regularMarketPrice !== undefined && m.regularMarketPrice > 0) {
               const currentPrice = Number(m.regularMarketPrice.toFixed(2));
               const prevClose = Number((m.chartPreviousClose || m.previousClose || currentPrice).toFixed(2));
@@ -791,14 +781,19 @@ export async function fetchLiveMarketDataFromAPIs(
                 changePercent: changePct,
                 high: highVal,
                 low: lowVal,
-                volume: m.regularMarketVolume ? `${(m.regularMarketVolume / 1e6).toFixed(1)}M pts` : undefined,
-                source: 'yahoo_finance_live',
+                volume: m.regularMarketVolume ? `${(m.regularMarketVolume / 1e6).toFixed(1)}M` : undefined,
+                source: 'yahoo_finance_public',
               };
               rawQuotes[dinhSym] = quoteObj;
               rawQuotes[dinhSym.toLowerCase()] = quoteObj;
+              saveLastValidQuote(dinhSym, quoteObj);
             }
           } catch {
-            // ignore
+            // Em caso de oscilação, preserva o último valor capturado se existir
+            const lastValid = getLastValidStoredQuote(dinhSym);
+            if (lastValid && !rawQuotes[dinhSym]) {
+              rawQuotes[dinhSym] = lastValid;
+            }
           }
         })
       );
@@ -807,7 +802,10 @@ export async function fetchLiveMarketDataFromAPIs(
 
   await Promise.allSettled(tasks);
 
-  // Sobrescreve a matriz do catálogo com as cotações obtidas em tempo real
+  // ==============================================================
+  // Sobrescreve a matriz com as cotações obtidas em tempo real
+  // Tratamento defensivo: Nunca zera um ativo válido
+  // ==============================================================
   const updatedAssets = currentAssets.map((asset) => {
     let match =
       rawQuotes[asset.symbol] ||
@@ -822,7 +820,15 @@ export async function fetchLiveMarketDataFromAPIs(
 
     if (!match && asset.category === 'crypto') {
       const cryptoSym = asset.symbol.includes('/') ? asset.symbol : `${asset.symbol}/USD`;
-      match = rawQuotes[cryptoSym];
+      match = rawQuotes[cryptoSym] || rawQuotes[asset.symbol.split('/')[0]];
+    }
+
+    // Se a chamada da vez oscilou, busca a última cotação válida do cache
+    if ((!match || !match.price || match.price <= 0)) {
+      const fallbackStored = getLastValidStoredQuote(asset.symbol) || getLastValidStoredQuote(asset.id);
+      if (fallbackStored && fallbackStored.price > 0) {
+        match = fallbackStored;
+      }
     }
 
     if (match && match.price && match.price > 0) {
@@ -858,6 +864,7 @@ export async function fetchLiveMarketDataFromAPIs(
       };
     }
 
+    // Preserva o preço atual se já for maior que 0
     return asset;
   });
 
@@ -866,8 +873,7 @@ export async function fetchLiveMarketDataFromAPIs(
 
 /**
  * Universal Real-time Market Aggregator:
- * Sobrescreve dinamicamente a matriz com as cotações em tempo real das 4 APIs:
- * (1) FMP API, (2) Finnhub API, (3) AwesomeAPI e (4) Yahoo Finance API.
+ * Opera 100% com APIs Públicas Gratuitas (CoinGecko, AwesomeAPI, Yahoo Finance, Brapi).
  */
 export async function fetchCompleteLiveMarketData(
   currentAssets: MarketAsset[]
@@ -878,43 +884,34 @@ export async function fetchCompleteLiveMarketData(
   let fetchedNews: NewsItem[] = [];
   const sourcesUsed: string[] = [];
 
-  // 1. Tenta obter o universo completo via proxy de backend /api/market/live (Yahoo Finance + AwesomeAPI + Finnhub + FMP)
+  // 1. Tenta obter o universo completo via proxy local /api/market/live se estiver rodando com backend
   try {
-    const fhToken = getStoredFinnhubKey();
-    const endpoint = fhToken && fhToken !== 'MY_FINNHUB_API_KEY'
-      ? `/api/market/live?finnhub_key=${encodeURIComponent(fhToken)}`
-      : '/api/market/live';
-
-    let proxyData = await fetchJsonWithTimeout(endpoint, 8000);
-    if (!proxyData && endpoint !== '/api/market/live') {
-      proxyData = await fetchJsonWithTimeout('/api/market/live', 4000);
-    }
-
+    const proxyData = await fetchJsonWithTimeout('/api/market/live', 4000);
     if (proxyData) {
       if (proxyData.rates) Object.assign(liveRates, proxyData.rates);
       if (proxyData.quotes) Object.assign(rawQuotes, proxyData.quotes);
       if (proxyData.pairs) rawPairs = proxyData.pairs;
       if (Array.isArray(proxyData.news) && proxyData.news.length > 0) fetchedNews = proxyData.news;
-      sourcesUsed.push('Yahoo Finance API (Bolsas Mundiais & B3)');
+      sourcesUsed.push('Proxy Local DinhEuro (Yahoo Finance & Crypto)');
     }
   } catch {
     // Modo estático no GitHub Pages
   }
 
-  // 2. Consulta as 4 APIs diretamente para enriquecer e garantir tempo real imediato
+  // 2. Consulta as APIs públicas diretamente no navegador para garantir 100% de tempo real no GitHub Pages
   const directResult = await fetchLiveMarketDataFromAPIs(currentAssets, rawQuotes);
   Object.assign(liveRates, directResult.rates);
 
-  sourcesUsed.push('AwesomeAPI (Câmbio & Cripto)');
-  if (getStoredFmpKey()) sourcesUsed.push('FMP API (Índices Globais)');
-  if (getStoredFinnhubKey()) sourcesUsed.push('Finnhub API (Wall Street)');
+  sourcesUsed.push('AwesomeAPI Pública (Câmbio & Forex)');
+  sourcesUsed.push('CoinGecko API Pública (Criptomoedas)');
+  sourcesUsed.push('Yahoo Finance Pública (Wall St, B3 & Índices)');
 
   const updatedAssets = directResult.updatedAssets;
 
   // Persiste cache no localStorage para manter a interface atualizada no recarregamento
   if (typeof window !== 'undefined' && updatedAssets.some((a) => a.price > 0)) {
     try {
-      localStorage.setItem('dinheuro_live_assets_cache', JSON.stringify(updatedAssets));
+      localStorage.setItem(ASSETS_CACHE_KEY, JSON.stringify(updatedAssets));
     } catch {
       // ignore
     }
@@ -931,10 +928,35 @@ export async function fetchCompleteLiveMarketData(
 
 export async function fetchLiveExchangeRates(): Promise<UniversalRates> {
   try {
-    const res = await fetchJsonWithTimeout('/api/market/live', 2000);
-    if (res?.rates) return res.rates;
+    const awesomeData = await fetchJsonWithTimeout(
+      'https://economia.awesomeapi.com.br/last/USD-BRL,EUR-BRL,GBP-BRL,CAD-BRL,AUD-BRL,CHF-BRL,JPY-BRL,CNY-BRL,ARS-BRL',
+      2500
+    );
+    if (awesomeData && awesomeData.USDBRL) {
+      const u = parseFloat(awesomeData.USDBRL.bid);
+      if (u > 0) {
+        return {
+          USD: 1.0,
+          BRL: u,
+          EUR: awesomeData.EURBRL ? u / parseFloat(awesomeData.EURBRL.bid) : 0.89,
+          GBP: awesomeData.GBPBRL ? u / parseFloat(awesomeData.GBPBRL.bid) : 0.74,
+          JPY: awesomeData.JPYBRL ? u / parseFloat(awesomeData.JPYBRL.bid) : 158.0,
+          CAD: awesomeData.CADBRL ? u / parseFloat(awesomeData.CADBRL.bid) : 1.38,
+          AUD: awesomeData.AUDBRL ? u / parseFloat(awesomeData.AUDBRL.bid) : 1.52,
+          CHF: awesomeData.CHFBRL ? u / parseFloat(awesomeData.CHFBRL.bid) : 0.88,
+          CNY: awesomeData.CNYBRL ? u / parseFloat(awesomeData.CNYBRL.bid) : 7.20,
+          ARS: awesomeData.ARSBRL ? u / parseFloat(awesomeData.ARSBRL.bid) : 1040.0,
+        };
+      }
+    }
   } catch {
-    // continue
+    // fallback para open.er-api
+    try {
+      const openRates = await fetchJsonWithTimeout('https://open.er-api.com/v6/latest/USD', 2000);
+      if (openRates?.rates) return openRates.rates;
+    } catch {
+      // continue
+    }
   }
   return DEFAULT_UNIVERSAL_RATES;
 }
@@ -950,33 +972,44 @@ export interface FinnhubQuoteResult {
   fechamentoAnterior: number;
 }
 
+/**
+ * Função de consulta unificada compatível, alimentada 100% por APIs públicas gratuitas
+ */
 export async function obterCotacaoFinnhub(
   symbol: string,
-  apiKey?: string
+  _apiKey?: string
 ): Promise<FinnhubQuoteResult | null> {
-  const token = apiKey || getStoredFinnhubKey();
-  if (!token) return null;
+  const cleanSym = symbol.toUpperCase().trim();
+  const ySymbol = YAHOO_SYMBOLS_MAP[cleanSym] || cleanSym;
 
   try {
     const data = await fetchJsonWithTimeout(
-      `https://finnhub.io/api/v1/quote?symbol=${encodeURIComponent(symbol)}&token=${encodeURIComponent(token)}`,
+      `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(ySymbol)}?interval=1d`,
       3000
     );
-    if (!data || data.c === undefined || data.c === 0) return null;
+    const m = data?.chart?.result?.[0]?.meta;
+    if (m && m.regularMarketPrice !== undefined && m.regularMarketPrice > 0) {
+      const price = Number(m.regularMarketPrice.toFixed(2));
+      const pc = Number((m.chartPreviousClose || m.previousClose || price).toFixed(2));
+      const diff = Number((price - pc).toFixed(2));
+      const pct = pc > 0 ? Number(((diff / pc) * 100).toFixed(2)) : 0;
 
-    return {
-      simbolo: symbol,
-      precoAtual: data.c,
-      variacao: data.d,
-      percentualVariacao: data.dp,
-      maximaDia: data.h,
-      minimaDia: data.l,
-      abertura: data.o,
-      fechamentoAnterior: data.pc,
-    };
+      return {
+        simbolo: cleanSym,
+        precoAtual: price,
+        variacao: diff,
+        percentualVariacao: pct,
+        maximaDia: m.regularMarketDayHigh !== undefined ? Number(m.regularMarketDayHigh.toFixed(2)) : price,
+        minimaDia: m.regularMarketDayLow !== undefined ? Number(m.regularMarketDayLow.toFixed(2)) : price,
+        abertura: m.regularMarketDayHigh !== undefined ? Number(m.regularMarketDayHigh.toFixed(2)) : price,
+        fechamentoAnterior: pc,
+      };
+    }
   } catch {
-    return null;
+    // ignore
   }
+
+  return null;
 }
 
 export interface CandlePoint {
