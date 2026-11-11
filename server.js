@@ -516,14 +516,14 @@ async function fetchRealTimeMarketData(customFinnhubKey) {
     };
     const rates = {
       USD: 1,
-      BRL: 5.459,
-      EUR: 0.8905,
-      GBP: 0.7423,
-      JPY: 158.45,
-      CHF: 0.8168,
-      CAD: 1.3968,
-      AUD: 1.4271,
-      CNY: 6.6738,
+      BRL: 5.584,
+      EUR: 0.8958,
+      GBP: 0.7432,
+      JPY: 154.2,
+      CHF: 0.8845,
+      CAD: 1.392,
+      AUD: 1.518,
+      CNY: 7.235,
       BTC: 1247e-8,
       ETH: 4128e-7,
       SOL: 0.01054
