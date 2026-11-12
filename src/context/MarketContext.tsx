@@ -118,51 +118,11 @@ interface MarketContextType {
 
 const MarketContext = createContext<MarketContextType | undefined>(undefined);
 
-const PORTFOLIO_STORAGE_KEY = 'dinheuro_user_portfolio_v1';
+const PORTFOLIO_STORAGE_KEY = 'dinheuro_user_portfolio_v2';
 const THEME_STORAGE_KEY = 'dinheuro_theme';
 
-const INITIAL_DEMO_PORTFOLIO: PortfolioPosition[] = [
-  {
-    id: 'p1',
-    symbol: 'PETR4',
-    name: 'Petrobras PN',
-    assetType: 'stock_br',
-    quantity: 300,
-    averageBuyPrice: 32.50,
-    currency: 'BRL',
-    purchaseDate: '2024-03-15',
-  },
-  {
-    id: 'p2',
-    symbol: 'NVDA',
-    name: 'NVIDIA Corp',
-    assetType: 'stock_us',
-    quantity: 25,
-    averageBuyPrice: 115.00,
-    currency: 'USD',
-    purchaseDate: '2024-05-10',
-  },
-  {
-    id: 'p3',
-    symbol: 'BTC/USD',
-    name: 'Bitcoin',
-    assetType: 'crypto',
-    quantity: 0.15,
-    averageBuyPrice: 58200.00,
-    currency: 'USD',
-    purchaseDate: '2024-02-20',
-  },
-  {
-    id: 'p4',
-    symbol: 'EUR/BRL',
-    name: 'Reserva em Euro',
-    assetType: 'forex',
-    quantity: 1500,
-    averageBuyPrice: 5.45,
-    currency: 'BRL',
-    purchaseDate: '2024-01-10',
-  },
-];
+// A carteira inicia 100% zerada para que o usuário monte e gerencie suas próprias posições
+const INITIAL_DEMO_PORTFOLIO: PortfolioPosition[] = [];
 
 export const MarketProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [assets, setAssets] = useState<MarketAsset[]>(() => {

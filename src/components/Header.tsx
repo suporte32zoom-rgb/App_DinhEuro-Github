@@ -18,6 +18,8 @@ import {
   Calculator,
   Info,
   ChevronRight,
+  Newspaper,
+  Building2,
 } from 'lucide-react';
 import { useMarket, NavigationTab } from '../context/MarketContext';
 import { DualPrice } from './DualPrice';
@@ -87,6 +89,8 @@ export const Header: React.FC = () => {
     { id: 'dashboard', label: 'Início', icon: <Home className="w-4 h-4" /> },
     { id: 'mercados', label: 'Mercados', icon: <TrendingUp className="w-4 h-4" /> },
     { id: 'carteiras', label: 'Carteiras', icon: <Briefcase className="w-4 h-4" /> },
+    { id: 'noticias', label: 'Notícias & Macro', badge: 'LIVE', icon: <Newspaper className="w-4 h-4 text-emerald-400" /> },
+    { id: 'corretoras', label: 'Corretoras Globais', icon: <Building2 className="w-4 h-4 text-teal-400" /> },
     { id: 'daytrade', label: 'Day Trade & Scalping', badge: 'PRO', icon: <Zap className="w-4 h-4 text-emerald-400" /> },
     { id: 'tape_reading', label: 'Fluxo & Tape Reading', badge: 'DOM', icon: <Layers className="w-4 h-4 text-cyan-400" /> },
     { id: 'renda_fixa', label: 'Renda Fixa & Derivativos', icon: <Percent className="w-4 h-4" /> },

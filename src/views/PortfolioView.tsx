@@ -82,6 +82,29 @@ export const PortfolioView: React.FC = () => {
     {} as Record<string, number>
   );
 
+  const handleSelectAssetPreset = (sym: string) => {
+    if (!sym) return;
+    const found = assets.find((a) => a.symbol === sym || a.id === sym);
+    if (found) {
+      setNewSymbol(found.symbol);
+      setNewName(found.name);
+      setNewBuyPrice(found.price > 0 ? found.price : 10);
+      if (found.category === 'stocks_br') {
+        setNewType('stock_br');
+        setNewCurrency('BRL');
+      } else if (found.category === 'stocks_us') {
+        setNewType('stock_us');
+        setNewCurrency('USD');
+      } else if (found.category === 'crypto') {
+        setNewType('crypto');
+        setNewCurrency(found.currency === 'BRL' ? 'BRL' : 'USD');
+      } else {
+        setNewType('forex');
+        setNewCurrency(found.currency === 'EUR' ? 'EUR' : found.currency === 'BRL' ? 'BRL' : 'USD');
+      }
+    }
+  };
+
   const handleAddSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!newSymbol || newQuantity <= 0 || newBuyPrice <= 0) return;
@@ -133,9 +156,13 @@ export const PortfolioView: React.FC = () => {
             {formatCurrencyValue(totalPortfolioValueBRL, 'BRL')}
           </div>
           <div className="flex items-center gap-3 text-xs text-slate-400 mt-2 font-mono">
-            <span>≈ € {(totalPortfolioValueBRL / (universalRates.BRL / (universalRates.EUR || 0.92))).toFixed(2)}</span>
+            <span>
+              ≈ € {portfolio.length > 0 ? (totalPortfolioValueBRL / (universalRates.BRL / (universalRates.EUR || 0.92))).toFixed(2) : '0,00'}
+            </span>
             <span>•</span>
-            <span>≈ $ {(totalPortfolioValueBRL / universalRates.BRL).toFixed(2)}</span>
+            <span>
+              ≈ $ {portfolio.length > 0 ? (totalPortfolioValueBRL / universalRates.BRL).toFixed(2) : '0,00'}
+            </span>
           </div>
         </div>
 
@@ -146,18 +173,24 @@ export const PortfolioView: React.FC = () => {
           </span>
           <div
             className={`text-2xl sm:text-3xl font-black font-mono-numbers mt-1 flex items-baseline gap-1.5 ${
-              isOverallPositive ? 'text-emerald-400' : 'text-rose-400'
+              portfolio.length === 0 ? 'text-slate-400' : isOverallPositive ? 'text-emerald-400' : 'text-rose-400'
             }`}
           >
-            <span>{isOverallPositive ? '+' : ''}{formatCurrencyValue(totalPLBRL, 'BRL')}</span>
+            <span>{portfolio.length > 0 && isOverallPositive ? '+' : ''}{formatCurrencyValue(totalPLBRL, 'BRL')}</span>
           </div>
           <div
             className={`flex items-center gap-1 text-xs font-bold font-mono-numbers mt-2 ${
-              isOverallPositive ? 'text-emerald-400' : 'text-rose-400'
+              portfolio.length === 0 ? 'text-slate-400' : isOverallPositive ? 'text-emerald-400' : 'text-rose-400'
             }`}
           >
-            {isOverallPositive ? <TrendingUp className="w-3.5 h-3.5" /> : <TrendingDown className="w-3.5 h-3.5" />}
-            <span>{isOverallPositive ? '+' : ''}{totalPLPercent.toFixed(2)}% de rentabilidade acumulada</span>
+            {portfolio.length > 0 ? (
+              isOverallPositive ? <TrendingUp className="w-3.5 h-3.5" /> : <TrendingDown className="w-3.5 h-3.5" />
+            ) : null}
+            <span>
+              {portfolio.length === 0
+                ? '0,00% de rentabilidade acumulada (zerado)'
+                : `${isOverallPositive ? '+' : ''}${totalPLPercent.toFixed(2)}% de rentabilidade acumulada`}
+            </span>
           </div>
         </div>
 
@@ -173,118 +206,146 @@ export const PortfolioView: React.FC = () => {
           </div>
 
           {/* Allocation mini progress bars */}
-          <div className="w-full bg-slate-800 h-2 rounded-full overflow-hidden flex mt-3">
-            <div
-              style={{ width: `${((typeTotals.stock_br || 0) / (totalPortfolioValueBRL || 1)) * 100}%` }}
-              className="bg-emerald-500 h-full"
-              title="Ações BR"
-            />
-            <div
-              style={{ width: `${((typeTotals.stock_us || 0) / (totalPortfolioValueBRL || 1)) * 100}%` }}
-              className="bg-blue-500 h-full"
-              title="Ações US"
-            />
-            <div
-              style={{ width: `${((typeTotals.crypto || 0) / (totalPortfolioValueBRL || 1)) * 100}%` }}
-              className="bg-amber-500 h-full"
-              title="Cripto"
-            />
-            <div
-              style={{ width: `${((typeTotals.forex || 0) / (totalPortfolioValueBRL || 1)) * 100}%` }}
-              className="bg-purple-500 h-full"
-              title="Forex / Euro"
-            />
-          </div>
+          {portfolio.length > 0 ? (
+            <div className="w-full bg-slate-800 h-2 rounded-full overflow-hidden flex mt-3">
+              <div
+                style={{ width: `${((typeTotals.stock_br || 0) / (totalPortfolioValueBRL || 1)) * 100}%` }}
+                className="bg-emerald-500 h-full"
+                title="Ações BR"
+              />
+              <div
+                style={{ width: `${((typeTotals.stock_us || 0) / (totalPortfolioValueBRL || 1)) * 100}%` }}
+                className="bg-blue-500 h-full"
+                title="Ações US"
+              />
+              <div
+                style={{ width: `${((typeTotals.crypto || 0) / (totalPortfolioValueBRL || 1)) * 100}%` }}
+                className="bg-amber-500 h-full"
+                title="Cripto"
+              />
+              <div
+                style={{ width: `${((typeTotals.forex || 0) / (totalPortfolioValueBRL || 1)) * 100}%` }}
+                className="bg-purple-500 h-full"
+                title="Forex / Euro"
+              />
+            </div>
+          ) : (
+            <div className="mt-3 flex items-center justify-between text-[11px] text-slate-500">
+              <span>Nenhum ativo adicionado</span>
+              <span className="text-[10px]">0% alocado</span>
+            </div>
+          )}
         </div>
       </div>
 
-      {/* Positions Table */}
+      {/* Positions Table or Empty State */}
       <div className="rounded-2xl bg-[#0d1627] border border-slate-800 overflow-hidden shadow-xl">
         <div className="p-4 border-b border-slate-800 bg-[#070e1b] flex items-center justify-between">
           <h3 className="text-xs sm:text-sm font-bold text-white uppercase tracking-wider">
             Posições Abertas no Portfólio
           </h3>
           <span className="text-[11px] text-slate-400">
-            Valores atualizados com a cotação do segundo
+            {portfolio.length > 0 ? 'Valores atualizados com a cotação do segundo' : 'Carteira zerada'}
           </span>
         </div>
 
-        <div className="overflow-x-auto">
-          <table className="w-full text-left border-collapse text-xs">
-            <thead>
-              <tr className="border-b border-slate-800 bg-slate-900/50 text-[11px] font-bold text-slate-400 uppercase tracking-wider">
-                <th className="py-3 px-4">Ativo</th>
-                <th className="py-3 px-4 text-right">Qtd</th>
-                <th className="py-3 px-4 text-right">Preço Médio</th>
-                <th className="py-3 px-4 text-right">Preço Atual</th>
-                <th className="py-3 px-4 text-right">Valor Total</th>
-                <th className="py-3 px-4 text-right">Retorno (P&L)</th>
-                <th className="py-3 px-4 text-center">Ações</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-800/60">
-              {positionsWithLiveMetrics.map((pos) => {
-                const isPos = pos.profitLoss >= 0;
-                return (
-                  <tr key={pos.id} className="hover:bg-slate-800/40 transition">
-                    <td className="py-3.5 px-4">
-                      <div>
-                        <div className="font-extrabold text-white text-xs">{pos.symbol}</div>
-                        <div className="text-[11px] text-slate-400">{pos.name}</div>
-                      </div>
-                    </td>
-                    <td className="py-3.5 px-4 text-right font-mono-numbers font-semibold text-slate-200">
-                      {pos.quantity}
-                    </td>
-                    <td className="py-3.5 px-4 text-right font-mono-numbers text-slate-300">
-                      {formatCurrencyValue(pos.averageBuyPrice, pos.currency)}
-                    </td>
-                    <td className="py-3.5 px-4 text-right">
-                      <DualPrice
-                        price={pos.currentPrice}
-                        currency={pos.currency}
-                        rates={universalRates}
-                        layout="compact"
-                        primaryClassName="font-mono-numbers font-bold text-white text-xs"
-                        secondaryClassName="text-[10px] font-mono-numbers text-emerald-400"
-                      />
-                    </td>
-                    <td className="py-3.5 px-4 text-right">
-                      <DualPrice
-                        price={pos.currentTotalValue}
-                        currency={pos.currency}
-                        rates={universalRates}
-                        layout="compact"
-                        primaryClassName="font-mono-numbers font-bold text-white text-xs"
-                        secondaryClassName="text-[10px] font-mono-numbers text-emerald-400 font-medium"
-                      />
-                    </td>
-                    <td className="py-3.5 px-4 text-right font-mono-numbers font-bold">
-                      <span
-                        className={`inline-flex items-center gap-1 px-2 py-0.5 rounded ${
-                          isPos ? 'text-emerald-400 bg-emerald-500/10' : 'text-rose-400 bg-rose-500/10'
-                        }`}
-                      >
-                        {isPos ? '+' : ''}
-                        {formatCurrencyValue(pos.profitLoss, pos.currency)} ({isPos ? '+' : ''}
-                        {pos.profitPercent.toFixed(2)}%)
-                      </span>
-                    </td>
-                    <td className="py-3.5 px-4 text-center">
-                      <button
-                        onClick={() => removePortfolioPosition(pos.id)}
-                        className="p-1.5 rounded-lg text-slate-500 hover:text-rose-400 hover:bg-rose-500/10 transition cursor-pointer"
-                        title="Remover posição da carteira"
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </button>
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-        </div>
+        {portfolio.length === 0 ? (
+          <div className="py-14 px-6 text-center flex flex-col items-center justify-center space-y-4">
+            <div className="w-14 h-14 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400">
+              <Wallet className="w-7 h-7" />
+            </div>
+            <div className="max-w-md space-y-1">
+              <h4 className="text-base font-bold text-white">Sua carteira está zerada e pronta</h4>
+              <p className="text-xs text-slate-400 leading-relaxed">
+                Nenhum ativo foi inserido previamente. Adicione seus investimentos em Ações (B3 e Wall St), Criptomoedas ou Moedas para calcular o patrimônio total e o lucro/prejuízo em tempo real.
+              </p>
+            </div>
+            <button
+              onClick={() => setShowAddModal(true)}
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-xs font-bold text-white shadow-lg shadow-emerald-950 transition cursor-pointer"
+            >
+              <PlusCircle className="w-4 h-4" />
+              <span>Adicionar Primeiro Ativo</span>
+            </button>
+          </div>
+        ) : (
+          <div className="overflow-x-auto">
+            <table className="w-full text-left border-collapse text-xs">
+              <thead>
+                <tr className="border-b border-slate-800 bg-slate-900/50 text-[11px] font-bold text-slate-400 uppercase tracking-wider">
+                  <th className="py-3 px-4">Ativo</th>
+                  <th className="py-3 px-4 text-right">Qtd</th>
+                  <th className="py-3 px-4 text-right">Preço Médio</th>
+                  <th className="py-3 px-4 text-right">Preço Atual</th>
+                  <th className="py-3 px-4 text-right">Valor Total</th>
+                  <th className="py-3 px-4 text-right">Retorno (P&L)</th>
+                  <th className="py-3 px-4 text-center">Ações</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-800/60">
+                {positionsWithLiveMetrics.map((pos) => {
+                  const isPos = pos.profitLoss >= 0;
+                  return (
+                    <tr key={pos.id} className="hover:bg-slate-800/40 transition">
+                      <td className="py-3.5 px-4">
+                        <div>
+                          <div className="font-extrabold text-white text-xs">{pos.symbol}</div>
+                          <div className="text-[11px] text-slate-400">{pos.name}</div>
+                        </div>
+                      </td>
+                      <td className="py-3.5 px-4 text-right font-mono-numbers font-semibold text-slate-200">
+                        {pos.quantity}
+                      </td>
+                      <td className="py-3.5 px-4 text-right font-mono-numbers text-slate-300">
+                        {formatCurrencyValue(pos.averageBuyPrice, pos.currency)}
+                      </td>
+                      <td className="py-3.5 px-4 text-right">
+                        <DualPrice
+                          price={pos.currentPrice}
+                          currency={pos.currency}
+                          rates={universalRates}
+                          layout="compact"
+                          primaryClassName="font-mono-numbers font-bold text-white text-xs"
+                          secondaryClassName="text-[10px] font-mono-numbers text-emerald-400"
+                        />
+                      </td>
+                      <td className="py-3.5 px-4 text-right">
+                        <DualPrice
+                          price={pos.currentTotalValue}
+                          currency={pos.currency}
+                          rates={universalRates}
+                          layout="compact"
+                          primaryClassName="font-mono-numbers font-bold text-white text-xs"
+                          secondaryClassName="text-[10px] font-mono-numbers text-emerald-400 font-medium"
+                        />
+                      </td>
+                      <td className="py-3.5 px-4 text-right font-mono-numbers font-bold">
+                        <span
+                          className={`inline-flex items-center gap-1 px-2 py-0.5 rounded ${
+                            isPos ? 'text-emerald-400 bg-emerald-500/10' : 'text-rose-400 bg-rose-500/10'
+                          }`}
+                        >
+                          {isPos ? '+' : ''}
+                          {formatCurrencyValue(pos.profitLoss, pos.currency)} ({isPos ? '+' : ''}
+                          {pos.profitPercent.toFixed(2)}%)
+                        </span>
+                      </td>
+                      <td className="py-3.5 px-4 text-center">
+                        <button
+                          onClick={() => removePortfolioPosition(pos.id)}
+                          className="p-1.5 rounded-lg text-slate-500 hover:text-rose-400 hover:bg-rose-500/10 transition cursor-pointer"
+                          title="Remover posição da carteira"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        )}
       </div>
 
       {/* Modal Add Position */}
@@ -308,6 +369,47 @@ export const PortfolioView: React.FC = () => {
             </div>
 
             <form onSubmit={handleAddSubmit} className="space-y-4">
+              <div>
+                <label className="block text-xs font-medium text-slate-300 mb-1">
+                  Selecionar do Catálogo (Opcional)
+                </label>
+                <select
+                  defaultValue=""
+                  onChange={(e) => handleSelectAssetPreset(e.target.value)}
+                  className="w-full bg-slate-950 border border-slate-700 rounded-xl px-3.5 py-2 text-xs text-white focus:outline-none focus:border-emerald-500"
+                >
+                  <option value="">-- Escolha um ativo ou digite manualmente abaixo --</option>
+                  <optgroup label="Ações Brasil (B3)">
+                    {assets.filter((a) => a.category === 'stocks_br').slice(0, 15).map((a) => (
+                      <option key={a.id} value={a.symbol}>
+                        {a.symbol} - {a.name}
+                      </option>
+                    ))}
+                  </optgroup>
+                  <optgroup label="Ações EUA (Wall Street)">
+                    {assets.filter((a) => a.category === 'stocks_us').slice(0, 15).map((a) => (
+                      <option key={a.id} value={a.symbol}>
+                        {a.symbol} - {a.name}
+                      </option>
+                    ))}
+                  </optgroup>
+                  <optgroup label="Criptomoedas">
+                    {assets.filter((a) => a.category === 'crypto').slice(0, 10).map((a) => (
+                      <option key={a.id} value={a.symbol}>
+                        {a.symbol} - {a.name}
+                      </option>
+                    ))}
+                  </optgroup>
+                  <optgroup label="Moedas & Câmbio">
+                    {assets.filter((a) => a.category === 'forex').slice(0, 10).map((a) => (
+                      <option key={a.id} value={a.symbol}>
+                        {a.symbol} - {a.name}
+                      </option>
+                    ))}
+                  </optgroup>
+                </select>
+              </div>
+
               <div>
                 <label className="block text-xs font-medium text-slate-300 mb-1">Ticker / Código</label>
                 <input
