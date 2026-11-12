@@ -14,6 +14,7 @@ import {
   EyeOff,
 } from 'lucide-react';
 import { MarketAsset, CandlePoint } from '../services/marketData';
+import { formatPointsValue } from '../utils/finance';
 
 export type D3Timeframe = '1D' | '5D' | '1M' | '6M' | 'YTD' | '1A' | '5A';
 export type D3ChartStyle = 'area' | 'line' | 'candle';
@@ -150,6 +151,8 @@ export const D3AdvancedChart: React.FC<D3AdvancedChartProps> = ({
     setContainerWidth(containerRef.current.clientWidth || 800);
     return () => observer.disconnect();
   }, []);
+
+  const isIndex = asset.category === 'indices' || asset.currency === 'PTS' || asset.currency === 'PONTOS';
 
   // Primary Series
   const data = useMemo(() => {
@@ -460,13 +463,17 @@ export const D3AdvancedChart: React.FC<D3AdvancedChartProps> = ({
           <div className="flex items-center gap-1.5">
             <span className="text-[10px] uppercase font-bold text-slate-500">Mín. Período:</span>
             <span className="text-rose-400 font-bold">
-              {asset.currency === 'BRL' ? 'R$' : '$'} {minPrice.toFixed(2)}
+              {isIndex
+                ? formatPointsValue(minPrice)
+                : `${asset.currency === 'BRL' ? 'R$' : asset.currency === 'EUR' ? '€' : '$'} ${minPrice.toFixed(2)}`}
             </span>
           </div>
           <div className="flex items-center gap-1.5">
             <span className="text-[10px] uppercase font-bold text-slate-500">Máx. Período:</span>
             <span className="text-emerald-400 font-bold">
-              {asset.currency === 'BRL' ? 'R$' : '$'} {maxPrice.toFixed(2)}
+              {isIndex
+                ? formatPointsValue(maxPrice)
+                : `${asset.currency === 'BRL' ? 'R$' : asset.currency === 'EUR' ? '€' : '$'} ${maxPrice.toFixed(2)}`}
             </span>
           </div>
         </div>
@@ -475,10 +482,10 @@ export const D3AdvancedChart: React.FC<D3AdvancedChartProps> = ({
         {hoveredPoint ? (
           <div className="flex items-center gap-3 text-xs bg-slate-900/90 border border-slate-700/80 px-3 py-1 rounded-lg text-white">
             <span className="text-slate-400">{hoveredPoint.time}</span>
-            <span>Abertura: <strong>{hoveredPoint.open.toFixed(2)}</strong></span>
-            <span>Máx: <strong className="text-emerald-400">{hoveredPoint.high.toFixed(2)}</strong></span>
-            <span>Mín: <strong className="text-rose-400">{hoveredPoint.low.toFixed(2)}</strong></span>
-            <span>Fech: <strong>{hoveredPoint.close.toFixed(2)}</strong></span>
+            <span>Abertura: <strong>{isIndex ? `${hoveredPoint.open.toFixed(2)} pts` : hoveredPoint.open.toFixed(2)}</strong></span>
+            <span>Máx: <strong className="text-emerald-400">{isIndex ? `${hoveredPoint.high.toFixed(2)} pts` : hoveredPoint.high.toFixed(2)}</strong></span>
+            <span>Mín: <strong className="text-rose-400">{isIndex ? `${hoveredPoint.low.toFixed(2)} pts` : hoveredPoint.low.toFixed(2)}</strong></span>
+            <span>Fech: <strong>{isIndex ? `${hoveredPoint.close.toFixed(2)} pts` : hoveredPoint.close.toFixed(2)}</strong></span>
             {showVolume && <span className="text-slate-400">Vol: {hoveredPoint.volume.toLocaleString('pt-BR')}</span>}
           </div>
         ) : (
@@ -540,7 +547,9 @@ export const D3AdvancedChart: React.FC<D3AdvancedChartProps> = ({
                     fontSize="10"
                     fontFamily="monospace"
                   >
-                    {tickVal.toFixed(2)}
+                    {isIndex
+                      ? tickVal.toLocaleString('pt-BR', { minimumFractionDigits: 0, maximumFractionDigits: 1 })
+                      : tickVal.toFixed(2)}
                   </text>
                 </g>
               );

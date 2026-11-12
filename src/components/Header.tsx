@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import {
   Search,
   Globe,
@@ -64,16 +65,21 @@ export const Header: React.FC = () => {
     return () => clearInterval(timer);
   }, []);
 
-  // Prevent background scrolling when mobile drawer is open
+  // Prevent background scrolling and handle Escape when mobile drawer is open
   useEffect(() => {
     if (isMobileDrawerOpen) {
       document.body.style.overflow = 'hidden';
+      const handleKeyDown = (e: KeyboardEvent) => {
+        if (e.key === 'Escape') setIsMobileDrawerOpen(false);
+      };
+      window.addEventListener('keydown', handleKeyDown);
+      return () => {
+        document.body.style.overflow = '';
+        window.removeEventListener('keydown', handleKeyDown);
+      };
     } else {
       document.body.style.overflow = '';
     }
-    return () => {
-      document.body.style.overflow = '';
-    };
   }, [isMobileDrawerOpen]);
 
   // Essential Navigation items for Desktop and Mobile Drawer
@@ -232,12 +238,13 @@ export const Header: React.FC = () => {
             )}
           </button>
 
-          {/* Mobile Hamburger Menu Button */}
+          {/* Mobile & Tablet Hamburger Menu Button */}
           <button
             type="button"
             onClick={() => setIsMobileDrawerOpen(true)}
-            className="md:hidden p-2 rounded-xl bg-slate-900 border border-slate-700/80 hover:border-emerald-500/50 text-slate-200 hover:text-white transition cursor-pointer flex items-center justify-center shadow-sm"
-            aria-label="Abrir menu de navegação"
+            className="lg:hidden p-2 rounded-xl bg-slate-900 border border-slate-700/80 hover:border-emerald-500/50 text-slate-200 hover:text-white transition cursor-pointer flex items-center justify-center shadow-sm"
+            aria-label="Abrir menu de navegação lateral"
+            aria-expanded={isMobileDrawerOpen}
           >
             <Menu className="w-5 h-5 text-emerald-400" />
           </button>
@@ -246,7 +253,7 @@ export const Header: React.FC = () => {
 
       {/* Universal Desktop Horizontal Navigation Bar */}
       <nav
-        className="hidden md:flex w-full border-t border-slate-800/80 bg-[#08101e]/90 px-3 sm:px-6"
+        className="hidden lg:flex w-full border-t border-slate-800/80 bg-[#08101e]/90 px-3 sm:px-6"
         style={{
           display: 'flex',
           flexWrap: 'nowrap',
@@ -292,17 +299,23 @@ export const Header: React.FC = () => {
         </div>
       </nav>
 
-      {/* Mobile Drawer (Gaveta Lateral Moderna e Responsiva) */}
-      {isMobileDrawerOpen && (
-        <div className="fixed inset-0 z-50 md:hidden flex">
+      {/* Mobile & Tablet Drawer (Camada Superior z-[9999] com Overlay Escuro) */}
+      {isMobileDrawerOpen && typeof document !== 'undefined' && createPortal(
+        <div
+          className="fixed inset-0 z-[9999] flex"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Menu de Navegação Lateral"
+        >
           {/* Backdrop Blur Overlay */}
           <div
-            className="fixed inset-0 bg-black/80 backdrop-blur-sm transition-opacity"
+            className="fixed inset-0 bg-black/85 backdrop-blur-md transition-opacity duration-200 z-[9998] cursor-pointer"
             onClick={() => setIsMobileDrawerOpen(false)}
+            aria-hidden="true"
           />
 
           {/* Drawer Content */}
-          <div className="relative w-[85%] max-w-xs bg-[#0B1320] border-r border-slate-800 p-5 flex flex-col justify-between shadow-2xl z-10 h-full overflow-y-auto no-scrollbar">
+          <div className="relative w-[85%] max-w-xs sm:w-80 bg-[#0B1320] border-r border-slate-800 p-5 flex flex-col justify-between shadow-2xl z-[9999] h-full overflow-y-auto no-scrollbar animate-in slide-in-from-left duration-200">
             <div className="space-y-6">
               {/* Drawer Top Header */}
               <div className="flex items-center justify-between border-b border-slate-800 pb-4">
@@ -341,7 +354,7 @@ export const Header: React.FC = () => {
                       onClick={() => handleNavClick(item.id)}
                       className={`w-full flex items-center justify-between p-2.5 rounded-xl text-xs font-semibold transition cursor-pointer ${
                         isActive
-                          ? 'bg-emerald-500/15 text-emerald-300 border border-emerald-500/30'
+                          ? 'bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 font-bold'
                           : 'text-slate-300 hover:bg-slate-800/80 hover:text-white'
                       }`}
                     >
@@ -391,7 +404,8 @@ export const Header: React.FC = () => {
               </p>
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
 
       {/* Instant Search Results Modal */}

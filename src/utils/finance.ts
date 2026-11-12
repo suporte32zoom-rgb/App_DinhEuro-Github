@@ -214,6 +214,11 @@ export function formatCurrencyValue(
   currency: string = 'BRL',
   decimals: number = 2
 ): string {
+  const normCur = (currency || 'BRL').toUpperCase();
+  if (normCur === 'PTS' || normCur === 'PONTOS' || normCur === 'POINTS') {
+    return formatPointsValue(value);
+  }
+
   const localeMap: Record<string, string> = {
     BRL: 'pt-BR',
     EUR: 'de-DE',

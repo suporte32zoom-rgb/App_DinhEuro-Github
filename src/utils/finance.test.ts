@@ -7,6 +7,7 @@ import {
   calculateProfitAndTax,
   getDualCurrencyDisplay,
   formatPointsValue,
+  formatCurrencyValue,
   CurrencyRates
 } from './finance';
 
@@ -128,7 +129,11 @@ test('formatPointsValue and index points display format strictly in points (pts)
   assert.equal(dualIndex.primaryCurrency, 'PTS');
   assert.equal(dualIndex.secondaryFormatted, '');
   assert.ok(dualIndex.primaryFormatted.includes('pts'));
-  assert.ok(!dualIndex.primaryFormatted.includes('R$'));
+  // formatCurrencyValue with PTS currency
+  const ptsCurrencyVal = formatCurrencyValue(5820.50, 'PTS');
+  assert.ok(ptsCurrencyVal.includes('pts'));
+  assert.ok(!ptsCurrencyVal.includes('$'));
+  assert.ok(!ptsCurrencyVal.includes('R$'));
 });
 
 
