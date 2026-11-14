@@ -16,7 +16,8 @@ import { useMarket } from '../context/MarketContext';
 import { formatCurrencyValue, convertCurrency } from '../utils/finance';
 import { DualPrice } from '../components/DualPrice';
 import { FocusRadarPanel } from '../components/FocusRadarPanel';
-import { DossierMercosulUEPanel } from '../components/DossierMercosulUEPanel';
+import { MercosulEuDossierPanel } from '../components/MercosulEuDossierPanel';
+import { DrexDossierPanel } from '../components/DrexDossierPanel';
 
 export const DashboardView: React.FC = () => {
   const { assets, universalRates, news, setActiveTab, setSelectedAsset, openAssetDetail, refreshData, lastUpdated, apiSourceSummary } =
@@ -328,7 +329,7 @@ export const DashboardView: React.FC = () => {
       </div>
 
       {/* Main Split: Stocks Heatmap & Universal Currency Hub */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Left: Top Movers and Market Stocks + Radar Macroeconômico Focus */}
         <div className="lg:col-span-2 space-y-6">
           <div className="flex items-center justify-between">
@@ -447,12 +448,15 @@ export const DashboardView: React.FC = () => {
           {/* Radar Macroeconômico DinhEuro: Boletim Focus (Preenche a coluna central ao lado esquerdo da Matriz Cambial) */}
           <FocusRadarPanel />
 
-          {/* Dossiê DinhEuro: Acordo de Parceria MERCOSUL–União Europeia */}
-          <DossierMercosulUEPanel />
+          {/* Dossiê DinhEuro: Acordo MERCOSUL-União Europeia */}
+          <MercosulEuDossierPanel />
+
+          {/* Dossiê DinhEuro: Drex - A Moeda Digital do Banco Central */}
+          <DrexDossierPanel />
         </div>
 
         {/* Right: Universal Currency Matrix */}
-        <div className="bg-white dark:bg-[#0d1627] rounded-xl border border-slate-200 dark:border-slate-800 p-4 sm:p-5 flex flex-col justify-between space-y-4 shadow-sm self-start lg:sticky lg:top-28">
+        <div className="bg-white dark:bg-[#0d1627] rounded-xl border border-slate-200 dark:border-slate-800 p-4 sm:p-5 flex flex-col justify-between space-y-4 shadow-sm self-start">
           <div>
             <div className="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-3 mb-3">
               <div className="flex items-center gap-2">
