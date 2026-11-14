@@ -79,6 +79,17 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
+  // Não intercepta scripts/requisições do Google AdSense nem /ads.txt
+  if (
+    url.hostname.includes('googlesyndication.com') ||
+    url.hostname.includes('doubleclick.net') ||
+    url.hostname.includes('googleadservices.com') ||
+    url.hostname.includes('adtrafficquality.google') ||
+    url.pathname === '/ads.txt'
+  ) {
+    return;
+  }
+
   // 1. APIs Financeiras (Awesome API, Finnhub, Coinbase, CoinGecko, ECB, FMP):
   // Estratégia Network-First com cache de contingência silencioso
   const isFinancialApi =
