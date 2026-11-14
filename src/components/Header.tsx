@@ -18,16 +18,26 @@ import {
   Calculator,
   Info,
   ChevronRight,
+  ChevronDown,
+  LayoutGrid,
+  Check,
   Newspaper,
   Building2,
+  Coins,
+  BarChart3,
+  DollarSign,
+  Landmark,
+  GraduationCap,
 } from 'lucide-react';
-import { useMarket, NavigationTab } from '../context/MarketContext';
+import { useMarket, NavigationTab, MarketCategoryFilter } from '../context/MarketContext';
 import { DualPrice } from './DualPrice';
 
 export const Header: React.FC = () => {
   const {
     activeTab,
     setActiveTab,
+    selectedMarketCategory,
+    setSelectedMarketCategory,
     assets,
     setSelectedAsset,
     displayCurrency,
@@ -42,6 +52,10 @@ export const Header: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [showSearchModal, setShowSearchModal] = useState(false);
   const [isMobileDrawerOpen, setIsMobileDrawerOpen] = useState(false);
+  const [isCategoryMenuOpen, setIsCategoryMenuOpen] = useState(false);
+  const [categoryMenuPos, setCategoryMenuPos] = useState<{ top: number; left: number }>({ top: 110, left: 16 });
+  const categoryBtnRef = useRef<HTMLButtonElement>(null);
+  const categoryDropdownRef = useRef<HTMLDivElement>(null);
   const [worldTimes, setWorldTimes] = useState({
     sp: '',
     ny: '',
@@ -84,6 +98,127 @@ export const Header: React.FC = () => {
     }
   }, [isMobileDrawerOpen]);
 
+  // Market Category options for Top Horizontal Category Selector
+  const marketCategories: {
+    id: MarketCategoryFilter;
+    label: string;
+    shortLabel: string;
+    description: string;
+    icon: React.ReactNode;
+    count: number;
+  }[] = [
+    {
+      id: 'all',
+      label: 'Todos os Ativos',
+      shortLabel: 'Todos',
+      description: 'Catálogo completo em tempo real',
+      icon: <Globe className="w-4 h-4 text-emerald-400" />,
+      count: assets.length,
+    },
+    {
+      id: 'stocks_br',
+      label: 'Ações Brasil (B3)',
+      shortLabel: 'B3',
+      description: 'PETR4, VALE3, ITUB4, WEGE3...',
+      icon: <BarChart3 className="w-4 h-4 text-emerald-400" />,
+      count: assets.filter((a) => a.category === 'stocks_br').length,
+    },
+    {
+      id: 'stocks_us',
+      label: 'Ações EUA (Wall St)',
+      shortLabel: 'EUA',
+      description: 'AAPL, NVDA, MSFT, TSLA...',
+      icon: <TrendingUp className="w-4 h-4 text-blue-400" />,
+      count: assets.filter((a) => a.category === 'stocks_us').length,
+    },
+    {
+      id: 'indices',
+      label: 'Índices Mundiais',
+      shortLabel: 'Índices',
+      description: 'Ibovespa, S&P 500, Nasdaq, DAX...',
+      icon: <BarChart2 className="w-4 h-4 text-cyan-400" />,
+      count: assets.filter((a) => a.category === 'indices').length,
+    },
+    {
+      id: 'forex',
+      label: 'Câmbio & Forex',
+      shortLabel: 'Câmbio',
+      description: 'USD/BRL, EUR/BRL, EUR/USD...',
+      icon: <DollarSign className="w-4 h-4 text-teal-400" />,
+      count: assets.filter((a) => a.category === 'forex').length,
+    },
+    {
+      id: 'crypto',
+      label: 'Criptomoedas',
+      shortLabel: 'Cripto',
+      description: 'Bitcoin, Ethereum, Solana...',
+      icon: <Coins className="w-4 h-4 text-amber-400" />,
+      count: assets.filter((a) => a.category === 'crypto').length,
+    },
+    {
+      id: 'commodities',
+      label: 'Commodities',
+      shortLabel: 'Commodities',
+      description: 'Ouro, Petróleo Brent, Prata...',
+      icon: <Landmark className="w-4 h-4 text-orange-400" />,
+      count: assets.filter((a) => a.category === 'commodities').length,
+    },
+  ];
+
+  const activeCategoryObj = marketCategories.find((c) => c.id === selectedMarketCategory) || marketCategories[0];
+
+  // Position and outside-click handling for Category Selector dropdown
+  useEffect(() => {
+    if (!isCategoryMenuOpen) return;
+
+    const updatePosition = () => {
+      if (categoryBtnRef.current) {
+        const rect = categoryBtnRef.current.getBoundingClientRect();
+        const maxLeft = Math.max(12, window.innerWidth - 310);
+        setCategoryMenuPos({
+          top: rect.bottom + 8,
+          left: Math.min(rect.left, maxLeft),
+        });
+      }
+    };
+
+    updatePosition();
+
+    const handleClickOutside = (e: MouseEvent) => {
+      const target = e.target as Node;
+      if (
+        categoryBtnRef.current?.contains(target) ||
+        categoryDropdownRef.current?.contains(target)
+      ) {
+        return;
+      }
+      setIsCategoryMenuOpen(false);
+    };
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setIsCategoryMenuOpen(false);
+    };
+
+    window.addEventListener('mousedown', handleClickOutside);
+    window.addEventListener('keydown', handleKeyDown);
+    window.addEventListener('resize', updatePosition);
+    window.addEventListener('scroll', updatePosition, true);
+
+    return () => {
+      window.removeEventListener('mousedown', handleClickOutside);
+      window.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener('resize', updatePosition);
+      window.removeEventListener('scroll', updatePosition, true);
+    };
+  }, [isCategoryMenuOpen]);
+
+  const handleSelectMarketCategory = (categoryId: MarketCategoryFilter) => {
+    setSelectedMarketCategory(categoryId);
+    setActiveTab('mercados');
+    setIsCategoryMenuOpen(false);
+    setIsMobileDrawerOpen(false);
+  };
+
   // Essential Navigation items for Desktop and Mobile Drawer
   const navItems: { id: NavigationTab; label: string; badge?: string; icon: React.ReactNode }[] = [
     { id: 'dashboard', label: 'Início', icon: <Home className="w-4 h-4" /> },
@@ -102,6 +237,7 @@ export const Header: React.FC = () => {
   const handleNavClick = (tabId: NavigationTab) => {
     setActiveTab(tabId);
     setIsMobileDrawerOpen(false);
+    setIsCategoryMenuOpen(false);
   };
 
   // Filter assets for search
@@ -273,6 +409,40 @@ export const Header: React.FC = () => {
             WebkitOverflowScrolling: 'touch',
           }}
         >
+          {/* Seletor de Categorias no Menu Horizontal Superior */}
+          <button
+            ref={categoryBtnRef}
+            type="button"
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              setIsCategoryMenuOpen((prev) => !prev);
+            }}
+            aria-haspopup="menu"
+            aria-expanded={isCategoryMenuOpen}
+            className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition cursor-pointer flex-shrink-0 select-none flex items-center gap-1.5 border ${
+              isCategoryMenuOpen || (activeTab === 'mercados' && selectedMarketCategory !== 'all')
+                ? 'bg-emerald-500/15 text-emerald-300 border-emerald-500/40 shadow-sm shadow-emerald-950'
+                : 'bg-slate-900/90 text-slate-200 hover:text-white border-slate-700/80 hover:border-emerald-500/40'
+            }`}
+            style={{ flexShrink: 0, whiteSpace: 'nowrap' }}
+            title="Selecionar categoria de mercado ou seção"
+          >
+            <LayoutGrid className="w-3.5 h-3.5 text-emerald-400" />
+            <span>
+              {activeTab === 'mercados' && selectedMarketCategory !== 'all'
+                ? `Categorias: ${activeCategoryObj.shortLabel}`
+                : 'Categorias'}
+            </span>
+            <ChevronDown
+              className={`w-3.5 h-3.5 text-slate-400 transition-transform duration-150 ${
+                isCategoryMenuOpen ? 'rotate-180 text-emerald-400' : ''
+              }`}
+            />
+          </button>
+
+          <span className="h-4 w-px bg-slate-800 flex-shrink-0 mx-0.5" aria-hidden="true" />
+
           {navItems.map((item) => {
             const isActive = activeTab === item.id;
             return (
@@ -302,6 +472,95 @@ export const Header: React.FC = () => {
           })}
         </div>
       </nav>
+
+      {/* Portal Dropdown for Top Horizontal Category Selector */}
+      {isCategoryMenuOpen && typeof document !== 'undefined' && createPortal(
+        <div
+          ref={categoryDropdownRef}
+          role="menu"
+          aria-label="Seletor de Categorias"
+          style={{ top: `${categoryMenuPos.top}px`, left: `${categoryMenuPos.left}px` }}
+          className={`fixed z-[9999] w-80 rounded-2xl border shadow-2xl p-2 animate-in fade-in duration-150 ${
+            theme === 'light'
+              ? 'bg-white border-slate-200 text-slate-900 shadow-slate-900/15'
+              : 'bg-[#0B1320] border-slate-700/90 text-slate-100 shadow-black/70'
+          }`}
+        >
+          <div className="px-2.5 py-1.5 flex items-center justify-between border-b border-slate-800/60 mb-1.5">
+            <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-400">
+              Categorias de Mercado
+            </span>
+            <span className="text-[10px] text-slate-400 font-mono-numbers">
+              {assets.length} ativos
+            </span>
+          </div>
+
+          <div className="space-y-0.5 max-h-[65vh] overflow-y-auto no-scrollbar">
+            {marketCategories.map((cat) => {
+              const isSelected = activeTab === 'mercados' && selectedMarketCategory === cat.id;
+              return (
+                <button
+                  key={cat.id}
+                  type="button"
+                  role="menuitem"
+                  onClick={() => handleSelectMarketCategory(cat.id)}
+                  className={`w-full flex items-center justify-between px-2.5 py-2 rounded-xl text-left transition cursor-pointer ${
+                    isSelected
+                      ? 'bg-emerald-500/15 border border-emerald-500/30 text-emerald-400'
+                      : theme === 'light'
+                      ? 'hover:bg-slate-100 text-slate-800 border border-transparent'
+                      : 'hover:bg-slate-800/80 text-slate-200 border border-transparent'
+                  }`}
+                >
+                  <div className="flex items-center gap-2.5 min-w-0">
+                    <div className="w-7 h-7 rounded-lg bg-slate-900/80 border border-slate-800 flex items-center justify-center flex-shrink-0">
+                      {cat.icon}
+                    </div>
+                    <div className="min-w-0">
+                      <div className="text-xs font-bold leading-tight truncate">{cat.label}</div>
+                      <div className="text-[10px] text-slate-400 truncate">{cat.description}</div>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-1.5 flex-shrink-0 ml-2">
+                    <span className="text-[10px] font-mono-numbers px-1.5 py-0.5 rounded bg-slate-900/70 border border-slate-800 text-slate-300">
+                      {cat.count}
+                    </span>
+                    {isSelected && <Check className="w-3.5 h-3.5 text-emerald-400" />}
+                  </div>
+                </button>
+              );
+            })}
+          </div>
+
+          <div className="mt-1.5 pt-1.5 border-t border-slate-800/60 flex items-center justify-between gap-1">
+            <button
+              type="button"
+              onClick={() => handleNavClick('academy')}
+              className={`flex-1 flex items-center justify-center gap-1.5 px-2.5 py-1.5 rounded-xl text-[11px] font-semibold transition cursor-pointer ${
+                theme === 'light'
+                  ? 'hover:bg-slate-100 text-slate-700'
+                  : 'hover:bg-slate-800/80 text-slate-300'
+              }`}
+            >
+              <GraduationCap className="w-3.5 h-3.5 text-amber-400" />
+              <span>DinhEuro Academy</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => handleNavClick('renda_fixa')}
+              className={`flex-1 flex items-center justify-center gap-1.5 px-2.5 py-1.5 rounded-xl text-[11px] font-semibold transition cursor-pointer ${
+                theme === 'light'
+                  ? 'hover:bg-slate-100 text-slate-700'
+                  : 'hover:bg-slate-800/80 text-slate-300'
+              }`}
+            >
+              <Percent className="w-3.5 h-3.5 text-emerald-400" />
+              <span>Renda Fixa</span>
+            </button>
+          </div>
+        </div>,
+        document.body
+      )}
 
       {/* Mobile & Tablet Drawer (Camada Superior z-[9999] com Overlay Escuro) */}
       {isMobileDrawerOpen && typeof document !== 'undefined' && createPortal(
@@ -379,6 +638,33 @@ export const Header: React.FC = () => {
                     </button>
                   );
                 })}
+              </div>
+
+              {/* Quick Market Categories in Mobile Drawer */}
+              <div className="space-y-2 pt-2 border-t border-slate-800/80">
+                <p className="text-[10px] uppercase font-bold text-slate-500 tracking-wider px-2">
+                  Categorias de Mercado
+                </p>
+                <div className="grid grid-cols-2 gap-1.5">
+                  {marketCategories.map((cat) => {
+                    const isSelected = activeTab === 'mercados' && selectedMarketCategory === cat.id;
+                    return (
+                      <button
+                        key={cat.id}
+                        type="button"
+                        onClick={() => handleSelectMarketCategory(cat.id)}
+                        className={`flex items-center gap-1.5 px-2.5 py-2 rounded-xl text-[11px] font-semibold transition cursor-pointer text-left border ${
+                          isSelected
+                            ? 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30'
+                            : 'bg-slate-900/70 text-slate-300 border-slate-800 hover:text-white hover:border-slate-700'
+                        }`}
+                      >
+                        <span className="flex-shrink-0">{cat.icon}</span>
+                        <span className="truncate">{cat.shortLabel}</span>
+                      </button>
+                    );
+                  })}
+                </div>
               </div>
             </div>
 

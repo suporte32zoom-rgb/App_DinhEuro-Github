@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import {
   Search,
   Filter,
@@ -14,14 +14,22 @@ import {
   ChevronUp,
   CheckCircle2,
 } from 'lucide-react';
-import { useMarket } from '../context/MarketContext';
+import { useMarket, MarketCategoryFilter } from '../context/MarketContext';
 import { MarketAsset } from '../services/marketData';
 import { formatCurrencyValue } from '../utils/finance';
 import { DualPrice } from '../components/DualPrice';
 
 export const MarketsView: React.FC = () => {
-  const { assets, setSelectedAsset, lastUpdated, universalRates, refreshData, apiSourceSummary } = useMarket();
-  const [selectedCategory, setSelectedCategory] = useState<string>('all');
+  const {
+    assets,
+    setSelectedAsset,
+    lastUpdated,
+    universalRates,
+    refreshData,
+    apiSourceSummary,
+    selectedMarketCategory: selectedCategory,
+    setSelectedMarketCategory: setSelectedCategory,
+  } = useMarket();
   const [search, setSearch] = useState<string>('');
   const [sortBy, setSortBy] = useState<'change' | 'price' | 'symbol' | 'volume'>('change');
   const [sortOrder, setSortOrder] = useState<'desc' | 'asc'>('desc');
@@ -47,7 +55,7 @@ export const MarketsView: React.FC = () => {
     return counts;
   }, [assets]);
 
-  const categories = [
+  const categories: { id: MarketCategoryFilter; label: string; count: number }[] = [
     { id: 'all', label: 'Todos os Ativos', count: categoryCounts.all },
     { id: 'stocks_us', label: 'Ações EUA (Wall St)', count: categoryCounts.stocks_us },
     { id: 'stocks_br', label: 'Ações Brasil (B3)', count: categoryCounts.stocks_br },
@@ -56,6 +64,10 @@ export const MarketsView: React.FC = () => {
     { id: 'crypto', label: 'Criptomoedas', count: categoryCounts.crypto },
     { id: 'commodities', label: 'Commodities', count: categoryCounts.commodities },
   ];
+
+  useEffect(() => {
+    setVisibleCount(20);
+  }, [selectedCategory]);
 
   // Filter
   const filtered = useMemo(() => {

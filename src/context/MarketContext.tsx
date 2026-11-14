@@ -89,12 +89,23 @@ export const ROUTE_TAB_MAP: Record<string, NavigationTab> = {
 
 export type ThemeMode = 'dark' | 'light';
 
+export type MarketCategoryFilter =
+  | 'all'
+  | 'stocks_br'
+  | 'stocks_us'
+  | 'indices'
+  | 'forex'
+  | 'crypto'
+  | 'commodities';
+
 interface MarketContextType {
   assets: MarketAsset[];
   universalRates: UniversalRates;
   news: NewsItem[];
   activeTab: NavigationTab;
   setActiveTab: (tab: NavigationTab) => void;
+  selectedMarketCategory: MarketCategoryFilter;
+  setSelectedMarketCategory: (category: MarketCategoryFilter) => void;
   selectedAsset: MarketAsset | null;
   setSelectedAsset: (asset: MarketAsset | null) => void;
   openAssetDetail: (symbolOrId: string) => void;
@@ -182,6 +193,7 @@ export const MarketProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     return 'dashboard';
   });
 
+  const [selectedMarketCategory, setSelectedMarketCategory] = useState<MarketCategoryFilter>('all');
   const [selectedAsset, setSelectedAsset] = useState<MarketAsset | null>(null);
   const [finnhubKey, setFinnhubKey] = useState<string>(getStoredFinnhubKey());
   const [isLiveUpdating, setIsLiveUpdating] = useState<boolean>(true);
@@ -373,6 +385,8 @@ export const MarketProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         news,
         activeTab,
         setActiveTab,
+        selectedMarketCategory,
+        setSelectedMarketCategory,
         selectedAsset,
         setSelectedAsset,
         openAssetDetail,
