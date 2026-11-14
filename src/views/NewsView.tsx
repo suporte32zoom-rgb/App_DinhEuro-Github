@@ -170,34 +170,23 @@ export const NewsView: React.FC = () => {
               key={item.id || `news_idx_${index}`}
               className="rounded-2xl bg-[#0d1627] border border-slate-800 hover:border-slate-700/80 overflow-hidden shadow-xl transition flex flex-col justify-between group"
             >
-              {/* Optional Thumbnail Image */}
-              {item.imageUrl && (
-                <div className="relative h-44 overflow-hidden bg-slate-950">
-                  <img
-                    src={item.imageUrl}
-                    alt={item.title}
-                    className="w-full h-full object-cover group-hover:scale-105 transition duration-500"
-                    loading="lazy"
-                  />
-                  {/* Category Pill Tag */}
-                  <span className="absolute top-3 left-3 text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-md bg-slate-950/85 backdrop-blur-md text-emerald-400 border border-emerald-500/30 shadow-md">
-                    {item.category}
-                  </span>
-                  {/* Relative Timestamp Pill */}
-                  <span className="absolute bottom-3 right-3 text-[10px] font-semibold px-2 py-0.5 rounded-md bg-slate-950/85 backdrop-blur-md text-slate-200 flex items-center gap-1 border border-slate-700/50 shadow-md">
-                    <Clock className="w-3 h-3 text-amber-400" />
-                    <span>{item.datetime || 'Agora'}</span>
-                  </span>
-                </div>
-              )}
-
-              {/* Text Body */}
+              {/* Text-Only News Card Body */}
               <div className="p-4 sm:p-5 flex-1 flex flex-col justify-between space-y-3">
-                <div className="space-y-2">
+                <div className="space-y-2.5">
+                  <div className="flex items-center justify-between gap-2 text-[11px]">
+                    <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-md bg-emerald-500/10 text-emerald-400 border border-emerald-500/25">
+                      {item.category}
+                    </span>
+                    <span className="text-[10px] font-semibold text-slate-400 flex items-center gap-1 flex-shrink-0">
+                      <Clock className="w-3 h-3 text-amber-400" />
+                      <span>{item.datetime || 'Agora'}</span>
+                    </span>
+                  </div>
+
                   <h2 className="text-sm sm:text-base font-bold text-white group-hover:text-emerald-300 transition leading-snug">
                     {item.title}
                   </h2>
-                  <p className="text-xs text-slate-400 leading-relaxed line-clamp-3">
+                  <p className="text-xs text-slate-400 leading-relaxed line-clamp-4">
                     {item.summary}
                   </p>
                 </div>
