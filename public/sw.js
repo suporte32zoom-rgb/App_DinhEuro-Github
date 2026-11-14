@@ -79,7 +79,7 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // Não intercepta scripts/requisições do Google AdSense, Google Analytics (GA4/GTM) nem /ads.txt
+  // Não intercepta scripts/requisições do Google AdSense, Google Analytics (GA4/GTM), ads.txt nem SEO raiz
   if (
     url.hostname.includes('googlesyndication.com') ||
     url.hostname.includes('doubleclick.net') ||
@@ -88,7 +88,9 @@ self.addEventListener('fetch', (event) => {
     url.hostname.includes('googletagmanager.com') ||
     url.hostname.includes('google-analytics.com') ||
     url.hostname.includes('analytics.google.com') ||
-    url.pathname === '/ads.txt'
+    url.pathname === '/ads.txt' ||
+    url.pathname === '/robots.txt' ||
+    url.pathname === '/sitemap.xml'
   ) {
     return;
   }
