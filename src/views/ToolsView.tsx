@@ -5,39 +5,21 @@ import {
   Percent,
   TrendingUp,
   Receipt,
-  Coins,
-  ShieldCheck,
-  CheckCircle2,
   Sparkles,
   ArrowUpRight,
   PiggyBank,
-  Maximize2,
 } from 'lucide-react';
-import { useMarket } from '../context/MarketContext';
 import {
-  convertCurrency,
   calculateCompoundInterest,
   calculateInflationImpact,
   calculateProfitAndTax,
   formatCurrencyValue,
 } from '../utils/finance';
 import { CompoundInterestChart } from '../components/CompoundInterestChart';
+import { UniversalCurrencyCalculator } from '../components/UniversalCurrencyCalculator';
 
 export const ToolsView: React.FC = () => {
-  const { universalRates } = useMarket();
   const [activeTool, setActiveTool] = useState<'cambio' | 'juros' | 'inflacao' | 'darf'>('cambio');
-
-  // --- 1. Câmbio Global State ---
-  const [cambioAmount, setCambioAmount] = useState<number>(1000);
-  const [cambioFrom, setCambioFrom] = useState<string>('EUR');
-  const [cambioTo, setCambioTo] = useState<string>('BRL');
-  const [spreadPercent, setSpreadPercent] = useState<number>(1.2); // 1.2% average commercial spread
-  const [iofPercent, setIofPercent] = useState<number>(1.1); // 1.1% standard IOF
-
-  const rawConverted = convertCurrency(cambioAmount, cambioFrom, cambioTo, universalRates);
-  const spreadValue = (rawConverted * spreadPercent) / 100;
-  const iofValue = (rawConverted * iofPercent) / 100;
-  const netConverted = Math.max(0, rawConverted - spreadValue - iofValue);
 
   // --- 2. Juros Compostos State ---
   const [initialPrincipal, setInitialPrincipal] = useState<number>(5000);
@@ -106,7 +88,7 @@ export const ToolsView: React.FC = () => {
   });
 
   const toolTabs = [
-    { id: 'cambio', label: 'Simulador de Câmbio & Euro', icon: ArrowRightLeft },
+    { id: 'cambio', label: 'Calculadora de Câmbio Universal', icon: ArrowRightLeft },
     { id: 'juros', label: 'Juros Compostos & Renda Fixa', icon: TrendingUp },
     { id: 'inflacao', label: 'Poder de Compra & Inflação', icon: Percent },
     { id: 'darf', label: 'Calculadora de Lucro & Imposto (DARF)', icon: Receipt },
@@ -149,137 +131,14 @@ export const ToolsView: React.FC = () => {
         })}
       </div>
 
-      {/* --- TOOL 1: SIMULADOR DE CÂMBIO UNIVERSAL --- */}
+      {/* --- TOOL 1: CALCULADORA DE CÂMBIO UNIVERSAL (AWESOMEAPI) --- */}
       {activeTool === 'cambio' && (
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <div className="lg:col-span-2 rounded-2xl bg-[#0d1627] border border-slate-800 p-5 sm:p-6 shadow-xl space-y-5">
-            <div>
-              <h2 className="text-base font-bold text-white">Simulador de Remessa & Conversor Global</h2>
-              <p className="text-xs text-slate-400 mt-1">
-                Taxas de referência em tempo real sincronizadas com o mercado global de câmbio.
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {/* From */}
-              <div className="bg-slate-900/80 rounded-xl p-4 border border-slate-800 space-y-2">
-                <label className="text-xs text-slate-400 font-medium">Você envia:</label>
-                <div className="flex items-center gap-2">
-                  <input
-                    type="number"
-                    value={cambioAmount}
-                    onChange={(e) => setCambioAmount(Math.max(0, Number(e.target.value)))}
-                    className="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-base font-bold font-mono-numbers text-white focus:outline-none focus:border-emerald-500"
-                  />
-                  <select
-                    value={cambioFrom}
-                    onChange={(e) => setCambioFrom(e.target.value)}
-                    className="bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-xs font-bold text-white focus:outline-none"
-                  >
-                    <option value="EUR">EUR (€)</option>
-                    <option value="USD">USD ($)</option>
-                    <option value="BRL">BRL (R$)</option>
-                    <option value="GBP">GBP (£)</option>
-                    <option value="JPY">JPY (¥)</option>
-                    <option value="CHF">CHF</option>
-                  </select>
-                </div>
-              </div>
-
-              {/* To */}
-              <div className="bg-slate-900/80 rounded-xl p-4 border border-slate-800 space-y-2">
-                <label className="text-xs text-slate-400 font-medium">Você recebe (Comercial Puro):</label>
-                <div className="flex items-center gap-2">
-                  <div className="w-full bg-slate-950/60 border border-slate-800 rounded-lg px-3 py-2 text-base font-bold font-mono-numbers text-emerald-400">
-                    {formatCurrencyValue(rawConverted, cambioTo, 2)}
-                  </div>
-                  <select
-                    value={cambioTo}
-                    onChange={(e) => setCambioTo(e.target.value)}
-                    className="bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-xs font-bold text-white focus:outline-none"
-                  >
-                    <option value="BRL">BRL (R$)</option>
-                    <option value="EUR">EUR (€)</option>
-                    <option value="USD">USD ($)</option>
-                    <option value="GBP">GBP (£)</option>
-                    <option value="JPY">JPY (¥)</option>
-                    <option value="CHF">CHF</option>
-                  </select>
-                </div>
-              </div>
-            </div>
-
-            {/* Spreads & Fees Configuration */}
-            <div className="bg-[#070e1b] rounded-xl p-4 border border-slate-800 space-y-3">
-              <h3 className="text-xs font-bold text-white uppercase tracking-wider">
-                Simulação de Custos Reais de Remessa Internacional
-              </h3>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
-                <div>
-                  <label className="text-slate-400 block mb-1">Spread da Corretora / Banco (%):</label>
-                  <input
-                    type="number"
-                    step="0.1"
-                    value={spreadPercent}
-                    onChange={(e) => setSpreadPercent(Number(e.target.value))}
-                    className="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-1.5 text-xs font-mono-numbers text-white"
-                  />
-                  <span className="text-[10px] text-slate-500">Média em fintechs: 1.0% a 1.5%</span>
-                </div>
-
-                <div>
-                  <label className="text-slate-400 block mb-1">IOF Cambial (%):</label>
-                  <input
-                    type="number"
-                    step="0.1"
-                    value={iofPercent}
-                    onChange={(e) => setIofPercent(Number(e.target.value))}
-                    className="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-1.5 text-xs font-mono-numbers text-white"
-                  />
-                  <span className="text-[10px] text-slate-500">1.1% (mesma titularidade) ou 0.38%</span>
-                </div>
-              </div>
-
-              <div className="pt-3 border-t border-slate-800 space-y-1.5 text-xs">
-                <div className="flex justify-between text-slate-400">
-                  <span>Câmbio Comercial de Referência:</span>
-                  <span className="font-mono text-slate-200">
-                    1 {cambioFrom} = {(universalRates[cambioTo] / universalRates[cambioFrom]).toFixed(4)} {cambioTo}
-                  </span>
-                </div>
-                <div className="flex justify-between text-slate-400">
-                  <span>Custo do Spread ({spreadPercent}%):</span>
-                  <span className="font-mono text-rose-400">-{formatCurrencyValue(spreadValue, cambioTo)}</span>
-                </div>
-                <div className="flex justify-between text-slate-400">
-                  <span>IOF ({iofPercent}%):</span>
-                  <span className="font-mono text-rose-400">-{formatCurrencyValue(iofValue, cambioTo)}</span>
-                </div>
-                <div className="flex justify-between text-sm font-bold text-white pt-2 border-t border-slate-800">
-                  <span>Total Efetivo a Receber:</span>
-                  <span className="font-mono text-emerald-400">{formatCurrencyValue(netConverted, cambioTo)}</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Side Info */}
-          <div className="rounded-2xl bg-[#0d1627] border border-slate-800 p-5 shadow-xl space-y-4">
-            <h3 className="text-sm font-bold text-white flex items-center gap-2">
-              <ShieldCheck className="w-4 h-4 text-emerald-400" />
-              <span>Dicas de Economia Cambial</span>
-            </h3>
-            <div className="space-y-3 text-xs text-slate-300 leading-relaxed">
-              <p>
-                <strong>1. Evite o câmbio turismo:</strong> O câmbio comercial cotado no DinhEuro é o oficial interbancário. Corretoras globais como Interactive Brokers ou Avenue cobram spreads a partir de 0,2% a 1,5%, muito inferiores aos 4% a 6% de casas de câmbio físicas.
-              </p>
-              <p>
-                <strong>2. Planejamento em Euro (€):</strong> Se você planeja viagens, residência ou cidadania europeia, aportes periódicos reduzem o risco de volatilidade cambial da paridade EUR/BRL.
-              </p>
-            </div>
-          </div>
-        </div>
+        <UniversalCurrencyCalculator
+          showRemittanceFeesDefault={true}
+          defaultFrom="EUR"
+          defaultTo="BRL"
+          defaultAmount={1000}
+        />
       )}
 
       {/* --- TOOL 2: JUROS COMPOSTOS & RENDA FIXA --- */}

@@ -18,6 +18,7 @@ import { DualPrice } from '../components/DualPrice';
 import { FocusRadarPanel } from '../components/FocusRadarPanel';
 import { MercosulEuDossierPanel } from '../components/MercosulEuDossierPanel';
 import { DrexDossierPanel } from '../components/DrexDossierPanel';
+import { UniversalCurrencyCalculator } from '../components/UniversalCurrencyCalculator';
 
 export const DashboardView: React.FC = () => {
   const { assets, universalRates, news, setActiveTab, setSelectedAsset, openAssetDetail, refreshData, lastUpdated, apiSourceSummary } =
@@ -327,6 +328,9 @@ export const DashboardView: React.FC = () => {
           })}
         </div>
       </div>
+
+      {/* Calculadora de Câmbio Universal (Tempo Real via AwesomeAPI) */}
+      <UniversalCurrencyCalculator defaultFrom="USD" defaultTo="BRL" defaultAmount={1000} />
 
       {/* Main Split: Stocks Heatmap & Universal Currency Hub */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">

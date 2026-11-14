@@ -79,12 +79,15 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // Não intercepta scripts/requisições do Google AdSense nem /ads.txt
+  // Não intercepta scripts/requisições do Google AdSense, Google Analytics (GA4/GTM) nem /ads.txt
   if (
     url.hostname.includes('googlesyndication.com') ||
     url.hostname.includes('doubleclick.net') ||
     url.hostname.includes('googleadservices.com') ||
     url.hostname.includes('adtrafficquality.google') ||
+    url.hostname.includes('googletagmanager.com') ||
+    url.hostname.includes('google-analytics.com') ||
+    url.hostname.includes('analytics.google.com') ||
     url.pathname === '/ads.txt'
   ) {
     return;
