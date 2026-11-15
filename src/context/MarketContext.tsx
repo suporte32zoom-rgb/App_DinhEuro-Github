@@ -12,6 +12,7 @@ import {
   setStoredFinnhubKey,
   obterCotacaoFinnhub,
 } from '../services/marketData';
+import { normalizeRoutePath, syncCanonicalLink } from '../utils/seo';
 
 export interface PortfolioPosition {
   id: string;
@@ -181,14 +182,14 @@ export const MarketProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   // Active Tab State with URL routing support
   const [activeTab, setActiveTabState] = useState<NavigationTab>(() => {
     if (typeof window === 'undefined') return 'dashboard';
-    const path = window.location.pathname.toLowerCase();
+    const path = normalizeRoutePath(window.location.pathname);
     if (ROUTE_TAB_MAP[path]) {
       return ROUTE_TAB_MAP[path];
     }
     // Also check hash
-    const hash = window.location.hash.replace('#', '').toLowerCase();
-    if (hash && ROUTE_TAB_MAP['/' + hash]) {
-      return ROUTE_TAB_MAP['/' + hash];
+    const hash = normalizeRoutePath('/' + window.location.hash.replace('#', ''));
+    if (hash && ROUTE_TAB_MAP[hash]) {
+      return ROUTE_TAB_MAP[hash];
     }
     return 'dashboard';
   });
@@ -279,16 +280,22 @@ export const MarketProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     }
   }, [portfolio]);
 
+  // Dynamically synchronize <link rel="canonical"> in <head> whenever route changes
+  useEffect(() => {
+    const routePath = TAB_ROUTE_MAP[activeTab] || '/';
+    syncCanonicalLink(routePath);
+  }, [activeTab]);
+
   // Listen to popstate for browser back/forward buttons
   useEffect(() => {
     const handlePopState = () => {
-      const path = window.location.pathname.toLowerCase();
+      const path = normalizeRoutePath(window.location.pathname);
       if (ROUTE_TAB_MAP[path]) {
         setActiveTabState(ROUTE_TAB_MAP[path]);
       } else {
-        const hash = window.location.hash.replace('#', '').toLowerCase();
-        if (hash && ROUTE_TAB_MAP['/' + hash]) {
-          setActiveTabState(ROUTE_TAB_MAP['/' + hash]);
+        const hash = normalizeRoutePath('/' + window.location.hash.replace('#', ''));
+        if (hash && ROUTE_TAB_MAP[hash]) {
+          setActiveTabState(ROUTE_TAB_MAP[hash]);
         }
       }
     };
@@ -301,7 +308,7 @@ export const MarketProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     setActiveTabState(tab);
     if (typeof window !== 'undefined') {
       const targetRoute = TAB_ROUTE_MAP[tab] || '/';
-      if (window.location.pathname !== targetRoute) {
+      if (normalizeRoutePath(window.location.pathname) !== targetRoute || window.location.pathname !== targetRoute) {
         try {
           window.history.pushState(null, '', targetRoute);
         } catch {

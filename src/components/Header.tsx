@@ -301,7 +301,7 @@ export const Header: React.FC = () => {
         >
           <div className="relative">
             <img
-              src="./logo.png"
+              src="/logo.png"
               alt="DinhEuro Logo"
               className="w-9 h-9 sm:w-11 sm:h-11 rounded-full object-contain shadow-lg shadow-emerald-950/50 group-hover:scale-105 transition duration-200 border-2 border-amber-400/30 bg-white/5"
             />
@@ -584,7 +584,7 @@ export const Header: React.FC = () => {
               <div className="flex items-center justify-between border-b border-slate-800 pb-4">
                 <div className="flex items-center gap-2.5">
                   <img
-                    src="./logo.png"
+                    src="/logo.png"
                     alt="DinhEuro"
                     className="w-8 h-8 rounded-full border border-emerald-500/40"
                   />
