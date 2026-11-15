@@ -76,10 +76,10 @@ export const Footer: React.FC = () => {
               <Mail className="w-3.5 h-3.5 text-amber-400 shrink-0" />
               <span>{t.footer.dpoLabel}</span>
               <a
-                href="mailto:admin@dinheuro.com.br"
+                href="mailto:tarcianosousa482@gmail.com"
                 className="text-emerald-400 hover:underline font-mono font-medium"
               >
-                admin@dinheuro.com.br
+                tarcianosousa482@gmail.com
               </a>
             </div>
           </div>

@@ -130,7 +130,7 @@ export const TermsOfUseView: React.FC = () => {
           <p>{tTerms.s6P1}</p>
           <p>{tTerms.s6P2}</p>
           <p className="text-slate-400 text-xs pt-2 border-t border-slate-800/80">
-            {tTerms.s6Contact} <a href="mailto:admin@dinheuro.com.br" className="text-emerald-400 hover:underline font-mono">admin@dinheuro.com.br</a>.
+            {tTerms.s6Contact} <a href="mailto:tarcianosousa482@gmail.com" className="text-emerald-400 hover:underline font-mono">tarcianosousa482@gmail.com</a>.
           </p>
         </div>
       </div>
