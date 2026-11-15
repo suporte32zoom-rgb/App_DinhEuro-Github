@@ -15,11 +15,13 @@ import {
   CheckCircle2,
 } from 'lucide-react';
 import { useMarket, MarketCategoryFilter } from '../context/MarketContext';
+import { useI18n } from '../i18n/I18nContext';
 import { MarketAsset } from '../services/marketData';
 import { formatCurrencyValue } from '../utils/finance';
 import { DualPrice } from '../components/DualPrice';
 
 export const MarketsView: React.FC = () => {
+  const { t, lang } = useI18n();
   const {
     assets,
     setSelectedAsset,
@@ -56,13 +58,13 @@ export const MarketsView: React.FC = () => {
   }, [assets]);
 
   const categories: { id: MarketCategoryFilter; label: string; count: number }[] = [
-    { id: 'all', label: 'Todos os Ativos', count: categoryCounts.all },
-    { id: 'stocks_us', label: 'Ações EUA (Wall St)', count: categoryCounts.stocks_us },
-    { id: 'stocks_br', label: 'Ações Brasil (B3)', count: categoryCounts.stocks_br },
-    { id: 'indices', label: 'Índices Mundiais', count: categoryCounts.indices },
-    { id: 'forex', label: 'Câmbio & Forex', count: categoryCounts.forex },
-    { id: 'crypto', label: 'Criptomoedas', count: categoryCounts.crypto },
-    { id: 'commodities', label: 'Commodities', count: categoryCounts.commodities },
+    { id: 'all', label: t.header.categories.all.label, count: categoryCounts.all },
+    { id: 'stocks_us', label: t.header.categories.stocks_us.label, count: categoryCounts.stocks_us },
+    { id: 'stocks_br', label: t.header.categories.stocks_br.label, count: categoryCounts.stocks_br },
+    { id: 'indices', label: t.header.categories.indices.label, count: categoryCounts.indices },
+    { id: 'forex', label: t.header.categories.forex.label, count: categoryCounts.forex },
+    { id: 'crypto', label: t.header.categories.crypto.label, count: categoryCounts.crypto },
+    { id: 'commodities', label: t.header.categories.commodities.label, count: categoryCounts.commodities },
   ];
 
   useEffect(() => {
@@ -149,14 +151,14 @@ export const MarketsView: React.FC = () => {
             </span>
           </div>
           <h1 className="text-xl sm:text-2xl font-black text-white tracking-tight">
-            Mercados Financeiros Globais
+            {t.markets.title}
           </h1>
           <p className="text-xs text-slate-400 mt-1 flex flex-wrap items-center gap-1.5">
-            <span>{assets.length} ativos catalogados</span>
+            <span>{assets.length} {t.markets.assetsListed}</span>
             <span>•</span>
-            <span className="text-slate-300 font-medium">Fontes: {apiSourceSummary}</span>
+            <span className="text-slate-300 font-medium">{apiSourceSummary}</span>
             <span>•</span>
-            <span>Última atualização: {lastUpdated.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit', second: '2-digit' })}</span>
+            <span>{t.dashboard.updatedAt} {lastUpdated.toLocaleTimeString(lang === 'en' ? 'en-US' : 'pt-BR', { hour: '2-digit', minute: '2-digit', second: '2-digit' })}</span>
           </p>
         </div>
 
@@ -167,17 +169,17 @@ export const MarketsView: React.FC = () => {
             onClick={handleManualRefresh}
             disabled={isRefreshing}
             className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-800/90 hover:bg-slate-700 text-slate-200 text-xs font-semibold border border-slate-700/80 hover:border-emerald-500/40 transition cursor-pointer shrink-0 disabled:opacity-50"
-            title="Atualizar cotações em tempo real"
+            title={t.markets.refreshBtn}
           >
             <RefreshCw className={`w-3.5 h-3.5 text-emerald-400 ${isRefreshing ? 'animate-spin' : ''}`} />
-            <span className="hidden sm:inline">Sincronizar</span>
+            <span className="hidden sm:inline">{t.markets.refreshBtn}</span>
           </button>
 
           <div className="relative flex-1 sm:w-72">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
             <input
               type="text"
-              placeholder="Filtrar por ticker ou nome..."
+              placeholder={t.markets.searchPlaceholder}
               value={search}
               onChange={(e) => {
                 setSearch(e.target.value);

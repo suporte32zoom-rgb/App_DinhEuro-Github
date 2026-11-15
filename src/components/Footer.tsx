@@ -12,9 +12,11 @@ import {
   CheckCircle2,
 } from 'lucide-react';
 import { useMarket, NavigationTab } from '../context/MarketContext';
+import { useI18n } from '../i18n/I18nContext';
 
 export const Footer: React.FC = () => {
   const { setActiveTab } = useMarket();
+  const { t } = useI18n();
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -48,31 +50,31 @@ export const Footer: React.FC = () => {
                   Dinh<span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-teal-300 to-amber-400">Euro</span>
                 </span>
                 <p className="text-[10px] uppercase font-bold text-emerald-400 tracking-wider">
-                  Hub Global de Finanças e Moedas
+                  {t.footer.tagline}
                 </p>
               </div>
             </div>
 
             <p className="text-slate-400 text-xs leading-relaxed max-w-sm">
-              Plataforma digital de dados econômicos em tempo real, paridade universal Euro-Dólar-Real, cotações mundiais e ferramentas analíticas sem paywall.
+              {t.footer.description}
             </p>
 
             {/* Compliance & Status Badges */}
             <div className="space-y-1.5 pt-1">
               <div className="flex items-center gap-2 text-[11px] text-emerald-400 font-medium">
                 <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-                <span>Operação Global • Infraestrutura em Nuvem de Alta Disponibilidade</span>
+                <span>{t.footer.infraStatus}</span>
               </div>
               <div className="flex items-center gap-2 text-[11px] text-slate-400">
                 <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
-                <span>Em conformidade com a LGPD (Lei nº 13.709/2018) & SSL 256-bit</span>
+                <span>{t.footer.lgpdCompliance}</span>
               </div>
             </div>
 
             {/* DPO Direct Contact */}
             <div className="pt-2 text-[11px] text-slate-400 flex items-center gap-1.5">
               <Mail className="w-3.5 h-3.5 text-amber-400 shrink-0" />
-              <span>Encarregado de Dados (DPO):</span>
+              <span>{t.footer.dpoLabel}</span>
               <a
                 href="mailto:admin@dinheuro.com.br"
                 className="text-emerald-400 hover:underline font-mono font-medium"
@@ -85,7 +87,7 @@ export const Footer: React.FC = () => {
           {/* Col 3: Navegação Hub */}
           <div className="space-y-2.5">
             <span className="text-xs font-bold text-white uppercase tracking-wider block">
-              Navegação do Hub
+              {t.footer.navHubTitle}
             </span>
             <ul className="space-y-1.5 text-xs">
               <li>
@@ -94,7 +96,7 @@ export const Footer: React.FC = () => {
                   onClick={() => setActiveTab('dashboard')}
                   className="hover:text-emerald-400 transition cursor-pointer text-left"
                 >
-                  Início (Dashboard)
+                  {t.footer.navDashboard}
                 </button>
               </li>
               <li>
@@ -103,7 +105,7 @@ export const Footer: React.FC = () => {
                   onClick={() => setActiveTab('mercados')}
                   className="hover:text-emerald-400 transition cursor-pointer text-left"
                 >
-                  Mercados Mundiais
+                  {t.footer.navMarkets}
                 </button>
               </li>
               <li>
@@ -112,7 +114,7 @@ export const Footer: React.FC = () => {
                   onClick={() => setActiveTab('carteiras')}
                   className="hover:text-emerald-400 transition cursor-pointer text-left"
                 >
-                  Minhas Carteiras
+                  {t.footer.navPortfolios}
                 </button>
               </li>
               <li>
@@ -121,7 +123,7 @@ export const Footer: React.FC = () => {
                   onClick={() => setActiveTab('noticias')}
                   className="hover:text-emerald-400 transition cursor-pointer text-left"
                 >
-                  Notícias & Análises
+                  {t.footer.navNews}
                 </button>
               </li>
               <li>
@@ -130,7 +132,7 @@ export const Footer: React.FC = () => {
                   onClick={() => setActiveTab('corretoras')}
                   className="hover:text-emerald-400 transition cursor-pointer text-left"
                 >
-                  Guia de Corretoras
+                  {t.footer.navBrokers}
                 </button>
               </li>
             </ul>
@@ -139,7 +141,7 @@ export const Footer: React.FC = () => {
           {/* Col 4: Recursos & Análise */}
           <div className="space-y-2.5">
             <span className="text-xs font-bold text-white uppercase tracking-wider block">
-              Recursos & Análise
+              {t.footer.resourcesTitle}
             </span>
             <ul className="space-y-1.5 text-xs">
               <li>
@@ -148,7 +150,7 @@ export const Footer: React.FC = () => {
                   onClick={() => setActiveTab('graficos')}
                   className="hover:text-emerald-400 transition cursor-pointer text-left"
                 >
-                  Terminal Gráfico D3 v7
+                  {t.footer.resCharts}
                 </button>
               </li>
               <li>
@@ -157,7 +159,7 @@ export const Footer: React.FC = () => {
                   onClick={() => setActiveTab('ferramentas')}
                   className="hover:text-emerald-400 transition cursor-pointer text-left"
                 >
-                  Simuladores & Câmbio
+                  {t.footer.resTools}
                 </button>
               </li>
               <li>
@@ -166,7 +168,7 @@ export const Footer: React.FC = () => {
                   onClick={() => setActiveTab('academy')}
                   className="hover:text-emerald-400 transition cursor-pointer text-left"
                 >
-                  Academy & Glossário
+                  {t.footer.resAcademy}
                 </button>
               </li>
               <li>
@@ -175,7 +177,7 @@ export const Footer: React.FC = () => {
                   onClick={() => setActiveTab('sobre')}
                   className="hover:text-emerald-400 transition cursor-pointer text-left font-semibold text-slate-300"
                 >
-                  Sobre o DinhEuro
+                  {t.footer.resAbout}
                 </button>
               </li>
               <li>
@@ -185,7 +187,7 @@ export const Footer: React.FC = () => {
                   className="flex items-center gap-1 text-amber-400 hover:text-amber-300 transition pt-1 cursor-pointer font-semibold"
                 >
                   <ArrowUp className="w-3.5 h-3.5" />
-                  <span>Voltar ao topo</span>
+                  <span>{t.footer.backToTop}</span>
                 </button>
               </li>
             </ul>
@@ -195,7 +197,7 @@ export const Footer: React.FC = () => {
           <div className="space-y-2.5">
             <span className="text-xs font-bold text-white uppercase tracking-wider block flex items-center gap-1.5">
               <Lock className="w-3.5 h-3.5 text-emerald-400" />
-              <span>Jurídico & LGPD</span>
+              <span>{t.footer.legalTitle}</span>
             </span>
             <ul className="space-y-1.5 text-xs">
               <li>
@@ -204,7 +206,7 @@ export const Footer: React.FC = () => {
                   onClick={() => setActiveTab('termos')}
                   className="hover:text-emerald-400 transition cursor-pointer text-left flex items-center gap-1"
                 >
-                  <span>Termos de Uso</span>
+                  <span>{t.footer.terms}</span>
                 </button>
               </li>
               <li>
@@ -213,7 +215,7 @@ export const Footer: React.FC = () => {
                   onClick={() => setActiveTab('privacidade')}
                   className="hover:text-emerald-400 transition cursor-pointer text-left flex items-center gap-1"
                 >
-                  <span>Política de Privacidade</span>
+                  <span>{t.footer.privacy}</span>
                 </button>
               </li>
               <li>
@@ -222,7 +224,7 @@ export const Footer: React.FC = () => {
                   onClick={() => setActiveTab('cookies')}
                   className="hover:text-emerald-400 transition cursor-pointer text-left flex items-center gap-1"
                 >
-                  <span>Política de Cookies</span>
+                  <span>{t.footer.cookies}</span>
                 </button>
               </li>
               <li>
@@ -231,7 +233,7 @@ export const Footer: React.FC = () => {
                   onClick={() => setActiveTab('disclaimer')}
                   className="hover:text-emerald-400 transition cursor-pointer text-left flex items-center gap-1"
                 >
-                  <span>Aviso Legal / Disclaimer</span>
+                  <span>{t.footer.disclaimer}</span>
                 </button>
               </li>
               <li className="pt-1.5">
@@ -241,7 +243,7 @@ export const Footer: React.FC = () => {
                   className="inline-flex items-center gap-1.5 text-[11px] font-semibold text-amber-400 hover:text-amber-300 bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 px-2.5 py-1 rounded-lg transition cursor-pointer"
                 >
                   <Sliders className="w-3 h-3" />
-                  <span>Preferências de Cookies</span>
+                  <span>{t.footer.cookiePrefs}</span>
                 </button>
               </li>
             </ul>
@@ -251,17 +253,17 @@ export const Footer: React.FC = () => {
         {/* Disclaimer Financeiro e Transparência de Dados */}
         <div className="pt-6 border-t border-slate-800/80 text-[11px] text-slate-500 leading-relaxed space-y-2">
           <p>
-            <strong className="text-slate-400">Aviso de Risco e Isenção de Responsabilidade Financeira:</strong> O DinhEuro (<span className="text-emerald-400 font-mono">dinheuro.com</span> / <span className="text-emerald-400 font-mono">dinheuro.com.br</span>) é um portal digital informativo e educacional de agregação de dados econômicos. As cotações em tempo real de ativos mundiais, taxas de câmbio (Euro, Dólar, Real), ações da B3, bolsas internacionais, criptoativos e simuladores são consolidados a partir de feeds institucionais de mercado, mesas de câmbio interbancário e livros públicos de negociação. O DinhEuro não presta consultoria de investimentos, análise de valores mobiliários ou recomendação direta de aporte financeiro. A negociação em mercados de renda variável e Forex envolve alto risco de perda do patrimônio investido.
+            <strong className="text-slate-400">{t.footer.disclaimerPrefix}</strong> O DinhEuro (<span className="text-emerald-400 font-mono">dinheuro.com</span> / <span className="text-emerald-400 font-mono">dinheuro.com.br</span>) é um portal digital informativo e educacional de agregação de dados econômicos. As cotações em tempo real de ativos mundiais, taxas de câmbio (Euro, Dólar, Real), ações da B3, bolsas internacionais, criptoativos e simuladores são consolidados a partir de feeds institucionais de mercado, mesas de câmbio interbancário e livros públicos de negociação. O DinhEuro não presta consultoria de investimentos, análise de valores mobiliários ou recomendação direta de aporte financeiro. A negociação em mercados de renda variável e Forex envolve alto risco de perda do patrimônio investido.
           </p>
 
           <div className="pt-4 border-t border-slate-800/40 space-y-3 text-slate-500 text-[11px] leading-relaxed">
             <p className="text-center sm:text-left">
-              DinhEuro™ — Marca com registro requerido junto ao INPI (Processo nº 942746848). É expressamente proibida a cópia, reprodução, imitação ou utilização total ou parcial do nome, marca, logotipo, layout, conteúdos ou funcionalidades deste portal em quaisquer sites, aplicativos, plataformas ou categorias comerciais sem autorização prévia e por escrito do titular.
+              {t.footer.brandProtection}
             </p>
 
             <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
               <span className="text-center sm:text-left">
-                © {new Date().getFullYear()} DinhEuro (dinheuro.com / dinheuro.com.br). Todos os direitos reservados.
+                © {new Date().getFullYear()} DinhEuro (dinheuro.com / dinheuro.com.br). {t.footer.copyrightSuffix}
               </span>
               <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 text-slate-400 text-[11px]">
                 <button
@@ -269,7 +271,7 @@ export const Footer: React.FC = () => {
                   onClick={() => setActiveTab('termos')}
                   className="hover:text-white transition cursor-pointer"
                 >
-                  Termos
+                  {t.footer.terms.split(' ')[0]}
                 </button>
                 <span>•</span>
                 <button
@@ -277,7 +279,7 @@ export const Footer: React.FC = () => {
                   onClick={() => setActiveTab('privacidade')}
                   className="hover:text-white transition cursor-pointer"
                 >
-                  Privacidade
+                  {t.header.nav.dashboard === 'Home' ? 'Privacy' : t.header.nav.dashboard === 'Inicio' ? 'Privacidad' : 'Privacidade'}
                 </button>
                 <span>•</span>
                 <button

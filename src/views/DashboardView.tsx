@@ -13,6 +13,7 @@ import {
   RefreshCw,
 } from 'lucide-react';
 import { useMarket } from '../context/MarketContext';
+import { useI18n } from '../i18n/I18nContext';
 import { formatCurrencyValue, convertCurrency } from '../utils/finance';
 import { DualPrice } from '../components/DualPrice';
 import { FocusRadarPanel } from '../components/FocusRadarPanel';
@@ -20,13 +21,15 @@ import { MercosulEuDossierPanel } from '../components/MercosulEuDossierPanel';
 import { DrexDossierPanel } from '../components/DrexDossierPanel';
 import { UniversalCurrencyCalculator } from '../components/UniversalCurrencyCalculator';
 import { AcademyHighlightSection } from '../components/AcademyHighlightSection';
+import { HomeSeoEditorialSection } from '../components/HomeSeoEditorialSection';
 
 export const DashboardView: React.FC = () => {
   const { assets, universalRates, news, setActiveTab, setSelectedAsset, openAssetDetail, refreshData, lastUpdated, apiSourceSummary } =
     useMarket();
+  const { t, lang } = useI18n();
 
   // Currency Converter local quick state (synchronised with global rates)
-  const [calcAmount, setCalcAmount] = useState<number>(1000);
+  const [calcAmount, setCalcAmount] = useState<number>(1);
   const [calcFrom, setCalcFrom] = useState<string>('EUR');
   const [calcTo, setCalcTo] = useState<string>('BRL');
 
@@ -80,16 +83,16 @@ export const DashboardView: React.FC = () => {
             <div>
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 text-xs font-semibold mb-3">
                 <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-                <span>Dados Globais em Tempo Real • Câmbio Interbancário, Bolsas Mundiais & Criptoativos</span>
+                <span>{t.dashboard.liveBadge}</span>
               </div>
               <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-white tracking-tight leading-tight">
-                Hub Financeiro Global{' '}
+                {t.dashboard.heroTitlePrefix}{' '}
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-teal-300 to-amber-400">
                   DinhEuro
                 </span>
               </h1>
               <p className="text-xs sm:text-sm text-slate-300 mt-2 max-w-xl leading-relaxed">
-                Monitore cotações internacionais e B3, câmbio universal com Euro e Dólar, índices mundiais, criptomoedas e análises no padrão institucional dos maiores terminais de finanças.
+                {t.dashboard.heroSubtitle}
               </p>
             </div>
 
@@ -180,11 +183,11 @@ export const DashboardView: React.FC = () => {
             <div className="flex items-center gap-2">
               <Gauge className="w-4 h-4 text-amber-400" />
               <span className="text-xs font-bold text-white uppercase tracking-wider">
-                Termômetro de Mercado
+                {t.dashboard.thermometerTitle}
               </span>
             </div>
             <span className="text-[11px] font-bold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20">
-              Apetite por Risco
+              {t.dashboard.riskAppetiteBadge}
             </span>
           </div>
 
@@ -192,7 +195,7 @@ export const DashboardView: React.FC = () => {
           <div className="space-y-2">
             <div className="flex items-baseline justify-between">
               <span className="text-2xl font-black font-mono-numbers text-white">68</span>
-              <span className="text-xs font-semibold text-emerald-400">Ganância Moderada</span>
+              <span className="text-xs font-semibold text-emerald-400">{t.dashboard.moderateGreed}</span>
             </div>
             {/* Visual gradient bar */}
             <div className="w-full bg-slate-800 h-2.5 rounded-full overflow-hidden p-0.5 flex">
@@ -202,9 +205,9 @@ export const DashboardView: React.FC = () => {
               <div className="h-full bg-emerald-500 rounded-r-full w-1/4"></div>
             </div>
             <div className="flex justify-between text-[9px] text-slate-400 font-medium">
-              <span>0 Medo Extremo</span>
-              <span>50 Neutro</span>
-              <span>100 Otimismo</span>
+              <span>{t.dashboard.extremeFear}</span>
+              <span>{t.dashboard.neutral}</span>
+              <span>{t.dashboard.optimism}</span>
             </div>
           </div>
 
@@ -213,7 +216,7 @@ export const DashboardView: React.FC = () => {
             <div className="flex items-center justify-between text-[11px] font-semibold text-slate-300">
               <span className="flex items-center gap-1.5">
                 <ArrowRightLeft className="w-3.5 h-3.5 text-amber-400" />
-                <span>Simulador Instantâneo</span>
+                <span>{t.dashboard.quickSimulator}</span>
               </span>
               <span className="text-[10px] text-slate-400 font-mono">1 {calcFrom} = {(universalRates[calcTo] / universalRates[calcFrom]).toFixed(4)} {calcTo}</span>
             </div>
@@ -244,7 +247,7 @@ export const DashboardView: React.FC = () => {
               <button
                 onClick={swapCurrencies}
                 className="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition cursor-pointer"
-                title="Inverter Moedas"
+                title={t.dashboard.swapTooltip}
               >
                 <ArrowRightLeft className="w-3.5 h-3.5" />
               </button>
@@ -264,7 +267,7 @@ export const DashboardView: React.FC = () => {
             </div>
 
             <div className="pt-1 flex items-center justify-between text-xs">
-              <span className="text-slate-400 text-[11px]">Resultado Convertido:</span>
+              <span className="text-slate-400 text-[11px]">{t.dashboard.convertedResult}</span>
               <span className="font-bold font-mono-numbers text-emerald-400 text-sm">
                 {formatCurrencyValue(convertedValue, calcTo, calcTo === 'JPY' ? 0 : 2)}
               </span>
@@ -279,11 +282,11 @@ export const DashboardView: React.FC = () => {
           <div className="flex items-center gap-2">
             <Globe className="w-4 h-4 text-emerald-400" />
             <h2 className="text-sm sm:text-base font-bold text-white">
-              Índices Mundiais de Referência
+              {t.dashboard.worldIndicesTitle}
             </h2>
           </div>
           <span className="text-[11px] text-slate-400">
-            Atualizado: {lastUpdated.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
+            {t.dashboard.updatedAt} {lastUpdated.toLocaleTimeString(lang === 'en' ? 'en-US' : 'pt-BR', { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
           </span>
         </div>
 
@@ -331,7 +334,7 @@ export const DashboardView: React.FC = () => {
       </div>
 
       {/* Calculadora de Câmbio Universal (Tempo Real via AwesomeAPI) */}
-      <UniversalCurrencyCalculator defaultFrom="USD" defaultTo="BRL" defaultAmount={1000} />
+      <UniversalCurrencyCalculator defaultFrom="EUR" defaultTo="BRL" defaultAmount={1} />
 
       {/* Main Split: Stocks Heatmap & Universal Currency Hub */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -341,7 +344,7 @@ export const DashboardView: React.FC = () => {
             <div className="flex items-center gap-2">
               <Flame className="w-4 h-4 text-amber-400" />
               <h2 className="text-sm sm:text-base font-bold text-white">
-                Destaques do Mercado (Ações Globais & B3)
+                {t.dashboard.marketHighlightsTitle}
               </h2>
             </div>
 
@@ -355,7 +358,7 @@ export const DashboardView: React.FC = () => {
               }}
               className="flex items-center gap-1 text-xs font-semibold text-emerald-400 hover:text-emerald-300 transition cursor-pointer"
             >
-              <span>Ver todas as ações do mercado</span>
+              <span>{t.dashboard.viewAllStocks}</span>
               <ArrowRight className="w-3.5 h-3.5" />
             </button>
           </div>
@@ -366,9 +369,9 @@ export const DashboardView: React.FC = () => {
               <div className="flex items-center justify-between text-xs font-bold text-slate-700 dark:text-slate-300 border-b border-slate-200 dark:border-slate-800 pb-2">
                 <span className="flex items-center gap-1.5 text-emerald-600 dark:text-emerald-400">
                   <TrendingUp className="w-3.5 h-3.5" />
-                  <span>Maiores Altas (24h)</span>
+                  <span>{t.dashboard.topGainers}</span>
                 </span>
-                <span className="text-[10px] text-slate-500 uppercase">Var %</span>
+                <span className="text-[10px] text-slate-500 uppercase">{t.dashboard.varPercent}</span>
               </div>
 
               <div className="space-y-2">
@@ -410,9 +413,9 @@ export const DashboardView: React.FC = () => {
               <div className="flex items-center justify-between text-xs font-bold text-slate-700 dark:text-slate-300 border-b border-slate-200 dark:border-slate-800 pb-2">
                 <span className="flex items-center gap-1.5 text-rose-600 dark:text-rose-400">
                   <TrendingDown className="w-3.5 h-3.5" />
-                  <span>Maiores Baixas (24h)</span>
+                  <span>{t.dashboard.topLosers}</span>
                 </span>
-                <span className="text-[10px] text-slate-500 uppercase">Var %</span>
+                <span className="text-[10px] text-slate-500 uppercase">{t.dashboard.varPercent}</span>
               </div>
 
               <div className="space-y-2">
@@ -467,16 +470,16 @@ export const DashboardView: React.FC = () => {
               <div className="flex items-center gap-2">
                 <Globe className="w-4 h-4 text-emerald-500 dark:text-emerald-400" />
                 <h3 className="text-xs sm:text-sm font-bold text-slate-900 dark:text-white uppercase tracking-wider">
-                  Matriz Cambial Global
+                  {t.dashboard.currencyMatrixTitle}
                 </h3>
               </div>
               <span className="text-[10px] font-semibold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
-                Sincronizada
+                {t.dashboard.synchronized}
               </span>
             </div>
 
             <p className="text-[11px] text-slate-400 mb-3">
-              Cotações universais unificadas entre a Home e o Simulador Interno:
+              {t.dashboard.matrixSubtitle}
             </p>
 
             <div className="space-y-2">
@@ -530,7 +533,7 @@ export const DashboardView: React.FC = () => {
             }}
             className="w-full py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-semibold text-slate-200 transition cursor-pointer flex items-center justify-center gap-1.5"
           >
-            <span>Abrir Simulador Completo</span>
+            <span>{t.dashboard.openFullSimulator}</span>
             <ChevronRight className="w-3.5 h-3.5" />
           </button>
         </div>
@@ -544,10 +547,10 @@ export const DashboardView: React.FC = () => {
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <h2 className="text-sm sm:text-base font-bold text-white">
-              Notícias & Análises em Tempo Real
+              {t.dashboard.newsTitle}
             </h2>
             <span className="text-[10px] px-2 py-0.5 rounded-full bg-blue-500/10 text-blue-400 border border-blue-500/20 font-bold">
-              Feed Verificado
+              {t.dashboard.verifiedFeed}
             </span>
           </div>
 
@@ -560,7 +563,7 @@ export const DashboardView: React.FC = () => {
             }}
             className="text-xs font-semibold text-emerald-400 hover:text-emerald-300 transition cursor-pointer flex items-center gap-1"
           >
-            <span>Ver todas as análises</span>
+            <span>{t.dashboard.viewAllNews}</span>
             <ArrowRight className="w-3.5 h-3.5" />
           </button>
         </div>
@@ -600,7 +603,7 @@ export const DashboardView: React.FC = () => {
                     className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-emerald-600/30 text-emerald-400 hover:text-emerald-300 text-xs font-medium border border-slate-700 hover:border-emerald-500/40 transition"
                     onClick={(e) => e.stopPropagation()}
                   >
-                    <span>Ler matéria</span>
+                    <span>{t.dashboard.readArticle}</span>
                     <ExternalLink className="w-3 h-3" />
                   </a>
                 </div>
@@ -609,6 +612,9 @@ export const DashboardView: React.FC = () => {
           })}
         </div>
       </div>
+
+      {/* Long-Tail SEO Editorial Reference Summary above Footer */}
+      <HomeSeoEditorialSection />
     </div>
   );
 };

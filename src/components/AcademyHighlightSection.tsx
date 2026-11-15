@@ -1,6 +1,7 @@
 import React from 'react';
 import { GraduationCap, BookOpen, ArrowRight, CheckCircle2, Layers } from 'lucide-react';
 import { useMarket } from '../context/MarketContext';
+import { useI18n } from '../i18n/I18nContext';
 import { ACADEMY_COURSES, type CourseLevel } from '../data/academyCourses';
 
 const LEVEL_BADGE_STYLES: Record<CourseLevel, string> = {
@@ -11,6 +12,7 @@ const LEVEL_BADGE_STYLES: Record<CourseLevel, string> = {
 
 export const AcademyHighlightSection: React.FC = () => {
   const { setActiveTab, openAcademyCourse } = useMarket();
+  const { t } = useI18n();
 
   return (
     <section
@@ -23,17 +25,17 @@ export const AcademyHighlightSection: React.FC = () => {
           <div className="flex flex-wrap items-center gap-2">
             <span className="inline-flex items-center gap-1.5 text-emerald-400">
               <GraduationCap className="w-4 h-4" />
-              <span className="text-[11px] font-bold uppercase tracking-wider">Educação Financeira</span>
+              <span className="text-[11px] font-bold uppercase tracking-wider">{t.academyHighlight.eyebrow}</span>
             </span>
             <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-emerald-500/15 border border-emerald-500/30 text-emerald-400">
-              100% Gratuito
+              {t.academyHighlight.freeBadge}
             </span>
           </div>
           <h2 id="home-academy-heading" className="text-base sm:text-lg font-extrabold text-white tracking-tight">
-            DinhEuro Academy — Trilhas Práticas de Mercado
+            {t.academyHighlight.title}
           </h2>
           <p className="text-xs text-slate-400 max-w-2xl leading-relaxed">
-            Cursos estruturados em módulos de leitura interativa com exemplos numéricos aplicados e acesso direto às ferramentas do portal.
+            {t.academyHighlight.subtitle}
           </p>
         </div>
 
@@ -46,7 +48,7 @@ export const AcademyHighlightSection: React.FC = () => {
           }}
           className="inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700 hover:border-emerald-500/40 text-xs font-bold text-emerald-400 hover:text-emerald-300 transition cursor-pointer flex-shrink-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500"
         >
-          <span>Ver Todos os Cursos</span>
+          <span>{t.academyHighlight.viewAllCourses}</span>
           <ArrowRight className="w-3.5 h-3.5" />
         </button>
       </div>
@@ -66,15 +68,15 @@ export const AcademyHighlightSection: React.FC = () => {
                   {course.level}
                 </span>
                 <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-400">
-                  GRATUITO
+                  {t.academyHighlight.freeTag}
                 </span>
               </div>
 
               <div className="flex items-center gap-1.5 text-[10px] font-mono-numbers text-slate-400">
                 <Layers className="w-3 h-3 text-slate-500" />
-                <span>Trilha 0{idx + 1}</span>
+                <span>0{idx + 1}</span>
                 <span>•</span>
-                <span>{course.modules.length} Módulos</span>
+                <span>{course.modules.length} {t.academyHighlight.modulesLabel}</span>
                 <span>•</span>
                 <span>{course.duration}</span>
               </div>
@@ -91,7 +93,7 @@ export const AcademyHighlightSection: React.FC = () => {
             <div className="pt-2 border-t border-slate-800/80 flex items-center justify-between gap-2">
               <span className="inline-flex items-center gap-1 text-[10px] text-slate-400">
                 <CheckCircle2 className="w-3 h-3 text-emerald-400" />
-                <span>Acesso Livre</span>
+                <span>{t.academyHighlight.freeAccess}</span>
               </span>
 
               <button
@@ -104,7 +106,7 @@ export const AcademyHighlightSection: React.FC = () => {
                 className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-slate-800/90 hover:bg-emerald-600/25 border border-slate-700 hover:border-emerald-500/40 text-[11px] font-bold text-emerald-400 hover:text-emerald-300 transition cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500"
               >
                 <BookOpen className="w-3 h-3" />
-                <span>Acessar Aula</span>
+                <span>{t.academyHighlight.accessLesson}</span>
               </button>
             </div>
           </div>

@@ -5,6 +5,8 @@
 
 import React, { useEffect } from 'react';
 import { MarketProvider, useMarket } from './context/MarketContext';
+import { I18nProvider, useI18n } from './i18n/I18nContext';
+import { syncRouteHeadMetadata } from './utils/seo';
 import { Header } from './components/Header';
 import { TickerTape } from './components/TickerTape';
 import { Footer } from './components/Footer';
@@ -68,7 +70,12 @@ const MainContent: React.FC = () => {
 
 const AppShell: React.FC = () => {
   const { theme, activeTab } = useMarket();
+  const { lang } = useI18n();
   const isTerminalMode = activeTab === 'daytrade' || activeTab === 'tape_reading';
+
+  useEffect(() => {
+    syncRouteHeadMetadata(activeTab, lang);
+  }, [activeTab, lang]);
 
   // Quando o React montar a interface no DOM com sucesso, dissolve o splash screen suavemente
   useEffect(() => {
@@ -130,9 +137,11 @@ const AppShell: React.FC = () => {
 export default function App() {
   return (
     <ErrorBoundary>
-      <MarketProvider>
-        <AppShell />
-      </MarketProvider>
+      <I18nProvider>
+        <MarketProvider>
+          <AppShell />
+        </MarketProvider>
+      </I18nProvider>
     </ErrorBoundary>
   );
 }

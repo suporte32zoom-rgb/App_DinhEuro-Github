@@ -10,6 +10,7 @@ import {
   AlertCircle,
 } from 'lucide-react';
 import { useMarket } from '../context/MarketContext';
+import { useI18n } from '../i18n/I18nContext';
 import {
   AwesomeQuoteMode,
   AwesomeQuotesMap,
@@ -33,11 +34,12 @@ const AUTO_REFRESH_INTERVAL_MS = 45000;
 
 export const UniversalCurrencyCalculator: React.FC<UniversalCurrencyCalculatorProps> = ({
   showRemittanceFeesDefault = false,
-  defaultFrom = 'USD',
+  defaultFrom = 'EUR',
   defaultTo = 'BRL',
-  defaultAmount = 1000,
+  defaultAmount = 1,
 }) => {
   const { universalRates } = useMarket();
+  const { t, lang } = useI18n();
 
   const [amountInput, setAmountInput] = useState<string>(String(defaultAmount));
   const [fromCurrency, setFromCurrency] = useState<string>(defaultFrom);
@@ -158,24 +160,24 @@ export const UniversalCurrencyCalculator: React.FC<UniversalCurrencyCalculatorPr
               id="universal-currency-calculator-title"
               className="text-base sm:text-lg font-bold text-white tracking-tight"
             >
-              Calculadora de Câmbio Universal
+              {t.calculator.title}
             </h2>
           </div>
           <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-slate-400">
             <span>
-              Fonte:{' '}
+              {t.calculator.sourceLabel}{' '}
               <strong className={dataSource === 'awesomeapi' ? 'text-emerald-400' : 'text-amber-400'}>
-                {dataSource === 'awesomeapi' ? 'AwesomeAPI (Tempo Real)' : 'Sincronização Local (Fallback)'}
+                {dataSource === 'awesomeapi' ? t.calculator.sourceLive : t.calculator.sourceFallback}
               </strong>
             </span>
             <span aria-hidden="true">·</span>
-            <span>{DINHEURO_CALCULATOR_CURRENCIES.length} moedas listadas no DinhEuro</span>
+            <span>{DINHEURO_CALCULATOR_CURRENCIES.length} {t.calculator.currenciesListed}</span>
             {lastSyncDate && (
               <>
                 <span aria-hidden="true">·</span>
                 <span className="font-mono-numbers">
-                  Atualizado às{' '}
-                  {lastSyncDate.toLocaleTimeString('pt-BR', {
+                  {t.calculator.updatedAt}{' '}
+                  {lastSyncDate.toLocaleTimeString(lang === 'en' ? 'en-US' : 'pt-BR', {
                     hour: '2-digit',
                     minute: '2-digit',
                     second: '2-digit',
@@ -186,7 +188,7 @@ export const UniversalCurrencyCalculator: React.FC<UniversalCurrencyCalculatorPr
             {apiTimestamp && (
               <>
                 <span aria-hidden="true">·</span>
-                <span className="font-mono-numbers text-slate-500">Ref. mercado: {apiTimestamp}</span>
+                <span className="font-mono-numbers text-slate-500">{t.calculator.marketRef} {apiTimestamp}</span>
               </>
             )}
           </div>
@@ -208,7 +210,7 @@ export const UniversalCurrencyCalculator: React.FC<UniversalCurrencyCalculatorPr
                   : 'text-slate-400 hover:text-white border border-transparent'
               }`}
             >
-              Compra (Bid)
+              {t.calculator.bidMode}
             </button>
             <button
               type="button"
@@ -219,7 +221,7 @@ export const UniversalCurrencyCalculator: React.FC<UniversalCurrencyCalculatorPr
                   : 'text-slate-400 hover:text-white border border-transparent'
               }`}
             >
-              Venda (Ask)
+              {t.calculator.askMode}
             </button>
           </div>
 
@@ -228,10 +230,10 @@ export const UniversalCurrencyCalculator: React.FC<UniversalCurrencyCalculatorPr
             onClick={() => syncFromAwesomeApi(true)}
             disabled={isRefreshing}
             className="min-h-[40px] inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700/80 hover:border-emerald-500/40 text-xs font-semibold text-slate-200 transition cursor-pointer whitespace-nowrap shrink-0 disabled:opacity-60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400"
-            title="Atualizar taxas agora pela AwesomeAPI"
+            title={t.calculator.refresh}
           >
             <RefreshCw className={`w-3.5 h-3.5 text-emerald-400 ${isRefreshing ? 'animate-spin' : ''}`} />
-            <span>{isRefreshing ? 'Sincronizando...' : 'Atualizar'}</span>
+            <span>{isRefreshing ? t.calculator.syncing : t.calculator.refresh}</span>
           </button>
         </div>
       </div>
@@ -245,7 +247,7 @@ export const UniversalCurrencyCalculator: React.FC<UniversalCurrencyCalculatorPr
           <div className="flex items-center gap-2">
             <AlertCircle className="w-4 h-4 shrink-0 text-amber-400" />
             <span>
-              AwesomeAPI indisponível no momento ({syncError}). Exibindo conversão com taxas sincronizadas de contingência.
+              {t.calculator.fallbackNotice} ({syncError})
             </span>
           </div>
           <button
@@ -253,7 +255,7 @@ export const UniversalCurrencyCalculator: React.FC<UniversalCurrencyCalculatorPr
             onClick={() => syncFromAwesomeApi(true)}
             className="text-xs font-semibold underline hover:text-amber-200 cursor-pointer self-start sm:self-auto whitespace-nowrap shrink-0"
           >
-            Tentar reconectar
+            {t.calculator.retry}
           </button>
         </div>
       )}
@@ -264,7 +266,7 @@ export const UniversalCurrencyCalculator: React.FC<UniversalCurrencyCalculatorPr
         <div className="lg:col-span-5 bg-[#070d18] rounded-xl border border-slate-800 p-4 space-y-3">
           <div className="flex items-center justify-between gap-2">
             <label htmlFor="universal-calc-amount" className="text-xs font-medium text-slate-400">
-              Valor de origem
+              {t.calculator.sourceAmount}
             </label>
             <span className="text-xs font-mono-numbers text-slate-400">
               {fromMeta.flag} {fromMeta.name}
@@ -335,14 +337,14 @@ export const UniversalCurrencyCalculator: React.FC<UniversalCurrencyCalculatorPr
             className="w-full lg:w-auto min-h-[44px] px-4 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700 hover:border-emerald-500/50 text-emerald-400 hover:text-emerald-300 transition cursor-pointer flex items-center justify-center gap-2 text-xs font-semibold whitespace-nowrap shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400"
           >
             <ArrowRightLeft className="w-4 h-4" />
-            <span className="lg:hidden">Inverter {fromCurrency} ↔ {toCurrency}</span>
+            <span className="lg:hidden">{t.calculator.swapButton} {fromCurrency} ↔ {toCurrency}</span>
           </button>
         </div>
 
         {/* Target Result Column */}
         <div className="lg:col-span-5 bg-[#070d18] rounded-xl border border-slate-800 p-4 space-y-3 flex flex-col justify-between">
           <div className="flex items-center justify-between gap-2">
-            <span className="text-xs font-medium text-slate-400">Valor convertido ({quoteMode === 'bid' ? 'Compra' : 'Venda'})</span>
+            <span className="text-xs font-medium text-slate-400">{t.calculator.convertedAmount} ({quoteMode === 'bid' ? t.calculator.buyLabel : t.calculator.sellLabel})</span>
             <span className="text-xs font-mono-numbers text-slate-400">
               {toMeta.flag} {toMeta.name}
             </span>
@@ -397,7 +399,7 @@ export const UniversalCurrencyCalculator: React.FC<UniversalCurrencyCalculatorPr
       {/* Market Stats Strip (High / Low / 24h Variation / BRL Reference) */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-1">
         <div className="bg-[#070d18] rounded-xl border border-slate-800/90 px-3.5 py-2.5">
-          <span className="text-[11px] text-slate-400 block">Equivalente em Real (BRL)</span>
+          <span className="text-[11px] text-slate-400 block">{t.calculator.brlEquivalent}</span>
           <span className="text-sm font-bold font-mono-numbers text-white">
             {formatConvertedAmount(conversion.amountInBrl, 'BRL')}
           </span>
@@ -405,7 +407,7 @@ export const UniversalCurrencyCalculator: React.FC<UniversalCurrencyCalculatorPr
 
         <div className="bg-[#070d18] rounded-xl border border-slate-800/90 px-3.5 py-2.5">
           <span className="text-[11px] text-slate-400 block">
-            {activePairForRange ? `Máx. Dia (${activePairForRange.code}/BRL)` : 'Paridade Base'}
+            {activePairForRange ? `${t.calculator.dayHigh} (${activePairForRange.code}/BRL)` : t.calculator.baseParity}
           </span>
           <span className="text-sm font-bold font-mono-numbers text-slate-200">
             {activePairForRange && activePairForRange.code !== 'BRL'
@@ -416,22 +418,22 @@ export const UniversalCurrencyCalculator: React.FC<UniversalCurrencyCalculatorPr
 
         <div className="bg-[#070d18] rounded-xl border border-slate-800/90 px-3.5 py-2.5">
           <span className="text-[11px] text-slate-400 block">
-            {activePairForRange ? `Mín. Dia (${activePairForRange.code}/BRL)` : 'Modo Ativo'}
+            {activePairForRange ? `${t.calculator.dayLow} (${activePairForRange.code}/BRL)` : t.calculator.activeMode}
           </span>
           <span className="text-sm font-bold font-mono-numbers text-slate-200">
             {activePairForRange && activePairForRange.code !== 'BRL'
               ? formatConvertedAmount(activePairForRange.lowBrl, 'BRL')
               : quoteMode === 'bid'
-              ? 'Compra'
-              : 'Venda'}
+              ? t.calculator.buyLabel
+              : t.calculator.sellLabel}
           </span>
         </div>
 
         <div className="bg-[#070d18] rounded-xl border border-slate-800/90 px-3.5 py-2.5">
           <span className="text-[11px] text-slate-400 block">
             {activePairForRange && activePairForRange.code !== 'BRL'
-              ? `Variação 24h (${activePairForRange.code})`
-              : 'Variação 24h'}
+              ? `${t.calculator.change24h} (${activePairForRange.code})`
+              : t.calculator.change24h}
           </span>
           {activePairForRange && activePairForRange.code !== 'BRL' ? (
             <span
@@ -462,7 +464,7 @@ export const UniversalCurrencyCalculator: React.FC<UniversalCurrencyCalculatorPr
           className="inline-flex items-center gap-2 text-xs font-semibold text-slate-300 hover:text-emerald-400 transition cursor-pointer"
         >
           {showFees ? <ChevronUp className="w-4 h-4 text-emerald-400" /> : <ChevronDown className="w-4 h-4 text-slate-400" />}
-          <span>Simular custos de remessa internacional (Spread bancário e IOF)</span>
+          <span>{t.calculator.toggleRemittanceFees}</span>
         </button>
 
         {showFees && (
@@ -470,7 +472,7 @@ export const UniversalCurrencyCalculator: React.FC<UniversalCurrencyCalculatorPr
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
               <div>
                 <label htmlFor="calc-spread" className="text-slate-400 block mb-1">
-                  Spread da Corretora / Banco (%)
+                  {t.calculator.brokerSpread}
                 </label>
                 <input
                   id="calc-spread"
@@ -485,7 +487,7 @@ export const UniversalCurrencyCalculator: React.FC<UniversalCurrencyCalculatorPr
 
               <div>
                 <label htmlFor="calc-iof" className="text-slate-400 block mb-1">
-                  IOF Cambial (%) — 1,1% conta mesma titularidade / 0,38% terceiros
+                  {t.calculator.iofLabel}
                 </label>
                 <input
                   id="calc-iof"
@@ -513,7 +515,7 @@ export const UniversalCurrencyCalculator: React.FC<UniversalCurrencyCalculatorPr
                 </span>
               </div>
               <div className="flex sm:block justify-between sm:text-right">
-                <span className="text-slate-300 font-semibold block">Total Líquido Efetivo:</span>
+                <span className="text-slate-300 font-semibold block">{t.calculator.netEffectiveTotal}</span>
                 <span className="font-mono-numbers font-bold text-sm text-emerald-400">
                   {formatConvertedAmount(netConvertedAmount, toCurrency)}
                 </span>
@@ -527,10 +529,10 @@ export const UniversalCurrencyCalculator: React.FC<UniversalCurrencyCalculatorPr
       <div className="border-t border-slate-800 pt-4 space-y-3">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
           <h3 className="text-xs font-bold text-slate-200">
-            Conversão Simultânea — Principais Moedas Listadas no DinhEuro
+            {t.calculator.matrixTitle}
           </h3>
           <span className="text-[11px] text-slate-400">
-            Clique em qualquer moeda para selecioná-la como destino
+            {t.calculator.matrixHint}
           </span>
         </div>
 

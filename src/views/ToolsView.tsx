@@ -17,8 +17,10 @@ import {
 } from '../utils/finance';
 import { CompoundInterestChart } from '../components/CompoundInterestChart';
 import { UniversalCurrencyCalculator } from '../components/UniversalCurrencyCalculator';
+import { useI18n } from '../i18n/I18nContext';
 
 export const ToolsView: React.FC = () => {
+  const { t } = useI18n();
   const [activeTool, setActiveTool] = useState<'cambio' | 'juros' | 'inflacao' | 'darf'>('cambio');
 
   // --- 2. Juros Compostos State ---
@@ -88,10 +90,10 @@ export const ToolsView: React.FC = () => {
   });
 
   const toolTabs = [
-    { id: 'cambio', label: 'Calculadora de Câmbio Universal', icon: ArrowRightLeft },
-    { id: 'juros', label: 'Juros Compostos & Renda Fixa', icon: TrendingUp },
-    { id: 'inflacao', label: 'Poder de Compra & Inflação', icon: Percent },
-    { id: 'darf', label: 'Calculadora de Lucro & Imposto (DARF)', icon: Receipt },
+    { id: 'cambio', label: t.tools.tabFx, icon: ArrowRightLeft },
+    { id: 'juros', label: t.tools.tabCompound, icon: TrendingUp },
+    { id: 'inflacao', label: t.tools.tabInflation, icon: Percent },
+    { id: 'darf', label: t.tools.tabTax, icon: Receipt },
   ];
 
   return (
@@ -100,10 +102,10 @@ export const ToolsView: React.FC = () => {
       <div className="border-b border-slate-800 pb-5">
         <h1 className="text-xl sm:text-2xl font-black text-white tracking-tight flex items-center gap-2">
           <Calculator className="w-6 h-6 text-emerald-400" />
-          <span>Ferramentas & Simuladores Financeiros Globais</span>
+          <span>{t.tools.title}</span>
         </h1>
         <p className="text-xs text-slate-400 mt-1">
-          Cálculos precisos em tempo real para remessas de câmbio, planejamento de aposentadoria e tributação.
+          {t.tools.subtitle}
         </p>
       </div>
 
@@ -137,7 +139,7 @@ export const ToolsView: React.FC = () => {
           showRemittanceFeesDefault={true}
           defaultFrom="EUR"
           defaultTo="BRL"
-          defaultAmount={1000}
+          defaultAmount={1}
         />
       )}
 

@@ -31,6 +31,8 @@ import {
   GraduationCap,
 } from 'lucide-react';
 import { useMarket, NavigationTab, MarketCategoryFilter } from '../context/MarketContext';
+import { useI18n } from '../i18n/I18nContext';
+import type { SupportedLanguage } from '../i18n/translations';
 import { DualPrice } from './DualPrice';
 
 export const Header: React.FC = () => {
@@ -49,9 +51,24 @@ export const Header: React.FC = () => {
     refreshData,
     lastUpdated,
   } = useMarket();
+  const { lang, setLang, t } = useI18n();
 
   const [searchQuery, setSearchQuery] = useState('');
   const [showSearchModal, setShowSearchModal] = useState(false);
+
+  // Support Schema.org SearchAction query param (?q=...)
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    try {
+      const qParam = new URLSearchParams(window.location.search).get('q');
+      if (qParam && qParam.trim()) {
+        setSearchQuery(qParam.trim());
+        setShowSearchModal(true);
+      }
+    } catch {
+      // ignore URL parsing errors
+    }
+  }, []);
   const [isMobileDrawerOpen, setIsMobileDrawerOpen] = useState(false);
   const [isCategoryMenuOpen, setIsCategoryMenuOpen] = useState(false);
   const [categoryMenuPos, setCategoryMenuPos] = useState<{ top: number; left: number }>({ top: 110, left: 16 });
@@ -150,57 +167,57 @@ export const Header: React.FC = () => {
   }[] = [
     {
       id: 'all',
-      label: 'Todos os Ativos',
-      shortLabel: 'Todos',
-      description: 'Catálogo completo em tempo real',
+      label: t.header.categories.all.label,
+      shortLabel: t.header.categories.all.shortLabel,
+      description: t.header.categories.all.description,
       icon: <Globe className="w-4 h-4 text-emerald-400" />,
       count: assets.length,
     },
     {
       id: 'stocks_br',
-      label: 'Ações Brasil (B3)',
-      shortLabel: 'B3',
-      description: 'PETR4, VALE3, ITUB4, WEGE3...',
+      label: t.header.categories.stocks_br.label,
+      shortLabel: t.header.categories.stocks_br.shortLabel,
+      description: t.header.categories.stocks_br.description,
       icon: <BarChart3 className="w-4 h-4 text-emerald-400" />,
       count: assets.filter((a) => a.category === 'stocks_br').length,
     },
     {
       id: 'stocks_us',
-      label: 'Ações EUA (Wall St)',
-      shortLabel: 'EUA',
-      description: 'AAPL, NVDA, MSFT, TSLA...',
+      label: t.header.categories.stocks_us.label,
+      shortLabel: t.header.categories.stocks_us.shortLabel,
+      description: t.header.categories.stocks_us.description,
       icon: <TrendingUp className="w-4 h-4 text-blue-400" />,
       count: assets.filter((a) => a.category === 'stocks_us').length,
     },
     {
       id: 'indices',
-      label: 'Índices Mundiais',
-      shortLabel: 'Índices',
-      description: 'Ibovespa, S&P 500, Nasdaq, DAX...',
+      label: t.header.categories.indices.label,
+      shortLabel: t.header.categories.indices.shortLabel,
+      description: t.header.categories.indices.description,
       icon: <BarChart2 className="w-4 h-4 text-cyan-400" />,
       count: assets.filter((a) => a.category === 'indices').length,
     },
     {
       id: 'forex',
-      label: 'Câmbio & Forex',
-      shortLabel: 'Câmbio',
-      description: 'USD/BRL, EUR/BRL, EUR/USD...',
+      label: t.header.categories.forex.label,
+      shortLabel: t.header.categories.forex.shortLabel,
+      description: t.header.categories.forex.description,
       icon: <DollarSign className="w-4 h-4 text-teal-400" />,
       count: assets.filter((a) => a.category === 'forex').length,
     },
     {
       id: 'crypto',
-      label: 'Criptomoedas',
-      shortLabel: 'Cripto',
-      description: 'Bitcoin, Ethereum, Solana...',
+      label: t.header.categories.crypto.label,
+      shortLabel: t.header.categories.crypto.shortLabel,
+      description: t.header.categories.crypto.description,
       icon: <Coins className="w-4 h-4 text-amber-400" />,
       count: assets.filter((a) => a.category === 'crypto').length,
     },
     {
       id: 'commodities',
-      label: 'Commodities',
-      shortLabel: 'Commodities',
-      description: 'Ouro, Petróleo Brent, Prata...',
+      label: t.header.categories.commodities.label,
+      shortLabel: t.header.categories.commodities.shortLabel,
+      description: t.header.categories.commodities.description,
       icon: <Landmark className="w-4 h-4 text-orange-400" />,
       count: assets.filter((a) => a.category === 'commodities').length,
     },
@@ -262,18 +279,18 @@ export const Header: React.FC = () => {
 
   // Essential Navigation items for Desktop and Mobile Drawer
   const navItems: { id: NavigationTab; label: string; badge?: string; icon: React.ReactNode }[] = [
-    { id: 'dashboard', label: 'Início', icon: <Home className="w-4 h-4" /> },
-    { id: 'mercados', label: 'Mercados', icon: <TrendingUp className="w-4 h-4" /> },
-    { id: 'carteiras', label: 'Carteiras', icon: <Briefcase className="w-4 h-4" /> },
-    { id: 'noticias', label: 'Notícias & Macro', badge: 'LIVE', icon: <Newspaper className="w-4 h-4 text-emerald-400" /> },
-    { id: 'corretoras', label: 'Corretoras Globais', icon: <Building2 className="w-4 h-4 text-teal-400" /> },
-    { id: 'daytrade', label: 'Day Trade & Scalping', badge: 'PRO', icon: <Zap className="w-4 h-4 text-emerald-400" /> },
-    { id: 'tape_reading', label: 'Fluxo & Tape Reading', badge: 'DOM', icon: <Layers className="w-4 h-4 text-cyan-400" /> },
-    { id: 'renda_fixa', label: 'Renda Fixa & Derivativos', icon: <Percent className="w-4 h-4" /> },
-    { id: 'graficos', label: 'Gráficos Avançados', icon: <BarChart2 className="w-4 h-4" /> },
-    { id: 'ferramentas', label: 'Ferramentas', icon: <Calculator className="w-4 h-4" /> },
-    { id: 'academy', label: 'Academy', badge: 'GRÁTIS', icon: <GraduationCap className="w-4 h-4 text-emerald-400" /> },
-    { id: 'sobre', label: 'Sobre o DinhEuro', icon: <Info className="w-4 h-4" /> },
+    { id: 'dashboard', label: t.header.nav.dashboard, icon: <Home className="w-4 h-4" /> },
+    { id: 'mercados', label: t.header.nav.mercados, icon: <TrendingUp className="w-4 h-4" /> },
+    { id: 'carteiras', label: t.header.nav.carteiras, icon: <Briefcase className="w-4 h-4" /> },
+    { id: 'noticias', label: t.header.nav.noticias, badge: 'LIVE', icon: <Newspaper className="w-4 h-4 text-emerald-400" /> },
+    { id: 'corretoras', label: t.header.nav.corretoras, icon: <Building2 className="w-4 h-4 text-teal-400" /> },
+    { id: 'daytrade', label: t.header.nav.daytrade, badge: 'PRO', icon: <Zap className="w-4 h-4 text-emerald-400" /> },
+    { id: 'tape_reading', label: t.header.nav.tape_reading, badge: 'DOM', icon: <Layers className="w-4 h-4 text-cyan-400" /> },
+    { id: 'renda_fixa', label: t.header.nav.renda_fixa, icon: <Percent className="w-4 h-4" /> },
+    { id: 'graficos', label: t.header.nav.graficos, icon: <BarChart2 className="w-4 h-4" /> },
+    { id: 'ferramentas', label: t.header.nav.ferramentas, icon: <Calculator className="w-4 h-4" /> },
+    { id: 'academy', label: t.header.nav.academy, badge: lang === 'en' ? 'FREE' : lang === 'es' ? 'GRATIS' : 'GRÁTIS', icon: <GraduationCap className="w-4 h-4 text-emerald-400" /> },
+    { id: 'sobre', label: t.header.nav.sobre, icon: <Info className="w-4 h-4" /> },
   ];
 
   const handleNavClick = (tabId: NavigationTab) => {
@@ -300,7 +317,7 @@ export const Header: React.FC = () => {
           <div className="flex items-center gap-3 overflow-x-auto no-scrollbar py-0.5 flex-nowrap">
             <span className="flex items-center gap-1 font-semibold text-slate-300 flex-shrink-0">
               <Clock className="w-3 h-3 text-amber-400" />
-              <span className="hidden xs:inline">Centros Financeiros:</span>
+              <span className="hidden xs:inline">{t.header.financialHubs}</span>
             </span>
             <span className="flex-shrink-0 text-slate-400">
               🇧🇷 SP <strong className="text-slate-200 font-mono-numbers">{worldTimes.sp}</strong>
@@ -326,9 +343,9 @@ export const Header: React.FC = () => {
               type="button"
               onClick={() => refreshData()}
               className="text-slate-400 hover:text-emerald-300 transition cursor-pointer flex items-center gap-1 font-mono-numbers bg-slate-900/60 px-2 py-0.5 rounded border border-slate-800"
-              title="Clique para sincronizar cotações agora"
+              title={t.header.syncTooltip}
             >
-              <span>{lastUpdated.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit', second: '2-digit' })}</span>
+              <span>{lastUpdated.toLocaleTimeString(lang === 'en' ? 'en-US' : 'pt-BR', { hour: '2-digit', minute: '2-digit', second: '2-digit' })}</span>
             </button>
           </div>
         </div>
@@ -359,7 +376,7 @@ export const Header: React.FC = () => {
               </span>
             </div>
             <span className="text-[10px] sm:text-[11px] font-medium text-slate-400 tracking-wide">
-              Hub Financeiro em Tempo Real
+              {t.header.hubSubtitle}
             </span>
           </div>
         </div>
@@ -370,7 +387,7 @@ export const Header: React.FC = () => {
             <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
             <input
               type="text"
-              placeholder="Buscar ações (AAPL, PETR4), pares forex, cripto, índices..."
+              placeholder={t.header.searchPlaceholder}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               onFocus={() => setShowSearchModal(true)}
@@ -393,29 +410,55 @@ export const Header: React.FC = () => {
           <button
             onClick={() => setShowSearchModal(true)}
             className="md:hidden p-2 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 hover:text-white transition cursor-pointer"
-            aria-label="Abrir busca de ativos"
+            aria-label={t.header.openSearchAria}
           >
             <Search className="w-4 h-4" />
           </button>
 
-
+          {/* Discreet Language Selector (PT | EN | ES) */}
+          <div
+            role="group"
+            aria-label="Language selector"
+            className="inline-flex items-center rounded-lg border border-slate-700/80 bg-slate-900/90 p-0.5 text-[10px] sm:text-[11px] font-bold flex-shrink-0"
+          >
+            {(['pt', 'en', 'es'] as SupportedLanguage[]).map((code, idx) => {
+              const isSelected = lang === code;
+              return (
+                <React.Fragment key={code}>
+                  {idx > 0 && <span className="text-slate-700 select-none px-0.5" aria-hidden="true">|</span>}
+                  <button
+                    type="button"
+                    onClick={() => setLang(code)}
+                    aria-pressed={isSelected}
+                    className={`px-1.5 sm:px-2 py-1 rounded-md uppercase transition cursor-pointer ${
+                      isSelected
+                        ? 'bg-emerald-500/20 text-emerald-300'
+                        : 'text-slate-400 hover:text-white'
+                    }`}
+                  >
+                    {code.toUpperCase()}
+                  </button>
+                </React.Fragment>
+              );
+            })}
+          </div>
 
           {/* Theme Toggle (Light / Dark) */}
           <button
             onClick={toggleTheme}
-            aria-label={theme === 'dark' ? 'Alternar para tema claro' : 'Alternar para tema escuro'}
-            title={theme === 'dark' ? 'Alternar para tema claro (Clean Finance)' : 'Alternar para tema escuro (Terminal)'}
+            aria-label={theme === 'dark' ? t.header.themeLight : t.header.themeDark}
+            title={theme === 'dark' ? t.header.themeLight : t.header.themeDark}
             className="p-1.5 sm:px-2.5 sm:py-1.5 rounded-lg border border-slate-700/80 bg-slate-900/90 hover:bg-slate-800 text-slate-300 hover:text-white transition flex items-center gap-1.5 text-xs font-medium cursor-pointer shadow-sm flex-shrink-0"
           >
             {theme === 'dark' ? (
               <>
                 <Sun className="w-3.5 h-3.5 text-amber-400" />
-                <span className="hidden lg:inline text-[11px]">Tema Claro</span>
+                <span className="hidden xl:inline text-[11px]">{t.header.themeLight}</span>
               </>
             ) : (
               <>
                 <Moon className="w-3.5 h-3.5 text-sky-400" />
-                <span className="hidden lg:inline text-[11px]">Tema Escuro</span>
+                <span className="hidden xl:inline text-[11px]">{t.header.themeDark}</span>
               </>
             )}
           </button>
@@ -425,7 +468,7 @@ export const Header: React.FC = () => {
             type="button"
             onClick={() => setIsMobileDrawerOpen(true)}
             className="lg:hidden p-2 rounded-xl bg-slate-900 border border-slate-700/80 hover:border-emerald-500/50 text-slate-200 hover:text-white transition cursor-pointer flex items-center justify-center shadow-sm"
-            aria-label="Abrir menu de navegação lateral"
+            aria-label={t.header.openMenuAria}
             aria-expanded={isMobileDrawerOpen}
           >
             <Menu className="w-5 h-5 text-emerald-400" />
@@ -453,13 +496,13 @@ export const Header: React.FC = () => {
                 : 'bg-slate-900/90 text-slate-200 hover:text-white border-slate-700/80 hover:border-emerald-500/40'
             }`}
             style={{ flexShrink: 0, whiteSpace: 'nowrap' }}
-            title="Selecionar categoria de mercado ou seção"
+            title={t.header.categoriesLabel}
           >
             <LayoutGrid className="w-3.5 h-3.5 text-emerald-400" />
             <span>
               {activeTab === 'mercados' && selectedMarketCategory !== 'all'
-                ? `Categorias: ${activeCategoryObj.shortLabel}`
-                : 'Categorias'}
+                ? `${t.header.categoriesLabel}: ${activeCategoryObj.shortLabel}`
+                : t.header.categoriesLabel}
             </span>
             <ChevronDown
               className={`w-3.5 h-3.5 text-slate-400 transition-transform duration-150 ${
@@ -664,13 +707,13 @@ export const Header: React.FC = () => {
                     <h3 className="text-base font-black text-white leading-tight">
                       Dinh<span className="text-emerald-400">Euro</span>
                     </h3>
-                    <p className="text-[10px] text-slate-400 font-medium">Menu Institucional</p>
+                    <p className="text-[10px] text-slate-400 font-medium">{t.header.drawerSubtitle}</p>
                   </div>
                 </div>
                 <button
                   onClick={() => setIsMobileDrawerOpen(false)}
                   className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition cursor-pointer"
-                  aria-label="Fechar menu"
+                  aria-label="Close menu"
                 >
                   <X className="w-5 h-5" />
                 </button>
@@ -679,7 +722,7 @@ export const Header: React.FC = () => {
               {/* Navigation Links List */}
               <div className="space-y-1">
                 <p className="text-[10px] uppercase font-bold text-slate-500 tracking-wider px-2 mb-2">
-                  Navegação Principal
+                  {t.header.drawerNavTitle}
                 </p>
                 {navItems.map((item) => {
                   const isActive = activeTab === item.id;
@@ -715,7 +758,7 @@ export const Header: React.FC = () => {
               {/* Quick Market Categories in Mobile Drawer */}
               <div className="space-y-2 pt-2 border-t border-slate-800/80">
                 <p className="text-[10px] uppercase font-bold text-slate-500 tracking-wider px-2">
-                  Categorias de Mercado
+                  {t.header.drawerCategoriesTitle}
                 </p>
                 <div className="grid grid-cols-2 gap-1.5">
                   {marketCategories.map((cat) => {
@@ -743,7 +786,7 @@ export const Header: React.FC = () => {
             {/* Drawer Footer Actions */}
             <div className="pt-6 mt-6 border-t border-slate-800 space-y-3">
               <div className="flex items-center justify-between text-xs text-slate-400">
-                <span>Moeda de Exibição</span>
+                <span>{t.header.displayCurrency}</span>
                 <span className="font-bold text-emerald-400">{displayCurrency}</span>
               </div>
               <div className="flex items-center gap-2">
@@ -762,7 +805,7 @@ export const Header: React.FC = () => {
                 ))}
               </div>
               <p className="text-[10px] text-slate-500 text-center pt-2">
-                DinhEuro &bull; Cotações em Tempo Real
+                {t.header.drawerFooterNote}
               </p>
             </div>
           </div>
@@ -786,7 +829,7 @@ export const Header: React.FC = () => {
                 ref={searchInputRef}
                 autoFocus
                 type="text"
-                placeholder="Buscar ações (AAPL, PETR4), pares forex, cripto, índices..."
+                placeholder={t.header.searchPlaceholder}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="w-full bg-transparent text-sm text-white placeholder:text-slate-500 focus:outline-none"
@@ -801,12 +844,12 @@ export const Header: React.FC = () => {
 
             <div className="max-h-80 overflow-y-auto space-y-1.5 no-scrollbar">
               <p className="text-[11px] font-semibold text-slate-400 px-2 py-1 uppercase tracking-wider">
-                {searchQuery ? 'Resultados Encontrados' : 'Ativos em Destaque'}
+                {searchQuery ? t.header.searchResults : t.header.featuredAssets}
               </p>
 
               {filteredAssets.length === 0 ? (
                 <div className="p-6 text-center text-xs text-slate-500">
-                  Nenhum ativo encontrado para "{searchQuery}". Tente outro símbolo ou nome.
+                  {t.header.noAssetFound}
                 </div>
               ) : (
                 filteredAssets.map((asset) => {
