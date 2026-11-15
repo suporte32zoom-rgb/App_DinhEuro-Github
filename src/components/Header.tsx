@@ -17,6 +17,7 @@ import {
   BarChart2,
   Calculator,
   Info,
+  ChevronLeft,
   ChevronRight,
   ChevronDown,
   LayoutGrid,
@@ -56,6 +57,9 @@ export const Header: React.FC = () => {
   const [categoryMenuPos, setCategoryMenuPos] = useState<{ top: number; left: number }>({ top: 110, left: 16 });
   const categoryBtnRef = useRef<HTMLButtonElement>(null);
   const categoryDropdownRef = useRef<HTMLDivElement>(null);
+  const navScrollRef = useRef<HTMLDivElement>(null);
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(false);
   const [worldTimes, setWorldTimes] = useState({
     sp: '',
     ny: '',
@@ -64,6 +68,43 @@ export const Header: React.FC = () => {
   });
 
   const searchInputRef = useRef<HTMLInputElement>(null);
+
+  const updateNavScrollState = React.useCallback(() => {
+    const el = navScrollRef.current;
+    if (!el) return;
+    setCanScrollLeft(el.scrollLeft > 5);
+    setCanScrollRight(el.scrollLeft + el.clientWidth < el.scrollWidth - 5);
+  }, []);
+
+  useEffect(() => {
+    const el = navScrollRef.current;
+    if (!el) return;
+
+    updateNavScrollState();
+
+    let resizeObserver: ResizeObserver | null = null;
+    if (typeof ResizeObserver !== 'undefined') {
+      resizeObserver = new ResizeObserver(() => {
+        updateNavScrollState();
+      });
+      resizeObserver.observe(el);
+    }
+
+    window.addEventListener('resize', updateNavScrollState);
+    return () => {
+      if (resizeObserver) resizeObserver.disconnect();
+      window.removeEventListener('resize', updateNavScrollState);
+    };
+  }, [updateNavScrollState]);
+
+  const scrollNavBy = (direction: 'left' | 'right') => {
+    const el = navScrollRef.current;
+    if (!el) return;
+    el.scrollBy({
+      left: direction === 'left' ? -260 : 260,
+      behavior: 'smooth',
+    });
+  };
 
   // Update clocks every second
   useEffect(() => {
@@ -392,24 +433,9 @@ export const Header: React.FC = () => {
       </div>
 
       {/* Universal Desktop Horizontal Navigation Bar */}
-      <nav
-        className="hidden lg:flex w-full border-t border-slate-800/80 bg-[#08101e]/90 px-3 sm:px-6"
-        style={{
-          display: 'flex',
-          flexWrap: 'nowrap',
-          overflowX: 'auto',
-          WebkitOverflowScrolling: 'touch',
-        }}
-      >
-        <div
-          className="max-w-7xl mx-auto w-full flex items-center gap-1 sm:gap-2 py-1.5 no-scrollbar"
-          style={{
-            flexWrap: 'nowrap',
-            overflowX: 'auto',
-            WebkitOverflowScrolling: 'touch',
-          }}
-        >
-          {/* Seletor de Categorias no Menu Horizontal Superior */}
+      <nav className="hidden lg:flex w-full border-t border-slate-800/80 bg-[#08101e]/90 px-3 sm:px-6">
+        <div className="max-w-7xl mx-auto w-full min-w-0 flex items-center gap-1 sm:gap-2 py-1.5">
+          {/* Seletor de Categorias fixo à esquerda no Menu Horizontal Superior */}
           <button
             ref={categoryBtnRef}
             type="button"
@@ -443,33 +469,78 @@ export const Header: React.FC = () => {
 
           <span className="h-4 w-px bg-slate-800 flex-shrink-0 mx-0.5" aria-hidden="true" />
 
-          {navItems.map((item) => {
-            const isActive = activeTab === item.id;
-            return (
+          {/* Container relativo da lista horizontal rolável com setas discretas */}
+          <div className="relative flex-1 min-w-0 flex items-center overflow-hidden">
+            {canScrollLeft && (
               <button
-                key={item.id}
                 type="button"
                 onClick={(e) => {
                   e.preventDefault();
                   e.stopPropagation();
-                  handleNavClick(item.id);
+                  scrollNavBy('left');
                 }}
-                className={`px-3 py-1.5 rounded-lg text-xs font-medium transition cursor-pointer flex-shrink-0 select-none flex items-center gap-1.5 ${
-                  isActive
-                    ? 'bg-gradient-to-r from-emerald-600/30 to-teal-600/20 text-emerald-300 border border-emerald-500/40 shadow-sm shadow-emerald-950 font-semibold'
-                    : 'text-slate-400 hover:text-slate-100 hover:bg-slate-800/60 border border-transparent'
-                }`}
-                style={{ flexShrink: 0, whiteSpace: 'nowrap' }}
+                aria-label="Rolar navegação para a esquerda"
+                className="hidden md:flex items-center justify-center absolute left-0 z-10 bg-[#0B1221]/90 backdrop-blur-sm border border-slate-800/80 rounded-full w-7 h-7 text-slate-300 hover:text-white hover:border-slate-700 transition cursor-pointer shadow-md"
               >
-                <span>{item.label}</span>
-                {item.badge && (
-                  <span className="text-[9px] px-1 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30 font-bold">
-                    {item.badge}
-                  </span>
-                )}
+                <ChevronLeft className="w-4 h-4" />
               </button>
-            );
-          })}
+            )}
+
+            <div
+              ref={navScrollRef}
+              onScroll={updateNavScrollState}
+              className="flex items-center gap-1 sm:gap-2 w-full overflow-x-auto no-scrollbar scrollbar-none scroll-smooth"
+              style={{
+                flexWrap: 'nowrap',
+                WebkitOverflowScrolling: 'touch',
+                scrollbarWidth: 'none',
+                msOverflowStyle: 'none',
+              }}
+            >
+              {navItems.map((item) => {
+                const isActive = activeTab === item.id;
+                return (
+                  <button
+                    key={item.id}
+                    type="button"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      handleNavClick(item.id);
+                    }}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-medium transition cursor-pointer flex-shrink-0 select-none flex items-center gap-1.5 ${
+                      isActive
+                        ? 'bg-gradient-to-r from-emerald-600/30 to-teal-600/20 text-emerald-300 border border-emerald-500/40 shadow-sm shadow-emerald-950 font-semibold'
+                        : 'text-slate-400 hover:text-slate-100 hover:bg-slate-800/60 border border-transparent'
+                    }`}
+                    style={{ flexShrink: 0, whiteSpace: 'nowrap' }}
+                  >
+                    <span>{item.label}</span>
+                    {item.badge && (
+                      <span className="text-[9px] px-1 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30 font-bold">
+                        {item.badge}
+                      </span>
+                    )}
+                  </button>
+                );
+              })}
+            </div>
+
+            {canScrollRight && (
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  scrollNavBy('right');
+                }}
+                aria-label="Rolar navegação para a direita"
+                className="hidden md:flex items-center justify-center absolute right-0 z-10 bg-[#0B1221]/90 backdrop-blur-sm border border-slate-800/80 rounded-full w-7 h-7 text-slate-300 hover:text-white hover:border-slate-700 transition cursor-pointer shadow-md"
+              >
+                <ChevronRight className="w-4 h-4" />
+              </button>
+            )}
+          </div>
         </div>
       </nav>
 
