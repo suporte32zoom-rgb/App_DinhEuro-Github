@@ -12,6 +12,8 @@
  * garantindo que nenhum ativo exiba R$ 0,00 ou $0.0000 mesmo durante oscilações de rede no GitHub Pages.
  */
 
+import { extractYahooChartOHLCV, reconcileSilverSpotParity } from '../utils/marketParsing';
+
 export interface MarketAsset {
   id: string;
   symbol: string;
@@ -769,8 +771,9 @@ export async function fetchJsonWithTimeout(
  * Consulta resiliente para Yahoo Finance no navegador estático (GitHub Pages)
  * Executa requisição direta e, se sofrer bloqueio de CORS, recorre a proxy público.
  */
-export async function fetchYahooQuoteDefensive(ySym: string, apiKey?: string): Promise<any | null> {
-  const directUrl = `https://query1.finance.yahoo.com/v8/finance/chart/${ySym}?interval=1d`;
+export async function fetchYahooQuoteDefensive(ySym: string, apiKey?: string, range?: string): Promise<any | null> {
+  const rangeParam = range ? `&range=${range}` : '';
+  const directUrl = `https://query1.finance.yahoo.com/v8/finance/chart/${ySym}?interval=1d&events=div,split${rangeParam}`;
   const headers: Record<string, string> = { Accept: 'application/json' };
   if (apiKey) {
     headers['X-RapidAPI-Key'] = apiKey;
@@ -1117,31 +1120,46 @@ export async function fetchLiveMarketDataFromAPIs(
     (async () => {
       try {
         const brapiKey = getBrapiKey();
-        const brapiBatch = brapiKey ? allB3Tickers.join(',') : allB3Tickers.slice(0, 5).join(',');
-        const brapiUrl = brapiKey
-          ? `https://brapi.dev/api/quote/${brapiBatch}?token=${encodeURIComponent(brapiKey)}`
-          : `https://brapi.dev/api/quote/${brapiBatch}`;
-
         const brapiHeaders: Record<string, string> = { Accept: 'application/json' };
         if (brapiKey) {
           brapiHeaders['Authorization'] = `Bearer ${brapiKey}`;
         }
 
-        const brapiData = await fetchJsonWithTimeout(brapiUrl, 3500, { headers: brapiHeaders });
-        if (brapiData?.results && Array.isArray(brapiData.results)) {
-          for (const r of brapiData.results) {
-            if (r.symbol && r.regularMarketPrice > 0) {
-              const q = {
-                price: Number(r.regularMarketPrice.toFixed(2)),
-                change: Number((r.regularMarketChange || 0).toFixed(2)),
-                changePercent: Number((r.regularMarketChangePercent || 0).toFixed(2)),
-                high: Number((r.regularMarketDayHigh || r.regularMarketPrice).toFixed(2)),
-                low: Number((r.regularMarketDayLow || r.regularMarketPrice).toFixed(2)),
-                volume: r.regularMarketVolume ? `${(r.regularMarketVolume / 1e6).toFixed(1)}M` : undefined,
-                source: 'brapi_api',
-              };
-              rawQuotes[r.symbol] = q;
-              saveLastValidQuote(r.symbol, q);
+        // Brapi multi-ticker requires token; without token query free single tickers cleanly
+        const batches = brapiKey ? [allB3Tickers.join(',')] : ['PETR4', 'VALE3', 'ITUB4', 'MGLU3'];
+        for (const batch of batches) {
+          if (rawQuotes[batch] && rawQuotes[batch].price > 0 && rawQuotes[batch].high > 0 && rawQuotes[batch].low > 0) {
+            continue;
+          }
+          const brapiUrl = brapiKey
+            ? `https://brapi.dev/api/quote/${batch}?token=${encodeURIComponent(brapiKey)}`
+            : `https://brapi.dev/api/quote/${batch}`;
+
+          const brapiData = await fetchJsonWithTimeout(brapiUrl, 3500, { headers: brapiHeaders });
+          if (brapiData?.results && Array.isArray(brapiData.results)) {
+            for (const r of brapiData.results) {
+              if (r.symbol && r.regularMarketPrice > 0) {
+                const price = Number(r.regularMarketPrice.toFixed(2));
+                const high =
+                  typeof r.regularMarketDayHigh === 'number' && r.regularMarketDayHigh > 0
+                    ? Number(r.regularMarketDayHigh.toFixed(2))
+                    : price;
+                const low =
+                  typeof r.regularMarketDayLow === 'number' && r.regularMarketDayLow > 0
+                    ? Number(r.regularMarketDayLow.toFixed(2))
+                    : price;
+                const q = {
+                  price,
+                  change: Number((r.regularMarketChange || 0).toFixed(2)),
+                  changePercent: Number((r.regularMarketChangePercent || 0).toFixed(2)),
+                  high: Math.max(high, low),
+                  low: Math.min(high, low),
+                  volume: r.regularMarketVolume ? `${(r.regularMarketVolume / 1e6).toFixed(1)}M` : undefined,
+                  source: 'brapi_api',
+                };
+                rawQuotes[r.symbol] = q;
+                saveLastValidQuote(r.symbol, q);
+              }
             }
           }
         }
@@ -1246,26 +1264,47 @@ export async function fetchLiveMarketDataFromAPIs(
 
       await Promise.allSettled(
         priorityYahooList.map(async ([dinhSym, ySym]) => {
-          if (rawQuotes[dinhSym] && rawQuotes[dinhSym].price > 0) return;
+          const existing = rawQuotes[dinhSym];
+          if (
+            existing &&
+            existing.price > 0 &&
+            existing.high > 0 &&
+            existing.low > 0 &&
+            existing.high !== existing.low
+          ) {
+            return;
+          }
           try {
             const yData = await fetchYahooQuoteDefensive(ySym, yahooApiKey);
-            const m = yData?.chart?.result?.[0]?.meta;
+            let parsed = extractYahooChartOHLCV(yData, 2);
 
-            if (m && m.regularMarketPrice !== undefined && m.regularMarketPrice > 0) {
-              const currentPrice = Number(m.regularMarketPrice.toFixed(2));
-              const prevClose = Number((m.chartPreviousClose || m.previousClose || currentPrice).toFixed(2));
-              const changeVal = Number((currentPrice - prevClose).toFixed(2));
-              const changePct = prevClose > 0 ? Number(((changeVal / prevClose) * 100).toFixed(2)) : 0;
-              const highVal = m.regularMarketDayHigh !== undefined ? Number(m.regularMarketDayHigh.toFixed(2)) : currentPrice;
-              const lowVal = m.regularMarketDayLow !== undefined ? Number(m.regularMarketDayLow.toFixed(2)) : currentPrice;
+            if (
+              parsed &&
+              (ySym.endsWith('.SA') || ySym === '%5EBVSP') &&
+              parsed.high === parsed.price &&
+              parsed.low === parsed.price
+            ) {
+              const yData5d = await fetchYahooQuoteDefensive(ySym, yahooApiKey, '5d');
+              const parsed5d = extractYahooChartOHLCV(yData5d, 2);
+              if (parsed5d && parsed5d.high > parsed5d.low) {
+                parsed = {
+                  ...parsed,
+                  high: parsed5d.high,
+                  low: parsed5d.low,
+                  volumeFormatted: parsed.volumeFormatted || parsed5d.volumeFormatted,
+                };
+              }
+            }
 
+            if (parsed) {
               const quoteObj = {
-                price: currentPrice,
-                change: changeVal,
-                changePercent: changePct,
-                high: highVal,
-                low: lowVal,
-                volume: m.regularMarketVolume ? `${(m.regularMarketVolume / 1e6).toFixed(1)}M` : undefined,
+                price: parsed.price,
+                change: parsed.change,
+                changePercent: parsed.changePercent,
+                high: parsed.high,
+                low: parsed.low,
+                previousClose: parsed.previousClose,
+                volume: parsed.volumeFormatted,
                 source: 'yahoo_finance_api',
               };
               rawQuotes[dinhSym] = quoteObj;
@@ -1285,6 +1324,105 @@ export async function fetchLiveMarketDataFromAPIs(
   );
 
   await Promise.allSettled(tasks);
+
+  // ==============================================================
+  // (5) METAIS SPOT (OURO XAU, PRATA XAG, PLATINA XPT):
+  // Valida Spot real por onça troy e recalcula paridade XAG vs XAU
+  // ==============================================================
+  try {
+    const needsSpotMetals =
+      rawQuotes['OURO (XAU)']?.source !== 'metals_spot_live' ||
+      rawQuotes['PRATA (XAG)']?.source !== 'metals_spot_live';
+
+    let xauSpotPrice: number | null = null;
+    let xagSpotPrice: number | null = null;
+    let xptSpotPrice: number | null = null;
+
+    if (needsSpotMetals) {
+      const [xauRes, xagRes, xptRes] = await Promise.all([
+        fetchJsonWithTimeout('https://api.gold-api.com/price/XAU', 2500),
+        fetchJsonWithTimeout('https://api.gold-api.com/price/XAG', 2500),
+        fetchJsonWithTimeout('https://api.gold-api.com/price/XPT', 2500),
+      ]);
+      if (typeof xauRes?.price === 'number' && xauRes.price > 0) xauSpotPrice = xauRes.price;
+      if (typeof xagRes?.price === 'number' && xagRes.price > 0) xagSpotPrice = xagRes.price;
+      if (typeof xptRes?.price === 'number' && xptRes.price > 0) xptSpotPrice = xptRes.price;
+    }
+
+    const goldRef = rawQuotes['OURO (XAU)'];
+    const silverRef = rawQuotes['PRATA (XAG)'];
+    const platRef = rawQuotes['PLATINA'];
+
+    const resolvedGold = xauSpotPrice
+      ? Number(xauSpotPrice.toFixed(2))
+      : goldRef?.price || 0;
+
+    if (resolvedGold > 0) {
+      if (xauSpotPrice) {
+        const gPct = goldRef?.changePercent || 0;
+        const gChg = Number(((resolvedGold * gPct) / 100).toFixed(2));
+        const gHighRatio = goldRef && goldRef.price > 0 ? goldRef.high / goldRef.price : 1.01;
+        const gLowRatio = goldRef && goldRef.price > 0 ? goldRef.low / goldRef.price : 0.99;
+        const qGold = {
+          price: resolvedGold,
+          change: gChg,
+          changePercent: gPct,
+          high: Number(Math.max(resolvedGold, resolvedGold * gHighRatio).toFixed(2)),
+          low: Number(Math.min(resolvedGold, resolvedGold * gLowRatio).toFixed(2)),
+          volume: goldRef?.volume || 'Spot',
+          source: 'metals_spot_live',
+        };
+        rawQuotes['OURO (XAU)'] = qGold;
+        saveLastValidQuote('OURO (XAU)', qGold);
+      }
+
+      if (xagSpotPrice || silverRef) {
+        const silverParity = reconcileSilverSpotParity({
+          goldSpotUsd: resolvedGold,
+          silverCandidateUsd: xagSpotPrice ?? silverRef?.price ?? null,
+          futuresPrice: silverRef?.price,
+          futuresHigh: silverRef?.high,
+          futuresLow: silverRef?.low,
+          futuresPrevClose: silverRef?.previousClose,
+        });
+
+        if (silverParity.price > 0) {
+          const qSilver = {
+            price: silverParity.price,
+            change: xagSpotPrice || silverParity.adjustedFromAnomaly ? silverParity.change : silverRef?.change ?? silverParity.change,
+            changePercent: silverRef?.changePercent ?? silverParity.changePercent,
+            high: silverParity.high,
+            low: silverParity.low,
+            volume: silverRef?.volume || 'Spot',
+            source: xagSpotPrice ? 'metals_spot_live' : 'metals_parity_validated',
+          };
+          rawQuotes['PRATA (XAG)'] = qSilver;
+          saveLastValidQuote('PRATA (XAG)', qSilver);
+        }
+      }
+    }
+
+    if (xptSpotPrice && xptSpotPrice > 0) {
+      const ptPrice = Number(xptSpotPrice.toFixed(2));
+      const ptPct = platRef?.changePercent || 0;
+      const ptChg = Number(((ptPrice * ptPct) / 100).toFixed(2));
+      const ptHighRatio = platRef && platRef.price > 0 ? platRef.high / platRef.price : 1.015;
+      const ptLowRatio = platRef && platRef.price > 0 ? platRef.low / platRef.price : 0.985;
+      const qPlat = {
+        price: ptPrice,
+        change: ptChg,
+        changePercent: ptPct,
+        high: Number(Math.max(ptPrice, ptPrice * ptHighRatio).toFixed(2)),
+        low: Number(Math.min(ptPrice, ptPrice * ptLowRatio).toFixed(2)),
+        volume: platRef?.volume || 'Spot',
+        source: 'metals_spot_live',
+      };
+      rawQuotes['PLATINA'] = qPlat;
+      saveLastValidQuote('PLATINA', qPlat);
+    }
+  } catch {
+    // Preserva cotações existentes se Spot Metals oscilar
+  }
 
   // ==============================================================
   // Sobrescreve a matriz com as cotações obtidas em tempo real
@@ -1504,22 +1642,17 @@ export async function obterCotacaoFinnhub(
   try {
     const yahooKey = getYahooFinanceKey();
     const data = await fetchYahooQuoteDefensive(encodeURIComponent(ySymbol), yahooKey);
-    const m = data?.chart?.result?.[0]?.meta;
-    if (m && m.regularMarketPrice !== undefined && m.regularMarketPrice > 0) {
-      const price = Number(m.regularMarketPrice.toFixed(2));
-      const pc = Number((m.chartPreviousClose || m.previousClose || price).toFixed(2));
-      const diff = Number((price - pc).toFixed(2));
-      const pct = pc > 0 ? Number(((diff / pc) * 100).toFixed(2)) : 0;
-
+    const parsed = extractYahooChartOHLCV(data, 2);
+    if (parsed) {
       return {
         simbolo: cleanSym,
-        precoAtual: price,
-        variacao: diff,
-        percentualVariacao: pct,
-        maximaDia: m.regularMarketDayHigh !== undefined ? Number(m.regularMarketDayHigh.toFixed(2)) : price,
-        minimaDia: m.regularMarketDayLow !== undefined ? Number(m.regularMarketDayLow.toFixed(2)) : price,
-        abertura: m.regularMarketDayHigh !== undefined ? Number(m.regularMarketDayHigh.toFixed(2)) : price,
-        fechamentoAnterior: pc,
+        precoAtual: parsed.price,
+        variacao: parsed.change,
+        percentualVariacao: parsed.changePercent,
+        maximaDia: parsed.high,
+        minimaDia: parsed.low,
+        abertura: parsed.open,
+        fechamentoAnterior: parsed.previousClose,
       };
     }
   } catch {

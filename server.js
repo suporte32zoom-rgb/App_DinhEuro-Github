@@ -359,6 +359,156 @@ import express from "express";
 import path from "path";
 import { fileURLToPath } from "url";
 
+// src/utils/marketParsing.ts
+var TROY_OUNCE_GRAMS = 31.1034768;
+var DEFAULT_GOLD_SILVER_RATIO = 79.91;
+var MIN_GOLD_SILVER_RATIO = 25;
+var MAX_GOLD_SILVER_RATIO = 130;
+function getValidPositiveNumbers(arr) {
+  if (!Array.isArray(arr)) return [];
+  return arr.filter((v) => typeof v === "number" && Number.isFinite(v) && v > 0);
+}
+function formatCompactVolume(volume) {
+  if (typeof volume !== "number" || !Number.isFinite(volume) || volume <= 0) {
+    return void 0;
+  }
+  if (volume >= 1e9) return `${(volume / 1e9).toFixed(1)}B`;
+  if (volume >= 1e6) return `${(volume / 1e6).toFixed(1)}M`;
+  if (volume >= 1e3) return `${Math.round(volume / 1e3)}K`;
+  return String(Math.round(volume));
+}
+function extractYahooChartOHLCV(yData, priceDecimals = 2) {
+  const result = yData?.chart?.result?.[0];
+  const m = result?.meta;
+  if (!m) return null;
+  const quote = result?.indicators?.quote?.[0];
+  const validCloses = getValidPositiveNumbers(quote?.close);
+  const validHighs = getValidPositiveNumbers(quote?.high);
+  const validLows = getValidPositiveNumbers(quote?.low);
+  const validOpens = getValidPositiveNumbers(quote?.open);
+  const validVolumes = getValidPositiveNumbers(quote?.volume);
+  const rawPrice = typeof m.regularMarketPrice === "number" && Number.isFinite(m.regularMarketPrice) && m.regularMarketPrice > 0 ? m.regularMarketPrice : validCloses.length > 0 ? validCloses[validCloses.length - 1] : 0;
+  if (rawPrice <= 0) return null;
+  const roundPrice = (n) => Number(n.toFixed(priceDecimals));
+  const currentPrice = roundPrice(rawPrice);
+  const rawPrevClose = typeof m.chartPreviousClose === "number" && Number.isFinite(m.chartPreviousClose) && m.chartPreviousClose > 0 ? m.chartPreviousClose : typeof m.previousClose === "number" && Number.isFinite(m.previousClose) && m.previousClose > 0 ? m.previousClose : rawPrice;
+  const previousClose = roundPrice(rawPrevClose);
+  const change = roundPrice(currentPrice - previousClose);
+  const changePercent = previousClose > 0 ? Number((change / previousClose * 100).toFixed(2)) : 0;
+  const rawHigh = typeof m.regularMarketDayHigh === "number" && Number.isFinite(m.regularMarketDayHigh) && m.regularMarketDayHigh > 0 ? m.regularMarketDayHigh : validHighs.length > 0 ? validHighs[validHighs.length - 1] : rawPrice;
+  const rawLow = typeof m.regularMarketDayLow === "number" && Number.isFinite(m.regularMarketDayLow) && m.regularMarketDayLow > 0 ? m.regularMarketDayLow : validLows.length > 0 ? validLows[validLows.length - 1] : rawPrice;
+  const high = roundPrice(Math.max(rawHigh, rawLow));
+  const low = roundPrice(Math.min(rawHigh, rawLow));
+  const rawOpen = typeof m.regularMarketOpen === "number" && Number.isFinite(m.regularMarketOpen) && m.regularMarketOpen > 0 ? m.regularMarketOpen : validOpens.length > 0 ? validOpens[validOpens.length - 1] : rawPrevClose;
+  const open = roundPrice(rawOpen);
+  const rawVolume = typeof m.regularMarketVolume === "number" && Number.isFinite(m.regularMarketVolume) && m.regularMarketVolume > 0 ? m.regularMarketVolume : validVolumes.length > 0 ? validVolumes[validVolumes.length - 1] : void 0;
+  const splits = result?.events?.splits;
+  const hasSplitEvent = Boolean(splits && typeof splits === "object" && Object.keys(splits).length > 0);
+  return {
+    price: currentPrice,
+    previousClose,
+    change,
+    changePercent,
+    high,
+    low,
+    open,
+    volume: rawVolume,
+    volumeFormatted: formatCompactVolume(rawVolume),
+    hasSplitEvent
+  };
+}
+function reconcileSilverSpotParity(params) {
+  const {
+    goldSpotUsd,
+    silverCandidateUsd,
+    referenceRatio = DEFAULT_GOLD_SILVER_RATIO,
+    futuresPrice,
+    futuresHigh,
+    futuresLow,
+    futuresPrevClose
+  } = params;
+  const safeRatio = Number.isFinite(referenceRatio) && referenceRatio >= MIN_GOLD_SILVER_RATIO && referenceRatio <= MAX_GOLD_SILVER_RATIO ? referenceRatio : DEFAULT_GOLD_SILVER_RATIO;
+  let spotPrice = 0;
+  let adjustedFromAnomaly = false;
+  if (typeof silverCandidateUsd === "number" && Number.isFinite(silverCandidateUsd) && silverCandidateUsd > 0) {
+    let candidate = silverCandidateUsd;
+    if (goldSpotUsd > 0) {
+      const rawRatio = goldSpotUsd / candidate;
+      if (rawRatio < 5 && goldSpotUsd / (candidate / 100) >= MIN_GOLD_SILVER_RATIO && goldSpotUsd / (candidate / 100) <= MAX_GOLD_SILVER_RATIO) {
+        candidate = candidate / 100;
+        adjustedFromAnomaly = true;
+      } else if (rawRatio > 1500 && goldSpotUsd / (candidate * TROY_OUNCE_GRAMS) >= MIN_GOLD_SILVER_RATIO && goldSpotUsd / (candidate * TROY_OUNCE_GRAMS) <= MAX_GOLD_SILVER_RATIO) {
+        candidate = candidate * TROY_OUNCE_GRAMS;
+        adjustedFromAnomaly = true;
+      }
+      const normalizedRatio = goldSpotUsd / candidate;
+      if (normalizedRatio >= MIN_GOLD_SILVER_RATIO && normalizedRatio <= MAX_GOLD_SILVER_RATIO) {
+        spotPrice = Number(candidate.toFixed(2));
+      } else {
+        spotPrice = Number((goldSpotUsd / safeRatio).toFixed(2));
+        adjustedFromAnomaly = true;
+      }
+    } else {
+      spotPrice = Number(candidate.toFixed(2));
+    }
+  } else if (goldSpotUsd > 0) {
+    spotPrice = Number((goldSpotUsd / safeRatio).toFixed(2));
+    adjustedFromAnomaly = true;
+  }
+  const goldSilverRatio = goldSpotUsd > 0 && spotPrice > 0 ? Number((goldSpotUsd / spotPrice).toFixed(2)) : safeRatio;
+  let changePercent = 0;
+  let change = 0;
+  let high = Number((spotPrice * 1.015).toFixed(2));
+  let low = Number((spotPrice * 0.985).toFixed(2));
+  if (futuresPrice && futuresPrice > 0) {
+    if (futuresPrevClose && futuresPrevClose > 0) {
+      changePercent = Number(((futuresPrice - futuresPrevClose) / futuresPrevClose * 100).toFixed(2));
+      change = Number((spotPrice * changePercent / 100).toFixed(2));
+    }
+    if (futuresHigh && futuresHigh > 0 && futuresLow && futuresLow > 0) {
+      const highRatio = futuresHigh / futuresPrice;
+      const lowRatio = futuresLow / futuresPrice;
+      high = Number(Math.max(spotPrice, spotPrice * highRatio).toFixed(2));
+      low = Number(Math.min(spotPrice, spotPrice * lowRatio).toFixed(2));
+    }
+  }
+  return {
+    price: spotPrice,
+    high,
+    low,
+    change,
+    changePercent,
+    goldSilverRatio,
+    adjustedFromAnomaly
+  };
+}
+function auditSplitAndFractionSanity(params) {
+  const { yahooPrice, primaryExchangePrice, primaryExchangeChange, primaryExchangeChangePct } = params;
+  if (typeof primaryExchangePrice === "number" && Number.isFinite(primaryExchangePrice) && primaryExchangePrice > 0) {
+    if (yahooPrice <= 0) {
+      return {
+        resolvedPrice: Number(primaryExchangePrice.toFixed(2)),
+        resolvedChange: typeof primaryExchangeChange === "number" && Number.isFinite(primaryExchangeChange) ? Number(primaryExchangeChange.toFixed(2)) : void 0,
+        resolvedChangePct: typeof primaryExchangeChangePct === "number" && Number.isFinite(primaryExchangeChangePct) ? Number(primaryExchangeChangePct.toFixed(2)) : void 0,
+        divergenceDetected: true
+      };
+    }
+    const diffRatio = Math.abs(yahooPrice - primaryExchangePrice) / primaryExchangePrice;
+    if (diffRatio > 0.05) {
+      return {
+        resolvedPrice: Number(primaryExchangePrice.toFixed(2)),
+        resolvedChange: typeof primaryExchangeChange === "number" && Number.isFinite(primaryExchangeChange) ? Number(primaryExchangeChange.toFixed(2)) : void 0,
+        resolvedChangePct: typeof primaryExchangeChangePct === "number" && Number.isFinite(primaryExchangeChangePct) ? Number(primaryExchangeChangePct.toFixed(2)) : void 0,
+        divergenceDetected: true
+      };
+    }
+  }
+  return {
+    resolvedPrice: Number(yahooPrice.toFixed(2)),
+    divergenceDetected: false
+  };
+}
+
 // src/server/marketProxy.ts
 var cachedData = null;
 var lastCacheTime = 0;
@@ -720,29 +870,50 @@ async function fetchRealTimeMarketData(customFinnhubKey) {
       await Promise.all(
         chunk.map(async ([dinhSymbol, meta]) => {
           try {
-            const yRes = await fetch(`https://query1.finance.yahoo.com/v8/finance/chart/${meta.yahoo}?interval=1d`, {
+            const yRes = await fetch(`https://query1.finance.yahoo.com/v8/finance/chart/${meta.yahoo}?interval=1d&events=div,split`, {
               headers: {
                 "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
                 "Accept": "application/json"
               }
             });
             if (yRes.ok) {
-              const yData = await yRes.json();
-              const m = yData?.chart?.result?.[0]?.meta;
-              if (m && m.regularMarketPrice !== void 0) {
-                sourcesStatus.yahooFinance = true;
-                const currentPrice = Number(m.regularMarketPrice.toFixed(meta.currency === "BRL" && dinhSymbol.includes("/") ? 4 : 2));
-                const prevClose = Number((m.chartPreviousClose || m.previousClose || currentPrice).toFixed(meta.currency === "BRL" && dinhSymbol.includes("/") ? 4 : 2));
-                const changeVal = Number((currentPrice - prevClose).toFixed(meta.currency === "BRL" && dinhSymbol.includes("/") ? 4 : 2));
-                const changePct = prevClose > 0 ? Number((changeVal / prevClose * 100).toFixed(2)) : 0;
-                const highVal = m.regularMarketDayHigh !== void 0 ? Number(m.regularMarketDayHigh.toFixed(2)) : Number((currentPrice * 1.01).toFixed(2));
-                const lowVal = m.regularMarketDayLow !== void 0 ? Number(m.regularMarketDayLow.toFixed(2)) : Number((currentPrice * 0.99).toFixed(2));
-                const openVal = m.regularMarketOpen !== void 0 ? Number(m.regularMarketOpen.toFixed(2)) : prevClose;
-                let volStr = "N/A";
-                if (m.regularMarketVolume) {
-                  const vol = m.regularMarketVolume;
-                  volStr = vol >= 1e9 ? `${(vol / 1e9).toFixed(1)}B` : vol >= 1e6 ? `${(vol / 1e6).toFixed(1)}M` : `${Math.round(vol / 1e3)}K`;
+              let yData = await yRes.json();
+              const decimals = meta.currency === "BRL" && dinhSymbol.includes("/") ? 4 : 2;
+              let parsed = extractYahooChartOHLCV(yData, decimals);
+              if (parsed && (meta.category === "stocks_br" || meta.category === "indices") && parsed.high === parsed.price && parsed.low === parsed.price) {
+                try {
+                  const yRes5d = await fetch(`https://query1.finance.yahoo.com/v8/finance/chart/${meta.yahoo}?range=5d&interval=1d`, {
+                    headers: {
+                      "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+                      "Accept": "application/json"
+                    }
+                  });
+                  if (yRes5d.ok) {
+                    const yData5d = await yRes5d.json();
+                    const parsed5d = extractYahooChartOHLCV(yData5d, decimals);
+                    if (parsed5d && parsed5d.high > parsed5d.low) {
+                      parsed = {
+                        ...parsed,
+                        high: parsed5d.high,
+                        low: parsed5d.low,
+                        open: parsed5d.open > 0 ? parsed5d.open : parsed.open,
+                        volumeFormatted: parsed.volumeFormatted || parsed5d.volumeFormatted
+                      };
+                    }
+                  }
+                } catch {
                 }
+              }
+              if (parsed) {
+                sourcesStatus.yahooFinance = true;
+                const currentPrice = parsed.price;
+                const prevClose = parsed.previousClose;
+                const changeVal = parsed.change;
+                const changePct = parsed.changePercent;
+                const highVal = parsed.high;
+                const lowVal = parsed.low;
+                const openVal = parsed.open;
+                const volStr = parsed.volumeFormatted || "N/A";
                 quotes[dinhSymbol] = {
                   symbol: dinhSymbol,
                   price: currentPrice,
@@ -829,6 +1000,138 @@ async function fetchRealTimeMarketData(customFinnhubKey) {
           }
         })
       );
+    }
+    try {
+      const fetchSpotMetal = async (sym) => {
+        try {
+          const res = await fetch(`https://api.gold-api.com/price/${sym}`, {
+            signal: AbortSignal.timeout(2500),
+            headers: { Accept: "application/json" }
+          });
+          if (!res.ok) return null;
+          const data = await res.json();
+          return typeof data?.price === "number" && Number.isFinite(data.price) && data.price > 0 ? data.price : null;
+        } catch {
+          return null;
+        }
+      };
+      const [xauSpot, xagSpot, xptSpot] = await Promise.all([
+        fetchSpotMetal("XAU"),
+        fetchSpotMetal("XAG"),
+        fetchSpotMetal("XPT")
+      ]);
+      const goldFuture = quotes["OURO (XAU)"];
+      const silverFuture = quotes["PRATA (XAG)"];
+      const platinumFuture = quotes["PLATINA"];
+      const resolvedGoldSpot = xauSpot ? Number(xauSpot.toFixed(2)) : goldFuture?.price || 0;
+      if (resolvedGoldSpot > 0) {
+        const goldPct = goldFuture?.changePercent || 0;
+        const goldChange = Number((resolvedGoldSpot * goldPct / 100).toFixed(2));
+        const goldHighRatio = goldFuture && goldFuture.price > 0 ? goldFuture.high / goldFuture.price : 1.01;
+        const goldLowRatio = goldFuture && goldFuture.price > 0 ? goldFuture.low / goldFuture.price : 0.99;
+        quotes["OURO (XAU)"] = {
+          symbol: "OURO (XAU)",
+          price: resolvedGoldSpot,
+          change: goldFuture && !xauSpot ? goldFuture.change : goldChange,
+          changePercent: goldPct,
+          high: Number(Math.max(resolvedGoldSpot, resolvedGoldSpot * goldHighRatio).toFixed(2)),
+          low: Number(Math.min(resolvedGoldSpot, resolvedGoldSpot * goldLowRatio).toFixed(2)),
+          open: Number((resolvedGoldSpot - goldChange).toFixed(2)),
+          previousClose: Number((resolvedGoldSpot - goldChange).toFixed(2)),
+          volume: goldFuture?.volume || "Spot",
+          currency: "USD",
+          source: xauSpot ? "metals_spot_live" : goldFuture?.source || "metals_spot_live"
+        };
+        const silverParity = reconcileSilverSpotParity({
+          goldSpotUsd: resolvedGoldSpot,
+          silverCandidateUsd: xagSpot ?? silverFuture?.price ?? null,
+          futuresPrice: silverFuture?.price,
+          futuresHigh: silverFuture?.high,
+          futuresLow: silverFuture?.low,
+          futuresPrevClose: silverFuture?.previousClose
+        });
+        if (silverParity.price > 0) {
+          quotes["PRATA (XAG)"] = {
+            symbol: "PRATA (XAG)",
+            price: silverParity.price,
+            change: silverParity.change,
+            changePercent: silverParity.changePercent,
+            high: silverParity.high,
+            low: silverParity.low,
+            open: Number((silverParity.price - silverParity.change).toFixed(2)),
+            previousClose: Number((silverParity.price - silverParity.change).toFixed(2)),
+            volume: silverFuture?.volume || "Spot",
+            currency: "USD",
+            source: xagSpot ? "metals_spot_live" : "metals_parity_validated"
+          };
+        }
+      }
+      if (xptSpot && xptSpot > 0) {
+        const ptPrice = Number(xptSpot.toFixed(2));
+        const ptPct = platinumFuture?.changePercent || 0;
+        const ptChange = Number((ptPrice * ptPct / 100).toFixed(2));
+        const ptHighRatio = platinumFuture && platinumFuture.price > 0 ? platinumFuture.high / platinumFuture.price : 1.015;
+        const ptLowRatio = platinumFuture && platinumFuture.price > 0 ? platinumFuture.low / platinumFuture.price : 0.985;
+        quotes["PLATINA"] = {
+          symbol: "PLATINA",
+          price: ptPrice,
+          change: ptChange,
+          changePercent: ptPct,
+          high: Number(Math.max(ptPrice, ptPrice * ptHighRatio).toFixed(2)),
+          low: Number(Math.min(ptPrice, ptPrice * ptLowRatio).toFixed(2)),
+          open: Number((ptPrice - ptChange).toFixed(2)),
+          previousClose: Number((ptPrice - ptChange).toFixed(2)),
+          volume: platinumFuture?.volume || "Spot",
+          currency: "USD",
+          source: "metals_spot_live"
+        };
+      }
+    } catch {
+    }
+    try {
+      const nsdqRes = await fetch("https://api.nasdaq.com/api/quote/AMD/info?assetclass=stocks", {
+        signal: AbortSignal.timeout(2200),
+        headers: {
+          "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
+          Accept: "application/json"
+        }
+      });
+      if (nsdqRes.ok) {
+        const nsdqData = await nsdqRes.json();
+        const primary = nsdqData?.data?.primaryData;
+        if (primary?.lastSalePrice) {
+          const parsedPrice = parseFloat(String(primary.lastSalePrice).replace(/[^0-9.-]/g, ""));
+          const parsedChange = parseFloat(String(primary.netChange || "0").replace(/[^0-9.-]/g, ""));
+          const parsedPct = parseFloat(String(primary.percentageChange || "0").replace(/[^0-9.-]/g, ""));
+          const parsedVol = parseFloat(String(primary.volume || "0").replace(/[^0-9]/g, ""));
+          const existingAmd = quotes["AMD"];
+          const audit = auditSplitAndFractionSanity({
+            yahooPrice: existingAmd?.price || 0,
+            primaryExchangePrice: parsedPrice,
+            primaryExchangeChange: parsedChange,
+            primaryExchangeChangePct: parsedPct
+          });
+          if (audit.divergenceDetected || !existingAmd) {
+            const p = audit.resolvedPrice;
+            const chg = audit.resolvedChange ?? existingAmd?.change ?? 0;
+            const pct = audit.resolvedChangePct ?? existingAmd?.changePercent ?? 0;
+            quotes["AMD"] = {
+              symbol: "AMD",
+              price: p,
+              change: chg,
+              changePercent: pct,
+              high: existingAmd && !audit.divergenceDetected ? existingAmd.high : Number((p * 1.02).toFixed(2)),
+              low: existingAmd && !audit.divergenceDetected ? existingAmd.low : Number((p * 0.98).toFixed(2)),
+              open: Number((p - chg).toFixed(2)),
+              previousClose: Number((p - chg).toFixed(2)),
+              volume: formatCompactVolume(parsedVol) || existingAmd?.volume || "N/A",
+              currency: "USD",
+              source: "nasdaq_primary_audited"
+            };
+          }
+        }
+      }
+    } catch {
     }
     if (finnhubKey && finnhubKey !== "MY_FINNHUB_API_KEY") {
       const priorityStocks = [
