@@ -208,7 +208,7 @@ export async function fetchAwesomeApiQuotes(
       quotes: fallbackQuotes,
       source: 'fallback',
       fetchedAt: new Date(),
-      errorMessage: err instanceof Error ? err.message : 'Falha de rede na AwesomeAPI',
+      errorMessage: err instanceof Error ? err.message : 'Instabilidade temporária de conexão',
     };
   } finally {
     if (timer) clearTimeout(timer);

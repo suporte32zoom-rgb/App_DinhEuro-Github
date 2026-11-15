@@ -165,7 +165,7 @@ export const UniversalCurrencyCalculator: React.FC<UniversalCurrencyCalculatorPr
           </div>
           <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-slate-400">
             <span>
-              {t.calculator.sourceLabel}{' '}
+              {t.calculator.sourceLabel ? `${t.calculator.sourceLabel} ` : ''}
               <strong className={dataSource === 'awesomeapi' ? 'text-emerald-400' : 'text-amber-400'}>
                 {dataSource === 'awesomeapi' ? t.calculator.sourceLive : t.calculator.sourceFallback}
               </strong>

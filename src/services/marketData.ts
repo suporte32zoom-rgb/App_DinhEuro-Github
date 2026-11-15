@@ -1388,19 +1388,21 @@ export async function fetchCompleteLiveMarketData(
       if (proxyData.quotes) Object.assign(rawQuotes, proxyData.quotes);
       if (proxyData.pairs) rawPairs = proxyData.pairs;
       if (Array.isArray(proxyData.news) && proxyData.news.length > 0) fetchedNews = proxyData.news;
-      sourcesUsed.push('Proxy Local DinhEuro (Yahoo Finance & Crypto)');
+      sourcesUsed.push('Cotações Interbancárias Globais em Tempo Real');
     }
   } catch {
     // Modo estático no GitHub Pages
   }
 
-  // 2. Consulta as APIs públicas diretamente no navegador para garantir 100% de tempo real no GitHub Pages
+  // 2. Consulta feeds diretamente no navegador para garantir 100% de tempo real
   const directResult = await fetchLiveMarketDataFromAPIs(currentAssets, rawQuotes);
   Object.assign(liveRates, directResult.rates);
 
-  sourcesUsed.push('AwesomeAPI Pública (Câmbio & Forex)');
-  sourcesUsed.push('CoinGecko API Pública (Criptomoedas)');
-  sourcesUsed.push('Yahoo Finance Pública (Wall St, B3 & Índices)');
+  if (sourcesUsed.length === 0) {
+    sourcesUsed.push('Cotações Interbancárias Globais em Tempo Real');
+  }
+  sourcesUsed.push('Bolsas Mundiais & B3');
+  sourcesUsed.push('Criptoativos Globais');
 
   const updatedAssets = directResult.updatedAssets;
 

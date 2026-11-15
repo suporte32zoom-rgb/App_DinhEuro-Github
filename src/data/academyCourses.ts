@@ -312,7 +312,7 @@ export const ACADEMY_COURSES: AcademyCourse[] = [
         targetTab: 'ferramentas',
         targetButtonLabel: 'Abrir Calculadora de Câmbio Universal',
         targetDescription:
-          'Simule cotações da AwesomeAPI em tempo real com cálculo detalhado de Spread e IOF.',
+          'Simule cotações interbancárias globais em tempo real com cálculo detalhado de Spread e IOF.',
       },
       {
         id: 'fx-m2',
@@ -891,7 +891,7 @@ export const ACADEMY_FAQ: AcademyFaqItem[] = [
     id: 'faq-5',
     question: 'Como praticar os cálculos aprendidos nos módulos?',
     answer:
-      'Ao final de cada módulo existe um atalho contextual direto para a ferramenta correspondente do DinhEuro, incluindo a Calculadora de Câmbio Universal (AwesomeAPI), Simuladores de Juros Compostos/DARF, Terminal Gráfico D3 v7, Fluxo & Tape Reading e Renda Fixa & Derivativos.',
+      'Ao final de cada módulo existe um atalho contextual direto para a ferramenta correspondente do DinhEuro, incluindo a Calculadora de Câmbio Universal em tempo real, Simuladores de Juros Compostos/DARF, Terminal Gráfico D3 v7, Fluxo & Tape Reading e Renda Fixa & Derivativos.',
   },
   {
     id: 'faq-6',
