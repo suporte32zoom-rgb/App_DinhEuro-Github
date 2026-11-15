@@ -10,9 +10,15 @@ import {
   HelpCircle,
 } from 'lucide-react';
 import { useMarket } from '../context/MarketContext';
+import { useI18n } from '../i18n/I18nContext';
+import { LEGAL_TRANSLATIONS } from '../i18n/legalTranslations';
 
 export const DisclaimerView: React.FC = () => {
   const { setActiveTab } = useMarket();
+  const { lang } = useI18n();
+  const tLegal = LEGAL_TRANSLATIONS[lang];
+  const tDisc = tLegal.disclaimer;
+  const cardColors = ['text-emerald-400', 'text-blue-400', 'text-amber-400', 'text-purple-400'];
 
   return (
     <div className="space-y-8 pb-16 max-w-4xl mx-auto animate-in fade-in duration-300">
@@ -24,10 +30,10 @@ export const DisclaimerView: React.FC = () => {
           className="flex items-center gap-2 text-xs font-bold text-slate-400 hover:text-white transition px-3 py-1.5 rounded-lg bg-slate-900/60 border border-slate-800 hover:border-slate-700 cursor-pointer"
         >
           <ArrowLeft className="w-4 h-4" />
-          <span>Voltar ao Início</span>
+          <span>{tLegal.backToHome}</span>
         </button>
         <span className="text-[11px] font-mono text-amber-400 bg-amber-500/10 border border-amber-500/20 px-2.5 py-1 rounded-md">
-          Aviso Regulatório Obrigatório
+          {tDisc.badge}
         </span>
       </div>
 
@@ -39,10 +45,10 @@ export const DisclaimerView: React.FC = () => {
           </div>
           <div className="space-y-2">
             <h1 className="text-xl sm:text-3xl font-black text-white tracking-tight">
-              Aviso Legal & Disclaimer Financeiro
+              {tDisc.title}
             </h1>
             <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
-              Origem dos dados de mercado, política de latência de cotações e ressalva regulatória sobre ausência de consultoria de valores mobiliários no DinhEuro.
+              {tDisc.subtitle}
             </p>
           </div>
         </div>
@@ -54,45 +60,31 @@ export const DisclaimerView: React.FC = () => {
         <div className="rounded-2xl bg-[#0b1322] border border-slate-800 p-6 shadow-xl space-y-3">
           <h2 className="text-base font-bold text-white flex items-center gap-2">
             <Scale className="w-4 h-4 text-amber-400" />
-            <span>1. Ausência de Consultoria ou Recomendação de Investimento</span>
+            <span>{tDisc.s1Title}</span>
           </h2>
           <p>
-            O portal <strong>DinhEuro</strong> (<span className="text-emerald-400 font-mono">dinheuro.com</span> / <span className="text-emerald-400 font-mono">dinheuro.com.br</span>) destina-se <strong>exclusivamente a fins informativos, analíticos, estatísticos e educacionais</strong>.
+            {tDisc.s1P1Before ? `${tDisc.s1P1Before} ` : ''}<strong>DinhEuro</strong> (<span className="text-emerald-400 font-mono">dinheuro.com</span> / <span className="text-emerald-400 font-mono">dinheuro.com.br</span>) {tDisc.s1P1After}
           </p>
-          <p>
-            Nenhum conteúdo divulgado na plataforma — incluindo índices, indicadores técnicos (SMA, RSI), diagnósticos com inteligência artificial, simuladores de juros compostos ou conversões de paridade Euro-Dólar-Real — deve ser interpretado como aconselhamento financeiro, recomendação de alocação de ativos, solicitação de compra ou venda de ações, títulos ou moedas, ou parecer tributário.
-          </p>
+          <p>{tDisc.s1P2}</p>
         </div>
 
         {/* 2. Provedores de Dados e Latência */}
         <div className="rounded-2xl bg-[#0b1322] border border-slate-800 p-6 shadow-xl space-y-4">
           <h2 className="text-base font-bold text-white flex items-center gap-2">
             <Radio className="w-4 h-4 text-emerald-400" />
-            <span>2. Provedores Oficiais de Dados e Condições de Mercado</span>
+            <span>{tDisc.s2Title}</span>
           </h2>
-          <p>
-            O DinhEuro agrega dados de provedores consolidados e fontes públicas oficiais internacionais:
-          </p>
+          <p>{tDisc.s2Intro}</p>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
-            <div className="p-3.5 rounded-xl bg-slate-900 border border-slate-800 space-y-1">
-              <span className="text-xs font-bold text-emerald-400 block">• Bolsas Internacionais & Ações Globais</span>
-              <p className="text-[11px] text-slate-400">Cotações em tempo real de ações norte-americanas (Wall Street), dados de fechamento e fundamentos de empresas.</p>
-            </div>
-            <div className="p-3.5 rounded-xl bg-slate-900 border border-slate-800 space-y-1">
-              <span className="text-xs font-bold text-blue-400 block">• Câmbio Comercial & Taxas Interbancárias</span>
-              <p className="text-[11px] text-slate-400">Taxas de câmbio comercial e paridades de moedas soberanas (EUR, USD, BRL, GBP, JPY, CHF).</p>
-            </div>
-            <div className="p-3.5 rounded-xl bg-slate-900 border border-slate-800 space-y-1">
-              <span className="text-xs font-bold text-amber-400 block">• Redes Globais de Criptoativos</span>
-              <p className="text-[11px] text-slate-400">Preços e variações de 24 horas dos principais ativos digitais globais (BTC, ETH, SOL, BNB).</p>
-            </div>
-            <div className="p-3.5 rounded-xl bg-slate-900 border border-slate-800 space-y-1">
-              <span className="text-xs font-bold text-purple-400 block">• Mercado de Capitais Brasileiro (B3)</span>
-              <p className="text-[11px] text-slate-400">Cotações das principais companhias listadas na Bolsa de Valores do Brasil (B3) e pontuação do Ibovespa.</p>
-            </div>
+            {tDisc.s2Cards.map((card, idx) => (
+              <div key={idx} className="p-3.5 rounded-xl bg-slate-900 border border-slate-800 space-y-1">
+                <span className={`text-xs font-bold ${cardColors[idx % cardColors.length]} block`}>{card.title}</span>
+                <p className="text-[11px] text-slate-400">{card.desc}</p>
+              </div>
+            ))}
           </div>
           <p className="text-slate-400 text-xs pt-1">
-            <strong>Ressalva de Latência:</strong> Salvo expressa indicação em contrário, os dados de mercado não são necessariamente fornecidos com execução no milissegundo de tick por bolsas de valores, podendo conter atrasos normais de transmissão de rede de 1 a 15 minutos dependendo da bolsa de origem.
+            <strong>{tDisc.s2LatencyLabel}</strong> {tDisc.s2LatencyDesc}
           </p>
         </div>
 
@@ -100,27 +92,21 @@ export const DisclaimerView: React.FC = () => {
         <div className="rounded-2xl bg-red-950/20 border border-red-500/30 p-6 shadow-xl space-y-3">
           <h2 className="text-base font-bold text-red-400 flex items-center gap-2">
             <AlertTriangle className="w-4 h-4 text-red-400" />
-            <span>3. Riscos Associados à Negociação nos Mercados Financeiros</span>
+            <span>{tDisc.s3Title}</span>
           </h2>
-          <p className="text-slate-200">
-            A negociação de instrumentos financeiros, pares de moedas (Forex), derivativos, contratos futuros e criptomoedas envolve risco substancial de perda do patrimônio investido.
-          </p>
-          <p className="text-slate-400">
-            Rentabilidade pretérita não constitui garantia de rentabilidade futura. Flutuações nas taxas de câmbio podem gerar efeitos adversos sobre o valor, preço ou rentabilidade de qualquer investimento denominado em moeda estrangeira.
-          </p>
+          <p className="text-slate-200">{tDisc.s3P1}</p>
+          <p className="text-slate-400">{tDisc.s3P2}</p>
         </div>
 
         {/* 4. Limitação de Responsabilidade */}
         <div className="rounded-2xl bg-[#0b1322] border border-slate-800 p-6 shadow-xl space-y-3">
           <h2 className="text-base font-bold text-white flex items-center gap-2">
             <Server className="w-4 h-4 text-emerald-400" />
-            <span>4. Limitação de Responsabilidade Técnica</span>
+            <span>{tDisc.s4Title}</span>
           </h2>
-          <p>
-            Em nenhuma circunstância o DinhEuro, seus desenvolvedores, mantenedores ou parceiros tecnológicos serão responsáveis por qualquer perda direta, indireta, incidental, especial ou consequente resultante de erros, imprecisões nas cotações ou indisponibilidade temporária de servidores.
-          </p>
+          <p>{tDisc.s4P1}</p>
           <p className="text-slate-400 text-xs pt-2 border-t border-slate-800/80">
-            Dúvidas regulatórias ou comunicação formal: <a href="mailto:admin@dinheuro.com.br" className="text-emerald-400 hover:underline font-mono">admin@dinheuro.com.br</a>.
+            {tDisc.s4Contact} <a href="mailto:admin@dinheuro.com.br" className="text-emerald-400 hover:underline font-mono">admin@dinheuro.com.br</a>.
           </p>
         </div>
       </div>

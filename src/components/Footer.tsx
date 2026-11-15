@@ -42,7 +42,7 @@ export const Footer: React.FC = () => {
             <div className="flex items-center gap-3">
               <img
                 src="/logo.png"
-                alt="Novo Logo Oficial DinhEuro"
+                alt={t.footer.logoAlt}
                 className="w-10 h-10 rounded-full border border-amber-400/50 shadow-md bg-white/5"
               />
               <div>
@@ -253,7 +253,7 @@ export const Footer: React.FC = () => {
         {/* Disclaimer Financeiro e Transparência de Dados */}
         <div className="pt-6 border-t border-slate-800/80 text-[11px] text-slate-500 leading-relaxed space-y-2">
           <p>
-            <strong className="text-slate-400">{t.footer.disclaimerPrefix}</strong> O DinhEuro (<span className="text-emerald-400 font-mono">dinheuro.com</span> / <span className="text-emerald-400 font-mono">dinheuro.com.br</span>) é um portal digital informativo e educacional de agregação de dados econômicos. As cotações em tempo real de ativos mundiais, taxas de câmbio (Euro, Dólar, Real), ações da B3, bolsas internacionais, criptoativos e simuladores são consolidados a partir de feeds institucionais de mercado, mesas de câmbio interbancário e livros públicos de negociação. O DinhEuro não presta consultoria de investimentos, análise de valores mobiliários ou recomendação direta de aporte financeiro. A negociação em mercados de renda variável e Forex envolve alto risco de perda do patrimônio investido.
+            <strong className="text-slate-400">{t.footer.disclaimerPrefix}</strong> DinhEuro (<span className="text-emerald-400 font-mono">dinheuro.com</span> / <span className="text-emerald-400 font-mono">dinheuro.com.br</span>) {t.footer.disclaimerBody}
           </p>
 
           <div className="pt-4 border-t border-slate-800/40 space-y-3 text-slate-500 text-[11px] leading-relaxed">
@@ -271,7 +271,7 @@ export const Footer: React.FC = () => {
                   onClick={() => setActiveTab('termos')}
                   className="hover:text-white transition cursor-pointer"
                 >
-                  {t.footer.terms.split(' ')[0]}
+                  {t.footer.shortTerms}
                 </button>
                 <span>•</span>
                 <button
@@ -279,7 +279,7 @@ export const Footer: React.FC = () => {
                   onClick={() => setActiveTab('privacidade')}
                   className="hover:text-white transition cursor-pointer"
                 >
-                  {t.header.nav.dashboard === 'Home' ? 'Privacy' : t.header.nav.dashboard === 'Inicio' ? 'Privacidad' : 'Privacidade'}
+                  {t.footer.shortPrivacy}
                 </button>
                 <span>•</span>
                 <button
@@ -287,7 +287,7 @@ export const Footer: React.FC = () => {
                   onClick={() => setActiveTab('cookies')}
                   className="hover:text-white transition cursor-pointer"
                 >
-                  Cookies
+                  {t.footer.shortCookies}
                 </button>
                 <span>•</span>
                 <button
@@ -295,7 +295,7 @@ export const Footer: React.FC = () => {
                   onClick={() => setActiveTab('disclaimer')}
                   className="hover:text-white transition cursor-pointer"
                 >
-                  Disclaimer
+                  {t.footer.shortDisclaimer}
                 </button>
               </div>
             </div>

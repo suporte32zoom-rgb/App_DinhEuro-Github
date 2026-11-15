@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Cookie, ShieldCheck, Check, ArrowRight, X } from 'lucide-react';
 import { useMarket } from '../context/MarketContext';
+import { useI18n } from '../i18n/I18nContext';
 
 const LGPD_STORAGE_KEY = 'dinheuro_lgpd_accepted';
 
 export const LgpdConsentBanner: React.FC = () => {
   const { setActiveTab } = useMarket();
+  const { t } = useI18n();
   const [isVisible, setIsVisible] = useState<boolean>(false);
 
   useEffect(() => {
@@ -64,7 +66,7 @@ export const LgpdConsentBanner: React.FC = () => {
     <div
       role="dialog"
       aria-live="polite"
-      aria-label="Consentimento de Cookies e Privacidade LGPD"
+      aria-label={t.lgpd.dialogAria}
       className="fixed bottom-0 inset-x-0 z-50 p-3 sm:p-5 pointer-events-none animate-in fade-in slide-in-from-bottom-6 duration-300"
     >
       <div className="max-w-5xl mx-auto pointer-events-auto bg-[#0a1220]/95 backdrop-blur-xl border border-emerald-500/30 rounded-2xl p-4 sm:p-6 shadow-2xl shadow-black/80 ring-1 ring-white/10">
@@ -77,14 +79,14 @@ export const LgpdConsentBanner: React.FC = () => {
             <div className="space-y-1.5">
               <div className="flex items-center gap-2">
                 <span className="text-xs sm:text-sm font-bold text-white tracking-tight">
-                  Privacidade & Cookies no DinhEuro
+                  {t.lgpd.title}
                 </span>
                 <span className="text-[10px] font-mono text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded-full font-medium">
                   LGPD & GDPR
                 </span>
               </div>
               <p className="text-xs text-slate-300 leading-relaxed">
-                Utilizamos cookies essenciais, armazenamento local (localStorage) e tecnologias de cache no PWA para memorizar suas carteiras, salvar preferências visuais e garantir a segurança das cotações em tempo real, em estrita conformidade com a Lei Geral de Proteção de Dados (Lei nº 13.709/2018).
+                {t.lgpd.body}
               </p>
               <div className="flex flex-wrap items-center gap-3 pt-0.5 text-xs">
                 <button
@@ -92,7 +94,7 @@ export const LgpdConsentBanner: React.FC = () => {
                   onClick={handleOpenPrivacy}
                   className="text-emerald-400 hover:text-emerald-300 font-semibold underline underline-offset-2 transition cursor-pointer"
                 >
-                  Saber mais / Política de Privacidade
+                  {t.lgpd.privacyLink}
                 </button>
                 <span className="text-slate-600">•</span>
                 <button
@@ -100,7 +102,7 @@ export const LgpdConsentBanner: React.FC = () => {
                   onClick={handleOpenCookies}
                   className="text-slate-400 hover:text-slate-200 transition cursor-pointer"
                 >
-                  Política de Cookies
+                  {t.lgpd.cookiesLink}
                 </button>
               </div>
             </div>
@@ -114,7 +116,7 @@ export const LgpdConsentBanner: React.FC = () => {
               className="flex-1 md:flex-initial inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 font-black text-xs sm:text-sm transition shadow-lg shadow-emerald-950/50 cursor-pointer"
             >
               <Check className="w-4 h-4 stroke-[3]" />
-              <span>Aceitar e Continuar</span>
+              <span>{t.lgpd.acceptBtn}</span>
             </button>
           </div>
         </div>

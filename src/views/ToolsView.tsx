@@ -18,9 +18,11 @@ import {
 import { CompoundInterestChart } from '../components/CompoundInterestChart';
 import { UniversalCurrencyCalculator } from '../components/UniversalCurrencyCalculator';
 import { useI18n } from '../i18n/I18nContext';
+import { getNumberLocale } from '../i18n/translations';
 
 export const ToolsView: React.FC = () => {
-  const { t } = useI18n();
+  const { t, lang } = useI18n();
+  const numberLocale = getNumberLocale(lang);
   const [activeTool, setActiveTool] = useState<'cambio' | 'juros' | 'inflacao' | 'darf'>('cambio');
 
   // --- 2. Juros Compostos State ---
@@ -152,10 +154,10 @@ export const ToolsView: React.FC = () => {
                 <div>
                   <h2 className="text-base font-bold text-white flex items-center gap-2">
                     <TrendingUp className="w-5 h-5 text-emerald-400" />
-                    <span>Calculadora de Juros Compostos & Renda Fixa</span>
+                    <span>{t.tools.compoundTitle}</span>
                   </h2>
                   <p className="text-xs text-slate-400 mt-1">
-                    Simulação interativa da evolução do capital no tempo com aportes mensais e juros compostos.
+                    {t.tools.compoundSubtitle}
                   </p>
                 </div>
               </div>
@@ -164,8 +166,8 @@ export const ToolsView: React.FC = () => {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs bg-[#070e1b] p-4 rounded-xl border border-slate-800/80">
                 <div>
                   <div className="flex items-center justify-between mb-1">
-                    <label className="text-slate-400 font-medium">Aporte Inicial (R$):</label>
-                    <span className="text-slate-500 font-mono-numbers text-[11px]">Capital inicial</span>
+                    <label className="text-slate-400 font-medium">{t.tools.initialPrincipalLabel}</label>
+                    <span className="text-slate-500 font-mono-numbers text-[11px]">{t.tools.initialPrincipalHint}</span>
                   </div>
                   <input
                     type="number"
@@ -177,8 +179,8 @@ export const ToolsView: React.FC = () => {
 
                 <div>
                   <div className="flex items-center justify-between mb-1">
-                    <label className="text-slate-400 font-medium">Aporte Mensal (R$):</label>
-                    <span className="text-emerald-400 font-mono-numbers text-[11px]">Recorrência mensal</span>
+                    <label className="text-slate-400 font-medium">{t.tools.monthlyContribLabel}</label>
+                    <span className="text-emerald-400 font-mono-numbers text-[11px]">{t.tools.monthlyContribHint}</span>
                   </div>
                   <input
                     type="number"
@@ -190,9 +192,9 @@ export const ToolsView: React.FC = () => {
 
                 <div>
                   <div className="flex items-center justify-between mb-1">
-                    <label className="text-slate-400 font-medium">Taxa de Juros Anual (% a.a.):</label>
+                    <label className="text-slate-400 font-medium">{t.tools.annualRateLabel}</label>
                     <span className="text-cyan-400 font-mono-numbers text-[11px]">
-                      ~{((Math.pow(1 + annualRate / 100, 1 / 12) - 1) * 100).toFixed(2)}% a.m.
+                      ~{((Math.pow(1 + annualRate / 100, 1 / 12) - 1) * 100).toFixed(2)}{t.tools.rateMonthlySuffix}
                     </span>
                   </div>
                   <input
@@ -206,9 +208,9 @@ export const ToolsView: React.FC = () => {
 
                 <div>
                   <div className="flex items-center justify-between mb-1">
-                    <label className="text-slate-400 font-medium">Prazo em Anos:</label>
+                    <label className="text-slate-400 font-medium">{t.tools.yearsLabel}</label>
                     <span className="text-amber-400 font-mono-numbers text-[11px]">
-                      {years * 12} meses
+                      {years * 12} {t.tools.monthsUnit}
                     </span>
                   </div>
                   <input
@@ -225,29 +227,29 @@ export const ToolsView: React.FC = () => {
               {/* Results Grid */}
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 <div className="bg-[#070e1b] rounded-xl p-3.5 border border-slate-800">
-                  <span className="text-[10px] text-slate-400 uppercase tracking-wider">Total Investido</span>
+                  <span className="text-[10px] text-slate-400 uppercase tracking-wider">{t.tools.totalInvestedLabel}</span>
                   <p className="text-lg font-bold font-mono-numbers text-blue-400 mt-1">
                     {formatCurrencyValue(compoundResult.totalInvested, 'BRL')}
                   </p>
-                  <span className="text-[10px] text-slate-500">Capital do seu bolso</span>
+                  <span className="text-[10px] text-slate-500">{t.tools.totalInvestedHint}</span>
                 </div>
 
                 <div className="bg-[#070e1b] rounded-xl p-3.5 border border-slate-800">
-                  <span className="text-[10px] text-slate-400 uppercase tracking-wider">Total em Juros Ganhos</span>
+                  <span className="text-[10px] text-slate-400 uppercase tracking-wider">{t.tools.totalInterestLabel}</span>
                   <p className="text-lg font-bold font-mono-numbers text-emerald-400 mt-1">
                     +{formatCurrencyValue(compoundResult.totalInterest, 'BRL')}
                   </p>
                   <span className="text-[10px] text-emerald-500 font-semibold">
-                    {((compoundResult.totalInterest / compoundResult.finalBalance) * 100).toFixed(0)}% do saldo
+                    {((compoundResult.totalInterest / compoundResult.finalBalance) * 100).toFixed(0)}{t.tools.ofBalanceSuffix}
                   </span>
                 </div>
 
                 <div className="bg-[#070e1b] rounded-xl p-3.5 border border-slate-800">
-                  <span className="text-[10px] text-slate-400 uppercase tracking-wider">Montante Final</span>
+                  <span className="text-[10px] text-slate-400 uppercase tracking-wider">{t.tools.finalBalanceLabel}</span>
                   <p className="text-lg font-black font-mono-numbers text-amber-400 mt-1">
                     {formatCurrencyValue(compoundResult.finalBalance, 'BRL')}
                   </p>
-                  <span className="text-[10px] text-slate-500">Patrimônio acumulado</span>
+                  <span className="text-[10px] text-slate-500">{t.tools.finalBalanceHint}</span>
                 </div>
               </div>
 
@@ -267,26 +269,26 @@ export const ToolsView: React.FC = () => {
               <div className="space-y-2 pt-2">
                 <div className="flex items-center justify-between">
                   <h3 className="text-xs font-bold text-white uppercase tracking-wider">
-                    Detalhamento Anual dos Aportes & Rendimentos
+                    {t.tools.annualBreakdownTitle}
                   </h3>
                   <span className="text-[11px] text-slate-400 font-mono-numbers">
-                    {compoundResult.breakdown.length} períodos computados
+                    {compoundResult.breakdown.length} {t.tools.periodsComputedSuffix}
                   </span>
                 </div>
                 <div className="max-h-52 overflow-y-auto no-scrollbar rounded-xl border border-slate-800">
                   <table className="w-full text-left text-[11px]">
                     <thead className="bg-[#070e1b] text-slate-400 border-b border-slate-800 sticky top-0">
                       <tr>
-                        <th className="py-2.5 px-3">Ano</th>
-                        <th className="py-2.5 px-3 text-right">Total Aportado</th>
-                        <th className="py-2.5 px-3 text-right">Juros Acumulados</th>
-                        <th className="py-2.5 px-3 text-right">Saldo Final</th>
+                        <th className="py-2.5 px-3">{t.tools.colYear}</th>
+                        <th className="py-2.5 px-3 text-right">{t.tools.colTotalInvested}</th>
+                        <th className="py-2.5 px-3 text-right">{t.tools.colAccumInterest}</th>
+                        <th className="py-2.5 px-3 text-right">{t.tools.colFinalBalance}</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-slate-800/60 font-mono-numbers">
                       {compoundResult.breakdown.map((row) => (
                         <tr key={row.year} className="hover:bg-slate-800/40 transition">
-                          <td className="py-2 px-3 font-semibold text-white">Ano {row.year}</td>
+                          <td className="py-2 px-3 font-semibold text-white">{t.tools.yearPrefix} {row.year}</td>
                           <td className="py-2 px-3 text-right text-slate-300">
                             {formatCurrencyValue(row.totalInvested, 'BRL')}
                           </td>
@@ -310,10 +312,10 @@ export const ToolsView: React.FC = () => {
               <div className="rounded-2xl bg-[#0d1627] border border-slate-800 p-5 shadow-xl space-y-3">
                 <h3 className="text-sm font-bold text-white flex items-center gap-2">
                   <Sparkles className="w-4 h-4 text-amber-400" />
-                  <span>Simulações Rápidas (Presets)</span>
+                  <span>{t.tools.presetsTitle}</span>
                 </h3>
                 <p className="text-xs text-slate-400">
-                  Selecione um objetivo financeiro para configurar automaticamente os valores:
+                  {t.tools.presetsSubtitle}
                 </p>
                 <div className="space-y-2 pt-1">
                   <button
@@ -323,10 +325,10 @@ export const ToolsView: React.FC = () => {
                   >
                     <div>
                       <div className="text-xs font-bold text-white group-hover:text-emerald-400 transition">
-                        Primeiro Milhão (R$ 1.000.000)
+                        {t.tools.presetMilhaoTitle}
                       </div>
                       <div className="text-[11px] text-slate-400">
-                        R$ 1.500/mês • 18 anos • 11.5% a.a.
+                        {t.tools.presetMilhaoDesc}
                       </div>
                     </div>
                     <ArrowUpRight className="w-4 h-4 text-slate-500 group-hover:text-emerald-400 transition" />
@@ -339,10 +341,10 @@ export const ToolsView: React.FC = () => {
                   >
                     <div>
                       <div className="text-xs font-bold text-white group-hover:text-emerald-400 transition">
-                        Aposentadoria Confortável
+                        {t.tools.presetAposTitle}
                       </div>
                       <div className="text-[11px] text-slate-400">
-                        R$ 2.000/mês • 30 anos • 10.5% a.a.
+                        {t.tools.presetAposDesc}
                       </div>
                     </div>
                     <ArrowUpRight className="w-4 h-4 text-slate-500 group-hover:text-emerald-400 transition" />
@@ -355,10 +357,10 @@ export const ToolsView: React.FC = () => {
                   >
                     <div>
                       <div className="text-xs font-bold text-white group-hover:text-emerald-400 transition">
-                        Independência em 15 Anos
+                        {t.tools.presetIndepTitle}
                       </div>
                       <div className="text-[11px] text-slate-400">
-                        R$ 3.000/mês • 15 anos • 12% a.a.
+                        {t.tools.presetIndepDesc}
                       </div>
                     </div>
                     <ArrowUpRight className="w-4 h-4 text-slate-500 group-hover:text-emerald-400 transition" />
@@ -371,10 +373,10 @@ export const ToolsView: React.FC = () => {
                   >
                     <div>
                       <div className="text-xs font-bold text-white group-hover:text-emerald-400 transition">
-                        Reserva de Emergência
+                        {t.tools.presetReservaTitle}
                       </div>
                       <div className="text-[11px] text-slate-400">
-                        R$ 800/mês • 3 anos • 11.5% a.a.
+                        {t.tools.presetReservaDesc}
                       </div>
                     </div>
                     <ArrowUpRight className="w-4 h-4 text-slate-500 group-hover:text-emerald-400 transition" />
@@ -386,30 +388,30 @@ export const ToolsView: React.FC = () => {
               <div className="rounded-2xl bg-[#0d1627] border border-slate-800 p-5 shadow-xl space-y-3">
                 <h3 className="text-sm font-bold text-white flex items-center gap-2">
                   <PiggyBank className="w-4 h-4 text-emerald-400" />
-                  <span>O Poder do Efeito Bola de Neve</span>
+                  <span>{t.tools.snowballTitle}</span>
                 </h3>
                 <p className="text-xs text-slate-300 leading-relaxed">
-                  No exemplo acima, os juros acumulados representam{' '}
+                  {t.tools.snowballBodyPrefix}{' '}
                   <strong className="text-emerald-400 font-mono-numbers">
                     {((compoundResult.totalInterest / compoundResult.finalBalance) * 100).toFixed(1)}%
                   </strong>{' '}
-                  de todo o patrimônio final conquistado.
+                  {t.tools.snowballBodySuffix}
                 </p>
                 <div className="pt-2 border-t border-slate-800/80 text-[11px] text-slate-400 space-y-1.5">
                   <div className="flex items-center justify-between">
-                    <span>Taxa Mensal Equivalente:</span>
+                    <span>{t.tools.monthlyEqRate}</span>
                     <span className="font-mono-numbers text-white">
-                      {((Math.pow(1 + annualRate / 100, 1 / 12) - 1) * 100).toFixed(2)}% a.m.
+                      {((Math.pow(1 + annualRate / 100, 1 / 12) - 1) * 100).toFixed(2)}{t.tools.rateMonthlySuffix}
                     </span>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span>Aporte Total no Período:</span>
+                    <span>{t.tools.periodTotalContrib}</span>
                     <span className="font-mono-numbers text-slate-300">
                       {formatCurrencyValue(compoundResult.totalInvested, 'BRL')}
                     </span>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span>Juros Gerados no Período:</span>
+                    <span>{t.tools.periodTotalInterest}</span>
                     <span className="font-mono-numbers text-emerald-400 font-bold">
                       +{formatCurrencyValue(compoundResult.totalInterest, 'BRL')}
                     </span>
@@ -426,15 +428,15 @@ export const ToolsView: React.FC = () => {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div className="lg:col-span-2 rounded-2xl bg-[#0d1627] border border-slate-800 p-5 sm:p-6 shadow-xl space-y-5">
             <div>
-              <h2 className="text-base font-bold text-white">Simulador de Perda de Poder de Compra</h2>
+              <h2 className="text-base font-bold text-white">{t.tools.inflationTitle}</h2>
               <p className="text-xs text-slate-400 mt-1">
-                Veja o impacto da inflação (IPCA/CPI) sobre o seu patrimônio ao longo do tempo.
+                {t.tools.inflationSubtitle}
               </p>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs">
               <div>
-                <label className="text-slate-400 block mb-1">Valor Atual:</label>
+                <label className="text-slate-400 block mb-1">{t.tools.inflationCurrentAmount}</label>
                 <input
                   type="number"
                   value={inflationAmount}
@@ -444,7 +446,7 @@ export const ToolsView: React.FC = () => {
               </div>
 
               <div>
-                <label className="text-slate-400 block mb-1">Inflação Anual Média (% a.a.):</label>
+                <label className="text-slate-400 block mb-1">{t.tools.inflationAvgRate}</label>
                 <input
                   type="number"
                   step="0.1"
@@ -455,7 +457,7 @@ export const ToolsView: React.FC = () => {
               </div>
 
               <div>
-                <label className="text-slate-400 block mb-1">Período (Anos):</label>
+                <label className="text-slate-400 block mb-1">{t.tools.inflationPeriodYears}</label>
                 <input
                   type="number"
                   value={inflationYears}
@@ -468,14 +470,14 @@ export const ToolsView: React.FC = () => {
             {/* Impact Box */}
             <div className="bg-[#070e1b] rounded-2xl p-5 border border-slate-800 space-y-4">
               <div className="flex items-center justify-between">
-                <span className="text-xs text-slate-400">Poder de compra equivalente futuro:</span>
+                <span className="text-xs text-slate-400">{t.tools.inflationFuturePower}</span>
                 <span className="text-xl font-bold font-mono-numbers text-rose-400">
                   {formatCurrencyValue(inflationResult.futurePurchasingPower, 'BRL')}
                 </span>
               </div>
 
               <div className="flex items-center justify-between">
-                <span className="text-xs text-slate-400">Perda real de valor:</span>
+                <span className="text-xs text-slate-400">{t.tools.inflationRealLoss}</span>
                 <span className="text-sm font-bold font-mono-numbers text-rose-400">
                   -{inflationResult.lossPercentage}%
                 </span>
@@ -483,7 +485,7 @@ export const ToolsView: React.FC = () => {
 
               <div className="flex items-center justify-between pt-3 border-t border-slate-800">
                 <span className="text-xs text-slate-300 font-semibold">
-                  Valor necessário no futuro para comprar o mesmo que hoje:
+                  {t.tools.inflationNeededFuture}
                 </span>
                 <span className="text-lg font-bold font-mono-numbers text-amber-400">
                   {formatCurrencyValue(inflationResult.equivalentNeeded, 'BRL')}
@@ -493,9 +495,9 @@ export const ToolsView: React.FC = () => {
           </div>
 
           <div className="rounded-2xl bg-[#0d1627] border border-slate-800 p-5 shadow-xl space-y-4">
-            <h3 className="text-sm font-bold text-white">Proteção Anti-Inflação</h3>
+            <h3 className="text-sm font-bold text-white">{t.tools.inflationProtectTitle}</h3>
             <p className="text-xs text-slate-300 leading-relaxed">
-              Deixar dinheiro parado na poupança ou em moeda fiduciária corrói seu patrimônio silenciosamente. O DinhEuro recomenda diversificar em ativos reais (Ações globais, Títulos IPCA+, Ouro e Euro).
+              {t.tools.inflationProtectBody}
             </p>
           </div>
         </div>
@@ -506,28 +508,28 @@ export const ToolsView: React.FC = () => {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div className="lg:col-span-2 rounded-2xl bg-[#0d1627] border border-slate-800 p-5 sm:p-6 shadow-xl space-y-5">
             <div>
-              <h2 className="text-base font-bold text-white">Calculadora de Ganho de Capital & DARF</h2>
+              <h2 className="text-base font-bold text-white">{t.tools.darfTitle}</h2>
               <p className="text-xs text-slate-400 mt-1">
-                Conformidade com a legislação da Receita Federal para ações e criptoativos.
+                {t.tools.darfSubtitle}
               </p>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs">
               <div>
-                <label className="text-slate-400 block mb-1">Tipo de Ativo:</label>
+                <label className="text-slate-400 block mb-1">{t.tools.darfAssetType}</label>
                 <select
                   value={darfAssetType}
                   onChange={(e) => setDarfAssetType(e.target.value as any)}
                   className="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white"
                 >
-                  <option value="stock_br">Ações Brasil (B3)</option>
-                  <option value="stock_us">Ações EUA / Global</option>
-                  <option value="crypto">Criptomoeda</option>
+                  <option value="stock_br">{t.tools.darfOptBr}</option>
+                  <option value="stock_us">{t.tools.darfOptUs}</option>
+                  <option value="crypto">{t.tools.darfOptCrypto}</option>
                 </select>
               </div>
 
               <div>
-                <label className="text-slate-400 block mb-1">Preço de Compra:</label>
+                <label className="text-slate-400 block mb-1">{t.tools.darfBuyPrice}</label>
                 <input
                   type="number"
                   step="any"
@@ -538,7 +540,7 @@ export const ToolsView: React.FC = () => {
               </div>
 
               <div>
-                <label className="text-slate-400 block mb-1">Preço de Venda:</label>
+                <label className="text-slate-400 block mb-1">{t.tools.darfSellPrice}</label>
                 <input
                   type="number"
                   step="any"
@@ -549,7 +551,7 @@ export const ToolsView: React.FC = () => {
               </div>
 
               <div>
-                <label className="text-slate-400 block mb-1">Quantidade de Ações / Cotas:</label>
+                <label className="text-slate-400 block mb-1">{t.tools.darfQty}</label>
                 <input
                   type="number"
                   value={darfQty}
@@ -559,7 +561,7 @@ export const ToolsView: React.FC = () => {
               </div>
 
               <div>
-                <label className="text-slate-400 block mb-1">Volume Total Vendido no Mês (R$):</label>
+                <label className="text-slate-400 block mb-1">{t.tools.darfMonthlyVol}</label>
                 <input
                   type="number"
                   value={monthlySalesVolume}
@@ -576,7 +578,7 @@ export const ToolsView: React.FC = () => {
                     onChange={(e) => setIsDayTrade(e.target.checked)}
                     className="rounded bg-slate-900 border-slate-700 text-emerald-500"
                   />
-                  <span>Operação Day Trade (20%)</span>
+                  <span>{t.tools.darfDayTradeCheck}</span>
                 </label>
               </div>
             </div>
@@ -584,14 +586,14 @@ export const ToolsView: React.FC = () => {
             {/* Results */}
             <div className="bg-[#070e1b] rounded-2xl p-5 border border-slate-800 space-y-3">
               <div className="flex justify-between items-center text-xs">
-                <span className="text-slate-400">Lucro Bruto Apurado:</span>
+                <span className="text-slate-400">{t.tools.darfGrossProfit}</span>
                 <span className="text-base font-bold font-mono-numbers text-white">
-                  R$ {taxResult.grossProfit.toFixed(2)} ({taxResult.returnPercentage.toFixed(2)}%)
+                  {formatCurrencyValue(taxResult.grossProfit, 'BRL')} ({taxResult.returnPercentage.toLocaleString(numberLocale, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}%)
                 </span>
               </div>
 
               <div className="flex justify-between items-center text-xs">
-                <span className="text-slate-400">Status de Isenção Fiscal:</span>
+                <span className="text-slate-400">{t.tools.darfExemptStatus}</span>
                 <span
                   className={`font-semibold px-2 py-0.5 rounded text-xs ${
                     taxResult.isTaxExempt
@@ -599,37 +601,37 @@ export const ToolsView: React.FC = () => {
                       : 'text-amber-400 bg-amber-500/15'
                   }`}
                 >
-                  {taxResult.isTaxExempt ? '✓ ISENTO de Imposto de Renda' : 'TRIBUTÁVEL'}
+                  {taxResult.isTaxExempt ? t.tools.darfExemptBadge : t.tools.darfTaxableBadge}
                 </span>
               </div>
 
               <div className="flex justify-between items-center text-xs">
-                <span className="text-slate-400">Alíquota Aplicável:</span>
+                <span className="text-slate-400">{t.tools.darfApplicableRate}</span>
                 <span className="font-mono text-slate-200">{taxResult.taxRatePercent}%</span>
               </div>
 
               <div className="flex justify-between items-center text-xs">
-                <span className="text-slate-400">DARF Estimado a Pagar:</span>
+                <span className="text-slate-400">{t.tools.darfEstimatedDue}</span>
                 <span className="text-base font-bold font-mono-numbers text-rose-400">
-                  R$ {taxResult.estimatedTaxDue.toFixed(2)}
+                  {formatCurrencyValue(taxResult.estimatedTaxDue, 'BRL')}
                 </span>
               </div>
 
               <div className="flex justify-between items-center text-sm font-bold text-white pt-2 border-t border-slate-800">
-                <span>Lucro Líquido Final no Bolso:</span>
+                <span>{t.tools.darfNetProfit}</span>
                 <span className="text-lg font-black font-mono-numbers text-emerald-400">
-                  R$ {taxResult.netProfit.toFixed(2)}
+                  {formatCurrencyValue(taxResult.netProfit, 'BRL')}
                 </span>
               </div>
             </div>
           </div>
 
           <div className="rounded-2xl bg-[#0d1627] border border-slate-800 p-5 shadow-xl space-y-4">
-            <h3 className="text-sm font-bold text-white">Regras da Receita Federal</h3>
+            <h3 className="text-sm font-bold text-white">{t.tools.darfRulesTitle}</h3>
             <ul className="text-xs text-slate-300 space-y-2 leading-relaxed">
-              <li>• <strong>Ações B3 (Swing Trade):</strong> Isento para vendas totais de até R$ 20.000 no mês. Acima disso, tributação de 15% sobre o ganho.</li>
-              <li>• <strong>Day Trade:</strong> Tributação fixa de 20%, sem qualquer faixa de isenção.</li>
-              <li>• <strong>Criptoativos:</strong> Isenção para alienações totais de até R$ 35.000 mensais.</li>
+              <li>• <strong>{t.tools.darfRule1Title}</strong> {t.tools.darfRule1Body}</li>
+              <li>• <strong>{t.tools.darfRule2Title}</strong> {t.tools.darfRule2Body}</li>
+              <li>• <strong>{t.tools.darfRule3Title}</strong> {t.tools.darfRule3Body}</li>
             </ul>
           </div>
         </div>

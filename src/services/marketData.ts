@@ -1671,7 +1671,11 @@ export interface CandlePoint {
   volume: number;
 }
 
-export function generateAssetCandles(currentPrice: number, timeframe: string): CandlePoint[] {
+export function generateAssetCandles(
+  currentPrice: number,
+  timeframe: string,
+  locale: string = 'pt-BR'
+): CandlePoint[] {
   let count = 24;
   let intervalMinutes = 60;
 
@@ -1710,8 +1714,8 @@ export function generateAssetCandles(currentPrice: number, timeframe: string): C
 
     candles.push({
       time: timeframe === '1D'
-        ? timeStamp.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })
-        : timeStamp.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' }),
+        ? timeStamp.toLocaleTimeString(locale, { hour: '2-digit', minute: '2-digit' })
+        : timeStamp.toLocaleDateString(locale, { day: '2-digit', month: '2-digit' }),
       open: Number(open.toFixed(2)),
       high: Number(high.toFixed(2)),
       low: Number(low.toFixed(2)),

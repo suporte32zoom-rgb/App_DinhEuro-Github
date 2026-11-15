@@ -11,6 +11,7 @@ import {
 } from 'lucide-react';
 import { useMarket } from '../context/MarketContext';
 import { useI18n } from '../i18n/I18nContext';
+import { getNumberLocale } from '../i18n/translations';
 import {
   AwesomeQuoteMode,
   AwesomeQuotesMap,
@@ -40,6 +41,7 @@ export const UniversalCurrencyCalculator: React.FC<UniversalCurrencyCalculatorPr
 }) => {
   const { universalRates } = useMarket();
   const { t, lang } = useI18n();
+  const numberLocale = getNumberLocale(lang);
 
   const [amountInput, setAmountInput] = useState<string>(String(defaultAmount));
   const [fromCurrency, setFromCurrency] = useState<string>(defaultFrom);
@@ -79,7 +81,7 @@ export const UniversalCurrencyCalculator: React.FC<UniversalCurrencyCalculatorPr
     setLastSyncDate(result.fetchedAt);
     setApiTimestamp(result.apiTimestamp);
     setSyncError(
-      result.source === 'fallback' ? result.errorMessage || 'Usando taxas em cache' : null
+      result.source === 'fallback' ? result.errorMessage || '__CACHED__' : null
     );
 
     setIsLoading(false);
@@ -177,7 +179,7 @@ export const UniversalCurrencyCalculator: React.FC<UniversalCurrencyCalculatorPr
                 <span aria-hidden="true">·</span>
                 <span className="font-mono-numbers">
                   {t.calculator.updatedAt}{' '}
-                  {lastSyncDate.toLocaleTimeString(lang === 'en' ? 'en-US' : 'pt-BR', {
+                  {lastSyncDate.toLocaleTimeString(numberLocale, {
                     hour: '2-digit',
                     minute: '2-digit',
                     second: '2-digit',
@@ -198,7 +200,7 @@ export const UniversalCurrencyCalculator: React.FC<UniversalCurrencyCalculatorPr
         <div className="flex flex-wrap items-center gap-2 shrink-0">
           <div
             role="group"
-            aria-label="Modo de cotação"
+            aria-label={t.calculator.quoteModeAria}
             className="inline-flex items-center p-1 rounded-xl bg-slate-900 border border-slate-800"
           >
             <button
@@ -247,7 +249,7 @@ export const UniversalCurrencyCalculator: React.FC<UniversalCurrencyCalculatorPr
           <div className="flex items-center gap-2">
             <AlertCircle className="w-4 h-4 shrink-0 text-amber-400" />
             <span>
-              {t.calculator.fallbackNotice} ({syncError})
+              {t.calculator.fallbackNotice} ({syncError === '__CACHED__' ? t.calculator.cachedRatesBadge : syncError})
             </span>
           </div>
           <button
@@ -269,7 +271,7 @@ export const UniversalCurrencyCalculator: React.FC<UniversalCurrencyCalculatorPr
               {t.calculator.sourceAmount}
             </label>
             <span className="text-xs font-mono-numbers text-slate-400">
-              {fromMeta.flag} {fromMeta.name}
+              {fromMeta.flag} {t.calculator.currencyNames[fromMeta.code] || fromMeta.name}
             </span>
           </div>
 
@@ -287,19 +289,19 @@ export const UniversalCurrencyCalculator: React.FC<UniversalCurrencyCalculatorPr
                 value={amountInput}
                 onChange={(e) => setAmountInput(e.target.value)}
                 className="w-full min-h-[44px] bg-slate-900 border border-slate-700 focus:border-emerald-500 rounded-xl pl-11 pr-3 py-2 text-lg font-bold font-mono-numbers text-white focus:outline-none transition"
-                aria-label="Valor a converter"
+                aria-label={t.calculator.amountAria}
               />
             </div>
 
             <select
               value={fromCurrency}
               onChange={(e) => setFromCurrency(e.target.value)}
-              aria-label="Moeda de origem"
+              aria-label={t.calculator.fromCurrencyAria}
               className="min-h-[44px] bg-slate-900 border border-slate-700 focus:border-emerald-500 rounded-xl px-3 py-2 text-xs font-bold text-white focus:outline-none cursor-pointer shrink-0"
             >
               {DINHEURO_CALCULATOR_CURRENCIES.map((cur) => (
                 <option key={cur.code} value={cur.code}>
-                  {cur.flag} {cur.code} — {cur.name}
+                  {cur.flag} {cur.code} — {t.calculator.currencyNames[cur.code] || cur.name}
                 </option>
               ))}
             </select>
@@ -320,7 +322,7 @@ export const UniversalCurrencyCalculator: React.FC<UniversalCurrencyCalculatorPr
                       : 'bg-slate-900/90 text-slate-400 hover:text-white border-slate-800 hover:border-slate-700'
                   }`}
                 >
-                  {preset.toLocaleString('pt-BR')}
+                  {preset.toLocaleString(numberLocale)}
                 </button>
               );
             })}
@@ -332,8 +334,8 @@ export const UniversalCurrencyCalculator: React.FC<UniversalCurrencyCalculatorPr
           <button
             type="button"
             onClick={handleSwap}
-            aria-label="Inverter moeda de origem e destino"
-            title="Inverter moedas"
+            aria-label={t.calculator.swapAria}
+            title={t.calculator.swapTitle}
             className="w-full lg:w-auto min-h-[44px] px-4 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700 hover:border-emerald-500/50 text-emerald-400 hover:text-emerald-300 transition cursor-pointer flex items-center justify-center gap-2 text-xs font-semibold whitespace-nowrap shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400"
           >
             <ArrowRightLeft className="w-4 h-4" />
@@ -346,7 +348,7 @@ export const UniversalCurrencyCalculator: React.FC<UniversalCurrencyCalculatorPr
           <div className="flex items-center justify-between gap-2">
             <span className="text-xs font-medium text-slate-400">{t.calculator.convertedAmount} ({quoteMode === 'bid' ? t.calculator.buyLabel : t.calculator.sellLabel})</span>
             <span className="text-xs font-mono-numbers text-slate-400">
-              {toMeta.flag} {toMeta.name}
+              {toMeta.flag} {t.calculator.currencyNames[toMeta.code] || toMeta.name}
             </span>
           </div>
 
@@ -359,7 +361,7 @@ export const UniversalCurrencyCalculator: React.FC<UniversalCurrencyCalculatorPr
                 <div className="h-5 w-32 bg-slate-800 rounded animate-pulse" />
               ) : (
                 <span className="text-lg sm:text-xl font-black font-mono-numbers text-emerald-400 truncate">
-                  {formatConvertedAmount(conversion.convertedAmount, toCurrency)}
+                  {formatConvertedAmount(conversion.convertedAmount, toCurrency, numberLocale)}
                 </span>
               )}
             </div>
@@ -367,12 +369,12 @@ export const UniversalCurrencyCalculator: React.FC<UniversalCurrencyCalculatorPr
             <select
               value={toCurrency}
               onChange={(e) => setToCurrency(e.target.value)}
-              aria-label="Moeda de destino"
+              aria-label={t.calculator.toCurrencyAria}
               className="min-h-[44px] bg-slate-900 border border-slate-700 focus:border-emerald-500 rounded-xl px-3 py-2 text-xs font-bold text-white focus:outline-none cursor-pointer shrink-0"
             >
               {DINHEURO_CALCULATOR_CURRENCIES.map((cur) => (
                 <option key={cur.code} value={cur.code}>
-                  {cur.flag} {cur.code} — {cur.name}
+                  {cur.flag} {cur.code} — {t.calculator.currencyNames[cur.code] || cur.name}
                 </option>
               ))}
             </select>
@@ -383,13 +385,13 @@ export const UniversalCurrencyCalculator: React.FC<UniversalCurrencyCalculatorPr
             <span>
               1 {fromCurrency} ={' '}
               <strong className="text-slate-200">
-                {formatUnitRate(conversion.directRate, toCurrency)} {toCurrency}
+                {formatUnitRate(conversion.directRate, toCurrency, numberLocale)} {toCurrency}
               </strong>
             </span>
             <span>
               1 {toCurrency} ={' '}
               <strong className="text-slate-200">
-                {formatUnitRate(conversion.inverseRate, fromCurrency)} {fromCurrency}
+                {formatUnitRate(conversion.inverseRate, fromCurrency, numberLocale)} {fromCurrency}
               </strong>
             </span>
           </div>
@@ -401,7 +403,7 @@ export const UniversalCurrencyCalculator: React.FC<UniversalCurrencyCalculatorPr
         <div className="bg-[#070d18] rounded-xl border border-slate-800/90 px-3.5 py-2.5">
           <span className="text-[11px] text-slate-400 block">{t.calculator.brlEquivalent}</span>
           <span className="text-sm font-bold font-mono-numbers text-white">
-            {formatConvertedAmount(conversion.amountInBrl, 'BRL')}
+            {formatConvertedAmount(conversion.amountInBrl, 'BRL', numberLocale)}
           </span>
         </div>
 
@@ -411,8 +413,8 @@ export const UniversalCurrencyCalculator: React.FC<UniversalCurrencyCalculatorPr
           </span>
           <span className="text-sm font-bold font-mono-numbers text-slate-200">
             {activePairForRange && activePairForRange.code !== 'BRL'
-              ? formatConvertedAmount(activePairForRange.highBrl, 'BRL')
-              : 'R$ 1,00'}
+              ? formatConvertedAmount(activePairForRange.highBrl, 'BRL', numberLocale)
+              : formatConvertedAmount(1, 'BRL', numberLocale)}
           </span>
         </div>
 
@@ -422,7 +424,7 @@ export const UniversalCurrencyCalculator: React.FC<UniversalCurrencyCalculatorPr
           </span>
           <span className="text-sm font-bold font-mono-numbers text-slate-200">
             {activePairForRange && activePairForRange.code !== 'BRL'
-              ? formatConvertedAmount(activePairForRange.lowBrl, 'BRL')
+              ? formatConvertedAmount(activePairForRange.lowBrl, 'BRL', numberLocale)
               : quoteMode === 'bid'
               ? t.calculator.buyLabel
               : t.calculator.sellLabel}
@@ -450,7 +452,9 @@ export const UniversalCurrencyCalculator: React.FC<UniversalCurrencyCalculatorPr
               {activePairForRange.pctChange.toFixed(2)}%
             </span>
           ) : (
-            <span className="text-sm font-bold font-mono-numbers text-slate-400">0,00%</span>
+            <span className="text-sm font-bold font-mono-numbers text-slate-400">
+              {(0).toLocaleString(numberLocale, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}%
+            </span>
           )}
         </div>
       </div>
@@ -505,19 +509,19 @@ export const UniversalCurrencyCalculator: React.FC<UniversalCurrencyCalculatorPr
               <div className="flex sm:block justify-between">
                 <span className="text-slate-400 block">Spread ({spreadPercent}%):</span>
                 <span className="font-mono-numbers font-semibold text-rose-400">
-                  -{formatConvertedAmount(spreadAmount, toCurrency)}
+                  -{formatConvertedAmount(spreadAmount, toCurrency, numberLocale)}
                 </span>
               </div>
               <div className="flex sm:block justify-between">
                 <span className="text-slate-400 block">IOF ({iofPercent}%):</span>
                 <span className="font-mono-numbers font-semibold text-rose-400">
-                  -{formatConvertedAmount(iofAmount, toCurrency)}
+                  -{formatConvertedAmount(iofAmount, toCurrency, numberLocale)}
                 </span>
               </div>
               <div className="flex sm:block justify-between sm:text-right">
                 <span className="text-slate-300 font-semibold block">{t.calculator.netEffectiveTotal}</span>
                 <span className="font-mono-numbers font-bold text-sm text-emerald-400">
-                  {formatConvertedAmount(netConvertedAmount, toCurrency)}
+                  {formatConvertedAmount(netConvertedAmount, toCurrency, numberLocale)}
                 </span>
               </div>
             </div>
@@ -578,11 +582,11 @@ export const UniversalCurrencyCalculator: React.FC<UniversalCurrencyCalculatorPr
                 </div>
 
                 <div className="text-xs sm:text-sm font-bold font-mono-numbers text-emerald-400 truncate">
-                  {formatConvertedAmount(targetConv.convertedAmount, target.code)}
+                  {formatConvertedAmount(targetConv.convertedAmount, target.code, numberLocale)}
                 </div>
 
                 <div className="text-[10px] text-slate-400 truncate mt-0.5">
-                  {target.name}
+                  {t.calculator.currencyNames[target.code] || target.name}
                 </div>
               </button>
             );

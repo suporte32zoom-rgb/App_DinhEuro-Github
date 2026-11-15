@@ -15,6 +15,10 @@ import {
 } from 'lucide-react';
 import { MarketAsset, CandlePoint } from '../services/marketData';
 import { formatPointsValue } from '../utils/finance';
+import { useI18n } from '../i18n/I18nContext';
+import { getNumberLocale } from '../i18n/translations';
+import { VIEWS_TRANSLATIONS } from '../i18n/viewsTranslations';
+import { getLocalizedAssetName } from '../i18n/marketDataTranslations';
 
 export type D3Timeframe = '1D' | '5D' | '1M' | '6M' | 'YTD' | '1A' | '5A';
 export type D3ChartStyle = 'area' | 'line' | 'candle';
@@ -43,7 +47,8 @@ function createDeterministicPRNG(seedStr: string) {
 export function generateD3Series(
   symbol: string,
   timeframe: D3Timeframe,
-  basePrice: number
+  basePrice: number,
+  locale: string = 'pt-BR'
 ): Array<CandlePoint & { date: Date }> {
   const prng = createDeterministicPRNG(`${symbol}_${timeframe}_d3v7_dinh`);
   let count = 30;
@@ -95,8 +100,8 @@ export function generateD3Series(
 
     const timeStr =
       timeframe === '1D'
-        ? timeStamp.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })
-        : timeStamp.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' });
+        ? timeStamp.toLocaleTimeString(locale, { hour: '2-digit', minute: '2-digit' })
+        : timeStamp.toLocaleDateString(locale, { day: '2-digit', month: '2-digit' });
 
     series.push({
       date: timeStamp,
@@ -128,6 +133,10 @@ export const D3AdvancedChart: React.FC<D3AdvancedChartProps> = ({
   initialTimeframe = '1M',
   height = 360,
 }) => {
+  const { lang } = useI18n();
+  const locale = getNumberLocale(lang);
+  const tD3 = VIEWS_TRANSLATIONS[lang].d3Chart;
+
   const [timeframe, setTimeframe] = useState<D3Timeframe>(initialTimeframe);
   const [chartStyle, setChartStyle] = useState<D3ChartStyle>('area');
   const [showSMA, setShowSMA] = useState<boolean>(true);
@@ -156,8 +165,8 @@ export const D3AdvancedChart: React.FC<D3AdvancedChartProps> = ({
 
   // Primary Series
   const data = useMemo(() => {
-    return generateD3Series(asset.symbol, timeframe, asset.price);
-  }, [asset.symbol, timeframe, asset.price]);
+    return generateD3Series(asset.symbol, timeframe, asset.price, locale);
+  }, [asset.symbol, timeframe, asset.price, locale]);
 
   // Comparison series normalized to percentage change (Base 0%)
   const comparisonAsset = useMemo(() => {
@@ -167,8 +176,8 @@ export const D3AdvancedChart: React.FC<D3AdvancedChartProps> = ({
 
   const comparisonData = useMemo(() => {
     if (!comparisonAsset || !showBenchmark) return null;
-    return generateD3Series(comparisonAsset.symbol, timeframe, comparisonAsset.price);
-  }, [comparisonAsset, timeframe, showBenchmark]);
+    return generateD3Series(comparisonAsset.symbol, timeframe, comparisonAsset.price, locale);
+  }, [comparisonAsset, timeframe, showBenchmark, locale]);
 
   // Simple Moving Averages (SMA 20 & SMA 50) using D3 data
   const sma20 = useMemo(() => {
@@ -368,7 +377,7 @@ export const D3AdvancedChart: React.FC<D3AdvancedChartProps> = ({
                 chartStyle === 'area' ? 'bg-slate-700 text-white shadow-sm' : 'text-slate-400 hover:text-white'
               }`}
             >
-              Área
+              {tD3.styleArea}
             </button>
             <button
               onClick={() => setChartStyle('line')}
@@ -376,7 +385,7 @@ export const D3AdvancedChart: React.FC<D3AdvancedChartProps> = ({
                 chartStyle === 'line' ? 'bg-slate-700 text-white shadow-sm' : 'text-slate-400 hover:text-white'
               }`}
             >
-              Linha
+              {tD3.styleLine}
             </button>
             <button
               onClick={() => setChartStyle('candle')}
@@ -384,7 +393,7 @@ export const D3AdvancedChart: React.FC<D3AdvancedChartProps> = ({
                 chartStyle === 'candle' ? 'bg-slate-700 text-white shadow-sm' : 'text-slate-400 hover:text-white'
               }`}
             >
-              Candlesticks
+              {tD3.styleCandle}
             </button>
           </div>
 
@@ -398,10 +407,10 @@ export const D3AdvancedChart: React.FC<D3AdvancedChartProps> = ({
                   ? 'bg-amber-500/10 text-amber-400 border-amber-500/30'
                   : 'bg-slate-900 text-slate-400 border-slate-800 hover:text-slate-200'
               }`}
-              title="Médias Móveis (SMA 20 & SMA 50)"
+              title={tD3.smaTitle}
             >
               <Activity className="w-3.5 h-3.5" />
-              <span>Média Móvel</span>
+              <span>{tD3.smaLabel}</span>
             </button>
 
             {/* Toggle Volume */}
@@ -412,10 +421,10 @@ export const D3AdvancedChart: React.FC<D3AdvancedChartProps> = ({
                   ? 'bg-sky-500/10 text-sky-400 border-sky-500/30'
                   : 'bg-slate-900 text-slate-400 border-slate-800 hover:text-slate-200'
               }`}
-              title="Exibir Volume"
+              title={tD3.volumeTitle}
             >
               <BarChart2 className="w-3.5 h-3.5" />
-              <span>Volume</span>
+              <span>{tD3.volumeLabel}</span>
             </button>
 
             {/* Benchmark / Comparison selector */}
@@ -428,10 +437,10 @@ export const D3AdvancedChart: React.FC<D3AdvancedChartProps> = ({
                       ? 'bg-purple-500/15 text-purple-300 border-purple-500/30'
                       : 'bg-slate-900 text-slate-400 border-slate-800 hover:text-slate-200'
                   }`}
-                  title="Benchmark Comparativo"
+                  title={tD3.compareTitle}
                 >
                   <Plus className="w-3.5 h-3.5" />
-                  <span>Comparar Ativo</span>
+                  <span>{tD3.compareLabel}</span>
                 </button>
 
                 {showBenchmark && (
@@ -440,13 +449,13 @@ export const D3AdvancedChart: React.FC<D3AdvancedChartProps> = ({
                     onChange={(e) => setComparedSymbol(e.target.value)}
                     className="ml-1.5 bg-slate-900 border border-slate-700 rounded-lg px-2 py-1 text-[11px] font-semibold text-purple-300 focus:outline-none cursor-pointer"
                   >
-                    <option value="">Selecione...</option>
+                    <option value="">{tD3.selectOption}</option>
                     {comparisonAssets
                       .filter((c) => c.symbol !== asset.symbol)
                       .slice(0, 8)
                       .map((c) => (
                         <option key={c.id} value={c.symbol}>
-                          vs {c.symbol} ({c.name.slice(0, 15)})
+                          vs {c.symbol} ({getLocalizedAssetName(c, lang).slice(0, 15)})
                         </option>
                       ))}
                   </select>
@@ -461,19 +470,19 @@ export const D3AdvancedChart: React.FC<D3AdvancedChartProps> = ({
       <div className="flex flex-wrap items-center justify-between text-xs px-1 text-slate-400 font-mono-numbers">
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-1.5">
-            <span className="text-[10px] uppercase font-bold text-slate-500">Mín. Período:</span>
+            <span className="text-[10px] uppercase font-bold text-slate-500">{tD3.periodLow}</span>
             <span className="text-rose-400 font-bold">
               {isIndex
-                ? formatPointsValue(minPrice)
-                : `${asset.currency === 'BRL' ? 'R$' : asset.currency === 'EUR' ? '€' : '$'} ${minPrice.toFixed(2)}`}
+                ? formatPointsValue(minPrice, locale)
+                : `${asset.currency === 'BRL' ? 'R$' : asset.currency === 'EUR' ? '€' : '$'} ${minPrice.toLocaleString(locale, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
             </span>
           </div>
           <div className="flex items-center gap-1.5">
-            <span className="text-[10px] uppercase font-bold text-slate-500">Máx. Período:</span>
+            <span className="text-[10px] uppercase font-bold text-slate-500">{tD3.periodHigh}</span>
             <span className="text-emerald-400 font-bold">
               {isIndex
-                ? formatPointsValue(maxPrice)
-                : `${asset.currency === 'BRL' ? 'R$' : asset.currency === 'EUR' ? '€' : '$'} ${maxPrice.toFixed(2)}`}
+                ? formatPointsValue(maxPrice, locale)
+                : `${asset.currency === 'BRL' ? 'R$' : asset.currency === 'EUR' ? '€' : '$'} ${maxPrice.toLocaleString(locale, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
             </span>
           </div>
         </div>
@@ -482,17 +491,17 @@ export const D3AdvancedChart: React.FC<D3AdvancedChartProps> = ({
         {hoveredPoint ? (
           <div className="flex items-center gap-3 text-xs bg-slate-900/90 border border-slate-700/80 px-3 py-1 rounded-lg text-white">
             <span className="text-slate-400">{hoveredPoint.time}</span>
-            <span>Abertura: <strong>{isIndex ? `${hoveredPoint.open.toFixed(2)} pts` : hoveredPoint.open.toFixed(2)}</strong></span>
-            <span>Máx: <strong className="text-emerald-400">{isIndex ? `${hoveredPoint.high.toFixed(2)} pts` : hoveredPoint.high.toFixed(2)}</strong></span>
-            <span>Mín: <strong className="text-rose-400">{isIndex ? `${hoveredPoint.low.toFixed(2)} pts` : hoveredPoint.low.toFixed(2)}</strong></span>
-            <span>Fech: <strong>{isIndex ? `${hoveredPoint.close.toFixed(2)} pts` : hoveredPoint.close.toFixed(2)}</strong></span>
-            {showVolume && <span className="text-slate-400">Vol: {hoveredPoint.volume.toLocaleString('pt-BR')}</span>}
+            <span>{tD3.openShort} <strong>{isIndex ? `${hoveredPoint.open.toFixed(2)} pts` : hoveredPoint.open.toFixed(2)}</strong></span>
+            <span>{tD3.highShort} <strong className="text-emerald-400">{isIndex ? `${hoveredPoint.high.toFixed(2)} pts` : hoveredPoint.high.toFixed(2)}</strong></span>
+            <span>{tD3.lowShort} <strong className="text-rose-400">{isIndex ? `${hoveredPoint.low.toFixed(2)} pts` : hoveredPoint.low.toFixed(2)}</strong></span>
+            <span>{tD3.closeShort} <strong>{isIndex ? `${hoveredPoint.close.toFixed(2)} pts` : hoveredPoint.close.toFixed(2)}</strong></span>
+            {showVolume && <span className="text-slate-400">{tD3.volShort} {hoveredPoint.volume.toLocaleString(locale)}</span>}
           </div>
         ) : (
           <div className="text-[11px] text-slate-500 flex items-center gap-2">
-            <span>Motor Gráfico D3 v7</span>
+            <span>{tD3.engineLabel}</span>
             <span>•</span>
-            <span className="text-emerald-400">Precisão Institucional</span>
+            <span className="text-emerald-400">{tD3.precisionLabel}</span>
           </div>
         )}
       </div>
@@ -548,7 +557,7 @@ export const D3AdvancedChart: React.FC<D3AdvancedChartProps> = ({
                     fontFamily="monospace"
                   >
                     {isIndex
-                      ? tickVal.toLocaleString('pt-BR', { minimumFractionDigits: 0, maximumFractionDigits: 1 })
+                      ? tickVal.toLocaleString(locale, { minimumFractionDigits: 0, maximumFractionDigits: 1 })
                       : tickVal.toFixed(2)}
                   </text>
                 </g>
@@ -719,7 +728,7 @@ export const D3AdvancedChart: React.FC<D3AdvancedChartProps> = ({
                 const label =
                   timeframe === '1D'
                     ? d3.timeFormat('%H:%M')(tDate)
-                    : d3.timeFormat('%d/%m')(tDate);
+                    : tDate.toLocaleDateString(locale, { day: '2-digit', month: '2-digit' });
                 return (
                   <text
                     key={i}
@@ -796,13 +805,13 @@ export const D3AdvancedChart: React.FC<D3AdvancedChartProps> = ({
           {showBenchmark && comparisonAsset && (
             <div className="flex items-center gap-1.5 text-purple-300">
               <span className="w-2.5 h-0.5 bg-purple-400 inline-block"></span>
-              <span>Benchmark: {comparisonAsset.symbol}</span>
+              <span>{tD3.benchmarkPrefix} {comparisonAsset.symbol}</span>
             </div>
           )}
         </div>
 
         <div className="text-slate-500 font-mono text-[10px]">
-          Fuso Horário: GMT-3 (São Paulo / B3) • Transmissão Contínua
+          {tD3.timezoneFooter}
         </div>
       </div>
     </div>

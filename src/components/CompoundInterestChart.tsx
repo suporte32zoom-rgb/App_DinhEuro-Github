@@ -30,6 +30,7 @@ import {
   Zap,
 } from 'lucide-react';
 import { formatCurrencyValue, YearBreakdown } from '../utils/finance';
+import { useI18n } from '../i18n/I18nContext';
 
 export interface CompoundChartProps {
   initialPrincipal: number;
@@ -83,6 +84,7 @@ export const CompoundInterestChart: React.FC<CompoundChartProps> = ({
   totalInterest,
   onUpdateParams,
 }) => {
+  const { t } = useI18n();
   const [chartType, setChartType] = useState<'area' | 'bar' | 'line'>('area');
   const [viewMode, setViewMode] = useState<'evolution' | 'benchmark' | 'contribution'>('evolution');
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -91,7 +93,7 @@ export const CompoundInterestChart: React.FC<CompoundChartProps> = ({
   const evolutionData = [
     {
       year: 0,
-      label: 'Início',
+      label: t.compoundChart.startLabel,
       totalInvested: Math.round(initialPrincipal),
       interestEarned: 0,
       totalBalance: Math.round(initialPrincipal),
@@ -99,7 +101,7 @@ export const CompoundInterestChart: React.FC<CompoundChartProps> = ({
     },
     ...breakdown.map((row) => ({
       year: row.year,
-      label: `Ano ${row.year}`,
+      label: `${t.compoundChart.yearPrefix} ${row.year}`,
       totalInvested: Math.round(row.totalInvested),
       interestEarned: Math.max(0, Math.round(row.interestEarned)),
       totalBalance: Math.round(row.totalBalance),
@@ -118,7 +120,7 @@ export const CompoundInterestChart: React.FC<CompoundChartProps> = ({
   const benchmarkData = [
     {
       year: 0,
-      label: 'Início',
+      label: t.compoundChart.startLabel,
       suaTaxa: Math.round(initialPrincipal),
       cdi100: Math.round(initialPrincipal),
       tesouroIpca: Math.round(initialPrincipal),
@@ -126,7 +128,7 @@ export const CompoundInterestChart: React.FC<CompoundChartProps> = ({
     },
     ...breakdown.map((row, idx) => ({
       year: row.year,
-      label: `Ano ${row.year}`,
+      label: `${t.compoundChart.yearPrefix} ${row.year}`,
       suaTaxa: Math.round(row.totalBalance),
       cdi100: cdi100Sim.breakdown[idx]?.balance || Math.round(row.totalBalance),
       tesouroIpca: ipcaSim.breakdown[idx]?.balance || Math.round(row.totalBalance),
@@ -141,14 +143,14 @@ export const CompoundInterestChart: React.FC<CompoundChartProps> = ({
   const contributionData = [
     {
       year: 0,
-      label: 'Início',
+      label: t.compoundChart.startLabel,
       atual: Math.round(initialPrincipal),
       dobro: Math.round(initialPrincipal),
       semAporte: Math.round(initialPrincipal),
     },
     ...breakdown.map((row, idx) => ({
       year: row.year,
-      label: `Ano ${row.year}`,
+      label: `${t.compoundChart.yearPrefix} ${row.year}`,
       atual: Math.round(row.totalBalance),
       dobro: doubleContribSim.breakdown[idx]?.balance || Math.round(row.totalBalance),
       semAporte: zeroContribSim.breakdown[idx]?.balance || Math.round(row.totalBalance),
@@ -180,7 +182,7 @@ export const CompoundInterestChart: React.FC<CompoundChartProps> = ({
               {label}
             </span>
             <span className="text-[10px] text-slate-400 font-mono-numbers">
-              {years} anos de horizonte
+              {years} {t.compoundChart.yearsHorizonSuffix}
             </span>
           </div>
 
@@ -203,10 +205,10 @@ export const CompoundInterestChart: React.FC<CompoundChartProps> = ({
 
           {viewMode === 'evolution' && (
             <div className="pt-2 border-t border-slate-800/80 text-[10px] text-slate-400 flex items-center justify-between">
-              <span>Impacto dos Juros:</span>
+              <span>{t.compoundChart.interestImpactLabel}</span>
               <span className="font-bold text-emerald-400">
                 {payload[1] && payload[0] && (payload[1].value + payload[0].value) > 0
-                  ? `${(((payload[1]?.value || 0) / ((payload[0]?.value || 1) + (payload[1]?.value || 0))) * 100).toFixed(0)}% do saldo`
+                  ? `${(((payload[1]?.value || 0) / ((payload[0]?.value || 1) + (payload[1]?.value || 0))) * 100).toFixed(0)}% ${t.compoundChart.ofBalanceSuffix}`
                   : '0%'}
               </span>
             </div>
@@ -234,7 +236,7 @@ export const CompoundInterestChart: React.FC<CompoundChartProps> = ({
             <Line
               type="monotone"
               dataKey="suaTaxa"
-              name={`Sua Simulação (${annualRate}% a.a.)`}
+              name={`${t.compoundChart.yourSimulationPrefix} (${annualRate}% ${t.compoundChart.perYearUnit})`}
               stroke="#10B981"
               strokeWidth={3}
               dot={false}
@@ -243,7 +245,7 @@ export const CompoundInterestChart: React.FC<CompoundChartProps> = ({
             <Line
               type="monotone"
               dataKey="cdi100"
-              name="CDI 100% (11.5% a.a.)"
+              name={t.compoundChart.cdi100Label}
               stroke="#06B6D4"
               strokeWidth={2}
               dot={false}
@@ -251,7 +253,7 @@ export const CompoundInterestChart: React.FC<CompoundChartProps> = ({
             <Line
               type="monotone"
               dataKey="tesouroIpca"
-              name="Tesouro IPCA+ (11.2% a.a.)"
+              name={t.compoundChart.tesouroIpcaLabel}
               stroke="#A855F7"
               strokeWidth={2}
               strokeDasharray="4 4"
@@ -260,7 +262,7 @@ export const CompoundInterestChart: React.FC<CompoundChartProps> = ({
             <Line
               type="monotone"
               dataKey="poupanca"
-              name="Poupança (6.17% a.a.)"
+              name={t.compoundChart.poupancaLabel}
               stroke="#EF4444"
               strokeWidth={2}
               dot={false}
@@ -300,7 +302,7 @@ export const CompoundInterestChart: React.FC<CompoundChartProps> = ({
             <Area
               type="monotone"
               dataKey="dobro"
-              name={`Aporte em Dobro (${formatCurrencyValue(monthlyContribution * 2, 'BRL', 0)}/mês)`}
+              name={`${t.compoundChart.doubleContribPrefix} (${formatCurrencyValue(monthlyContribution * 2, 'BRL', 0)}${t.compoundChart.perMonthSuffix})`}
               stroke="#10B981"
               strokeWidth={2}
               fillOpacity={1}
@@ -309,7 +311,7 @@ export const CompoundInterestChart: React.FC<CompoundChartProps> = ({
             <Area
               type="monotone"
               dataKey="atual"
-              name={`Aporte Atual (${formatCurrencyValue(monthlyContribution, 'BRL', 0)}/mês)`}
+              name={`${t.compoundChart.currentContribPrefix} (${formatCurrencyValue(monthlyContribution, 'BRL', 0)}${t.compoundChart.perMonthSuffix})`}
               stroke="#3B82F6"
               strokeWidth={2}
               fillOpacity={1}
@@ -318,7 +320,7 @@ export const CompoundInterestChart: React.FC<CompoundChartProps> = ({
             <Area
               type="monotone"
               dataKey="semAporte"
-              name="Sem Aportes Mensais (Só Inicial)"
+              name={t.compoundChart.noContribLabel}
               stroke="#64748B"
               strokeWidth={2}
               strokeDasharray="4 4"
@@ -344,8 +346,8 @@ export const CompoundInterestChart: React.FC<CompoundChartProps> = ({
             />
             <Tooltip content={<CustomTooltip />} />
             <Legend wrapperStyle={{ fontSize: 11, paddingTop: 10 }} />
-            <Bar dataKey="totalInvested" name="Total Aportado" stackId="a" fill="#3B82F6" radius={[0, 0, 0, 0]} />
-            <Bar dataKey="interestEarned" name="Juros Acumulados" stackId="a" fill="#10B981" radius={[4, 4, 0, 0]} />
+            <Bar dataKey="totalInvested" name={t.compoundChart.totalInvestedBar} stackId="a" fill="#3B82F6" radius={[0, 0, 0, 0]} />
+            <Bar dataKey="interestEarned" name={t.compoundChart.accumInterestBar} stackId="a" fill="#10B981" radius={[4, 4, 0, 0]} />
           </BarChart>
         </ResponsiveContainer>
       );
@@ -367,7 +369,7 @@ export const CompoundInterestChart: React.FC<CompoundChartProps> = ({
             <Line
               type="monotone"
               dataKey="totalBalance"
-              name="Patrimônio Total"
+              name={t.compoundChart.totalEquityLine}
               stroke="#F59E0B"
               strokeWidth={3}
               dot={{ r: 3, fill: '#F59E0B' }}
@@ -375,7 +377,7 @@ export const CompoundInterestChart: React.FC<CompoundChartProps> = ({
             <Line
               type="monotone"
               dataKey="interestEarned"
-              name="Juros Compostos"
+              name={t.compoundChart.compoundInterestLine}
               stroke="#10B981"
               strokeWidth={2}
               dot={false}
@@ -383,7 +385,7 @@ export const CompoundInterestChart: React.FC<CompoundChartProps> = ({
             <Line
               type="monotone"
               dataKey="totalInvested"
-              name="Total Aportado"
+              name={t.compoundChart.totalInvestedBar}
               stroke="#3B82F6"
               strokeWidth={2}
               strokeDasharray="4 4"
@@ -420,7 +422,7 @@ export const CompoundInterestChart: React.FC<CompoundChartProps> = ({
           <Area
             type="monotone"
             dataKey="totalInvested"
-            name="Total Aportado (Seu Capital)"
+            name={t.compoundChart.totalInvestedArea}
             stackId="1"
             stroke="#3B82F6"
             strokeWidth={2}
@@ -430,7 +432,7 @@ export const CompoundInterestChart: React.FC<CompoundChartProps> = ({
           <Area
             type="monotone"
             dataKey="interestEarned"
-            name="Juros Compostos (Bola de Neve)"
+            name={t.compoundChart.compoundInterestArea}
             stackId="1"
             stroke="#10B981"
             strokeWidth={2}
@@ -458,7 +460,7 @@ export const CompoundInterestChart: React.FC<CompoundChartProps> = ({
             }`}
           >
             <TrendingUp className="w-3.5 h-3.5" />
-            <span>Evolução do Capital</span>
+            <span>{t.compoundChart.viewEvolution}</span>
           </button>
 
           <button
@@ -471,7 +473,7 @@ export const CompoundInterestChart: React.FC<CompoundChartProps> = ({
             }`}
           >
             <PiggyBank className="w-3.5 h-3.5" />
-            <span>Comparador Renda Fixa</span>
+            <span>{t.compoundChart.viewBenchmark}</span>
           </button>
 
           <button
@@ -484,7 +486,7 @@ export const CompoundInterestChart: React.FC<CompoundChartProps> = ({
             }`}
           >
             <Coins className="w-3.5 h-3.5" />
-            <span>Impacto do Aporte</span>
+            <span>{t.compoundChart.viewContribution}</span>
           </button>
         </div>
 
@@ -495,7 +497,7 @@ export const CompoundInterestChart: React.FC<CompoundChartProps> = ({
               <button
                 type="button"
                 onClick={() => setChartType('area')}
-                title="Área Empilhada"
+                title={t.compoundChart.typeAreaTitle}
                 className={`p-1.5 rounded-lg transition cursor-pointer ${
                   chartType === 'area' ? 'bg-slate-800 text-emerald-400' : 'hover:text-white'
                 }`}
@@ -505,7 +507,7 @@ export const CompoundInterestChart: React.FC<CompoundChartProps> = ({
               <button
                 type="button"
                 onClick={() => setChartType('bar')}
-                title="Barras"
+                title={t.compoundChart.typeBarTitle}
                 className={`p-1.5 rounded-lg transition cursor-pointer ${
                   chartType === 'bar' ? 'bg-slate-800 text-emerald-400' : 'hover:text-white'
                 }`}
@@ -515,7 +517,7 @@ export const CompoundInterestChart: React.FC<CompoundChartProps> = ({
               <button
                 type="button"
                 onClick={() => setChartType('line')}
-                title="Linhas"
+                title={t.compoundChart.typeLineTitle}
                 className={`p-1.5 rounded-lg transition cursor-pointer ${
                   chartType === 'line' ? 'bg-slate-800 text-emerald-400' : 'hover:text-white'
                 }`}
@@ -529,10 +531,10 @@ export const CompoundInterestChart: React.FC<CompoundChartProps> = ({
             type="button"
             onClick={() => setIsModalOpen(true)}
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-800 hover:border-slate-700 text-xs text-slate-300 hover:text-white transition cursor-pointer"
-            title="Expandir Gráfico no Modal"
+            title={t.compoundChart.expandModalTitle}
           >
             <Maximize2 className="w-3.5 h-3.5 text-emerald-400" />
-            <span className="hidden sm:inline">Expandir no Modal</span>
+            <span className="hidden sm:inline">{t.compoundChart.expandModalLabel}</span>
           </button>
         </div>
       </div>
@@ -543,13 +545,13 @@ export const CompoundInterestChart: React.FC<CompoundChartProps> = ({
           <div className="flex items-center gap-2">
             <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
             <h4 className="text-xs font-bold text-white uppercase tracking-wider">
-              {viewMode === 'evolution' && 'Evolução Patrimonial no Tempo (Recharts Engine)'}
-              {viewMode === 'benchmark' && 'Simulação Comparativa: Sua Carteira vs Benchmarks'}
-              {viewMode === 'contribution' && 'Curva de Sensibilidade por Intensidade de Aporte'}
+              {viewMode === 'evolution' && t.compoundChart.headingEvolution}
+              {viewMode === 'benchmark' && t.compoundChart.headingBenchmark}
+              {viewMode === 'contribution' && t.compoundChart.headingContribution}
             </h4>
           </div>
           <span className="text-[11px] text-slate-400 font-mono-numbers">
-            {years} anos • {annualRate}% a.a.
+            {years} {t.compoundChart.yearsUnit} • {annualRate}% {t.compoundChart.perYearUnit}
           </span>
         </div>
 
@@ -562,15 +564,16 @@ export const CompoundInterestChart: React.FC<CompoundChartProps> = ({
           <div className="flex items-center justify-between">
             <span className="text-[11px] text-slate-400 flex items-center gap-1.5">
               <Sparkles className="w-3.5 h-3.5 text-amber-400" />
-              Multiplicador de Capital
+              {t.compoundChart.multiplierTitle}
             </span>
             <span className="text-xs font-black text-amber-400 font-mono-numbers">
               {multiplier}x
             </span>
           </div>
           <p className="text-[11px] text-slate-300 leading-snug">
-            Para cada R$ 1,00 aportado, seu patrimônio final terá{' '}
-            <strong className="text-white font-mono-numbers">R$ {multiplier}</strong>.
+            {t.compoundChart.multiplierBodyPrefix}{' '}
+            <strong className="text-white font-mono-numbers">R$ {multiplier}</strong>
+            {t.compoundChart.multiplierBodySuffix ? ` ${t.compoundChart.multiplierBodySuffix}` : '.'}
           </p>
         </div>
 
@@ -578,14 +581,14 @@ export const CompoundInterestChart: React.FC<CompoundChartProps> = ({
           <div className="flex items-center justify-between">
             <span className="text-[11px] text-slate-400 flex items-center gap-1.5">
               <Coins className="w-3.5 h-3.5 text-emerald-400" />
-              Renda Passiva Mensal
+              {t.compoundChart.passiveIncomeTitle}
             </span>
             <span className="text-xs font-black text-emerald-400 font-mono-numbers">
-              {formatCurrencyValue(passiveMonthlyIncome, 'BRL', 0)}/mês
+              {formatCurrencyValue(passiveMonthlyIncome, 'BRL', 0)}{t.compoundChart.perMonthSuffix}
             </span>
           </div>
           <p className="text-[11px] text-slate-300 leading-snug">
-            Retirada perpétua sustentável de 0,8% a.m. sem consumir o montante principal.
+            {t.compoundChart.passiveIncomeBody}
           </p>
         </div>
 
@@ -593,16 +596,16 @@ export const CompoundInterestChart: React.FC<CompoundChartProps> = ({
           <div className="flex items-center justify-between">
             <span className="text-[11px] text-slate-400 flex items-center gap-1.5">
               <Zap className="w-3.5 h-3.5 text-cyan-400" />
-              Ponto de Inflexão
+              {t.compoundChart.tippingPointTitle}
             </span>
             <span className="text-xs font-black text-cyan-400">
-              {tippingPoint ? `Ano ${tippingPoint.year}` : `Ano ${Math.min(years, 6)}`}
+              {tippingPoint ? `${t.compoundChart.yearPrefix} ${tippingPoint.year}` : `${t.compoundChart.yearPrefix} ${Math.min(years, 6)}`}
             </span>
           </div>
           <p className="text-[11px] text-slate-300 leading-snug">
             {tippingPoint
-              ? `No Ano ${tippingPoint.year}, os juros anuais ultrapassam seus aportes anuais.`
-              : 'O efeito bola de neve supera seus aportes com o tempo.'}
+              ? `${t.compoundChart.tippingPointBodyFoundPrefix} ${tippingPoint.year}${t.compoundChart.tippingPointBodyFoundSuffix}`
+              : t.compoundChart.tippingPointBodyDefault}
           </p>
         </div>
       </div>
@@ -623,13 +626,13 @@ export const CompoundInterestChart: React.FC<CompoundChartProps> = ({
                 </div>
                 <div>
                   <h3 className="text-base sm:text-lg font-bold text-white flex items-center gap-2">
-                    <span>Simulação Interativa de Juros Compostos & Renda Fixa</span>
+                    <span>{t.compoundChart.modalTitle}</span>
                     <span className="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 text-[10px] font-bold">
                       DinhEuro Hub
                     </span>
                   </h3>
                   <p className="text-xs text-slate-400">
-                    Projeção completa da evolução patrimonial, efeito bola de neve e comparação de rentabilidade.
+                    {t.compoundChart.modalSubtitle}
                   </p>
                 </div>
               </div>
@@ -648,27 +651,27 @@ export const CompoundInterestChart: React.FC<CompoundChartProps> = ({
               {/* Controls inside modal */}
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 bg-[#070e1b] p-4 rounded-xl border border-slate-800/80">
                 <div>
-                  <label className="text-[11px] text-slate-400 block mb-1">Aporte Inicial:</label>
+                  <label className="text-[11px] text-slate-400 block mb-1">{t.compoundChart.modalInitial}</label>
                   <div className="text-sm font-bold font-mono-numbers text-white">
                     {formatCurrencyValue(initialPrincipal, 'BRL')}
                   </div>
                 </div>
                 <div>
-                  <label className="text-[11px] text-slate-400 block mb-1">Aporte Mensal:</label>
+                  <label className="text-[11px] text-slate-400 block mb-1">{t.compoundChart.modalMonthly}</label>
                   <div className="text-sm font-bold font-mono-numbers text-blue-400">
-                    {formatCurrencyValue(monthlyContribution, 'BRL')}/mês
+                    {formatCurrencyValue(monthlyContribution, 'BRL')}{t.compoundChart.perMonthSuffix}
                   </div>
                 </div>
                 <div>
-                  <label className="text-[11px] text-slate-400 block mb-1">Taxa Anual:</label>
+                  <label className="text-[11px] text-slate-400 block mb-1">{t.compoundChart.modalRate}</label>
                   <div className="text-sm font-bold font-mono-numbers text-emerald-400">
-                    {annualRate}% a.a.
+                    {annualRate}% {t.compoundChart.perYearUnit}
                   </div>
                 </div>
                 <div>
-                  <label className="text-[11px] text-slate-400 block mb-1">Horizonte:</label>
+                  <label className="text-[11px] text-slate-400 block mb-1">{t.compoundChart.modalHorizon}</label>
                   <div className="text-sm font-bold font-mono-numbers text-amber-400">
-                    {years} Anos ({years * 12} meses)
+                    {years} {t.compoundChart.yearsUnit} ({years * 12} {t.tools.monthsUnit})
                   </div>
                 </div>
               </div>
@@ -685,7 +688,7 @@ export const CompoundInterestChart: React.FC<CompoundChartProps> = ({
                         : 'bg-slate-800 text-slate-300 hover:bg-slate-700'
                     }`}
                   >
-                    Evolução do Capital
+                    {t.compoundChart.viewEvolution}
                   </button>
                   <button
                     type="button"
@@ -696,7 +699,7 @@ export const CompoundInterestChart: React.FC<CompoundChartProps> = ({
                         : 'bg-slate-800 text-slate-300 hover:bg-slate-700'
                     }`}
                   >
-                    Comparador Renda Fixa
+                    {t.compoundChart.viewBenchmark}
                   </button>
                   <button
                     type="button"
@@ -707,12 +710,12 @@ export const CompoundInterestChart: React.FC<CompoundChartProps> = ({
                         : 'bg-slate-800 text-slate-300 hover:bg-slate-700'
                     }`}
                   >
-                    Sensibilidade de Aportes
+                    {t.compoundChart.viewContribution}
                   </button>
                 </div>
 
                 <div className="text-xs text-slate-400 font-mono-numbers">
-                  Montante Final: <strong className="text-amber-400 text-sm">{formatCurrencyValue(finalBalance, 'BRL')}</strong>
+                  {t.compoundChart.modalFinalBalance} <strong className="text-amber-400 text-sm">{formatCurrencyValue(finalBalance, 'BRL')}</strong>
                 </div>
               </div>
 
@@ -725,10 +728,10 @@ export const CompoundInterestChart: React.FC<CompoundChartProps> = ({
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
                   <h4 className="text-xs font-bold text-white uppercase tracking-wider">
-                    Tabela Detalhada Ano a Ano
+                    {t.compoundChart.modalTableTitle}
                   </h4>
                   <span className="text-[11px] text-slate-400 font-mono-numbers">
-                    Juros representam {interestPercentage}% do patrimônio
+                    {t.compoundChart.modalTableInterestSharePrefix} {interestPercentage}{t.compoundChart.modalTableInterestShareSuffix}
                   </span>
                 </div>
 
@@ -736,12 +739,12 @@ export const CompoundInterestChart: React.FC<CompoundChartProps> = ({
                   <table className="w-full text-left text-xs">
                     <thead className="bg-slate-900/90 text-slate-400 border-b border-slate-800 sticky top-0 backdrop-blur-sm">
                       <tr>
-                        <th className="py-2.5 px-3">Ano</th>
-                        <th className="py-2.5 px-3 text-right">Total Investido</th>
-                        <th className="py-2.5 px-3 text-right">Juros Acumulados</th>
-                        <th className="py-2.5 px-3 text-right">Saldo Final</th>
-                        <th className="py-2.5 px-3 text-right">% Juros</th>
-                        <th className="py-2.5 px-3 text-right">Renda Passiva Est.</th>
+                        <th className="py-2.5 px-3">{t.compoundChart.colYear}</th>
+                        <th className="py-2.5 px-3 text-right">{t.compoundChart.colTotalInvested}</th>
+                        <th className="py-2.5 px-3 text-right">{t.compoundChart.colInterest}</th>
+                        <th className="py-2.5 px-3 text-right">{t.compoundChart.colFinalBalance}</th>
+                        <th className="py-2.5 px-3 text-right">{t.compoundChart.colPctInterest}</th>
+                        <th className="py-2.5 px-3 text-right">{t.compoundChart.colEstPassive}</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-slate-800/60 font-mono-numbers text-[11px]">
@@ -758,10 +761,10 @@ export const CompoundInterestChart: React.FC<CompoundChartProps> = ({
                             }`}
                           >
                             <td className="py-2 px-3 font-semibold text-white flex items-center gap-1.5">
-                              <span>Ano {row.year}</span>
+                              <span>{t.compoundChart.yearPrefix} {row.year}</span>
                               {isTipping && (
                                 <span className="px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-400 text-[9px] font-bold">
-                                  Inflexão
+                                  {t.compoundChart.tippingBadge}
                                 </span>
                               )}
                             </td>
@@ -778,7 +781,7 @@ export const CompoundInterestChart: React.FC<CompoundChartProps> = ({
                               {pct}%
                             </td>
                             <td className="py-2 px-3 text-right text-cyan-400 font-medium">
-                              {formatCurrencyValue(estIncome, 'BRL', 0)}/mês
+                              {formatCurrencyValue(estIncome, 'BRL', 0)}{t.compoundChart.perMonthSuffix}
                             </td>
                           </tr>
                         );
@@ -793,14 +796,14 @@ export const CompoundInterestChart: React.FC<CompoundChartProps> = ({
             <div className="p-4 border-t border-slate-800 bg-[#080f1e] flex items-center justify-between text-xs">
               <span className="text-slate-400 flex items-center gap-1.5">
                 <Info className="w-4 h-4 text-emerald-400" />
-                Cálculo com juros compostos capitalizados mensalmente.
+                {t.compoundChart.modalFooterNote}
               </span>
               <button
                 type="button"
                 onClick={() => setIsModalOpen(false)}
                 className="px-4 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-medium transition cursor-pointer"
               >
-                Fechar Modal
+                {t.compoundChart.closeModal}
               </button>
             </div>
           </div>

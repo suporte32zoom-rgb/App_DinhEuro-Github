@@ -17,6 +17,9 @@ import {
 } from 'lucide-react';
 import { useMarket } from '../context/MarketContext';
 import { getDualCurrencyDisplay } from '../utils/finance';
+import { useI18n } from '../i18n/I18nContext';
+import { getNumberLocale } from '../i18n/translations';
+import { TRADING_TRANSLATIONS } from '../i18n/tradingTranslations';
 
 interface TapeReadingAsset {
   symbol: string;
@@ -83,6 +86,9 @@ interface BrokerPosition {
 
 export const TapeReadingView: React.FC = () => {
   const { universalRates, assets } = useMarket();
+  const { lang } = useI18n();
+  const locale = getNumberLocale(lang);
+  const tTape = TRADING_TRANSLATIONS[lang].tapeReading;
 
   // Dynamic assets matching real-time market quotes
   const dynamicTapeAssets = useMemo(() => {
@@ -199,7 +205,7 @@ export const TapeReadingView: React.FC = () => {
       if (sBroker === bBroker) sBroker = 'BTG Pactual';
 
       const tradeTime = new Date(now - j * 800);
-      const timeStr = tradeTime.toLocaleTimeString('pt-BR', { hour12: false }) + '.' + String(tradeTime.getMilliseconds()).padStart(3, '0');
+      const timeStr = tradeTime.toLocaleTimeString(locale, { hour12: false }) + '.' + String(tradeTime.getMilliseconds()).padStart(3, '0');
 
       initialTrades.push({
         id: 'trade-' + j + '-' + now,
@@ -213,7 +219,7 @@ export const TapeReadingView: React.FC = () => {
       });
     }
     setTapeData(initialTrades);
-  }, [selectedAsset]);
+  }, [selectedAsset, locale]);
 
   // Real-time ticking stream
   useEffect(() => {
@@ -240,7 +246,7 @@ export const TapeReadingView: React.FC = () => {
 
       const now = new Date();
       const timeStr =
-        now.toLocaleTimeString('pt-BR', { hour12: false }) +
+        now.toLocaleTimeString(locale, { hour12: false }) +
         '.' +
         String(now.getMilliseconds()).padStart(3, '0');
 
@@ -278,7 +284,7 @@ export const TapeReadingView: React.FC = () => {
     }, intervalTime);
 
     return () => clearInterval(interval);
-  }, [isPlaying, speedMultiplier, currentPrice, selectedAsset]);
+  }, [isPlaying, speedMultiplier, currentPrice, selectedAsset, locale]);
 
   // Filtered Tape trades
   const filteredTape = useMemo(() => {
@@ -334,14 +340,14 @@ export const TapeReadingView: React.FC = () => {
 
   const formatPrice = (val: number) => {
     if (selectedAsset.tickSize < 1) {
-      return val.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      return val.toLocaleString(locale, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
     }
-    return val.toLocaleString('pt-BR', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+    return val.toLocaleString(locale, { minimumFractionDigits: 0, maximumFractionDigits: 0 });
   };
 
   const handleDomClick = (price: number, side: 'BUY' | 'SELL') => {
-    const action = side === 'BUY' ? 'Ordem Compra Limitada' : 'Ordem Venda Limitada';
-    setLastNotification(`${action} enviada em ${formatPrice(price)} ${selectedAsset.unit}`);
+    const action = side === 'BUY' ? tTape.buyLimitSent : tTape.sellLimitSent;
+    setLastNotification(`${action} ${tTape.sentAtWord} ${formatPrice(price)} ${selectedAsset.unit}`);
     setTimeout(() => setLastNotification(null), 3000);
   };
 
@@ -360,12 +366,12 @@ export const TapeReadingView: React.FC = () => {
                 const found = dynamicTapeAssets.find((a) => a.symbol === e.target.value);
                 if (found) setSelectedAsset(found);
               }}
-              aria-label="Selecionar ativo para Tape Reading"
+              aria-label={tTape.selectAssetAria}
               className="bg-[#0f1a2e] border border-slate-700 hover:border-emerald-500 rounded-md pl-2 pr-6 py-1 text-xs font-black text-white font-mono-numbers focus:outline-none cursor-pointer"
             >
               {dynamicTapeAssets.map((a) => (
                 <option key={a.symbol} value={a.symbol}>
-                  {a.symbol} • {a.name}
+                  {a.symbol} • {tTape.assetOverrides[a.symbol]?.name || a.name}
                 </option>
               ))}
             </select>
@@ -396,8 +402,8 @@ export const TapeReadingView: React.FC = () => {
             </span>
             <span className="text-[10px] text-emerald-400 font-medium">
               (≈ {selectedAsset.unit === 'R$' || selectedAsset.symbol.includes('WIN') || selectedAsset.symbol.includes('WDO')
-                ? getDualCurrencyDisplay(currentPrice, 'BRL', universalRates).secondaryFormatted
-                : getDualCurrencyDisplay(currentPrice, 'USD', universalRates).secondaryFormatted})
+                ? getDualCurrencyDisplay(currentPrice, 'BRL', universalRates, false, locale).secondaryFormatted
+                : getDualCurrencyDisplay(currentPrice, 'USD', universalRates, false, locale).secondaryFormatted})
             </span>
           </div>
         </div>
@@ -414,18 +420,18 @@ export const TapeReadingView: React.FC = () => {
             >
               {cvdValue >= 0 ? <ArrowUpRight className="w-3 h-3" /> : <ArrowDownRight className="w-3 h-3" />}
               {cvdValue >= 0 ? '+' : ''}
-              {cvdValue.toLocaleString('pt-BR')} lotes
+              {cvdValue.toLocaleString(locale)} {tTape.lotsUnit}
             </strong>
           </div>
 
           {/* Aggression Ratio */}
           <div className="bg-[#060c18] border border-slate-800/90 rounded px-2 py-0.5 flex items-center gap-2 min-w-[170px]">
-            <span className="text-emerald-400 font-bold text-[10px]">C {buyRatio}%</span>
+            <span className="text-emerald-400 font-bold text-[10px]">{tTape.buyLetter} {buyRatio}%</span>
             <div className="flex-1 h-1.5 rounded-full bg-slate-800 flex overflow-hidden">
               <div className="bg-emerald-500 h-full transition-all" style={{ width: `${buyRatio}%` }} />
               <div className="bg-rose-500 h-full transition-all" style={{ width: `${sellRatio}%` }} />
             </div>
-            <span className="text-rose-400 font-bold text-[10px]">V {sellRatio}%</span>
+            <span className="text-rose-400 font-bold text-[10px]">{tTape.sellLetter} {sellRatio}%</span>
           </div>
         </div>
 
@@ -441,7 +447,7 @@ export const TapeReadingView: React.FC = () => {
             }`}
           >
             {isPlaying ? <Pause className="w-3 h-3" /> : <Play className="w-3 h-3" />}
-            <span>{isPlaying ? 'Pausar' : 'Play'}</span>
+            <span>{isPlaying ? tTape.pauseBtn : tTape.playBtn}</span>
           </button>
 
           {/* Speed */}
@@ -479,7 +485,7 @@ export const TapeReadingView: React.FC = () => {
                   minTradeFilter === f ? 'bg-blue-600 text-white' : 'text-slate-400 hover:text-white'
                 }`}
               >
-                {f === 0 ? 'Todos' : `≥${f}`}
+                {f === 0 ? tTape.allFilter : `≥${f}`}
               </button>
             ))}
           </div>
@@ -488,10 +494,10 @@ export const TapeReadingView: React.FC = () => {
           <select
             value={brokerFilter}
             onChange={(e) => setBrokerFilter(e.target.value)}
-            aria-label="Filtrar corretora"
+            aria-label={tTape.filterBrokerAria}
             className="bg-[#060c18] border border-slate-800 text-slate-300 text-[10px] rounded px-1.5 py-0.5 outline-none"
           >
-            <option value="ALL">Todas Corretoras</option>
+            <option value="ALL">{tTape.allBrokersOption}</option>
             {BROKERS_LIST.map((b) => (
               <option key={b} value={b}>
                 {b}
@@ -520,18 +526,18 @@ export const TapeReadingView: React.FC = () => {
           <div className="flex items-center justify-between pb-1 border-b border-slate-800/80 mb-1 shrink-0 text-xs">
             <div className="flex items-center gap-1.5">
               <BarChart3 className="w-3.5 h-3.5 text-emerald-400" />
-              <span className="font-bold text-white uppercase text-[11px] tracking-wider">Book de Profundidade (DOM)</span>
+              <span className="font-bold text-white uppercase text-[11px] tracking-wider">{tTape.domTitle}</span>
             </div>
-            <span className="text-[10px] text-slate-400 font-mono-numbers">{domLevels.length} Níveis</span>
+            <span className="text-[10px] text-slate-400 font-mono-numbers">{domLevels.length} {tTape.levelsUnit}</span>
           </div>
 
           {/* Columns Header */}
           <div className="grid grid-cols-12 text-[9px] font-bold text-slate-400 uppercase py-0.5 px-1 bg-[#060c18] rounded mb-1 shrink-0">
-            <div className="col-span-2 text-left pl-0.5">Ord</div>
-            <div className="col-span-3 text-right text-sky-400">Bid (Compra)</div>
-            <div className="col-span-2 text-center text-slate-200">Preço</div>
-            <div className="col-span-3 text-left text-rose-400 pl-1">Ask (Venda)</div>
-            <div className="col-span-2 text-right pr-0.5">Ord</div>
+            <div className="col-span-2 text-left pl-0.5">{tTape.colOrd}</div>
+            <div className="col-span-3 text-right text-sky-400">{tTape.colBid}</div>
+            <div className="col-span-2 text-center text-slate-200">{tTape.colPrice}</div>
+            <div className="col-span-3 text-left text-rose-400 pl-1">{tTape.colAsk}</div>
+            <div className="col-span-2 text-right pr-0.5">{tTape.colOrd}</div>
           </div>
 
           {/* DOM Ladder Rows (Ultra Dense) */}
@@ -604,13 +610,13 @@ export const TapeReadingView: React.FC = () => {
               onClick={() => handleDomClick(currentPrice, 'BUY')}
               className="py-1 rounded bg-emerald-600 hover:bg-emerald-500 text-white font-bold uppercase transition flex items-center justify-center gap-1 cursor-pointer"
             >
-              <ArrowUpRight className="w-3 h-3" /> Comprar Mercado
+              <ArrowUpRight className="w-3 h-3" /> {tTape.buyMarketBtn}
             </button>
             <button
               onClick={() => handleDomClick(currentPrice, 'SELL')}
               className="py-1 rounded bg-rose-600 hover:bg-rose-500 text-white font-bold uppercase transition flex items-center justify-center gap-1 cursor-pointer"
             >
-              <ArrowDownRight className="w-3 h-3" /> Vender Mercado
+              <ArrowDownRight className="w-3 h-3" /> {tTape.sellMarketBtn}
             </button>
           </div>
         </div>
@@ -622,18 +628,18 @@ export const TapeReadingView: React.FC = () => {
           <div className="flex items-center justify-between pb-1 border-b border-slate-800/80 mb-1 shrink-0 text-xs">
             <div className="flex items-center gap-1.5">
               <Activity className="w-3.5 h-3.5 text-sky-400" />
-              <span className="font-bold text-white uppercase text-[11px] tracking-wider">Times & Trades (Fita)</span>
+              <span className="font-bold text-white uppercase text-[11px] tracking-wider">{tTape.tapeTitle}</span>
             </div>
-            <span className="text-[10px] text-slate-400 font-mono-numbers">{filteredTape.length} Negócios</span>
+            <span className="text-[10px] text-slate-400 font-mono-numbers">{filteredTape.length} {tTape.tradesCountLabel}</span>
           </div>
 
           {/* Tape Header */}
           <div className="grid grid-cols-12 text-[9px] font-bold text-slate-400 uppercase py-0.5 px-1 bg-[#060c18] rounded mb-1 shrink-0">
-            <div className="col-span-3 text-left">Hora</div>
-            <div className="col-span-3 text-center">Preço</div>
-            <div className="col-span-2 text-right">Lote</div>
-            <div className="col-span-2 text-center text-sky-400">Comprador</div>
-            <div className="col-span-2 text-center text-rose-400">Vendedor</div>
+            <div className="col-span-3 text-left">{tTape.colTime}</div>
+            <div className="col-span-3 text-center">{tTape.colPrice}</div>
+            <div className="col-span-2 text-right">{tTape.colLot}</div>
+            <div className="col-span-2 text-center text-sky-400">{tTape.colBuyer}</div>
+            <div className="col-span-2 text-center text-rose-400">{tTape.colSeller}</div>
           </div>
 
           {/* Tape Rows */}
@@ -673,13 +679,13 @@ export const TapeReadingView: React.FC = () => {
           {/* Tape Legend Footer */}
           <div className="pt-1.5 border-t border-slate-800/80 flex items-center justify-between text-[9px] text-slate-400 shrink-0">
             <span className="flex items-center gap-1">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> Agressor Compra
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> {tTape.aggressorBuy}
             </span>
             <span className="flex items-center gap-1">
-              <span className="w-1.5 h-1.5 rounded-full bg-rose-400"></span> Agressor Venda
+              <span className="w-1.5 h-1.5 rounded-full bg-rose-400"></span> {tTape.aggressorSell}
             </span>
             <span className="flex items-center gap-1">
-              <span className="w-1.5 h-1.5 rounded-full bg-amber-400"></span> Lote Big
+              <span className="w-1.5 h-1.5 rounded-full bg-amber-400"></span> {tTape.bigLotLegend}
             </span>
           </div>
         </div>
@@ -691,16 +697,16 @@ export const TapeReadingView: React.FC = () => {
           <div className="flex items-center justify-between pb-1 border-b border-slate-800/80 mb-1 shrink-0 text-xs">
             <div className="flex items-center gap-1.5">
               <Shield className="w-3.5 h-3.5 text-amber-400" />
-              <span className="font-bold text-white uppercase text-[11px] tracking-wider">Saldo de Players</span>
+              <span className="font-bold text-white uppercase text-[11px] tracking-wider">{tTape.playersTitle}</span>
             </div>
-            <span className="text-[10px] text-slate-400">Institucional</span>
+            <span className="text-[10px] text-slate-400">{tTape.institutionalTag}</span>
           </div>
 
           {/* Ranking Header */}
           <div className="grid grid-cols-12 text-[9px] font-bold text-slate-400 uppercase py-0.5 px-1 bg-[#060c18] rounded mb-1 shrink-0">
-            <div className="col-span-5 text-left">Corretora</div>
-            <div className="col-span-4 text-right">Saldo Líq</div>
-            <div className="col-span-3 text-right">Vol %</div>
+            <div className="col-span-5 text-left">{tTape.colBroker}</div>
+            <div className="col-span-4 text-right">{tTape.colNetBalance}</div>
+            <div className="col-span-3 text-right">{tTape.colVolPct}</div>
           </div>
 
           {/* Broker Positioning List */}
@@ -713,14 +719,14 @@ export const TapeReadingView: React.FC = () => {
                     <div className="col-span-5 font-bold text-white truncate text-[10px]">{b.broker}</div>
                     <div className={`col-span-4 text-right font-bold ${isLong ? 'text-emerald-400' : 'text-rose-400'}`}>
                       {isLong ? '+' : ''}
-                      {b.netQty.toLocaleString('pt-BR')}
+                      {b.netQty.toLocaleString(locale)}
                     </div>
                     <div className="col-span-3 text-right text-slate-400">{b.volPercent}%</div>
                   </div>
                   <div className="flex items-center gap-1 text-[8px] text-slate-400 pt-0.5">
-                    <span className="text-emerald-400 font-semibold">{b.buyQty} C</span>
+                    <span className="text-emerald-400 font-semibold">{b.buyQty} {tTape.buyLetter}</span>
                     <span className="text-slate-600">/</span>
-                    <span className="text-rose-400 font-semibold">{b.sellQty} V</span>
+                    <span className="text-rose-400 font-semibold">{b.sellQty} {tTape.sellLetter}</span>
                   </div>
                 </div>
               );
@@ -730,12 +736,12 @@ export const TapeReadingView: React.FC = () => {
           {/* Compact Educational Tips Dock at bottom */}
           <div className="pt-1.5 border-t border-slate-800/80 shrink-0 space-y-1 text-[9px] text-slate-400">
             <div className="bg-[#060c18] p-1.5 rounded border border-slate-800/70">
-              <span className="text-emerald-400 font-bold block">Absorção Institucional:</span>
-              <span>Grandes ordens passivas sustentam níveis de preço mesmo sob forte agressão contrária.</span>
+              <span className="text-emerald-400 font-bold block">{tTape.tip1Title}</span>
+              <span>{tTape.tip1Desc}</span>
             </div>
             <div className="bg-[#060c18] p-1.5 rounded border border-slate-800/70">
-              <span className="text-amber-400 font-bold block">Delta & Exaustão (CVD):</span>
-              <span>Divergência entre nova máxima do preço e queda do CVD antecipa exaustão compradora.</span>
+              <span className="text-amber-400 font-bold block">{tTape.tip2Title}</span>
+              <span>{tTape.tip2Desc}</span>
             </div>
           </div>
         </div>

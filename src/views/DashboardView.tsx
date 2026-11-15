@@ -14,6 +14,12 @@ import {
 } from 'lucide-react';
 import { useMarket } from '../context/MarketContext';
 import { useI18n } from '../i18n/I18nContext';
+import { getNumberLocale } from '../i18n/translations';
+import {
+  getLocalizedAssetName,
+  getLocalizedAssetSymbol,
+  localizeNewsItem,
+} from '../i18n/marketDataTranslations';
 import { formatCurrencyValue, convertCurrency } from '../utils/finance';
 import { DualPrice } from '../components/DualPrice';
 import { FocusRadarPanel } from '../components/FocusRadarPanel';
@@ -105,11 +111,11 @@ export const DashboardView: React.FC = () => {
                   openAssetDetail('eur_brl');
                 }}
                 className="bg-slate-900/60 hover:bg-slate-800/80 rounded-xl p-2.5 border border-slate-800 hover:border-emerald-500/50 cursor-pointer transition shadow-sm"
-                title="Ver gráfico e cotação de EUR / BRL"
+                title={t.dashboard.tooltips.eurBrl}
               >
                 <div className="flex items-center justify-between">
                   <span className="text-[10px] text-slate-400 uppercase font-medium">EUR / BRL</span>
-                  <span className="text-[9px] text-emerald-400 font-semibold">Gráfico ↗</span>
+                  <span className="text-[9px] text-emerald-400 font-semibold">{t.dashboard.chartAction}</span>
                 </div>
                 <p className="text-sm font-bold font-mono-numbers text-emerald-400">
                   R$ {eurBrlDisplay}
@@ -123,11 +129,11 @@ export const DashboardView: React.FC = () => {
                   openAssetDetail('usd_brl');
                 }}
                 className="bg-slate-900/60 hover:bg-slate-800/80 rounded-xl p-2.5 border border-slate-800 hover:border-emerald-500/50 cursor-pointer transition shadow-sm"
-                title="Ver gráfico e cotação de USD / BRL"
+                title={t.dashboard.tooltips.usdBrl}
               >
                 <div className="flex items-center justify-between">
                   <span className="text-[10px] text-slate-400 uppercase font-medium">USD / BRL</span>
-                  <span className="text-[9px] text-emerald-400 font-semibold">Gráfico ↗</span>
+                  <span className="text-[9px] text-emerald-400 font-semibold">{t.dashboard.chartAction}</span>
                 </div>
                 <p className="text-sm font-bold font-mono-numbers text-emerald-400">
                   R$ {usdBrlDisplay}
@@ -141,7 +147,7 @@ export const DashboardView: React.FC = () => {
                   openAssetDetail('sp500');
                 }}
                 className="bg-slate-900/60 hover:bg-slate-800/80 rounded-xl p-2.5 border border-slate-800 hover:border-emerald-500/50 cursor-pointer transition shadow-sm"
-                title="Ver gráfico e detalhes do S&P 500"
+                title={t.dashboard.tooltips.sp500}
               >
                 <div className="flex items-center justify-between">
                   <span className="text-[10px] text-slate-400 uppercase font-medium">S&P 500</span>
@@ -150,7 +156,7 @@ export const DashboardView: React.FC = () => {
                   </span>
                 </div>
                 <p className="text-sm font-bold font-mono-numbers text-slate-200">
-                  {sp500Asset?.price ? `${sp500Asset.price.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} pts` : '-- pts'}
+                  {sp500Asset?.price ? `${sp500Asset.price.toLocaleString(getNumberLocale(lang), { minimumFractionDigits: 2, maximumFractionDigits: 2 })} pts` : '-- pts'}
                 </p>
               </div>
 
@@ -161,7 +167,7 @@ export const DashboardView: React.FC = () => {
                   openAssetDetail('ibovespa');
                 }}
                 className="bg-slate-900/60 hover:bg-slate-800/80 rounded-xl p-2.5 border border-slate-800 hover:border-emerald-500/50 cursor-pointer transition shadow-sm"
-                title="Ver gráfico e detalhes do IBOVESPA"
+                title={t.dashboard.tooltips.ibov}
               >
                 <div className="flex items-center justify-between">
                   <span className="text-[10px] text-slate-400 uppercase font-medium">IBOVESPA</span>
@@ -170,7 +176,7 @@ export const DashboardView: React.FC = () => {
                   </span>
                 </div>
                 <p className="text-sm font-bold font-mono-numbers text-emerald-400">
-                  {ibovAsset?.price ? `${Math.round(ibovAsset.price).toLocaleString('pt-BR')} pts` : '-- pts'}
+                  {ibovAsset?.price ? `${Math.round(ibovAsset.price).toLocaleString(getNumberLocale(lang))} pts` : '-- pts'}
                 </p>
               </div>
             </div>
@@ -286,7 +292,7 @@ export const DashboardView: React.FC = () => {
             </h2>
           </div>
           <span className="text-[11px] text-slate-400">
-            {t.dashboard.updatedAt} {lastUpdated.toLocaleTimeString(lang === 'en' ? 'en-US' : 'pt-BR', { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
+            {t.dashboard.updatedAt} {lastUpdated.toLocaleTimeString(getNumberLocale(lang), { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
           </span>
         </div>
 
@@ -301,7 +307,7 @@ export const DashboardView: React.FC = () => {
               >
                 <div className="flex items-center justify-between mb-1">
                   <span className="text-xs font-bold text-slate-900 dark:text-white group-hover:text-emerald-500 dark:group-hover:text-emerald-400 transition">
-                    {index.symbol}
+                    {getLocalizedAssetSymbol(index, lang)}
                   </span>
                   <span className="text-sm">{index.flag}</span>
                 </div>
@@ -384,9 +390,9 @@ export const DashboardView: React.FC = () => {
                     <div className="flex items-center gap-2.5">
                       <span className="text-base">{stock.flag}</span>
                       <div>
-                        <div className="text-xs font-bold text-slate-900 dark:text-white">{stock.symbol}</div>
+                        <div className="text-xs font-bold text-slate-900 dark:text-white">{getLocalizedAssetSymbol(stock, lang)}</div>
                         <div className="text-[10px] text-slate-500 dark:text-slate-400 truncate max-w-[120px]">
-                          {stock.name}
+                          {getLocalizedAssetName(stock, lang)}
                         </div>
                       </div>
                     </div>
@@ -428,9 +434,9 @@ export const DashboardView: React.FC = () => {
                     <div className="flex items-center gap-2.5">
                       <span className="text-base">{stock.flag}</span>
                       <div>
-                        <div className="text-xs font-bold text-slate-900 dark:text-white">{stock.symbol}</div>
+                        <div className="text-xs font-bold text-slate-900 dark:text-white">{getLocalizedAssetSymbol(stock, lang)}</div>
                         <div className="text-[10px] text-slate-500 dark:text-slate-400 truncate max-w-[120px]">
-                          {stock.name}
+                          {getLocalizedAssetName(stock, lang)}
                         </div>
                       </div>
                     </div>
@@ -497,7 +503,7 @@ export const DashboardView: React.FC = () => {
                   >
                     <div className="flex items-center gap-2">
                       <span className="text-base">{pair.flag}</span>
-                      <span className="text-xs font-bold text-slate-200">{pair.symbol}</span>
+                      <span className="text-xs font-bold text-slate-200">{getLocalizedAssetSymbol(pair, lang)}</span>
                     </div>
 
                     <div className="text-right">
@@ -569,7 +575,8 @@ export const DashboardView: React.FC = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {news.slice(0, 3).map((item) => {
+          {news.slice(0, 3).map((rawItem) => {
+            const item = localizeNewsItem(rawItem, lang);
             const safeUrl = item.url.startsWith('http://') || item.url.startsWith('https://') ? item.url : `https://${item.url}`;
             return (
               <div

@@ -2,9 +2,12 @@ import React from 'react';
 import { TrendingUp, TrendingDown } from 'lucide-react';
 import { useMarket } from '../context/MarketContext';
 import { getDualCurrencyDisplay } from '../utils/finance';
+import { useI18n } from '../i18n/I18nContext';
+import { getLocalizedAssetSymbol } from '../i18n/marketDataTranslations';
 
 export const TickerTape: React.FC = () => {
   const { assets, setSelectedAsset, universalRates } = useMarket();
+  const { lang, t } = useI18n();
 
   // Curated list for the ticker
   const tickerItems = assets.slice(0, 14);
@@ -17,8 +20,8 @@ export const TickerTape: React.FC = () => {
         {/* Live Badge */}
         <div className="flex items-center gap-1.5 px-3 py-0.5 bg-slate-900 border-r border-slate-800 z-10 flex-shrink-0 text-[10px] font-semibold text-slate-400">
           <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-          <span className="hidden sm:inline">MERCADOS EM TEMPO REAL</span>
-          <span className="sm:hidden">AO VIVO</span>
+          <span className="hidden sm:inline">{t.ticker.liveDesktop}</span>
+          <span className="sm:hidden">{t.ticker.liveMobile}</span>
         </div>
 
         {/* Ticker marquee */}
@@ -35,7 +38,7 @@ export const TickerTape: React.FC = () => {
                   onClick={() => setSelectedAsset(item)}
                   className="flex items-center gap-2 hover:bg-slate-800/60 px-2 py-0.5 rounded transition cursor-pointer flex-shrink-0"
                 >
-                  <span className="font-bold text-slate-200">{item.symbol}</span>
+                  <span className="font-bold text-slate-200">{getLocalizedAssetSymbol(item, lang)}</span>
                   <div className="flex items-baseline gap-1.5 font-mono-numbers">
                     <span className="text-slate-100 font-bold">{dual.primaryFormatted}</span>
                     {!isIndex && dual.secondaryFormatted && (

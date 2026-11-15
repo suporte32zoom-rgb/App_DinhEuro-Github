@@ -16,6 +16,13 @@ import {
 } from 'lucide-react';
 import { useMarket, MarketCategoryFilter } from '../context/MarketContext';
 import { useI18n } from '../i18n/I18nContext';
+import { getNumberLocale } from '../i18n/translations';
+import {
+  getLocalizedApiSourceSummary,
+  getLocalizedAssetName,
+  getLocalizedAssetSymbol,
+  getLocalizedCategoryLabel,
+} from '../i18n/marketDataTranslations';
 import { MarketAsset } from '../services/marketData';
 import { formatCurrencyValue } from '../utils/finance';
 import { DualPrice } from '../components/DualPrice';
@@ -73,16 +80,18 @@ export const MarketsView: React.FC = () => {
 
   // Filter
   const filtered = useMemo(() => {
+    const term = search.trim().toLowerCase();
     return assets.filter((asset) => {
       const matchesCategory = selectedCategory === 'all' || asset.category === selectedCategory;
-      const term = search.trim().toLowerCase();
       const matchesSearch =
         !term ||
         asset.symbol.toLowerCase().includes(term) ||
-        asset.name.toLowerCase().includes(term);
+        asset.name.toLowerCase().includes(term) ||
+        getLocalizedAssetSymbol(asset, lang).toLowerCase().includes(term) ||
+        getLocalizedAssetName(asset, lang).toLowerCase().includes(term);
       return matchesCategory && matchesSearch;
     });
-  }, [assets, selectedCategory, search]);
+  }, [assets, selectedCategory, search, lang]);
 
   // Sort
   const sorted = useMemo(() => {
@@ -147,7 +156,7 @@ export const MarketsView: React.FC = () => {
           <div className="flex items-center gap-2 mb-1.5">
             <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
             <span className="text-[11px] font-bold uppercase tracking-wider text-emerald-400">
-              Cotações em Tempo Real • Zero Defasagem
+              {t.markets.realtimeBadge}
             </span>
           </div>
           <h1 className="text-xl sm:text-2xl font-black text-white tracking-tight">
@@ -156,9 +165,9 @@ export const MarketsView: React.FC = () => {
           <p className="text-xs text-slate-400 mt-1 flex flex-wrap items-center gap-1.5">
             <span>{assets.length} {t.markets.assetsListed}</span>
             <span>•</span>
-            <span className="text-slate-300 font-medium">{apiSourceSummary}</span>
+            <span className="text-slate-300 font-medium">{getLocalizedApiSourceSummary(apiSourceSummary, lang)}</span>
             <span>•</span>
-            <span>{t.dashboard.updatedAt} {lastUpdated.toLocaleTimeString(lang === 'en' ? 'en-US' : 'pt-BR', { hour: '2-digit', minute: '2-digit', second: '2-digit' })}</span>
+            <span>{t.dashboard.updatedAt} {lastUpdated.toLocaleTimeString(getNumberLocale(lang), { hour: '2-digit', minute: '2-digit', second: '2-digit' })}</span>
           </p>
         </div>
 
@@ -228,18 +237,18 @@ export const MarketsView: React.FC = () => {
       <div className="flex items-center justify-between text-xs text-slate-400 px-1">
         <div className="flex items-center gap-2">
           <span>
-            Exibindo <strong className="text-white font-mono">{displayedAssets.length}</strong> de{' '}
-            <strong className="text-white font-mono">{sorted.length}</strong> ativos encontrados
+            {t.markets.showingOf} <strong className="text-white font-mono">{displayedAssets.length}</strong> {t.markets.ofWord}{' '}
+            <strong className="text-white font-mono">{sorted.length}</strong> {t.markets.assetsFound}
           </span>
           {search && (
             <span className="text-emerald-400 font-medium">
-              (termo: &ldquo;{search}&rdquo;)
+              ({t.markets.searchTermPrefix} &ldquo;{search}&rdquo;)
             </span>
           )}
         </div>
         {sorted.length > 20 && (
           <div className="text-[11px] text-slate-500 hidden sm:block">
-            {visibleCount >= sorted.length ? 'Catálogo 100% visível' : `${remainingCount} ativos prontos para expansão`}
+            {visibleCount >= sorted.length ? t.markets.catalogFullVisible : `${remainingCount} ${t.markets.assetsReadyToExpand}`}
           </div>
         )}
       </div>
@@ -255,7 +264,7 @@ export const MarketsView: React.FC = () => {
                   className="py-3 px-4 cursor-pointer hover:text-white transition"
                 >
                   <div className="flex items-center gap-1">
-                    <span>Ativo / Ticker</span>
+                    <span>{t.markets.colAsset}</span>
                     <ArrowUpDown className="w-3 h-3" />
                   </div>
                 </th>
@@ -264,7 +273,7 @@ export const MarketsView: React.FC = () => {
                   className="py-3 px-4 text-right cursor-pointer hover:text-white transition"
                 >
                   <div className="flex items-center justify-end gap-1">
-                    <span>Preço Oficial & Dupla Conversão</span>
+                    <span>{t.markets.colPrice}</span>
                     <ArrowUpDown className="w-3 h-3" />
                   </div>
                 </th>
@@ -273,21 +282,21 @@ export const MarketsView: React.FC = () => {
                   className="py-3 px-4 text-right cursor-pointer hover:text-white transition"
                 >
                   <div className="flex items-center justify-end gap-1">
-                    <span>Variação 24h</span>
+                    <span>{t.markets.colVar24h}</span>
                     <ArrowUpDown className="w-3 h-3" />
                   </div>
                 </th>
-                <th className="py-3 px-4 text-right hidden md:table-cell">Máx / Mín (24h)</th>
+                <th className="py-3 px-4 text-right hidden md:table-cell">{t.markets.colHighLow}</th>
                 <th
                   onClick={() => toggleSort('volume')}
                   className="py-3 px-4 text-right hidden sm:table-cell cursor-pointer hover:text-white transition"
                 >
                   <div className="flex items-center justify-end gap-1">
-                    <span>Volume 24h</span>
+                    <span>{t.markets.colVolume}</span>
                     <ArrowUpDown className="w-3 h-3" />
                   </div>
                 </th>
-                <th className="py-3 px-4 text-center">Terminal Gráfico</th>
+                <th className="py-3 px-4 text-center">{t.markets.colChart}</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-800/60 text-xs">
@@ -305,14 +314,14 @@ export const MarketsView: React.FC = () => {
                         <div>
                           <div className="flex items-center gap-2">
                             <span className="font-extrabold text-white text-xs group-hover:text-emerald-400 transition font-mono">
-                              {asset.symbol}
+                              {getLocalizedAssetSymbol(asset, lang)}
                             </span>
                             <span className="text-[10px] uppercase font-semibold text-slate-400 px-1.5 py-0.2 rounded bg-slate-800/80 border border-slate-700/50">
-                              {asset.category.replace('_', ' ')}
+                              {getLocalizedCategoryLabel(asset.category, lang)}
                             </span>
                           </div>
                           <span className="text-[11px] text-slate-400 block truncate max-w-[140px] sm:max-w-xs">
-                            {asset.name}
+                            {getLocalizedAssetName(asset, lang)}
                           </span>
                         </div>
                       </div>
@@ -384,7 +393,7 @@ export const MarketsView: React.FC = () => {
         {displayedAssets.length === 0 && (
           <div className="p-12 text-center space-y-3">
             <p className="text-sm text-slate-400">
-              Nenhum ativo encontrado para os filtros selecionados.
+              {t.markets.emptyMessage}
             </p>
             <button
               type="button"
@@ -394,7 +403,7 @@ export const MarketsView: React.FC = () => {
               }}
               className="px-3.5 py-1.5 rounded-xl bg-slate-800 text-xs font-semibold text-emerald-400 hover:bg-slate-700 transition"
             >
-              Limpar Filtros
+              {t.markets.clearFilters}
             </button>
           </div>
         )}
@@ -407,10 +416,10 @@ export const MarketsView: React.FC = () => {
             <div className="flex items-center gap-2">
               <Layers className="w-4 h-4 text-emerald-400" />
               <span className="font-bold text-white">
-                Status da Cobertura de Mercados:
+                {t.markets.coverageStatus}
               </span>
               <span className="text-slate-400">
-                {displayedAssets.length} de {sorted.length} ativos renderizados
+                {displayedAssets.length} {t.markets.ofWord} {sorted.length} {t.markets.assetsRenderedSuffix}
               </span>
             </div>
 
@@ -432,7 +441,7 @@ export const MarketsView: React.FC = () => {
                   className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 font-black text-xs sm:text-sm transition shadow-lg shadow-emerald-950/40 cursor-pointer inline-flex items-center gap-2"
                 >
                   <ChevronDown className="w-4 h-4 stroke-[3]" />
-                  <span>Ver Mais Ativos (+{Math.min(20, remainingCount)} de {remainingCount} disponíveis)</span>
+                  <span>{t.markets.viewMorePrefix}{Math.min(20, remainingCount)} {t.markets.ofWord} {remainingCount} {t.markets.availableSuffix}</span>
                 </button>
 
                 <button
@@ -441,14 +450,14 @@ export const MarketsView: React.FC = () => {
                   className="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs sm:text-sm border border-slate-700 hover:border-emerald-500/40 transition cursor-pointer inline-flex items-center gap-1.5"
                 >
                   <Sparkles className="w-4 h-4 text-amber-400" />
-                  <span>Carregar Todos os {sorted.length} Mercados Globais</span>
+                  <span>{t.markets.loadAllPrefix} {sorted.length} {t.markets.loadAllSuffix}</span>
                 </button>
               </>
             ) : (
               <div className="flex items-center gap-3">
                 <div className="inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-400 bg-emerald-500/10 px-3 py-1 rounded-full border border-emerald-500/20">
                   <CheckCircle2 className="w-3.5 h-3.5" />
-                  <span>Catálogo Completo Carregado ({sorted.length} ativos mundiais)</span>
+                  <span>{t.markets.fullCatalogLoadedPrefix}{sorted.length} {t.markets.fullCatalogLoadedSuffix}</span>
                 </div>
 
                 <button
@@ -457,7 +466,7 @@ export const MarketsView: React.FC = () => {
                   className="px-3.5 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold border border-slate-700 transition cursor-pointer inline-flex items-center gap-1"
                 >
                   <ChevronUp className="w-3.5 h-3.5" />
-                  <span>Recolher para Top 20</span>
+                  <span>{t.markets.collapseToTop20}</span>
                 </button>
               </div>
             )}

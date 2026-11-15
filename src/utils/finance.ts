@@ -212,11 +212,12 @@ export function calculateProfitAndTax(input: TaxCalculationInput): {
 export function formatCurrencyValue(
   value: number,
   currency: string = 'BRL',
-  decimals: number = 2
+  decimals: number = 2,
+  fallbackLocale: string = 'pt-BR'
 ): string {
   const normCur = (currency || 'BRL').toUpperCase();
   if (normCur === 'PTS' || normCur === 'PONTOS' || normCur === 'POINTS') {
-    return formatPointsValue(value);
+    return formatPointsValue(value, fallbackLocale);
   }
 
   const localeMap: Record<string, string> = {
@@ -227,7 +228,7 @@ export function formatCurrencyValue(
     JPY: 'ja-JP',
   };
 
-  const locale = localeMap[currency] || 'pt-BR';
+  const locale = localeMap[currency] || fallbackLocale;
 
   try {
     return new Intl.NumberFormat(locale, {
@@ -245,11 +246,11 @@ export function formatCurrencyValue(
  * Formata pontuação de índices mundiais (IBOVESPA, S&P 500, etc.) em PONTOS (pts).
  * Índices nunca devem ser exibidos em formato monetário (R$ ou $).
  */
-export function formatPointsValue(value: number): string {
+export function formatPointsValue(value: number, locale: string = 'pt-BR'): string {
   if (value === undefined || value === null || isNaN(value)) return '0 pts';
   const decimals = value % 1 === 0 ? 0 : 2;
   try {
-    return `${new Intl.NumberFormat('pt-BR', {
+    return `${new Intl.NumberFormat(locale, {
       minimumFractionDigits: decimals,
       maximumFractionDigits: 2,
     }).format(value)} pts`;
@@ -287,13 +288,14 @@ export function getDualCurrencyDisplay(
   price: number,
   currency: string = 'USD',
   rates: CurrencyRates = { USD: 1.0, BRL: 5.485, EUR: 0.8905 },
-  isIndex?: boolean
+  isIndex?: boolean,
+  locale: string = 'pt-BR'
 ): DualCurrencyInfo {
   const normCur = (currency || 'USD').toUpperCase();
   const isPointAsset = isIndex || normCur === 'PTS' || normCur === 'PONTOS';
 
   if (isPointAsset) {
-    const ptsFormatted = formatPointsValue(price);
+    const ptsFormatted = formatPointsValue(price, locale);
     return {
       primaryFormatted: ptsFormatted,
       secondaryFormatted: '',

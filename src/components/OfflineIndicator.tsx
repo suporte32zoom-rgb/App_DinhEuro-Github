@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { WifiOff } from 'lucide-react';
+import { useI18n } from '../i18n/I18nContext';
 
 export const OfflineIndicator: React.FC = () => {
+  const { t } = useI18n();
   const [isOnline, setIsOnline] = useState(
     typeof navigator !== 'undefined' ? navigator.onLine : true
   );
@@ -24,7 +26,7 @@ export const OfflineIndicator: React.FC = () => {
   return (
     <div className="fixed bottom-4 left-4 z-50 flex items-center gap-2 rounded-xl bg-amber-500/90 text-slate-950 font-semibold px-3 py-2 text-xs shadow-xl backdrop-blur-md border border-amber-400">
       <WifiOff className="w-4 h-4 animate-pulse" />
-      <span>Modo Offline — Exibindo dados locais armazenados em cache.</span>
+      <span>{t.offline.banner}</span>
     </div>
   );
 };

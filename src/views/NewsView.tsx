@@ -14,9 +14,14 @@ import {
 } from 'lucide-react';
 import { useMarket } from '../context/MarketContext';
 import { NewsItem, INITIAL_NEWS } from '../services/marketData';
+import { useI18n } from '../i18n/I18nContext';
+import { VIEWS_TRANSLATIONS } from '../i18n/viewsTranslations';
+import { localizeNewsItem } from '../i18n/marketDataTranslations';
 
 export const NewsView: React.FC = () => {
   const { news, refreshData } = useMarket();
+  const { lang } = useI18n();
+  const tNews = VIEWS_TRANSLATIONS[lang].news;
   const [filterCategory, setFilterCategory] = useState<string>('all');
   const [newsSearch, setNewsSearch] = useState<string>('');
   const [isRefreshing, setIsRefreshing] = useState(false);
@@ -42,34 +47,40 @@ export const NewsView: React.FC = () => {
   }, [news]);
 
   const categories = [
-    { id: 'all', label: 'Todas as Notícias' },
-    { id: 'Política & Fiscal', label: 'Política & Fiscal' },
-    { id: 'Mercados & B3', label: 'Mercados & B3' },
-    { id: 'Macro & Câmbio', label: 'Macro & Câmbio' },
-    { id: 'Macro & Bancos Centrais', label: 'Bancos Centrais' },
-    { id: 'Criptoativos', label: 'Criptoativos' },
-    { id: 'Empresas & Wall St', label: 'Empresas & Wall St' },
+    { id: 'all', label: tNews.allNews },
+    { id: 'Política & Fiscal', label: tNews.catPolicyFiscal },
+    { id: 'Mercados & B3', label: tNews.catMarketsB3 },
+    { id: 'Macro & Câmbio', label: tNews.catMacroFx },
+    { id: 'Macro & Bancos Centrais', label: tNews.catCentralBanks },
+    { id: 'Criptoativos', label: tNews.catCrypto },
+    { id: 'Empresas & Wall St', label: tNews.catWallSt },
   ];
 
   const filteredNews = useMemo(() => {
-    return consolidatedNews.filter((item) => {
-      const matchesCategory =
-        filterCategory === 'all' ||
-        item.category.toLowerCase().includes(filterCategory.toLowerCase()) ||
-        (filterCategory === 'Macro & Câmbio' && (item.category === 'Câmbio' || item.category === 'Macro')) ||
-        (filterCategory === 'Mercados & B3' && (item.category === 'Ações' || item.category === 'Geral'));
+    return consolidatedNews
+      .filter((item) => {
+        const matchesCategory =
+          filterCategory === 'all' ||
+          item.category.toLowerCase().includes(filterCategory.toLowerCase()) ||
+          (filterCategory === 'Macro & Câmbio' && (item.category === 'Câmbio' || item.category === 'Macro')) ||
+          (filterCategory === 'Mercados & B3' && (item.category === 'Ações' || item.category === 'Geral'));
 
-      const searchLower = newsSearch.toLowerCase();
-      const matchesSearch =
-        newsSearch.trim() === '' ||
-        item.title.toLowerCase().includes(searchLower) ||
-        item.summary.toLowerCase().includes(searchLower) ||
-        item.source.toLowerCase().includes(searchLower) ||
-        item.category.toLowerCase().includes(searchLower);
+        const localized = localizeNewsItem(item, lang);
+        const searchLower = newsSearch.toLowerCase();
+        const matchesSearch =
+          newsSearch.trim() === '' ||
+          item.title.toLowerCase().includes(searchLower) ||
+          item.summary.toLowerCase().includes(searchLower) ||
+          item.source.toLowerCase().includes(searchLower) ||
+          item.category.toLowerCase().includes(searchLower) ||
+          localized.title.toLowerCase().includes(searchLower) ||
+          localized.summary.toLowerCase().includes(searchLower) ||
+          localized.category.toLowerCase().includes(searchLower);
 
-      return matchesCategory && matchesSearch;
-    });
-  }, [consolidatedNews, filterCategory, newsSearch]);
+        return matchesCategory && matchesSearch;
+      })
+      .map((item) => localizeNewsItem(item, lang));
+  }, [consolidatedNews, filterCategory, newsSearch, lang]);
 
   const handleManualRefresh = async () => {
     setIsRefreshing(true);
@@ -85,15 +96,15 @@ export const NewsView: React.FC = () => {
           <div className="flex items-center gap-2">
             <h1 className="text-xl sm:text-2xl font-black text-white tracking-tight flex items-center gap-2">
               <Newspaper className="w-6 h-6 text-emerald-400" />
-              <span>Notícias & Cenário Político-Financeiro</span>
+              <span>{tNews.title}</span>
             </h1>
             <span className="flex items-center gap-1 text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 font-bold uppercase tracking-wider">
               <Radio className="w-3 h-3 animate-pulse" />
-              Ao Vivo
+              {tNews.liveBadge}
             </span>
           </div>
           <p className="text-xs text-slate-400 mt-1 max-w-3xl">
-            Cobertura em tempo real dos bastidores de Brasília, Congresso, Banco Central (Copom), Wall Street, bolsas europeias e mercado cripto, com redirecionamento direto aos veículos oficiais de imprensa.
+            {tNews.subtitle}
           </p>
         </div>
 
@@ -103,7 +114,7 @@ export const NewsView: React.FC = () => {
             <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
             <input
               type="text"
-              placeholder="Buscar por termo, fonte ou político..."
+              placeholder={tNews.searchPlaceholder}
               value={newsSearch}
               onChange={(e) => setNewsSearch(e.target.value)}
               className="w-full bg-slate-900 border border-slate-700/80 rounded-xl pl-9.5 pr-4 py-2 text-xs text-white placeholder:text-slate-500 focus:outline-none focus:border-emerald-500 transition"
@@ -114,7 +125,7 @@ export const NewsView: React.FC = () => {
             onClick={handleManualRefresh}
             disabled={isRefreshing}
             className="p-2 rounded-xl bg-slate-900 border border-slate-700/80 hover:border-emerald-500/50 text-slate-300 hover:text-white transition cursor-pointer flex-shrink-0"
-            title="Atualizar feed de notícias"
+            title={tNews.refreshTitle}
           >
             <RefreshCw className={`w-4 h-4 text-emerald-400 ${isRefreshing ? 'animate-spin' : ''}`} />
           </button>
@@ -144,14 +155,14 @@ export const NewsView: React.FC = () => {
       {/* Feed Status Summary */}
       <div className="flex items-center justify-between text-xs text-slate-400 px-1">
         <span className="flex items-center gap-1.5">
-          <span>Mostrando <strong>{filteredNews.length}</strong> matérias em ordem cronológica (mais recentes primeiro)</span>
+          <span>{tNews.showingPrefix} <strong>{filteredNews.length}</strong> {tNews.showingSuffix}</span>
         </span>
         {newsSearch && (
           <button
             onClick={() => setNewsSearch('')}
             className="text-emerald-400 hover:underline cursor-pointer"
           >
-            Limpar filtro de busca
+            {tNews.clearSearch}
           </button>
         )}
       </div>
@@ -179,7 +190,7 @@ export const NewsView: React.FC = () => {
                     </span>
                     <span className="text-[10px] font-semibold text-slate-400 flex items-center gap-1 flex-shrink-0">
                       <Clock className="w-3 h-3 text-amber-400" />
-                      <span>{item.datetime || 'Agora'}</span>
+                      <span>{item.datetime || tNews.nowFallback}</span>
                     </span>
                   </div>
 
@@ -203,10 +214,10 @@ export const NewsView: React.FC = () => {
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-xs font-bold text-white shadow-sm shadow-emerald-950 transition active:scale-95 cursor-pointer flex-shrink-0"
-                    title={`Abrir matéria original completa em ${item.source}`}
+                    title={`${tNews.readFullTitlePrefix} ${item.source}`}
                     onClick={(e) => e.stopPropagation()}
                   >
-                    <span>Ler matéria completa</span>
+                    <span>{tNews.readFull}</span>
                     <ExternalLink className="w-3.5 h-3.5" />
                   </a>
                 </div>

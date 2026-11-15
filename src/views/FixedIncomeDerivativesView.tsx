@@ -20,6 +20,9 @@ import {
 } from 'lucide-react';
 import { useMarket } from '../context/MarketContext';
 import { formatCurrencyValue } from '../utils/finance';
+import { useI18n } from '../i18n/I18nContext';
+import { getNumberLocale } from '../i18n/translations';
+import { TRADING_TRANSLATIONS } from '../i18n/tradingTranslations';
 
 // ================= BLACK-SCHOLES HELPER FUNCTIONS =================
 // Standard Normal Cumulative Distribution Function (CDF) approximation
@@ -289,6 +292,9 @@ const FIXED_INCOME_ASSETS: FixedIncomeAsset[] = [
 
 export const FixedIncomeDerivativesView: React.FC = () => {
   const { universalRates, assets } = useMarket();
+  const { lang } = useI18n();
+  const locale = getNumberLocale(lang);
+  const tFi = TRADING_TRANSLATIONS[lang].fixedIncome;
 
   // Dynamic futures contracts synchronized with real-time quotes
   const dynamicFutures = useMemo(() => {
@@ -304,18 +310,20 @@ export const FixedIncomeDerivativesView: React.FC = () => {
     const spChange = sp500 ? sp500.change24h : +0.48;
 
     return FUTURES_CONTRACTS.map((contract) => {
+      const ov = tFi.futuresOverrides[contract.code];
+      const localized = ov ? { ...contract, ...ov } : contract;
       if (contract.code === 'WINQ26') {
-        return { ...contract, price: winPrice, change: winChange };
+        return { ...localized, price: winPrice, change: winChange };
       }
       if (contract.code === 'WDOQ26') {
-        return { ...contract, price: wdoPrice, change: wdoChange };
+        return { ...localized, price: wdoPrice, change: wdoChange };
       }
       if (contract.code === 'ES1!') {
-        return { ...contract, price: spPrice, change: spChange };
+        return { ...localized, price: spPrice, change: spChange };
       }
-      return contract;
+      return localized;
     });
-  }, [assets]);
+  }, [assets, tFi]);
 
   // Active sub-tab
   const [activeSubTab, setActiveSubTab] = useState<'options' | 'futures' | 'fixed_income'>('options');
@@ -425,14 +433,14 @@ export const FixedIncomeDerivativesView: React.FC = () => {
                 <Percent className="w-4 h-4" />
               </span>
               <h1 className="text-xl sm:text-2xl font-black text-white tracking-tight flex items-center gap-2">
-                Renda Fixa & Derivativos Globais
+                {tFi.bannerTitle}
                 <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 uppercase font-mono-numbers font-bold">
-                  B3 & Chicago
+                  {tFi.bannerBadge}
                 </span>
               </h1>
             </div>
             <p className="text-xs text-slate-400 max-w-2xl">
-              Análise completa de contratos futuros, precificação de opções com o modelo Black-Scholes, sensibilidade das Gregas e títulos soberanos de renda fixa.
+              {tFi.bannerSubtitle}
             </p>
           </div>
 
@@ -447,7 +455,7 @@ export const FixedIncomeDerivativesView: React.FC = () => {
               }`}
             >
               <Calculator className="w-3.5 h-3.5" />
-              Calculadora de Opções
+              {tFi.tabOptions}
             </button>
             <button
               onClick={() => setActiveSubTab('futures')}
@@ -458,7 +466,7 @@ export const FixedIncomeDerivativesView: React.FC = () => {
               }`}
             >
               <BarChart2 className="w-3.5 h-3.5" />
-              Contratos Futuros
+              {tFi.tabFutures}
             </button>
             <button
               onClick={() => setActiveSubTab('fixed_income')}
@@ -469,7 +477,7 @@ export const FixedIncomeDerivativesView: React.FC = () => {
               }`}
             >
               <ShieldCheck className="w-3.5 h-3.5" />
-              Títulos & Tesouro
+              {tFi.tabFixedIncome}
             </button>
           </div>
         </div>
@@ -485,7 +493,7 @@ export const FixedIncomeDerivativesView: React.FC = () => {
                 <div className="flex items-center gap-2">
                   <Calculator className="w-4 h-4 text-emerald-400" />
                   <h2 className="text-sm font-bold text-white uppercase tracking-wider">
-                    Parâmetros da Opção
+                    {tFi.optionsParamsTitle}
                   </h2>
                 </div>
                 <span className="text-[10px] text-slate-400 font-mono-numbers">
@@ -496,7 +504,7 @@ export const FixedIncomeDerivativesView: React.FC = () => {
               {/* Option Type Selector (Call vs Put) */}
               <div>
                 <label className="text-[11px] font-semibold text-slate-400 block mb-1.5">
-                  Tipo de Contrato
+                  {tFi.contractTypeLabel}
                 </label>
                 <div className="grid grid-cols-2 gap-2">
                   <button
@@ -507,7 +515,7 @@ export const FixedIncomeDerivativesView: React.FC = () => {
                         : 'bg-slate-900 text-slate-400 border-slate-800 hover:text-white'
                     }`}
                   >
-                    <ArrowUpRight className="w-3.5 h-3.5" /> CALL (Compra)
+                    <ArrowUpRight className="w-3.5 h-3.5" /> {tFi.callBtn}
                   </button>
                   <button
                     onClick={() => setOptionType('PUT')}
@@ -517,7 +525,7 @@ export const FixedIncomeDerivativesView: React.FC = () => {
                         : 'bg-slate-900 text-slate-400 border-slate-800 hover:text-white'
                     }`}
                   >
-                    <ArrowDownRight className="w-3.5 h-3.5" /> PUT (Venda)
+                    <ArrowDownRight className="w-3.5 h-3.5" /> {tFi.putBtn}
                   </button>
                 </div>
               </div>
@@ -525,8 +533,8 @@ export const FixedIncomeDerivativesView: React.FC = () => {
               {/* Spot Price (S) */}
               <div>
                 <div className="flex items-center justify-between text-[11px] font-semibold text-slate-400 mb-1">
-                  <span>Preço Spot do Ativo (S)</span>
-                  <span className="text-white font-mono-numbers">R$ {spotPrice.toFixed(2)}</span>
+                  <span>{tFi.spotPriceLabel}</span>
+                  <span className="text-white font-mono-numbers">{formatCurrencyValue(spotPrice, 'BRL', 2, locale)}</span>
                 </div>
                 <input
                   type="number"
@@ -540,8 +548,8 @@ export const FixedIncomeDerivativesView: React.FC = () => {
               {/* Strike Price (K) */}
               <div>
                 <div className="flex items-center justify-between text-[11px] font-semibold text-slate-400 mb-1">
-                  <span>Preço de Exercício / Strike (K)</span>
-                  <span className="text-white font-mono-numbers">R$ {strikePrice.toFixed(2)}</span>
+                  <span>{tFi.strikePriceLabel}</span>
+                  <span className="text-white font-mono-numbers">{formatCurrencyValue(strikePrice, 'BRL', 2, locale)}</span>
                 </div>
                 <input
                   type="number"
@@ -555,8 +563,8 @@ export const FixedIncomeDerivativesView: React.FC = () => {
               {/* Days to Expiration (T) */}
               <div>
                 <div className="flex items-center justify-between text-[11px] font-semibold text-slate-400 mb-1">
-                  <span>Dias Corridos até o Vencimento</span>
-                  <span className="text-white font-mono-numbers">{daysToExpiry} dias</span>
+                  <span>{tFi.daysToExpiryLabel}</span>
+                  <span className="text-white font-mono-numbers">{daysToExpiry} {tFi.daysUnit}</span>
                 </div>
                 <input
                   type="range"
@@ -571,8 +579,8 @@ export const FixedIncomeDerivativesView: React.FC = () => {
               {/* Volatility Implied (Sigma %) */}
               <div>
                 <div className="flex items-center justify-between text-[11px] font-semibold text-slate-400 mb-1">
-                  <span>Volatilidade Implícita (IV)</span>
-                  <span className="text-amber-400 font-mono-numbers">{volatilityPct}% a.a.</span>
+                  <span>{tFi.impliedVolLabel}</span>
+                  <span className="text-amber-400 font-mono-numbers">{volatilityPct}{tFi.perYearUnit}</span>
                 </div>
                 <input
                   type="range"
@@ -587,8 +595,8 @@ export const FixedIncomeDerivativesView: React.FC = () => {
               {/* Interest Rate (r) */}
               <div>
                 <div className="flex items-center justify-between text-[11px] font-semibold text-slate-400 mb-1">
-                  <span>Taxa Livre de Risco (Selic)</span>
-                  <span className="text-sky-400 font-mono-numbers">{interestRatePct}% a.a.</span>
+                  <span>{tFi.riskFreeRateLabel}</span>
+                  <span className="text-sky-400 font-mono-numbers">{interestRatePct}{tFi.perYearUnit}</span>
                 </div>
                 <input
                   type="number"
@@ -613,17 +621,17 @@ export const FixedIncomeDerivativesView: React.FC = () => {
                 >
                   <div className="flex items-center justify-between mb-2">
                     <span className="text-xs font-bold uppercase tracking-wider text-emerald-400 flex items-center gap-1">
-                      <ArrowUpRight className="w-4 h-4" /> Preço Teórico CALL
+                      <ArrowUpRight className="w-4 h-4" /> {tFi.theoreticalCallTitle}
                     </span>
                     <span className="text-[10px] text-slate-400 font-mono-numbers">
-                      {spotPrice >= strikePrice ? 'ITM (No Dinheiro)' : 'OTM (Fora)'}
+                      {spotPrice >= strikePrice ? tFi.itmLabel : tFi.otmLabel}
                     </span>
                   </div>
                   <div className="text-3xl font-black text-white font-mono-numbers">
-                    R$ {bsResult.callPrice.toFixed(2)}
+                    {formatCurrencyValue(bsResult.callPrice, 'BRL', 2, locale)}
                   </div>
                   <p className="text-[11px] text-slate-400 mt-2">
-                    Prêmio justo estimado pelo modelo matemático para o direito de compra.
+                    {tFi.callDesc}
                   </p>
                 </div>
 
@@ -636,17 +644,17 @@ export const FixedIncomeDerivativesView: React.FC = () => {
                 >
                   <div className="flex items-center justify-between mb-2">
                     <span className="text-xs font-bold uppercase tracking-wider text-rose-400 flex items-center gap-1">
-                      <ArrowDownRight className="w-4 h-4" /> Preço Teórico PUT
+                      <ArrowDownRight className="w-4 h-4" /> {tFi.theoreticalPutTitle}
                     </span>
                     <span className="text-[10px] text-slate-400 font-mono-numbers">
-                      {spotPrice <= strikePrice ? 'ITM (No Dinheiro)' : 'OTM (Fora)'}
+                      {spotPrice <= strikePrice ? tFi.itmLabel : tFi.otmLabel}
                     </span>
                   </div>
                   <div className="text-3xl font-black text-white font-mono-numbers">
-                    R$ {bsResult.putPrice.toFixed(2)}
+                    {formatCurrencyValue(bsResult.putPrice, 'BRL', 2, locale)}
                   </div>
                   <p className="text-[11px] text-slate-400 mt-2">
-                    Prêmio justo estimado pelo modelo matemático para o direito de venda.
+                    {tFi.putDesc}
                   </p>
                 </div>
               </div>
@@ -657,10 +665,10 @@ export const FixedIncomeDerivativesView: React.FC = () => {
                   <div className="flex items-center gap-2">
                     <Sparkles className="w-4 h-4 text-amber-400" />
                     <h3 className="text-sm font-bold text-white uppercase tracking-wider">
-                      Sensibilidade das Gregas (Greeks)
+                      {tFi.greeksTitle}
                     </h3>
                   </div>
-                  <span className="text-[10px] text-slate-400">Tempo Real</span>
+                  <span className="text-[10px] text-slate-400">{tFi.realTimeTag}</span>
                 </div>
 
                 <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
@@ -673,7 +681,7 @@ export const FixedIncomeDerivativesView: React.FC = () => {
                       {(optionType === 'CALL' ? bsResult.callDelta : bsResult.putDelta).toFixed(3)}
                     </div>
                     <span className="text-[9px] text-slate-500 block mt-1">
-                      Variação por R$ 1 no ativo
+                      {tFi.deltaDesc}
                     </span>
                   </div>
 
@@ -686,7 +694,7 @@ export const FixedIncomeDerivativesView: React.FC = () => {
                       {bsResult.gamma.toFixed(4)}
                     </div>
                     <span className="text-[9px] text-slate-500 block mt-1">
-                      Aceleração do Delta
+                      {tFi.gammaDesc}
                     </span>
                   </div>
 
@@ -699,7 +707,7 @@ export const FixedIncomeDerivativesView: React.FC = () => {
                       {(optionType === 'CALL' ? bsResult.callTheta : bsResult.putTheta).toFixed(3)}
                     </div>
                     <span className="text-[9px] text-slate-500 block mt-1">
-                      Perda por dia útil (Decaimento)
+                      {tFi.thetaDesc}
                     </span>
                   </div>
 
@@ -712,7 +720,7 @@ export const FixedIncomeDerivativesView: React.FC = () => {
                       {bsResult.vega.toFixed(3)}
                     </div>
                     <span className="text-[9px] text-slate-500 block mt-1">
-                      Sensibilidade por 1% IV
+                      {tFi.vegaDesc}
                     </span>
                   </div>
 
@@ -725,7 +733,7 @@ export const FixedIncomeDerivativesView: React.FC = () => {
                       {(optionType === 'CALL' ? bsResult.callRho : bsResult.putRho).toFixed(3)}
                     </div>
                     <span className="text-[9px] text-slate-500 block mt-1">
-                      Sensibilidade à Selic
+                      {tFi.rhoDesc}
                     </span>
                   </div>
                 </div>
@@ -737,7 +745,7 @@ export const FixedIncomeDerivativesView: React.FC = () => {
                   <div className="flex items-center gap-2">
                     <BarChart2 className="w-4 h-4 text-emerald-400" />
                     <h3 className="text-sm font-bold text-white uppercase tracking-wider">
-                      Gráfico de Payoff no Vencimento (P&L)
+                      {tFi.payoffTitle}
                     </h3>
                   </div>
 
@@ -745,10 +753,10 @@ export const FixedIncomeDerivativesView: React.FC = () => {
                   <div className="flex items-center gap-1 bg-slate-900 border border-slate-800 rounded-lg p-0.5 text-xs">
                     {(
                       [
-                        { id: 'BUY_CALL', label: 'Compra Call' },
-                        { id: 'BUY_PUT', label: 'Compra Put' },
-                        { id: 'BULL_CALL_SPREAD', label: 'Trava de Alta' },
-                        { id: 'STRADDLE', label: 'Straddle' },
+                        { id: 'BUY_CALL', label: tFi.strategies.BUY_CALL },
+                        { id: 'BUY_PUT', label: tFi.strategies.BUY_PUT },
+                        { id: 'BULL_CALL_SPREAD', label: tFi.strategies.BULL_CALL_SPREAD },
+                        { id: 'STRADDLE', label: tFi.strategies.STRADDLE },
                       ] as const
                     ).map((st) => (
                       <button
@@ -772,7 +780,7 @@ export const FixedIncomeDerivativesView: React.FC = () => {
                     {/* Zero PnL Reference Line */}
                     <line x1="0" y1="90" x2="600" y2="90" stroke="#334155" strokeWidth="1.5" strokeDasharray="4 4" />
                     <text x="10" y="85" fill="#64748b" fontSize="10" fontFamily="monospace">
-                      Breakeven (R$ 0,00)
+                      {tFi.breakevenText}
                     </text>
 
                     {/* Payoff Polyline */}
@@ -804,9 +812,9 @@ export const FixedIncomeDerivativesView: React.FC = () => {
                 </div>
 
                 <div className="flex items-center justify-between text-[11px] text-slate-400 pt-2 border-t border-slate-800/80">
-                  <span>Preço Mín: R$ {(spotPrice * 0.7).toFixed(2)}</span>
-                  <span className="text-amber-400 font-bold">Strike: R$ {strikePrice.toFixed(2)}</span>
-                  <span>Preço Máx: R$ {(spotPrice * 1.3).toFixed(2)}</span>
+                  <span>{tFi.minPriceLabel} {formatCurrencyValue(spotPrice * 0.7, 'BRL', 2, locale)}</span>
+                  <span className="text-amber-400 font-bold">{tFi.strikeLabel} {formatCurrencyValue(strikePrice, 'BRL', 2, locale)}</span>
+                  <span>{tFi.maxPriceLabel} {formatCurrencyValue(spotPrice * 1.3, 'BRL', 2, locale)}</span>
                 </div>
               </div>
             </div>
@@ -822,10 +830,10 @@ export const FixedIncomeDerivativesView: React.FC = () => {
               <div className="flex items-center gap-2">
                 <BarChart2 className="w-4 h-4 text-emerald-400" />
                 <h2 className="text-sm font-bold text-white uppercase tracking-wider">
-                  Contratos Futuros de Referência (B3 & Bolsas Globais)
+                  {tFi.futuresTitle}
                 </h2>
               </div>
-              <span className="text-xs text-slate-400">Margem e Liquidação Financeira</span>
+              <span className="text-xs text-slate-400">{tFi.futuresSubtitle}</span>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -859,24 +867,24 @@ export const FixedIncomeDerivativesView: React.FC = () => {
                     </div>
 
                     <div className="text-xl font-black text-white font-mono-numbers my-2">
-                      {contract.price.toLocaleString('pt-BR')}
+                      {contract.price.toLocaleString(locale)}
                     </div>
 
                     <div className="space-y-1.5 pt-2 border-t border-slate-800/80 text-[11px]">
                       <div className="flex justify-between text-slate-400">
-                        <span>Valor do Ponto:</span>
+                        <span>{tFi.tickValueLabel}</span>
                         <span className="text-slate-200 font-medium">{contract.tickValue}</span>
                       </div>
                       <div className="flex justify-between text-slate-400">
-                        <span>Margem Recomendada:</span>
+                        <span>{tFi.recommendedMarginLabel}</span>
                         <span className="text-amber-400 font-medium">{contract.marginReq}</span>
                       </div>
                       <div className="flex justify-between text-slate-400">
-                        <span>Vencimento:</span>
+                        <span>{tFi.maturityLabel}</span>
                         <span className="text-slate-200 font-medium">{contract.maturity}</span>
                       </div>
                       <div className="flex justify-between text-slate-400">
-                        <span>Volume 24h:</span>
+                        <span>{tFi.volume24hLabel}</span>
                         <span className="text-emerald-400 font-medium">{contract.volume}</span>
                       </div>
                     </div>
@@ -896,14 +904,14 @@ export const FixedIncomeDerivativesView: React.FC = () => {
             <div className="flex items-center gap-2 pb-3 border-b border-slate-800 mb-4">
               <Calculator className="w-4 h-4 text-emerald-400" />
               <h2 className="text-sm font-bold text-white uppercase tracking-wider">
-                Simulador Comparativo de Rentabilidade Líquida
+                {tFi.simTitle}
               </h2>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
               <div>
                 <label className="text-[11px] font-semibold text-slate-400 block mb-1">
-                  Aporte Inicial (R$)
+                  {tFi.initialDepositLabel}
                 </label>
                 <input
                   type="number"
@@ -916,7 +924,7 @@ export const FixedIncomeDerivativesView: React.FC = () => {
 
               <div>
                 <label className="text-[11px] font-semibold text-slate-400 block mb-1">
-                  Prazo da Aplicação (Meses)
+                  {tFi.termMonthsLabel}
                 </label>
                 <input
                   type="number"
@@ -930,7 +938,7 @@ export const FixedIncomeDerivativesView: React.FC = () => {
 
               <div>
                 <label className="text-[11px] font-semibold text-slate-400 block mb-1">
-                  Taxa Selic / CDI Referência (% a.a.)
+                  {tFi.selicCdiRefLabel}
                 </label>
                 <input
                   type="number"
@@ -947,20 +955,20 @@ export const FixedIncomeDerivativesView: React.FC = () => {
               {/* CDI 100% */}
               <div className="p-4 rounded-xl bg-slate-900/90 border border-slate-800">
                 <span className="text-[10px] uppercase font-bold text-slate-400 block mb-1">
-                  Tesouro Selic / CDB 100% CDI
+                  {tFi.cdiCardTitle}
                 </span>
                 <div className="text-xl font-black text-emerald-400 font-mono-numbers">
-                  R$ {simResults.cdiNet.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                  {formatCurrencyValue(simResults.cdiNet, 'BRL', 2, locale)}
                 </div>
                 <div className="text-[11px] text-slate-400 mt-2 space-y-1">
                   <div className="flex justify-between">
-                    <span>Lucro Líquido:</span>
+                    <span>{tFi.netProfitLabel}</span>
                     <span className="text-white font-semibold">
-                      +R$ {simResults.cdiProfit.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                      +{formatCurrencyValue(simResults.cdiProfit, 'BRL', 2, locale)}
                     </span>
                   </div>
                   <div className="flex justify-between text-[10px] text-slate-500">
-                    <span>Alíquota IR Retido:</span>
+                    <span>{tFi.irWithheldLabel}</span>
                     <span>{simResults.irPercentageApplied}%</span>
                   </div>
                 </div>
@@ -969,21 +977,21 @@ export const FixedIncomeDerivativesView: React.FC = () => {
               {/* LCI / LCA Isento */}
               <div className="p-4 rounded-xl bg-gradient-to-br from-emerald-950/30 to-slate-900 border border-emerald-500/40">
                 <span className="text-[10px] uppercase font-bold text-emerald-400 block mb-1">
-                  LCI / LCA (95% CDI - Isento de IR)
+                  {tFi.lciCardTitle}
                 </span>
                 <div className="text-xl font-black text-white font-mono-numbers">
-                  R$ {simResults.lciNet.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                  {formatCurrencyValue(simResults.lciNet, 'BRL', 2, locale)}
                 </div>
                 <div className="text-[11px] text-slate-400 mt-2 space-y-1">
                   <div className="flex justify-between">
-                    <span>Lucro Líquido:</span>
+                    <span>{tFi.netProfitLabel}</span>
                     <span className="text-emerald-400 font-semibold">
-                      +R$ {simResults.lciProfit.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                      +{formatCurrencyValue(simResults.lciProfit, 'BRL', 2, locale)}
                     </span>
                   </div>
                   <div className="flex justify-between text-[10px] text-emerald-400 font-semibold">
-                    <span>Imposto de Renda:</span>
-                    <span>ISENTO (0%)</span>
+                    <span>{tFi.incomeTaxLabel}</span>
+                    <span>{tFi.exemptZeroLabel}</span>
                   </div>
                 </div>
               </div>
@@ -991,21 +999,21 @@ export const FixedIncomeDerivativesView: React.FC = () => {
               {/* Poupança */}
               <div className="p-4 rounded-xl bg-slate-900/90 border border-slate-800">
                 <span className="text-[10px] uppercase font-bold text-slate-500 block mb-1">
-                  Poupança Tradicional
+                  {tFi.poupancaCardTitle}
                 </span>
                 <div className="text-xl font-black text-slate-300 font-mono-numbers">
-                  R$ {simResults.poupNet.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                  {formatCurrencyValue(simResults.poupNet, 'BRL', 2, locale)}
                 </div>
                 <div className="text-[11px] text-slate-400 mt-2 space-y-1">
                   <div className="flex justify-between">
-                    <span>Lucro:</span>
+                    <span>{tFi.profitLabel}</span>
                     <span className="text-slate-300 font-semibold">
-                      +R$ {simResults.poupProfit.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                      +{formatCurrencyValue(simResults.poupProfit, 'BRL', 2, locale)}
                     </span>
                   </div>
                   <div className="flex justify-between text-[10px] text-rose-400 font-semibold">
-                    <span>Diferencial DinhEuro:</span>
-                    <span>Perde R$ {(simResults.lciProfit - simResults.poupProfit).toFixed(2)}</span>
+                    <span>{tFi.dinheuroDiffLabel}</span>
+                    <span>{tFi.losesPrefix} {formatCurrencyValue(simResults.lciProfit - simResults.poupProfit, 'BRL', 2, locale)}</span>
                   </div>
                 </div>
               </div>
@@ -1018,44 +1026,55 @@ export const FixedIncomeDerivativesView: React.FC = () => {
               <div className="flex items-center gap-2">
                 <ShieldCheck className="w-4 h-4 text-emerald-400" />
                 <h3 className="text-sm font-bold text-white uppercase tracking-wider">
-                  Catálogo de Títulos Soberanos & Privados
+                  {tFi.catalogTitle}
                 </h3>
               </div>
-              <span className="text-xs text-slate-400">Tesouro Direto & Bancários</span>
+              <span className="text-xs text-slate-400">{tFi.catalogSubtitle}</span>
             </div>
 
             <div className="overflow-x-auto no-scrollbar">
               <table className="w-full text-left text-xs">
                 <thead>
                   <tr className="border-b border-slate-800 text-slate-400 text-[11px] uppercase tracking-wider">
-                    <th className="py-2.5 px-3">Título / Ativo</th>
-                    <th className="py-2.5 px-3">Emissor</th>
-                    <th className="py-2.5 px-3">Rentabilidade</th>
-                    <th className="py-2.5 px-3">Vencimento</th>
-                    <th className="py-2.5 px-3">Mínimo</th>
-                    <th className="py-2.5 px-3">Tributação</th>
-                    <th className="py-2.5 px-3">Garantia</th>
+                    <th className="py-2.5 px-3">{tFi.colTitleAsset}</th>
+                    <th className="py-2.5 px-3">{tFi.colIssuer}</th>
+                    <th className="py-2.5 px-3">{tFi.colYield}</th>
+                    <th className="py-2.5 px-3">{tFi.colMaturity}</th>
+                    <th className="py-2.5 px-3">{tFi.colMinimum}</th>
+                    <th className="py-2.5 px-3">{tFi.colTaxation}</th>
+                    <th className="py-2.5 px-3">{tFi.colGuarantee}</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-800/60 font-medium text-slate-200">
-                  {FIXED_INCOME_ASSETS.map((asset) => (
-                    <tr key={asset.id} className="hover:bg-slate-800/40 transition">
-                      <td className="py-3 px-3">
-                        <div className="font-bold text-white">{asset.name}</div>
-                        <span className="text-[10px] text-emerald-400 font-normal">{asset.category}</span>
-                      </td>
-                      <td className="py-3 px-3 text-slate-300">{asset.issuer}</td>
-                      <td className="py-3 px-3 font-bold text-emerald-400 font-mono-numbers">
-                        {asset.rateDescription}
-                      </td>
-                      <td className="py-3 px-3 text-slate-300">{asset.maturity}</td>
-                      <td className="py-3 px-3 font-mono-numbers text-white">
-                        R$ {asset.minInvestment.toFixed(2)}
-                      </td>
-                      <td className="py-3 px-3 text-[11px] text-slate-400">{asset.irTax}</td>
-                      <td className="py-3 px-3 text-[11px] text-slate-300">{asset.guarantee}</td>
-                    </tr>
-                  ))}
+                  {FIXED_INCOME_ASSETS.map((asset) => {
+                    const ov = tFi.fixedIncomeOverrides[asset.id];
+                    const name = ov?.name || asset.name;
+                    const category = ov?.category || asset.category;
+                    const issuer = ov?.issuer || asset.issuer;
+                    const rateDescription = ov?.rateDescription || asset.rateDescription;
+                    const maturity = ov?.maturity || asset.maturity;
+                    const irTax = ov?.irTax || asset.irTax;
+                    const guarantee = ov?.guarantee || asset.guarantee;
+
+                    return (
+                      <tr key={asset.id} className="hover:bg-slate-800/40 transition">
+                        <td className="py-3 px-3">
+                          <div className="font-bold text-white">{name}</div>
+                          <span className="text-[10px] text-emerald-400 font-normal">{category}</span>
+                        </td>
+                        <td className="py-3 px-3 text-slate-300">{issuer}</td>
+                        <td className="py-3 px-3 font-bold text-emerald-400 font-mono-numbers">
+                          {rateDescription}
+                        </td>
+                        <td className="py-3 px-3 text-slate-300">{maturity}</td>
+                        <td className="py-3 px-3 font-mono-numbers text-white">
+                          {formatCurrencyValue(asset.minInvestment, 'BRL', 2, locale)}
+                        </td>
+                        <td className="py-3 px-3 text-[11px] text-slate-400">{irTax}</td>
+                        <td className="py-3 px-3 text-[11px] text-slate-300">{guarantee}</td>
+                      </tr>
+                    );
+                  })}
                 </tbody>
               </table>
             </div>

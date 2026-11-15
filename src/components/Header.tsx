@@ -32,7 +32,12 @@ import {
 } from 'lucide-react';
 import { useMarket, NavigationTab, MarketCategoryFilter } from '../context/MarketContext';
 import { useI18n } from '../i18n/I18nContext';
-import type { SupportedLanguage } from '../i18n/translations';
+import { getNumberLocale, type SupportedLanguage } from '../i18n/translations';
+import {
+  getLocalizedAssetName,
+  getLocalizedAssetSymbol,
+  getLocalizedCategoryLabel,
+} from '../i18n/marketDataTranslations';
 import { DualPrice } from './DualPrice';
 
 export const Header: React.FC = () => {
@@ -125,10 +130,11 @@ export const Header: React.FC = () => {
 
   // Update clocks every second
   useEffect(() => {
+    const spLocale = getNumberLocale(lang);
     const updateTimes = () => {
       const now = new Date();
       setWorldTimes({
-        sp: now.toLocaleTimeString('pt-BR', { timeZone: 'America/Sao_Paulo', hour: '2-digit', minute: '2-digit' }),
+        sp: now.toLocaleTimeString(spLocale, { timeZone: 'America/Sao_Paulo', hour: '2-digit', minute: '2-digit' }),
         ny: now.toLocaleTimeString('en-US', { timeZone: 'America/New_York', hour: '2-digit', minute: '2-digit' }),
         lon: now.toLocaleTimeString('en-GB', { timeZone: 'Europe/London', hour: '2-digit', minute: '2-digit' }),
         fra: now.toLocaleTimeString('de-DE', { timeZone: 'Europe/Berlin', hour: '2-digit', minute: '2-digit' }),
@@ -137,7 +143,7 @@ export const Header: React.FC = () => {
     updateTimes();
     const timer = setInterval(updateTimes, 1000);
     return () => clearInterval(timer);
-  }, []);
+  }, [lang]);
 
   // Prevent background scrolling and handle Escape when mobile drawer is open
   useEffect(() => {
@@ -300,11 +306,14 @@ export const Header: React.FC = () => {
   };
 
   // Filter assets for search
-  const filteredAssets = searchQuery.trim()
+  const normalizedQuery = searchQuery.trim().toLowerCase();
+  const filteredAssets = normalizedQuery
     ? assets.filter(
         (a) =>
-          a.symbol.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          a.name.toLowerCase().includes(searchQuery.toLowerCase())
+          a.symbol.toLowerCase().includes(normalizedQuery) ||
+          a.name.toLowerCase().includes(normalizedQuery) ||
+          getLocalizedAssetSymbol(a, lang).toLowerCase().includes(normalizedQuery) ||
+          getLocalizedAssetName(a, lang).toLowerCase().includes(normalizedQuery)
       )
     : assets.slice(0, 6);
 
@@ -345,7 +354,7 @@ export const Header: React.FC = () => {
               className="text-slate-400 hover:text-emerald-300 transition cursor-pointer flex items-center gap-1 font-mono-numbers bg-slate-900/60 px-2 py-0.5 rounded border border-slate-800"
               title={t.header.syncTooltip}
             >
-              <span>{lastUpdated.toLocaleTimeString(lang === 'en' ? 'en-US' : 'pt-BR', { hour: '2-digit', minute: '2-digit', second: '2-digit' })}</span>
+              <span>{lastUpdated.toLocaleTimeString(getNumberLocale(lang), { hour: '2-digit', minute: '2-digit', second: '2-digit' })}</span>
             </button>
           </div>
         </div>
@@ -418,7 +427,7 @@ export const Header: React.FC = () => {
           {/* Discreet Language Selector (PT | EN | ES) */}
           <div
             role="group"
-            aria-label="Language selector"
+            aria-label={t.header.languageSelectorAria}
             className="inline-flex items-center rounded-lg border border-slate-700/80 bg-slate-900/90 p-0.5 text-[10px] sm:text-[11px] font-bold flex-shrink-0"
           >
             {(['pt', 'en', 'es'] as SupportedLanguage[]).map((code, idx) => {
@@ -523,7 +532,7 @@ export const Header: React.FC = () => {
                   e.stopPropagation();
                   scrollNavBy('left');
                 }}
-                aria-label="Rolar navegação para a esquerda"
+                aria-label={t.header.scrollLeftAria}
                 className="hidden md:flex items-center justify-center absolute left-0 z-10 bg-[#0B1221]/90 backdrop-blur-sm border border-slate-800/80 rounded-full w-7 h-7 text-slate-300 hover:text-white hover:border-slate-700 transition cursor-pointer shadow-md"
               >
                 <ChevronLeft className="w-4 h-4" />
@@ -578,7 +587,7 @@ export const Header: React.FC = () => {
                   e.stopPropagation();
                   scrollNavBy('right');
                 }}
-                aria-label="Rolar navegação para a direita"
+                aria-label={t.header.scrollRightAria}
                 className="hidden md:flex items-center justify-center absolute right-0 z-10 bg-[#0B1221]/90 backdrop-blur-sm border border-slate-800/80 rounded-full w-7 h-7 text-slate-300 hover:text-white hover:border-slate-700 transition cursor-pointer shadow-md"
               >
                 <ChevronRight className="w-4 h-4" />
@@ -593,7 +602,7 @@ export const Header: React.FC = () => {
         <div
           ref={categoryDropdownRef}
           role="menu"
-          aria-label="Seletor de Categorias"
+          aria-label={t.header.categoryMenuAria}
           style={{ top: `${categoryMenuPos.top}px`, left: `${categoryMenuPos.left}px` }}
           className={`fixed z-[9999] w-80 rounded-2xl border shadow-2xl p-2 animate-in fade-in duration-150 ${
             theme === 'light'
@@ -603,10 +612,10 @@ export const Header: React.FC = () => {
         >
           <div className="px-2.5 py-1.5 flex items-center justify-between border-b border-slate-800/60 mb-1.5">
             <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-400">
-              Categorias de Mercado
+              {t.header.categoryMenuTitle}
             </span>
             <span className="text-[10px] text-slate-400 font-mono-numbers">
-              {assets.length} ativos
+              {assets.length} {t.header.assetsCountLabel}
             </span>
           </div>
 
@@ -670,7 +679,7 @@ export const Header: React.FC = () => {
               }`}
             >
               <Percent className="w-3.5 h-3.5 text-emerald-400" />
-              <span>Renda Fixa</span>
+              <span>{t.header.fixedIncomeShortcut}</span>
             </button>
           </div>
         </div>,
@@ -683,7 +692,7 @@ export const Header: React.FC = () => {
           className="fixed inset-0 z-[9999] flex"
           role="dialog"
           aria-modal="true"
-          aria-label="Menu de Navegação Lateral"
+          aria-label={t.header.openMenuAria}
         >
           {/* Backdrop Blur Overlay */}
           <div
@@ -713,7 +722,7 @@ export const Header: React.FC = () => {
                 <button
                   onClick={() => setIsMobileDrawerOpen(false)}
                   className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition cursor-pointer"
-                  aria-label="Close menu"
+                  aria-label={t.header.closeMenuAria}
                 >
                   <X className="w-5 h-5" />
                 </button>
@@ -868,13 +877,13 @@ export const Header: React.FC = () => {
                         <span className="text-xl flex-shrink-0">{asset.flag || '📈'}</span>
                         <div>
                           <div className="flex items-center gap-2">
-                            <span className="font-bold text-white text-xs">{asset.symbol}</span>
+                            <span className="font-bold text-white text-xs">{getLocalizedAssetSymbol(asset, lang)}</span>
                             <span className="text-[10px] text-slate-400 uppercase px-1.5 py-0.2 rounded bg-slate-800">
-                              {asset.category}
+                              {getLocalizedCategoryLabel(asset.category, lang)}
                             </span>
                           </div>
                           <p className="text-[11px] text-slate-400 truncate max-w-[160px] sm:max-w-xs">
-                            {asset.name}
+                            {getLocalizedAssetName(asset, lang)}
                           </p>
                         </div>
                       </div>

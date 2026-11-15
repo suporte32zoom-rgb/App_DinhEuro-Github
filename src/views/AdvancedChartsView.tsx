@@ -1,10 +1,15 @@
 import React, { useState } from 'react';
-import { BarChart2, Layers } from 'lucide-react';
+import { BarChart2 } from 'lucide-react';
 import { useMarket } from '../context/MarketContext';
 import { UnifiedAssetDetailView } from '../components/UnifiedAssetDetailView';
+import { useI18n } from '../i18n/I18nContext';
+import { VIEWS_TRANSLATIONS } from '../i18n/viewsTranslations';
+import { getLocalizedAssetName } from '../i18n/marketDataTranslations';
 
 export const AdvancedChartsView: React.FC = () => {
   const { assets, setActiveTab } = useMarket();
+  const { lang } = useI18n();
+  const tAdv = VIEWS_TRANSLATIONS[lang].advancedCharts;
   const [selectedSymbol, setSelectedSymbol] = useState<string>('IBOVESPA');
 
   const currentAsset =
@@ -20,10 +25,10 @@ export const AdvancedChartsView: React.FC = () => {
           </div>
           <div>
             <h1 className="text-base sm:text-lg font-black text-white tracking-tight flex items-center gap-2">
-              <span>Terminal de Análise Técnica & Gráficos Avançados</span>
+              <span>{tAdv.title}</span>
             </h1>
             <p className="text-xs text-slate-400">
-              Motor Gráfico D3 v7 institucional com análise diagnóstica de inteligência artificial.
+              {tAdv.subtitle}
             </p>
           </div>
         </div>
@@ -31,64 +36,64 @@ export const AdvancedChartsView: React.FC = () => {
         {/* Global Asset Dropdown */}
         <div className="flex items-center gap-2.5">
           <label className="text-xs font-bold text-slate-400 uppercase tracking-wider">
-            Selecionar Ativo:
+            {tAdv.selectAsset}
           </label>
           <select
             value={currentAsset.symbol}
             onChange={(e) => setSelectedSymbol(e.target.value)}
             className="bg-slate-900 border border-slate-700/80 rounded-xl px-3.5 py-2 text-xs font-bold text-white focus:outline-none focus:border-emerald-500 shadow-md cursor-pointer"
           >
-            <optgroup label="Índices Globais">
+            <optgroup label={tAdv.groupIndices}>
               {assets
                 .filter((a) => a.category === 'indices')
                 .map((a) => (
                   <option key={a.id} value={a.symbol}>
-                    {a.symbol} - {a.name}
+                    {a.symbol} - {getLocalizedAssetName(a, lang)}
                   </option>
                 ))}
             </optgroup>
-            <optgroup label="Ações B3 (Brasil)">
+            <optgroup label={tAdv.groupStocksBr}>
               {assets
                 .filter((a) => a.category === 'stocks_br')
                 .map((a) => (
                   <option key={a.id} value={a.symbol}>
-                    {a.symbol} - {a.name}
+                    {a.symbol} - {getLocalizedAssetName(a, lang)}
                   </option>
                 ))}
             </optgroup>
-            <optgroup label="Ações Internacionais (EUA)">
+            <optgroup label={tAdv.groupStocksUs}>
               {assets
                 .filter((a) => a.category === 'stocks_us')
                 .map((a) => (
                   <option key={a.id} value={a.symbol}>
-                    {a.symbol} - {a.name}
+                    {a.symbol} - {getLocalizedAssetName(a, lang)}
                   </option>
                 ))}
             </optgroup>
-            <optgroup label="Câmbio & Forex">
+            <optgroup label={tAdv.groupForex}>
               {assets
                 .filter((a) => a.category === 'forex')
                 .map((a) => (
                   <option key={a.id} value={a.symbol}>
-                    {a.symbol} - {a.name}
+                    {a.symbol} - {getLocalizedAssetName(a, lang)}
                   </option>
                 ))}
             </optgroup>
-            <optgroup label="Criptoativos">
+            <optgroup label={tAdv.groupCrypto}>
               {assets
                 .filter((a) => a.category === 'crypto')
                 .map((a) => (
                   <option key={a.id} value={a.symbol}>
-                    {a.symbol} - {a.name}
+                    {a.symbol} - {getLocalizedAssetName(a, lang)}
                   </option>
                 ))}
             </optgroup>
-            <optgroup label="Commodities">
+            <optgroup label={tAdv.groupCommodities}>
               {assets
                 .filter((a) => a.category === 'commodities')
                 .map((a) => (
                   <option key={a.id} value={a.symbol}>
-                    {a.symbol} - {a.name}
+                    {a.symbol} - {getLocalizedAssetName(a, lang)}
                   </option>
                 ))}
             </optgroup>

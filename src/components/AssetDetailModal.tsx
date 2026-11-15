@@ -2,9 +2,13 @@ import React, { useEffect } from 'react';
 import { X } from 'lucide-react';
 import { useMarket } from '../context/MarketContext';
 import { UnifiedAssetDetailView } from './UnifiedAssetDetailView';
+import { useI18n } from '../i18n/I18nContext';
+import { VIEWS_TRANSLATIONS } from '../i18n/viewsTranslations';
 
 export const AssetDetailModal: React.FC = () => {
   const { selectedAsset, setSelectedAsset } = useMarket();
+  const { lang } = useI18n();
+  const tDetail = VIEWS_TRANSLATIONS[lang].assetDetail;
 
   // Close modal on Escape key press
   useEffect(() => {
@@ -27,7 +31,7 @@ export const AssetDetailModal: React.FC = () => {
       onClick={() => setSelectedAsset(null)}
       role="dialog"
       aria-modal="true"
-      aria-label={`Detalhes do ativo ${selectedAsset.symbol}`}
+      aria-label={`${tDetail.modalAriaPrefix} ${selectedAsset.symbol}`}
     >
       <div
         className="w-full max-w-5xl rounded-3xl bg-[#070e1b] border border-slate-700/80 shadow-2xl text-slate-100 overflow-hidden flex flex-col max-h-[92vh]"
@@ -38,16 +42,16 @@ export const AssetDetailModal: React.FC = () => {
           <div className="flex items-center gap-2">
             <span className="text-xl">{selectedAsset.flag || '📊'}</span>
             <span className="text-xs font-bold uppercase tracking-wider text-slate-300">
-              Detalhes & Análise do Ativo • DinhEuro
+              {tDetail.modalTopTitle}
             </span>
           </div>
 
           <button
             onClick={() => setSelectedAsset(null)}
             className="p-1.5 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition cursor-pointer flex items-center gap-1.5 text-xs font-semibold"
-            title="Fechar Detalhes (Esc)"
+            title={tDetail.closeTitle}
           >
-            <span className="hidden sm:inline">Fechar</span>
+            <span className="hidden sm:inline">{tDetail.closeBtn}</span>
             <X className="w-5 h-5" />
           </button>
         </div>

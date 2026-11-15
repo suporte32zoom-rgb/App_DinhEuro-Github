@@ -21,81 +21,18 @@ import {
 } from 'lucide-react';
 import { useMarket } from '../context/MarketContext';
 import {
-  ACADEMY_COURSES,
-  ACADEMY_FAQ,
   ACADEMY_PROGRESS_STORAGE_KEY,
   type AcademyCourse,
   type CourseLevel,
 } from '../data/academyCourses';
-
-interface GlossaryTerm {
-  term: string;
-  category: 'Câmbio' | 'Ações' | 'Macro' | 'Cripto';
-  definition: string;
-}
-
-const GLOSSARY_TERMS: GlossaryTerm[] = [
-  {
-    term: 'Spread Cambial',
-    category: 'Câmbio',
-    definition:
-      'A diferença entre a cotação interbancária de mercado (preço de custo da moeda) e a taxa cobrada pelo banco ou corretora na conversão.',
-  },
-  {
-    term: 'VET (Valor Efetivo Total)',
-    category: 'Câmbio',
-    definition:
-      'Custo final real por unidade de moeda estrangeira somando taxa de câmbio comercial, spread da instituição e IOF incidente na remessa.',
-  },
-  {
-    term: 'SIPC (Securities Investor Protection Corporation)',
-    category: 'Ações',
-    definition:
-      'Entidade dos Estados Unidos que protege contas de clientes em corretoras reguladas até o limite de US$ 500.000 em valores mobiliários em caso de falência.',
-  },
-  {
-    term: 'Carry Trade',
-    category: 'Câmbio',
-    definition:
-      'Operação financeira em que um investidor capta recursos em moedas com taxa de juros baixa para aplicar em países com juros reais elevados.',
-  },
-  {
-    term: 'P/L (Preço sobre Lucro / P/E Ratio)',
-    category: 'Ações',
-    definition:
-      'Múltiplo de avaliação que indica quantos anos o investidor levaria para reaver o capital investido considerando o lucro atual da empresa.',
-  },
-  {
-    term: 'Dividend Yield (DY)',
-    category: 'Ações',
-    definition:
-      'Relação percentual entre os proventos pagos por uma ação nos últimos 12 meses e o preço de mercado atual de sua cotação.',
-  },
-  {
-    term: 'Selic e CDI',
-    category: 'Macro',
-    definition:
-      'A taxa Selic é a taxa básica de juros da economia brasileira definida pelo Copom. O CDI acompanha a Selic de perto e serve de referência para títulos bancários pós-fixados.',
-  },
-  {
-    term: 'Marcação a Mercado (MtM)',
-    category: 'Macro',
-    definition:
-      'Atualização diária do valor de um título público ou privado conforme as taxas de juros futuras negociadas no mercado secundário.',
-  },
-  {
-    term: 'Halving do Bitcoin',
-    category: 'Cripto',
-    definition:
-      'Evento programado no protocolo do Bitcoin a cada 210.000 blocos (aprox. 4 anos) que reduz pela metade a emissão de novas moedas por bloco minerado.',
-  },
-  {
-    term: 'Hedge Cambial',
-    category: 'Câmbio',
-    definition:
-      'Estratégia de proteção patrimonial utilizada para neutralizar o risco de variação abrupta de moedas estrangeiras sobre ativos ou passivos.',
-  },
-];
+import { useI18n } from '../i18n/I18nContext';
+import {
+  ACADEMY_UI,
+  getLocalizedAcademyCourses,
+  getLocalizedAcademyFaq,
+  getLocalizedCourseLevel,
+  getLocalizedGlossaryTerms,
+} from '../i18n/academyTranslations';
 
 const LEVEL_STYLES: Record<CourseLevel, string> = {
   Iniciante: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/25',
@@ -124,6 +61,12 @@ function loadCompletedModules(): string[] {
 
 export const AcademyView: React.FC = () => {
   const { setActiveTab, selectedAcademyTarget, setSelectedAcademyTarget } = useMarket();
+  const { lang } = useI18n();
+  const tAc = ACADEMY_UI[lang];
+
+  const localizedCourses = useMemo(() => getLocalizedAcademyCourses(lang), [lang]);
+  const localizedFaq = useMemo(() => getLocalizedAcademyFaq(lang), [lang]);
+  const localizedGlossary = useMemo(() => getLocalizedGlossaryTerms(lang), [lang]);
 
   const [levelFilter, setLevelFilter] = useState<'Todos' | CourseLevel>('Todos');
   const [completedModuleIds, setCompletedModuleIds] = useState<string[]>(() => loadCompletedModules());
@@ -155,7 +98,7 @@ export const AcademyView: React.FC = () => {
   // Handle deep-link from Home Academy Highlight cards
   useEffect(() => {
     if (!selectedAcademyTarget) return;
-    const course = ACADEMY_COURSES.find((c) => c.id === selectedAcademyTarget.courseId);
+    const course = localizedCourses.find((c) => c.id === selectedAcademyTarget.courseId);
     if (course) {
       const idx =
         typeof selectedAcademyTarget.moduleIndex === 'number' &&
@@ -166,7 +109,7 @@ export const AcademyView: React.FC = () => {
       setActiveStudySession({ courseId: course.id, moduleIndex: idx });
     }
     setSelectedAcademyTarget(null);
-  }, [selectedAcademyTarget, setSelectedAcademyTarget]);
+  }, [selectedAcademyTarget, setSelectedAcademyTarget, localizedCourses]);
 
   // Body scroll lock & Escape handler when Study Modal is open
   useEffect(() => {
@@ -187,21 +130,21 @@ export const AcademyView: React.FC = () => {
   }, [activeStudySession]);
 
   const totalModulesCount = useMemo(
-    () => ACADEMY_COURSES.reduce((acc, c) => acc + c.modules.length, 0),
-    []
+    () => localizedCourses.reduce((acc, c) => acc + c.modules.length, 0),
+    [localizedCourses]
   );
   const completedCount = completedModuleIds.length;
   const overallProgressPercent =
     totalModulesCount > 0 ? Math.round((completedCount / totalModulesCount) * 100) : 0;
 
   const filteredCourses = useMemo(() => {
-    if (levelFilter === 'Todos') return ACADEMY_COURSES;
-    return ACADEMY_COURSES.filter((c) => c.level === levelFilter);
-  }, [levelFilter]);
+    if (levelFilter === 'Todos') return localizedCourses;
+    return localizedCourses.filter((c) => c.level === levelFilter);
+  }, [levelFilter, localizedCourses]);
 
   const filteredGlossary = useMemo(() => {
     const normalizedSearch = searchTerm.trim().toLowerCase();
-    return GLOSSARY_TERMS.filter((item) => {
+    return localizedGlossary.filter((item) => {
       const matchesCat = activeCategory === 'all' || item.category === activeCategory;
       const matchesSearch =
         !normalizedSearch ||
@@ -209,7 +152,7 @@ export const AcademyView: React.FC = () => {
         item.definition.toLowerCase().includes(normalizedSearch);
       return matchesCat && matchesSearch;
     });
-  }, [activeCategory, searchTerm]);
+  }, [activeCategory, searchTerm, localizedGlossary]);
 
   const toggleModuleCompleted = (moduleId: string) => {
     setCompletedModuleIds((prev) =>
@@ -236,7 +179,7 @@ export const AcademyView: React.FC = () => {
   };
 
   const activeCourse = activeStudySession
-    ? ACADEMY_COURSES.find((c) => c.id === activeStudySession.courseId) || null
+    ? localizedCourses.find((c) => c.id === activeStudySession.courseId) || null
     : null;
   const activeModule =
     activeCourse && activeStudySession
@@ -256,32 +199,32 @@ export const AcademyView: React.FC = () => {
             <div className="flex flex-wrap items-center gap-2">
               <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-emerald-500/10 border border-emerald-500/25 text-emerald-400 text-[11px] font-bold">
                 <ShieldCheck className="w-3.5 h-3.5" />
-                <span>Acesso Livre</span>
+                <span>{tAc.badgeFree}</span>
               </span>
               <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-sky-500/10 border border-sky-500/25 text-sky-400 text-[11px] font-bold">
                 <Clock className="w-3.5 h-3.5" />
-                <span>Conteúdo Atualizado</span>
+                <span>{tAc.badgeUpdated}</span>
               </span>
               <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-amber-500/10 border border-amber-500/25 text-amber-400 text-[11px] font-bold">
                 <Layers className="w-3.5 h-3.5" />
-                <span>4 Trilhas Completas</span>
+                <span>{tAc.badgeTracks}</span>
               </span>
             </div>
 
             <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight flex items-center gap-2.5">
               <GraduationCap className="w-7 h-7 text-emerald-400 flex-shrink-0" />
-              <span>DinhEuro Academy</span>
+              <span>{tAc.title}</span>
             </h1>
 
             <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
-              Educação financeira independente e 100% gratuita, sem cadastro obrigatório, sem paywalls e sem dependência de vídeos externos. Estude por leitura estruturada, acompanhe exemplos numéricos reais e aplique cada conceito diretamente nos simuladores e terminais do portal.
+              {tAc.subtitle}
             </p>
           </div>
 
           {/* Study Progress Card */}
           <div className="rounded-xl bg-[#070e1b] border border-slate-800 p-4 sm:min-w-[260px] space-y-2.5">
             <div className="flex items-center justify-between text-xs">
-              <span className="font-bold text-slate-300">Seu Progresso de Estudo</span>
+              <span className="font-bold text-slate-300">{tAc.progressTitle}</span>
               <span className="font-mono-numbers font-extrabold text-emerald-400">
                 {overallProgressPercent}%
               </span>
@@ -294,9 +237,9 @@ export const AcademyView: React.FC = () => {
             </div>
             <div className="flex items-center justify-between text-[11px] text-slate-400 font-mono-numbers">
               <span>
-                {completedCount} de {totalModulesCount} módulos concluídos
+                {completedCount} {tAc.progressOf} {totalModulesCount} {tAc.progressModulesCompleted}
               </span>
-              <span className="text-emerald-400 font-semibold">Salvo no dispositivo</span>
+              <span className="text-emerald-400 font-semibold">{tAc.savedOnDevice}</span>
             </div>
           </div>
         </div>
@@ -311,25 +254,26 @@ export const AcademyView: React.FC = () => {
               className="text-base sm:text-lg font-extrabold text-white flex items-center gap-2"
             >
               <BookOpen className="w-4 h-4 text-emerald-400" />
-              <span>Trilhas de Educação Financeira & Mercados</span>
+              <span>{tAc.coursesHeading}</span>
             </h2>
             <p className="text-xs text-slate-400 mt-0.5">
-              Selecione uma trilha abaixo ou clique diretamente em qualquer módulo para abrir o ambiente de leitura.
+              {tAc.coursesSubtitle}
             </p>
           </div>
 
           {/* Level Filters */}
           <div
             role="group"
-            aria-label="Filtrar cursos por nível"
+            aria-label={tAc.filterAriaLabel}
             className="flex items-center gap-1.5 overflow-x-auto no-scrollbar"
           >
             {LEVEL_FILTERS.map((level) => {
               const count =
                 level === 'Todos'
-                  ? ACADEMY_COURSES.length
-                  : ACADEMY_COURSES.filter((c) => c.level === level).length;
+                  ? localizedCourses.length
+                  : localizedCourses.filter((c) => c.level === level).length;
               const isActive = levelFilter === level;
+              const label = level === 'Todos' ? tAc.filterAll : getLocalizedCourseLevel(level, lang);
               return (
                 <button
                   key={level}
@@ -341,7 +285,7 @@ export const AcademyView: React.FC = () => {
                       : 'bg-slate-900 border-slate-800 text-slate-400 hover:text-white hover:border-slate-700'
                   }`}
                 >
-                  {level} <span className="font-mono-numbers opacity-75">({count})</span>
+                  {label} <span className="font-mono-numbers opacity-75">({count})</span>
                 </button>
               );
             })}
@@ -368,14 +312,14 @@ export const AcademyView: React.FC = () => {
                       <span
                         className={`text-[11px] font-bold px-2.5 py-0.5 rounded border ${LEVEL_STYLES[course.level]}`}
                       >
-                        Nível: {course.level}
+                        {tAc.levelPrefix} {getLocalizedCourseLevel(course.level, lang)}
                       </span>
                       <span className="text-[11px] font-mono-numbers text-slate-400 font-semibold">
-                        {course.modules.length} Módulos • {course.duration}
+                        {course.modules.length} {tAc.modulesCountLabel} • {course.duration}
                       </span>
                     </div>
                     <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/25 text-emerald-400">
-                      Gratuito
+                      {tAc.freeTag}
                     </span>
                   </div>
 
@@ -386,16 +330,16 @@ export const AcademyView: React.FC = () => {
                     </h3>
                     <p className="text-xs text-slate-300 leading-relaxed">{course.description}</p>
                     <p className="text-[11px] text-slate-400 leading-relaxed">
-                      <strong className="text-slate-200">Objetivo prático:</strong> {course.objective}
+                      <strong className="text-slate-200">{tAc.practicalObjective}</strong> {course.objective}
                     </p>
                   </div>
 
                   {/* Progress inside course */}
                   <div className="space-y-1.5">
                     <div className="flex items-center justify-between text-[11px]">
-                      <span className="text-slate-400 font-medium">Progresso da trilha</span>
+                      <span className="text-slate-400 font-medium">{tAc.trackProgress}</span>
                       <span className="font-mono-numbers font-bold text-emerald-400">
-                        {doneInCourse}/{course.modules.length} módulos ({coursePercent}%)
+                        {doneInCourse}/{course.modules.length} {tAc.modulesLowerLabel} ({coursePercent}%)
                       </span>
                     </div>
                     <div className="w-full h-1.5 rounded-full bg-slate-800 overflow-hidden">
@@ -409,7 +353,7 @@ export const AcademyView: React.FC = () => {
                   {/* Clickable 4 Modules List */}
                   <div className="pt-2 border-t border-slate-800/80 space-y-2">
                     <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
-                      Estrutura dos 4 Módulos:
+                      {tAc.fourModulesStructure}
                     </span>
                     <div className="space-y-1.5">
                       {course.modules.map((mod, mIdx) => {
@@ -455,10 +399,10 @@ export const AcademyView: React.FC = () => {
                   <BookOpen className="w-3.5 h-3.5" />
                   <span>
                     {doneInCourse === 0
-                      ? 'Iniciar Curso'
+                      ? tAc.startCourse
                       : doneInCourse === course.modules.length
-                        ? 'Revisar Curso Completo'
-                        : 'Continuar Curso'}
+                        ? tAc.reviewCourse
+                        : tAc.continueCourse}
                   </span>
                   <ChevronRight className="w-3.5 h-3.5" />
                 </button>
@@ -480,10 +424,10 @@ export const AcademyView: React.FC = () => {
               className="text-base font-bold text-white flex items-center gap-2"
             >
               <Award className="w-4 h-4 text-amber-400" />
-              <span>Glossário & Dicionário Financeiro A-Z</span>
+              <span>{tAc.glossaryTitle}</span>
             </h2>
             <p className="text-xs text-slate-400 mt-0.5">
-              Definições claras de termos técnicos do mercado financeiro brasileiro e global.
+              {tAc.glossarySubtitle}
             </p>
           </div>
 
@@ -491,7 +435,7 @@ export const AcademyView: React.FC = () => {
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
             <input
               type="text"
-              placeholder="Buscar termo no glossário..."
+              placeholder={tAc.glossarySearchPlaceholder}
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="w-full bg-slate-900 border border-slate-700 rounded-xl pl-9 pr-3 py-1.5 text-xs text-white placeholder:text-slate-500 focus:outline-none focus:border-emerald-500"
@@ -503,11 +447,11 @@ export const AcademyView: React.FC = () => {
         <div className="flex items-center gap-2 overflow-x-auto no-scrollbar">
           {(
             [
-              { id: 'all', label: 'Todos os Termos' },
-              { id: 'Câmbio', label: 'Câmbio & Moedas' },
-              { id: 'Ações', label: 'Ações & Bolsa' },
-              { id: 'Macro', label: 'Macroeconomia' },
-              { id: 'Cripto', label: 'Criptoativos' },
+              { id: 'all', label: tAc.glossaryCategories.all },
+              { id: 'Câmbio', label: tAc.glossaryCategories.Câmbio },
+              { id: 'Ações', label: tAc.glossaryCategories.Ações },
+              { id: 'Macro', label: tAc.glossaryCategories.Macro },
+              { id: 'Cripto', label: tAc.glossaryCategories.Cripto },
             ] as const
           ).map((c) => (
             <button
@@ -529,13 +473,13 @@ export const AcademyView: React.FC = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {filteredGlossary.map((item) => (
             <div
-              key={item.term}
+              key={item.id}
               className="bg-[#070e1b] rounded-xl p-4 border border-slate-800/80 space-y-1.5"
             >
               <div className="flex items-center justify-between gap-2">
                 <h3 className="text-xs sm:text-sm font-bold text-white">{item.term}</h3>
                 <span className="text-[10px] px-2 py-0.5 rounded bg-slate-800 text-slate-400 font-semibold uppercase flex-shrink-0">
-                  {item.category}
+                  {tAc.glossaryCategories[item.category]}
                 </span>
               </div>
               <p className="text-xs text-slate-300 leading-relaxed">{item.definition}</p>
@@ -555,15 +499,15 @@ export const AcademyView: React.FC = () => {
             className="text-base font-bold text-white flex items-center gap-2"
           >
             <HelpCircle className="w-4 h-4 text-emerald-400" />
-            <span>Perguntas Frequentes — DinhEuro Academy</span>
+            <span>{tAc.faqTitle}</span>
           </h2>
           <p className="text-xs text-slate-400 mt-0.5">
-            Informações sobre funcionamento, acesso gratuito, armazenamento de progresso e uso dos simuladores.
+            {tAc.faqSubtitle}
           </p>
         </div>
 
         <div className="space-y-2.5">
-          {ACADEMY_FAQ.map((faq) => {
+          {localizedFaq.map((faq) => {
             const isOpen = !!openFaqIds[faq.id];
             return (
               <div
@@ -616,21 +560,21 @@ export const AcademyView: React.FC = () => {
                     <span
                       className={`text-[10px] font-bold px-2 py-0.5 rounded border ${LEVEL_STYLES[activeCourse.level]}`}
                     >
-                      {activeCourse.level}
+                      {getLocalizedCourseLevel(activeCourse.level, lang)}
                     </span>
                     <span className="text-[11px] font-semibold text-emerald-400 truncate">
                       {activeCourse.title}
                     </span>
                   </div>
                   <p className="text-[11px] text-slate-400 font-mono-numbers">
-                    Módulo {activeModule.number} de {activeCourse.modules.length} • Duração estimada:{' '}
+                    {tAc.moduleWord} {activeModule.number} {tAc.ofWord} {activeCourse.modules.length} • {tAc.estimatedDuration}{' '}
                     {activeModule.duration}
                   </p>
                 </div>
 
                 <button
                   type="button"
-                  aria-label="Fechar aula"
+                  aria-label={tAc.closeLessonAria}
                   onClick={() => setActiveStudySession(null)}
                   className="p-2 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-300 hover:text-white transition cursor-pointer flex-shrink-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500"
                 >
@@ -643,7 +587,7 @@ export const AcademyView: React.FC = () => {
                 {/* Course Modules Sidebar */}
                 <aside className="md:w-72 border-b md:border-b-0 md:border-r border-slate-800 bg-[#070d18] p-3 sm:p-4 overflow-x-auto md:overflow-y-auto flex-shrink-0">
                   <div className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2 hidden md:block">
-                    Módulos da Trilha
+                    {tAc.trackModulesSidebar}
                   </div>
                   <div className="flex md:flex-col gap-2">
                     {activeCourse.modules.map((mod, idx) => {
@@ -673,7 +617,7 @@ export const AcademyView: React.FC = () => {
                           )}
                           <div className="min-w-0">
                             <div className="text-[10px] font-mono-numbers text-slate-400">
-                              Módulo {mod.number} • {mod.duration}
+                              {tAc.moduleWord} {mod.number} • {mod.duration}
                             </div>
                             <div className="text-xs font-bold leading-snug line-clamp-2">
                               {mod.title}
@@ -713,8 +657,8 @@ export const AcademyView: React.FC = () => {
                       <CheckCircle2 className="w-3.5 h-3.5" />
                       <span>
                         {completedModuleIds.includes(activeModule.id)
-                          ? 'Módulo Concluído'
-                          : 'Marcar como Concluído'}
+                          ? tAc.moduleCompletedBtn
+                          : tAc.markAsCompletedBtn}
                       </span>
                     </button>
                   </div>
@@ -735,10 +679,10 @@ export const AcademyView: React.FC = () => {
                   <div className="rounded-xl bg-[#070e1b] border border-slate-800 p-4 sm:p-5 space-y-3">
                     <div className="flex items-center gap-2 text-xs font-extrabold text-amber-400 uppercase tracking-wider">
                       <Calculator className="w-4 h-4" />
-                      <span>Exemplo Numérico Aplicado: {activeModule.numericExample.title}</span>
+                      <span>{tAc.appliedNumericExample} {activeModule.numericExample.title}</span>
                     </div>
                     <p className="text-xs text-slate-300 leading-relaxed">
-                      <strong className="text-white">Cenário:</strong>{' '}
+                      <strong className="text-white">{tAc.scenarioLabel}</strong>{' '}
                       {activeModule.numericExample.scenario}
                     </p>
                     <ol className="space-y-1.5 pl-4 list-decimal text-xs text-slate-200 font-mono-numbers">
@@ -750,7 +694,7 @@ export const AcademyView: React.FC = () => {
                     </ol>
                     <div className="pt-2 border-t border-slate-800/80">
                       <p className="text-xs font-semibold text-emerald-400 leading-relaxed">
-                        Conclusão prática: {activeModule.numericExample.result}
+                        {tAc.practicalConclusionLabel} {activeModule.numericExample.result}
                       </p>
                     </div>
                   </div>
@@ -759,7 +703,7 @@ export const AcademyView: React.FC = () => {
                   <div className="space-y-3">
                     <div className="text-xs font-bold text-white uppercase tracking-wider flex items-center gap-2">
                       <Compass className="w-4 h-4 text-emerald-400" />
-                      <span>Conceitos-Chave do Módulo</span>
+                      <span>{tAc.keyConceptsTitle}</span>
                     </div>
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                       {activeModule.keyConcepts.map((concept) => (
@@ -780,7 +724,7 @@ export const AcademyView: React.FC = () => {
                   <div className="rounded-xl bg-gradient-to-r from-emerald-950/50 via-[#0d1627] to-[#0d1627] border border-emerald-500/30 p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                     <div className="space-y-0.5">
                       <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-400">
-                        Prática Imediata no Terminal DinhEuro
+                        {tAc.immediatePracticeEyebrow}
                       </span>
                       <p className="text-xs text-slate-200 leading-relaxed">
                         {activeModule.targetDescription}
@@ -819,7 +763,7 @@ export const AcademyView: React.FC = () => {
                   className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 disabled:opacity-40 disabled:cursor-not-allowed border border-slate-700 text-xs font-bold text-slate-200 transition cursor-pointer"
                 >
                   <ChevronLeft className="w-3.5 h-3.5" />
-                  <span>Módulo Anterior</span>
+                  <span>{tAc.previousModule}</span>
                 </button>
 
                 <div className="hidden sm:flex items-center gap-1.5">
@@ -827,7 +771,7 @@ export const AcademyView: React.FC = () => {
                     <button
                       key={m.id}
                       type="button"
-                      aria-label={`Ir para módulo ${m.number}`}
+                      aria-label={`${tAc.goToModulePrefix} ${m.number}`}
                       onClick={() =>
                         setActiveStudySession({ courseId: activeCourse.id, moduleIndex: idx })
                       }
@@ -861,7 +805,7 @@ export const AcademyView: React.FC = () => {
                     }}
                     className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold transition cursor-pointer"
                   >
-                    <span>Concluir & Próximo Módulo</span>
+                    <span>{tAc.completeAndNext}</span>
                     <ChevronRight className="w-3.5 h-3.5" />
                   </button>
                 ) : (
@@ -874,7 +818,7 @@ export const AcademyView: React.FC = () => {
                     className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold transition cursor-pointer"
                   >
                     <CheckCircle2 className="w-3.5 h-3.5" />
-                    <span>Concluir Trilha</span>
+                    <span>{tAc.completeTrack}</span>
                   </button>
                 )}
               </div>

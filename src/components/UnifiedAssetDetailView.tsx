@@ -21,9 +21,13 @@ import {
 } from 'lucide-react';
 import { MarketAsset } from '../services/marketData';
 import { useMarket } from '../context/MarketContext';
-import { getDualCurrencyDisplay, formatPointsValue } from '../utils/finance';
+import { getDualCurrencyDisplay, formatPointsValue, formatCurrencyValue } from '../utils/finance';
 import { getAssetMetadata } from '../utils/assetProfiles';
 import { D3AdvancedChart } from './D3AdvancedChart';
+import { useI18n } from '../i18n/I18nContext';
+import { getNumberLocale } from '../i18n/translations';
+import { VIEWS_TRANSLATIONS } from '../i18n/viewsTranslations';
+import { getLocalizedAssetName } from '../i18n/marketDataTranslations';
 
 interface UnifiedAssetDetailViewProps {
   asset: MarketAsset;
@@ -37,6 +41,9 @@ export const UnifiedAssetDetailView: React.FC<UnifiedAssetDetailViewProps> = ({
   isModal = false,
 }) => {
   const { assets, universalRates, addPortfolioPosition, setActiveTab, setSelectedAsset } = useMarket();
+  const { lang } = useI18n();
+  const locale = getNumberLocale(lang);
+  const tDetail = VIEWS_TRANSLATIONS[lang].assetDetail;
 
   // Local interaction states
   const [isFollowing, setIsFollowing] = useState(false);
@@ -45,25 +52,47 @@ export const UnifiedAssetDetailView: React.FC<UnifiedAssetDetailViewProps> = ({
   const [alertPrice, setAlertPrice] = useState(asset.price.toString());
   const [portfolioToast, setPortfolioToast] = useState(false);
 
-  const meta = getAssetMetadata(asset);
+  const meta = getAssetMetadata(asset, lang);
+  const localizedName = getLocalizedAssetName(asset, lang);
   const isPositive = asset.change24h >= 0;
   const isIndex = asset.category === 'indices' || asset.currency === 'PTS';
 
   // Dual Currency calculations
-  const dual = getDualCurrencyDisplay(asset.price, asset.currency, universalRates, isIndex);
+  const dual = getDualCurrencyDisplay(asset.price, asset.currency, universalRates, isIndex, locale);
+  const usdBrlFormatted = universalRates.BRL.toLocaleString(locale, {
+    minimumFractionDigits: 4,
+    maximumFractionDigits: 4,
+  });
+  const eurBrlFormatted = (universalRates.BRL / (universalRates.EUR || 0.895)).toLocaleString(locale, {
+    minimumFractionDigits: 4,
+    maximumFractionDigits: 4,
+  });
   const refRate = isIndex
-    ? 'Índice de mercado medido em pontos (pts) • Sem paridade cambial direta'
+    ? tDetail.indexParityNote
     : asset.currency === 'USD'
-    ? `1 USD = R$ ${universalRates.BRL.toFixed(4)}`
+    ? `1 USD = R$ ${usdBrlFormatted}`
     : asset.currency === 'EUR'
-    ? `1 EUR = R$ ${(universalRates.BRL / (universalRates.EUR || 0.895)).toFixed(4)}`
-    : `1 USD = R$ ${universalRates.BRL.toFixed(4)}`;
+    ? `1 EUR = R$ ${eurBrlFormatted}`
+    : `1 USD = R$ ${usdBrlFormatted}`;
 
-  const nowFormatted = new Date().toLocaleTimeString('pt-BR', {
+  const nowFormatted = new Date().toLocaleTimeString(locale, {
     hour: '2-digit',
     minute: '2-digit',
     second: '2-digit',
   });
+
+  const formatStatPrice = (val: number) => {
+    if (isIndex) return formatPointsValue(val, locale);
+    const cur = asset.currency === 'BRL' ? 'BRL' : asset.currency === 'EUR' ? 'EUR' : 'USD';
+    return formatCurrencyValue(val, cur, 2, locale);
+  };
+
+  const formatSecondaryStatPrice = (val: number) => {
+    if (asset.currency === 'BRL') {
+      return `≈ ${formatCurrencyValue(val / universalRates.BRL, 'USD', 2, locale)}`;
+    }
+    return `≈ ${formatCurrencyValue(val * universalRates.BRL, 'BRL', 2, locale)}`;
+  };
 
   const handleAddPortfolio = () => {
     let assetType: 'stock_br' | 'stock_us' | 'crypto' | 'forex' = 'stock_br';
@@ -73,7 +102,7 @@ export const UnifiedAssetDetailView: React.FC<UnifiedAssetDetailViewProps> = ({
 
     addPortfolioPosition({
       symbol: asset.symbol,
-      name: asset.name,
+      name: localizedName,
       assetType,
       quantity: asset.category === 'crypto' ? 0.05 : 10,
       averageBuyPrice: asset.price,
@@ -106,7 +135,7 @@ export const UnifiedAssetDetailView: React.FC<UnifiedAssetDetailViewProps> = ({
             className="flex items-center gap-2 text-xs font-bold text-slate-300 hover:text-white bg-slate-900 hover:bg-slate-800 border border-slate-700/80 px-3.5 py-2 rounded-xl transition cursor-pointer shadow-sm group"
           >
             <ArrowLeft className="w-4 h-4 text-emerald-400 group-hover:-translate-x-0.5 transition" />
-            <span>Voltar para Visão Geral</span>
+            <span>{tDetail.backToOverview}</span>
           </button>
 
           {/* Action Buttons: Day Trade Pro, Seguir Ativo, Adicionar Alerta, Adicionar ao Portfólio */}
@@ -121,7 +150,7 @@ export const UnifiedAssetDetailView: React.FC<UnifiedAssetDetailViewProps> = ({
               className="flex items-center gap-1.5 text-xs font-bold px-3 py-2 rounded-xl bg-emerald-500/15 text-emerald-300 hover:bg-emerald-500/25 border border-emerald-500/40 shadow-sm cursor-pointer transition active:scale-95"
             >
               <Activity className="w-3.5 h-3.5 text-emerald-400" />
-              <span>Operar Day Trade Pro</span>
+              <span>{tDetail.tradeDayTradePro}</span>
             </button>
             {/* Seguir Ativo */}
             <button
@@ -133,7 +162,7 @@ export const UnifiedAssetDetailView: React.FC<UnifiedAssetDetailViewProps> = ({
               }`}
             >
               <Star className={`w-3.5 h-3.5 ${isFollowing ? 'fill-amber-400 text-amber-400' : ''}`} />
-              <span>{isFollowing ? 'Seguindo Ativo' : 'Seguir Ativo'}</span>
+              <span>{isFollowing ? tDetail.followingAsset : tDetail.followAsset}</span>
             </button>
 
             {/* Adicionar Alerta */}
@@ -146,7 +175,7 @@ export const UnifiedAssetDetailView: React.FC<UnifiedAssetDetailViewProps> = ({
               }`}
             >
               <Bell className={`w-3.5 h-3.5 ${alertActive ? 'fill-sky-400 text-sky-400' : ''}`} />
-              <span>{alertActive ? 'Alerta Ativo' : 'Adicionar Alerta'}</span>
+              <span>{alertActive ? tDetail.alertActive : tDetail.addAlert}</span>
             </button>
 
             {/* Botão de Destaque: Adicionar ao Portfólio */}
@@ -155,7 +184,7 @@ export const UnifiedAssetDetailView: React.FC<UnifiedAssetDetailViewProps> = ({
               className="flex items-center gap-2 text-xs font-bold px-4 py-2 rounded-xl bg-gradient-to-r from-emerald-500 via-teal-500 to-emerald-600 hover:from-emerald-400 hover:to-teal-500 text-slate-950 shadow-lg shadow-emerald-500/20 cursor-pointer transition active:scale-95"
             >
               <Briefcase className="w-3.5 h-3.5" />
-              <span>Adicionar ao Portfólio</span>
+              <span>{tDetail.addToPortfolio}</span>
             </button>
           </div>
         </div>
@@ -171,18 +200,18 @@ export const UnifiedAssetDetailView: React.FC<UnifiedAssetDetailViewProps> = ({
                     {meta.ticker}
                   </h1>
                   <span className="text-sm font-semibold text-slate-300">
-                    {asset.name}
+                    {localizedName}
                   </span>
                   {/* Status de Mercado: AO VIVO */}
                   <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-black uppercase tracking-wider bg-emerald-500/15 text-emerald-400 border border-emerald-500/35">
                     <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-                    AO VIVO
+                    {tDetail.liveBadge}
                   </span>
                 </div>
                 <div className="text-xs text-slate-400 font-medium flex items-center gap-2 mt-0.5">
                   <span className="text-slate-300 font-semibold">{meta.marketOrigin}</span>
                   <span>•</span>
-                  <span>Cotação Oficial em Tempo Real</span>
+                  <span>{tDetail.officialQuoteRealtime}</span>
                 </div>
               </div>
             </div>
@@ -212,7 +241,7 @@ export const UnifiedAssetDetailView: React.FC<UnifiedAssetDetailViewProps> = ({
         {/* Primary and Converted Values */}
         <div className="space-y-2">
           <span className="text-[11px] uppercase tracking-wider font-bold text-slate-400">
-            {isIndex ? 'Pontuação Oficial do Índice' : 'Cotação Atual & Dupla Conversão'}
+            {isIndex ? tDetail.indexScoreLabel : tDetail.currentQuoteDualLabel}
           </span>
           <div className="flex flex-wrap items-baseline gap-3">
             {/* Valor Principal */}
@@ -233,7 +262,7 @@ export const UnifiedAssetDetailView: React.FC<UnifiedAssetDetailViewProps> = ({
             )}
             {isIndex && (
               <span className="text-xs font-mono font-bold text-emerald-400 bg-emerald-500/10 px-2.5 py-1 rounded-lg border border-emerald-500/25">
-                Pontos de Índice
+                {tDetail.indexPointsUnit}
               </span>
             )}
           </div>
@@ -241,7 +270,7 @@ export const UnifiedAssetDetailView: React.FC<UnifiedAssetDetailViewProps> = ({
           {/* Taxa de câmbio de referência ou nota institucional */}
           <div className="flex items-center gap-2 text-xs text-slate-400 font-mono-numbers">
             <span className="font-semibold text-slate-300">
-              {isIndex ? 'Regime de Cotação:' : 'Taxa de Câmbio de Referência:'}
+              {isIndex ? tDetail.quoteRegimeLabel : tDetail.refRateLabel}
             </span>
             <span className="text-slate-300 font-bold bg-slate-900 px-2 py-0.5 rounded border border-slate-800">
               {refRate}
@@ -252,7 +281,7 @@ export const UnifiedAssetDetailView: React.FC<UnifiedAssetDetailViewProps> = ({
         {/* Variação Diária e Data/Hora da Cotação */}
         <div className="flex flex-col md:items-end space-y-2 border-t md:border-t-0 md:border-l border-slate-800 pt-3 md:pt-0 md:pl-6">
           <span className="text-[11px] uppercase tracking-wider font-bold text-slate-400">
-            Desempenho Diário
+            {tDetail.dailyPerformance}
           </span>
           <div
             className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-xl font-bold font-mono-numbers text-sm sm:text-base border shadow-sm ${
@@ -264,13 +293,22 @@ export const UnifiedAssetDetailView: React.FC<UnifiedAssetDetailViewProps> = ({
             {isPositive ? <TrendingUp className="w-5 h-5" /> : <TrendingDown className="w-5 h-5" />}
             <span>
               {isPositive ? '+' : ''}
-              {isIndex ? formatPointsValue(asset.changeValue) : asset.changeValue.toFixed(2)} ({isPositive ? '+' : ''}
-              {asset.change24h.toFixed(2)}%)
+              {isIndex
+                ? formatPointsValue(asset.changeValue, locale)
+                : asset.changeValue.toLocaleString(locale, {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  })}{' '}
+              ({isPositive ? '+' : ''}
+              {asset.change24h.toLocaleString(locale, {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              })}%)
             </span>
           </div>
 
           <div className="text-[11px] text-slate-400 font-mono">
-            Sincronizado hoje às <strong className="text-slate-200">{nowFormatted}</strong> (Horário de Brasília)
+            {tDetail.syncedTodayAt} <strong className="text-slate-200">{nowFormatted}</strong> {tDetail.brasiliaTime}
           </div>
         </div>
       </div>
@@ -281,7 +319,7 @@ export const UnifiedAssetDetailView: React.FC<UnifiedAssetDetailViewProps> = ({
           <div className="flex items-center gap-2">
             <Activity className="w-4 h-4 text-emerald-400" />
             <h2 className="text-sm sm:text-base font-bold text-white uppercase tracking-wider">
-              Motor Gráfico D3 v7 • Análise Técnica Interativa
+              {tDetail.d3SectionTitle}
             </h2>
           </div>
         </div>
@@ -300,123 +338,123 @@ export const UnifiedAssetDetailView: React.FC<UnifiedAssetDetailViewProps> = ({
         <div className="flex items-center gap-2 px-1">
           <Layers className="w-4 h-4 text-sky-400" />
           <h2 className="text-sm sm:text-base font-bold text-white uppercase tracking-wider">
-            Indicadores de Mercado & Estatísticas Chave
+            {tDetail.keyStatsTitle}
           </h2>
         </div>
 
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
           {/* 1. Abertura */}
           <div className="bg-[#0b1322] border border-slate-800 rounded-xl p-3 sm:p-4 space-y-1">
-            <span className="text-[11px] uppercase font-bold text-slate-400">Abertura</span>
+            <span className="text-[11px] uppercase font-bold text-slate-400">{tDetail.statOpen}</span>
             <p className="text-base sm:text-lg font-bold font-mono-numbers text-white">
-              {isIndex ? formatPointsValue(meta.openPrice) : `${asset.currency === 'BRL' ? 'R$' : '$'} ${meta.openPrice.toFixed(2)}`}
+              {formatStatPrice(meta.openPrice)}
             </p>
             {!isIndex && (
               <p className="text-[10px] font-mono-numbers text-emerald-400/90 font-medium">
-                {asset.currency === 'BRL' ? `≈ $ ${(meta.openPrice / universalRates.BRL).toFixed(2)}` : `≈ R$ ${(meta.openPrice * universalRates.BRL).toFixed(2)}`}
+                {formatSecondaryStatPrice(meta.openPrice)}
               </p>
             )}
             <span className="text-[9px] text-slate-500 font-medium block">
-              {isIndex ? 'Pontos na abertura do pregão' : 'Preço na abertura do pregão'}
+              {isIndex ? tDetail.statOpenIndexDesc : tDetail.statOpenAssetDesc}
             </span>
           </div>
 
           {/* 2. Máxima do Dia */}
           <div className="bg-[#0b1322] border border-slate-800 rounded-xl p-3 sm:p-4 space-y-1">
-            <span className="text-[11px] uppercase font-bold text-slate-400">Máxima do Dia</span>
+            <span className="text-[11px] uppercase font-bold text-slate-400">{tDetail.statDayHigh}</span>
             <p className="text-base sm:text-lg font-bold font-mono-numbers text-emerald-400">
-              {isIndex ? formatPointsValue(asset.high24h) : `${asset.currency === 'BRL' ? 'R$' : '$'} ${asset.high24h.toFixed(2)}`}
+              {formatStatPrice(asset.high24h)}
             </p>
             {!isIndex && (
               <p className="text-[10px] font-mono-numbers text-emerald-400/90 font-medium">
-                {asset.currency === 'BRL' ? `≈ $ ${(asset.high24h / universalRates.BRL).toFixed(2)}` : `≈ R$ ${(asset.high24h * universalRates.BRL).toFixed(2)}`}
+                {formatSecondaryStatPrice(asset.high24h)}
               </p>
             )}
             <span className="text-[9px] text-slate-500 font-medium block">
-              {isIndex ? 'Pico em pontos (24h)' : 'Pico nas últimas 24h'}
+              {isIndex ? tDetail.statDayHighIndexDesc : tDetail.statDayHighAssetDesc}
             </span>
           </div>
 
           {/* 3. Mínima do Dia */}
           <div className="bg-[#0b1322] border border-slate-800 rounded-xl p-3 sm:p-4 space-y-1">
-            <span className="text-[11px] uppercase font-bold text-slate-400">Mínima do Dia</span>
+            <span className="text-[11px] uppercase font-bold text-slate-400">{tDetail.statDayLow}</span>
             <p className="text-base sm:text-lg font-bold font-mono-numbers text-rose-400">
-              {isIndex ? formatPointsValue(asset.low24h) : `${asset.currency === 'BRL' ? 'R$' : '$'} ${asset.low24h.toFixed(2)}`}
+              {formatStatPrice(asset.low24h)}
             </p>
             {!isIndex && (
               <p className="text-[10px] font-mono-numbers text-rose-300/90 font-medium">
-                {asset.currency === 'BRL' ? `≈ $ ${(asset.low24h / universalRates.BRL).toFixed(2)}` : `≈ R$ ${(asset.low24h * universalRates.BRL).toFixed(2)}`}
+                {formatSecondaryStatPrice(asset.low24h)}
               </p>
             )}
             <span className="text-[9px] text-slate-500 font-medium block">
-              {isIndex ? 'Vale em pontos (24h)' : 'Vale nas últimas 24h'}
+              {isIndex ? tDetail.statDayLowIndexDesc : tDetail.statDayLowAssetDesc}
             </span>
           </div>
 
           {/* 4. Volume Negociado */}
           <div className="bg-[#0b1322] border border-slate-800 rounded-xl p-3 sm:p-4 space-y-1">
-            <span className="text-[11px] uppercase font-bold text-slate-400">Volume Negociado</span>
+            <span className="text-[11px] uppercase font-bold text-slate-400">{tDetail.statVolume}</span>
             <p className="text-base sm:text-lg font-bold font-mono-numbers text-white">
               {asset.volume}
             </p>
             <span className="text-[10px] text-slate-500 font-medium">
-              {isIndex ? 'Volume total em pontos' : 'Liquidez de transações'}
+              {isIndex ? tDetail.statVolumeIndexDesc : tDetail.statVolumeAssetDesc}
             </span>
           </div>
 
           {/* 5. Máx 52 Semanas */}
           <div className="bg-[#0b1322] border border-slate-800 rounded-xl p-3 sm:p-4 space-y-1">
-            <span className="text-[11px] uppercase font-bold text-slate-400">Máx. 52 Semanas</span>
+            <span className="text-[11px] uppercase font-bold text-slate-400">{tDetail.stat52wHigh}</span>
             <p className="text-base sm:text-lg font-bold font-mono-numbers text-emerald-300">
-              {isIndex ? formatPointsValue(meta.week52High) : `${asset.currency === 'BRL' ? 'R$' : '$'} ${meta.week52High.toFixed(2)}`}
+              {formatStatPrice(meta.week52High)}
             </p>
             {!isIndex && (
               <p className="text-[10px] font-mono-numbers text-emerald-400/90 font-medium">
-                {asset.currency === 'BRL' ? `≈ $ ${(meta.week52High / universalRates.BRL).toFixed(2)}` : `≈ R$ ${(meta.week52High * universalRates.BRL).toFixed(2)}`}
+                {formatSecondaryStatPrice(meta.week52High)}
               </p>
             )}
             <span className="text-[9px] text-slate-500 font-medium block">
-              {isIndex ? 'Pico anual em pontos' : 'Topo anual histórico'}
+              {isIndex ? tDetail.stat52wHighIndexDesc : tDetail.stat52wHighAssetDesc}
             </span>
           </div>
 
           {/* 6. Mín 52 Semanas */}
           <div className="bg-[#0b1322] border border-slate-800 rounded-xl p-3 sm:p-4 space-y-1">
-            <span className="text-[11px] uppercase font-bold text-slate-400">Mín. 52 Semanas</span>
+            <span className="text-[11px] uppercase font-bold text-slate-400">{tDetail.stat52wLow}</span>
             <p className="text-base sm:text-lg font-bold font-mono-numbers text-rose-300">
-              {isIndex ? formatPointsValue(meta.week52Low) : `${asset.currency === 'BRL' ? 'R$' : '$'} ${meta.week52Low.toFixed(2)}`}
+              {formatStatPrice(meta.week52Low)}
             </p>
             {!isIndex && (
               <p className="text-[10px] font-mono-numbers text-rose-300/90 font-medium">
-                {asset.currency === 'BRL' ? `≈ $ ${(meta.week52Low / universalRates.BRL).toFixed(2)}` : `≈ R$ ${(meta.week52Low * universalRates.BRL).toFixed(2)}`}
+                {formatSecondaryStatPrice(meta.week52Low)}
               </p>
             )}
             <span className="text-[9px] text-slate-500 font-medium block">
-              {isIndex ? 'Fundo anual em pontos' : 'Fundo anual histórico'}
+              {isIndex ? tDetail.stat52wLowIndexDesc : tDetail.stat52wLowAssetDesc}
             </span>
           </div>
 
           {/* 7. P/L (Preço / Lucro) */}
           <div className="bg-[#0b1322] border border-slate-800 rounded-xl p-3 sm:p-4 space-y-1">
-            <span className="text-[11px] uppercase font-bold text-slate-400">P/L (Preço / Lucro)</span>
+            <span className="text-[11px] uppercase font-bold text-slate-400">{tDetail.statPE}</span>
             <p className="text-base sm:text-lg font-bold font-mono-numbers text-sky-400">
               {meta.peRatioDisplay}
             </p>
-            <span className="text-[10px] text-slate-500 font-medium">Múltiplo de Valuation</span>
+            <span className="text-[10px] text-slate-500 font-medium">{tDetail.statPEDesc}</span>
           </div>
 
           {/* 8. Dividend Yield (DY) */}
           <div className="bg-[#0b1322] border border-slate-800 rounded-xl p-3 sm:p-4 space-y-1">
-            <span className="text-[11px] uppercase font-bold text-slate-400">Dividend Yield (DY)</span>
+            <span className="text-[11px] uppercase font-bold text-slate-400">{tDetail.statDY}</span>
             <p className="text-base sm:text-lg font-bold font-mono-numbers text-amber-400">
               {meta.dividendYieldDisplay}
             </p>
-            <span className="text-[10px] text-slate-500 font-medium">Rendimento anual de proventos</span>
+            <span className="text-[10px] text-slate-500 font-medium">{tDetail.statDYDesc}</span>
           </div>
         </div>
       </div>
 
-      {/* 5. Módulo de Diagnóstico do Ativo com Inteligência Artificial */}
+      {/* 5. Módulo de Diagnóstico Quantitativo do Ativo */}
       <div className="bg-gradient-to-br from-[#0c172a] via-[#091120] to-[#060c17] border border-purple-500/30 rounded-2xl p-5 sm:p-6 shadow-2xl space-y-5">
         <div className="flex items-center justify-between border-b border-slate-800/80 pb-3">
           <div className="flex items-center gap-2.5">
@@ -425,13 +463,13 @@ export const UnifiedAssetDetailView: React.FC<UnifiedAssetDetailViewProps> = ({
             </div>
             <div>
               <h2 className="text-base font-bold text-white flex items-center gap-2">
-                <span>Diagnóstico do Ativo com Inteligência Artificial</span>
+                <span>{tDetail.diagnosisTitle}</span>
                 <span className="text-[10px] font-semibold bg-purple-500/20 text-purple-300 px-2 py-0.5 rounded-full border border-purple-500/30">
-                  DinhEuro AI Engine
+                  {tDetail.diagnosisBadge}
                 </span>
               </h2>
               <p className="text-xs text-slate-400">
-                Análise quantitativa de liquidez, suporte, resistência e fatores de risco em tempo real.
+                {tDetail.diagnosisSubtitle}
               </p>
             </div>
           </div>
@@ -441,7 +479,7 @@ export const UnifiedAssetDetailView: React.FC<UnifiedAssetDetailViewProps> = ({
         <div className="bg-[#050b14]/80 border border-slate-800 rounded-xl p-4 space-y-3">
           <div className="flex items-center gap-2 text-xs font-bold text-purple-300 uppercase tracking-wider">
             <Activity className="w-3.5 h-3.5" />
-            <span>Resumo do Cenário & Níveis Críticos</span>
+            <span>{tDetail.scenarioSummaryTitle}</span>
           </div>
           <p className="text-xs sm:text-sm text-slate-200 leading-relaxed">
             {meta.aiDiagnosis.scenarioSummary}
@@ -449,29 +487,29 @@ export const UnifiedAssetDetailView: React.FC<UnifiedAssetDetailViewProps> = ({
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2 text-xs border-t border-slate-800/80">
             <div>
-              <span className="text-[10px] text-slate-400 font-bold uppercase block">Suporte Imediato</span>
+              <span className="text-[10px] text-slate-400 font-bold uppercase block">{tDetail.immediateSupport}</span>
               <span className="text-sm font-bold font-mono-numbers text-rose-400">
-                {isIndex ? formatPointsValue(meta.aiDiagnosis.supportLevel) : `${asset.currency === 'BRL' ? 'R$' : '$'} ${meta.aiDiagnosis.supportLevel.toFixed(2)}`}
+                {formatStatPrice(meta.aiDiagnosis.supportLevel)}
               </span>
               {!isIndex && (
                 <span className="text-[10px] font-mono-numbers text-slate-400 block">
-                  {asset.currency === 'BRL' ? `≈ $ ${(meta.aiDiagnosis.supportLevel / universalRates.BRL).toFixed(2)}` : `≈ R$ ${(meta.aiDiagnosis.supportLevel * universalRates.BRL).toFixed(2)}`}
+                  {formatSecondaryStatPrice(meta.aiDiagnosis.supportLevel)}
                 </span>
               )}
             </div>
             <div>
-              <span className="text-[10px] text-slate-400 font-bold uppercase block">Resistência Técnica</span>
+              <span className="text-[10px] text-slate-400 font-bold uppercase block">{tDetail.technicalResistance}</span>
               <span className="text-sm font-bold font-mono-numbers text-emerald-400">
-                {isIndex ? formatPointsValue(meta.aiDiagnosis.resistanceLevel) : `${asset.currency === 'BRL' ? 'R$' : '$'} ${meta.aiDiagnosis.resistanceLevel.toFixed(2)}`}
+                {formatStatPrice(meta.aiDiagnosis.resistanceLevel)}
               </span>
               {!isIndex && (
                 <span className="text-[10px] font-mono-numbers text-slate-400 block">
-                  {asset.currency === 'BRL' ? `≈ $ ${(meta.aiDiagnosis.resistanceLevel / universalRates.BRL).toFixed(2)}` : `≈ R$ ${(meta.aiDiagnosis.resistanceLevel * universalRates.BRL).toFixed(2)}`}
+                  {formatSecondaryStatPrice(meta.aiDiagnosis.resistanceLevel)}
                 </span>
               )}
             </div>
             <div>
-              <span className="text-[10px] text-slate-400 font-bold uppercase block">Liquidez & Giro</span>
+              <span className="text-[10px] text-slate-400 font-bold uppercase block">{tDetail.liquidityTurnover}</span>
               <span className="text-xs text-slate-300 font-medium block">
                 {meta.aiDiagnosis.liquidityAnalysis}
               </span>
@@ -485,7 +523,7 @@ export const UnifiedAssetDetailView: React.FC<UnifiedAssetDetailViewProps> = ({
           <div className="bg-[#07111e]/90 border border-emerald-500/25 rounded-xl p-4 space-y-3">
             <div className="flex items-center gap-2 text-xs font-bold text-emerald-400 uppercase tracking-wider">
               <CheckCircle2 className="w-4 h-4" />
-              <span>Pontos Fortes & Oportunidades</span>
+              <span>{tDetail.strengthsTitle}</span>
             </div>
             <ul className="space-y-2 text-xs text-slate-300">
               {meta.aiDiagnosis.strengths.map((str, idx) => (
@@ -501,7 +539,7 @@ export const UnifiedAssetDetailView: React.FC<UnifiedAssetDetailViewProps> = ({
           <div className="bg-[#07111e]/90 border border-amber-500/25 rounded-xl p-4 space-y-3">
             <div className="flex items-center gap-2 text-xs font-bold text-amber-400 uppercase tracking-wider">
               <AlertTriangle className="w-4 h-4" />
-              <span>Fatores de Risco & Atenção</span>
+              <span>{tDetail.risksTitle}</span>
             </div>
             <ul className="space-y-2 text-xs text-slate-300">
               {meta.aiDiagnosis.risks.map((risk, idx) => (
@@ -520,41 +558,41 @@ export const UnifiedAssetDetailView: React.FC<UnifiedAssetDetailViewProps> = ({
         <div className="flex items-center gap-2 border-b border-slate-800/80 pb-3">
           <Building2 className="w-4 h-4 text-emerald-400" />
           <h2 className="text-sm sm:text-base font-bold text-white uppercase tracking-wider">
-            Perfil Institucional & Governança
+            {tDetail.institutionalProfileTitle}
           </h2>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 text-xs">
           <div className="bg-[#070e1b] rounded-xl p-3.5 border border-slate-800/80 space-y-1">
-            <span className="text-[10px] text-slate-400 uppercase font-bold">Natureza Jurídica / Tipo</span>
+            <span className="text-[10px] text-slate-400 uppercase font-bold">{tDetail.legalNature}</span>
             <p className="text-slate-200 font-semibold">{meta.institutionalProfile.nature}</p>
           </div>
 
           <div className="bg-[#070e1b] rounded-xl p-3.5 border border-slate-800/80 space-y-1">
-            <span className="text-[10px] text-slate-400 uppercase font-bold">Setor de Atuação</span>
+            <span className="text-[10px] text-slate-400 uppercase font-bold">{tDetail.sectorLabel}</span>
             <p className="text-slate-200 font-semibold">{meta.institutionalProfile.sector}</p>
           </div>
 
           <div className="bg-[#070e1b] rounded-xl p-3.5 border border-slate-800/80 space-y-1">
-            <span className="text-[10px] text-slate-400 uppercase font-bold">Segmento / Listagem</span>
+            <span className="text-[10px] text-slate-400 uppercase font-bold">{tDetail.segmentLabel}</span>
             <p className="text-slate-200 font-semibold">{meta.institutionalProfile.segment}</p>
           </div>
 
           <div className="bg-[#070e1b] rounded-xl p-3.5 border border-slate-800/80 space-y-1">
-            <span className="text-[10px] text-slate-400 uppercase font-bold">Benchmark Primário</span>
+            <span className="text-[10px] text-slate-400 uppercase font-bold">{tDetail.primaryBenchmark}</span>
             <p className="text-slate-200 font-semibold">{meta.institutionalProfile.benchmark}</p>
           </div>
 
           {meta.institutionalProfile.governance && (
             <div className="bg-[#070e1b] rounded-xl p-3.5 border border-slate-800/80 space-y-1">
-              <span className="text-[10px] text-slate-400 uppercase font-bold">Governança Corporativa</span>
+              <span className="text-[10px] text-slate-400 uppercase font-bold">{tDetail.governanceLabel}</span>
               <p className="text-slate-200 font-semibold">{meta.institutionalProfile.governance}</p>
             </div>
           )}
 
           {meta.institutionalProfile.foundation && (
             <div className="bg-[#070e1b] rounded-xl p-3.5 border border-slate-800/80 space-y-1">
-              <span className="text-[10px] text-slate-400 uppercase font-bold">Ano de Fundação</span>
+              <span className="text-[10px] text-slate-400 uppercase font-bold">{tDetail.foundationYearLabel}</span>
               <p className="text-slate-200 font-semibold">{meta.institutionalProfile.foundation}</p>
             </div>
           )}
@@ -565,7 +603,7 @@ export const UnifiedAssetDetailView: React.FC<UnifiedAssetDetailViewProps> = ({
       {portfolioToast && (
         <div className="fixed bottom-6 right-6 z-50 bg-emerald-500 text-slate-950 font-bold px-4 py-3 rounded-xl shadow-2xl flex items-center gap-2 animate-in fade-in slide-in-from-bottom duration-200">
           <CheckCircle2 className="w-5 h-5" />
-          <span>{asset.symbol} adicionado ao seu Portfólio com sucesso!</span>
+          <span>{asset.symbol} {tDetail.addedToPortfolioToast}</span>
         </div>
       )}
 
@@ -575,15 +613,15 @@ export const UnifiedAssetDetailView: React.FC<UnifiedAssetDetailViewProps> = ({
           <div className="bg-[#0b1322] border border-slate-700 rounded-2xl p-5 max-w-sm w-full space-y-4 shadow-2xl">
             <div className="flex items-center gap-2 text-white font-bold text-base">
               <Bell className="w-4 h-4 text-sky-400" />
-              <span>Criar Alerta de Preço</span>
+              <span>{tDetail.createPriceAlertTitle}</span>
             </div>
             <p className="text-xs text-slate-300">
-              Receba notificação instantânea quando <strong>{asset.symbol}</strong> atingir o patamar desejado.
+              {tDetail.createAlertDescPrefix} <strong>{asset.symbol}</strong> {tDetail.createAlertDescSuffix}
             </p>
             <form onSubmit={handleCreateAlert} className="space-y-3">
               <div>
                 <label className="text-xs text-slate-400 block mb-1">
-                  {isIndex ? 'Pontuação Alvo (pts):' : `Preço Alvo (${asset.currency}):`}
+                  {isIndex ? tDetail.targetPointsLabel : `${tDetail.targetPriceLabel} (${asset.currency}):`}
                 </label>
                 <input
                   type="number"
@@ -600,13 +638,13 @@ export const UnifiedAssetDetailView: React.FC<UnifiedAssetDetailViewProps> = ({
                   onClick={() => setShowAlertModal(false)}
                   className="px-3 py-1.5 text-xs font-semibold text-slate-400 hover:text-white"
                 >
-                  Cancelar
+                  {tDetail.cancel}
                 </button>
                 <button
                   type="submit"
                   className="px-4 py-1.5 text-xs font-bold bg-sky-500 text-slate-950 rounded-xl hover:bg-sky-400 transition"
                 >
-                  Salvar Alerta
+                  {tDetail.saveAlert}
                 </button>
               </div>
             </form>

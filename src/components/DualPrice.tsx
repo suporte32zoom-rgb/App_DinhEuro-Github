@@ -1,5 +1,7 @@
 import React from 'react';
 import { CurrencyRates, getDualCurrencyDisplay } from '../utils/finance';
+import { useI18n } from '../i18n/I18nContext';
+import { getNumberLocale } from '../i18n/translations';
 
 interface DualPriceProps {
   price: number;
@@ -28,9 +30,11 @@ export const DualPrice: React.FC<DualPriceProps> = ({
   showSecondaryBadge = false,
   showEur = false,
 }) => {
+  const { lang } = useI18n();
+  const locale = getNumberLocale(lang);
   const normCur = (currency || 'USD').toUpperCase();
   const isPointAsset = isIndex || normCur === 'PTS' || normCur === 'PONTOS';
-  const dual = getDualCurrencyDisplay(price, currency, rates, isPointAsset);
+  const dual = getDualCurrencyDisplay(price, currency, rates, isPointAsset, locale);
 
   // Índices mundiais (IBOVESPA, S&P 500, etc.) são obrigatoriamente exibidos apenas em PONTOS (pts)
   if (isPointAsset) {

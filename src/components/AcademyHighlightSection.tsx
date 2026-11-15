@@ -2,7 +2,8 @@ import React from 'react';
 import { GraduationCap, BookOpen, ArrowRight, CheckCircle2, Layers } from 'lucide-react';
 import { useMarket } from '../context/MarketContext';
 import { useI18n } from '../i18n/I18nContext';
-import { ACADEMY_COURSES, type CourseLevel } from '../data/academyCourses';
+import { type CourseLevel } from '../data/academyCourses';
+import { getLocalizedAcademyCourses, getLocalizedCourseLevel } from '../i18n/academyTranslations';
 
 const LEVEL_BADGE_STYLES: Record<CourseLevel, string> = {
   Iniciante: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/25',
@@ -12,7 +13,8 @@ const LEVEL_BADGE_STYLES: Record<CourseLevel, string> = {
 
 export const AcademyHighlightSection: React.FC = () => {
   const { setActiveTab, openAcademyCourse } = useMarket();
-  const { t } = useI18n();
+  const { lang, t } = useI18n();
+  const courses = getLocalizedAcademyCourses(lang);
 
   return (
     <section
@@ -55,7 +57,7 @@ export const AcademyHighlightSection: React.FC = () => {
 
       {/* Compact 4-Card Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        {ACADEMY_COURSES.map((course, idx) => (
+        {courses.map((course, idx) => (
           <div
             key={course.id}
             className="rounded-xl bg-[#070e1b] border border-slate-800/90 hover:border-emerald-500/40 p-4 flex flex-col justify-between space-y-4 transition group"
@@ -65,7 +67,7 @@ export const AcademyHighlightSection: React.FC = () => {
                 <span
                   className={`text-[10px] font-bold px-2 py-0.5 rounded border ${LEVEL_BADGE_STYLES[course.level]}`}
                 >
-                  {course.level}
+                  {getLocalizedCourseLevel(course.level, lang)}
                 </span>
                 <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-400">
                   {t.academyHighlight.freeTag}

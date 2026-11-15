@@ -1,6 +1,7 @@
 import React from 'react';
 import { Globe, Coins, TrendingUp } from 'lucide-react';
 import { useI18n } from '../i18n/I18nContext';
+import { getNumberLocale } from '../i18n/translations';
 import { useMarket } from '../context/MarketContext';
 
 export const HomeSeoEditorialSection: React.FC = () => {
@@ -15,11 +16,12 @@ export const HomeSeoEditorialSection: React.FC = () => {
   const usdBrl =
     assets.find((a) => a.id === 'usd_brl')?.price || universalRates.BRL || 5.584;
 
-  const formattedEur = eurBrl.toLocaleString(lang === 'en' ? 'en-US' : 'pt-BR', {
+  const numberLocale = getNumberLocale(lang);
+  const formattedEur = eurBrl.toLocaleString(numberLocale, {
     minimumFractionDigits: 4,
     maximumFractionDigits: 4,
   });
-  const formattedUsd = usdBrl.toLocaleString(lang === 'en' ? 'en-US' : 'pt-BR', {
+  const formattedUsd = usdBrl.toLocaleString(numberLocale, {
     minimumFractionDigits: 4,
     maximumFractionDigits: 4,
   });

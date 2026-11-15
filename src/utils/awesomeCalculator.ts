@@ -275,8 +275,12 @@ export function convertUsingAwesomeQuotes(
 /**
  * Formata valores convertidos preservando clareza entre fiat, ARS e frações de cripto.
  */
-export function formatConvertedAmount(value: number, currencyCode: string): string {
-  if (!Number.isFinite(value)) return '0,00';
+export function formatConvertedAmount(
+  value: number,
+  currencyCode: string,
+  locale = 'pt-BR'
+): string {
+  if (!Number.isFinite(value)) return locale.startsWith('en') ? '0.00' : '0,00';
   const meta = DINHEURO_CALCULATOR_CURRENCIES.find((c) => c.code === currencyCode);
 
   let decimals = meta?.decimals ?? 2;
@@ -286,7 +290,7 @@ export function formatConvertedAmount(value: number, currencyCode: string): stri
     decimals = 4;
   }
 
-  const formattedNumber = new Intl.NumberFormat('pt-BR', {
+  const formattedNumber = new Intl.NumberFormat(locale, {
     minimumFractionDigits: decimals,
     maximumFractionDigits: decimals,
   }).format(value);
@@ -294,8 +298,14 @@ export function formatConvertedAmount(value: number, currencyCode: string): stri
   return `${meta?.symbol ?? currencyCode} ${formattedNumber}`;
 }
 
-export function formatUnitRate(rate: number, targetCode: string): string {
-  if (!Number.isFinite(rate) || rate <= 0) return '0,0000';
+export function formatUnitRate(
+  rate: number,
+  targetCode: string,
+  locale = 'pt-BR'
+): string {
+  if (!Number.isFinite(rate) || rate <= 0) {
+    return locale.startsWith('en') ? '0.0000' : '0,0000';
+  }
   const meta = DINHEURO_CALCULATOR_CURRENCIES.find((c) => c.code === targetCode);
 
   let decimals = 4;
@@ -305,7 +315,7 @@ export function formatUnitRate(rate: number, targetCode: string): string {
     decimals = 2;
   }
 
-  return new Intl.NumberFormat('pt-BR', {
+  return new Intl.NumberFormat(locale, {
     minimumFractionDigits: decimals,
     maximumFractionDigits: decimals,
   }).format(rate);

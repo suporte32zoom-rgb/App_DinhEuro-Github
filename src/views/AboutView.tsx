@@ -15,9 +15,13 @@ import {
   Award,
 } from 'lucide-react';
 import { useMarket } from '../context/MarketContext';
+import { useI18n } from '../i18n/I18nContext';
+import { VIEWS_TRANSLATIONS } from '../i18n/viewsTranslations';
 
 export const AboutView: React.FC = () => {
   const { setActiveTab } = useMarket();
+  const { lang } = useI18n();
+  const tAbout = VIEWS_TRANSLATIONS[lang].about;
 
   return (
     <div className="space-y-8 pb-16 max-w-4xl mx-auto animate-in fade-in duration-300">
@@ -26,7 +30,7 @@ export const AboutView: React.FC = () => {
         <div className="w-24 h-24 sm:w-32 sm:h-32 rounded-full border-4 border-amber-400/50 p-1.5 mb-5 shadow-2xl shadow-emerald-950/80 bg-white/5 transition-transform hover:scale-105 duration-300">
           <img
             src="/logo.png"
-            alt="Novo Logo Oficial DinhEuro"
+            alt={tAbout.logoAlt}
             className="w-full h-full object-contain rounded-full"
           />
         </div>
@@ -35,11 +39,11 @@ export const AboutView: React.FC = () => {
           Dinh<span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-teal-300 to-amber-400">Euro</span>
         </h1>
         <p className="text-xs sm:text-sm font-bold text-emerald-400 tracking-widest uppercase mt-1">
-          dinheuro.com • Hub Financeiro Global & Mercados
+          {tAbout.brandTagline}
         </p>
 
         <p className="text-xs sm:text-sm text-slate-300 max-w-2xl mt-4 leading-relaxed">
-          O <strong>DinhEuro</strong> nasceu com a missão primordial de democratizar a informação econômica em tempo real e derrubar barreiras cambiais para quem investe, viaja, empreende ou constrói patrimônio entre o Brasil e o exterior.
+          {tAbout.heroDescPrefix ? `${tAbout.heroDescPrefix} ` : ''}<strong>DinhEuro</strong> {tAbout.heroDescSuffix}
         </p>
 
         <div className="flex flex-wrap items-center justify-center gap-3 mt-6">
@@ -48,7 +52,7 @@ export const AboutView: React.FC = () => {
             onClick={() => setActiveTab('mercados')}
             className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs transition shadow-lg cursor-pointer"
           >
-            <span>Explorar Mercados</span>
+            <span>{tAbout.exploreMarkets}</span>
             <ArrowRight className="w-3.5 h-3.5" />
           </button>
           <button
@@ -56,7 +60,7 @@ export const AboutView: React.FC = () => {
             onClick={() => setActiveTab('graficos')}
             className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs transition border border-slate-700 cursor-pointer"
           >
-            <span>Terminal Gráfico D3 v7</span>
+            <span>{tAbout.d3TerminalBtn}</span>
           </button>
         </div>
       </div>
@@ -67,9 +71,9 @@ export const AboutView: React.FC = () => {
           <div className="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400">
             <Compass className="w-5 h-5" />
           </div>
-          <h2 className="text-base font-bold text-white">Nossa Missão</h2>
+          <h2 className="text-base font-bold text-white">{tAbout.missionTitle}</h2>
           <p className="text-xs text-slate-400 leading-relaxed">
-            Democratizar a inteligência econômica global através de ferramentas analíticas, simulações instantâneas e cotações transparentes sem paywall ou jargões inacessíveis.
+            {tAbout.missionDesc}
           </p>
         </div>
 
@@ -77,9 +81,9 @@ export const AboutView: React.FC = () => {
           <div className="w-10 h-10 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400">
             <TrendingUp className="w-5 h-5" />
           </div>
-          <h2 className="text-base font-bold text-white">Visão Global</h2>
+          <h2 className="text-base font-bold text-white">{tAbout.visionTitle}</h2>
           <p className="text-xs text-slate-400 leading-relaxed">
-            Ser a principal referência em paridade Euro-Real e acompanhamento de carteiras multinacionais para brasileiros em qualquer lugar do mundo.
+            {tAbout.visionDesc}
           </p>
         </div>
 
@@ -87,9 +91,9 @@ export const AboutView: React.FC = () => {
           <div className="w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400">
             <Award className="w-5 h-5" />
           </div>
-          <h2 className="text-base font-bold text-white">Valores & Compliance</h2>
+          <h2 className="text-base font-bold text-white">{tAbout.valuesTitle}</h2>
           <p className="text-xs text-slate-400 leading-relaxed">
-            Transparência regulatória irrestrita, respeito à LGPD e integridade tecnológica em conformidade com as diretrizes do Banco Central do Brasil.
+            {tAbout.valuesDesc}
           </p>
         </div>
       </div>
@@ -98,27 +102,27 @@ export const AboutView: React.FC = () => {
       <div className="rounded-2xl bg-[#0b1322] border border-slate-800 p-6 sm:p-8 shadow-xl space-y-4">
         <h2 className="text-base font-bold text-white flex items-center gap-2">
           <Server className="w-5 h-5 text-emerald-400" />
-          <span>Infraestrutura Tecnológica e Arquitetura PWA</span>
+          <span>{tAbout.techTitle}</span>
         </h2>
         <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
-          O DinhEuro é construído sob arquitetura <strong>Progressive Web App (PWA)</strong> de alta performance, projetado para operação contínua e resiliente em infraestrutura global em nuvem. Ele combina:
+          {tAbout.techIntroPrefix} <strong>{tAbout.techIntroBold}</strong> {tAbout.techIntroSuffix}
         </p>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
           <div className="p-4 rounded-xl bg-slate-900 border border-slate-800 space-y-1.5">
-            <span className="text-xs font-bold text-emerald-400 block">• Motor Gráfico Institucional D3 v7</span>
-            <p className="text-xs text-slate-400">Renderização vetorial SVG sem trepidação, médias móveis SMA 20/50, volume e velas japonesas de alta precisão.</p>
+            <span className="text-xs font-bold text-emerald-400 block">{tAbout.pillar1Title}</span>
+            <p className="text-xs text-slate-400">{tAbout.pillar1Desc}</p>
           </div>
           <div className="p-4 rounded-xl bg-slate-900 border border-slate-800 space-y-1.5">
-            <span className="text-xs font-bold text-blue-400 block">• Caching Inteligente & Modo Offline</span>
-            <p className="text-xs text-slate-400">Service workers Workbox para acesso instantâneo ao aplicativo mesmo em conexões lentas ou instáveis.</p>
+            <span className="text-xs font-bold text-blue-400 block">{tAbout.pillar2Title}</span>
+            <p className="text-xs text-slate-400">{tAbout.pillar2Desc}</p>
           </div>
           <div className="p-4 rounded-xl bg-slate-900 border border-slate-800 space-y-1.5">
-            <span className="text-xs font-bold text-amber-400 block">• Agregação Multiprovedor em Tempo Real</span>
-            <p className="text-xs text-slate-400">Sincronização contínua com feeds consolidados de bolsas internacionais, mesas de câmbio e redes globais de liquidez para cobertura 360º de mercados.</p>
+            <span className="text-xs font-bold text-amber-400 block">{tAbout.pillar3Title}</span>
+            <p className="text-xs text-slate-400">{tAbout.pillar3Desc}</p>
           </div>
           <div className="p-4 rounded-xl bg-slate-900 border border-slate-800 space-y-1.5">
-            <span className="text-xs font-bold text-purple-400 block">• Privacidade Local (Zero Tracking de Carteira)</span>
-            <p className="text-xs text-slate-400">As carteiras e ativos do usuário permanecem exclusivamente gravados no localStorage do dispositivo.</p>
+            <span className="text-xs font-bold text-purple-400 block">{tAbout.pillar4Title}</span>
+            <p className="text-xs text-slate-400">{tAbout.pillar4Desc}</p>
           </div>
         </div>
       </div>
@@ -126,9 +130,9 @@ export const AboutView: React.FC = () => {
       {/* Contato e Governança */}
       <div className="rounded-2xl bg-[#0b1322] border border-slate-800 p-6 shadow-xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div className="space-y-1">
-          <h3 className="text-sm font-bold text-white">Canal Institucional & Imprensa</h3>
+          <h3 className="text-sm font-bold text-white">{tAbout.pressTitle}</h3>
           <p className="text-xs text-slate-400">
-            Para parcerias, sugestões de integração ou questões regulatórias:
+            {tAbout.pressDesc}
           </p>
         </div>
         <a

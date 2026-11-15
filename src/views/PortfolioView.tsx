@@ -11,13 +11,20 @@ import {
   X,
   Check,
 } from 'lucide-react';
-import { useMarket, PortfolioPosition } from '../context/MarketContext';
+import { useMarket } from '../context/MarketContext';
 import { formatCurrencyValue } from '../utils/finance';
 import { DualPrice } from '../components/DualPrice';
+import { useI18n } from '../i18n/I18nContext';
+import { getNumberLocale } from '../i18n/translations';
+import { VIEWS_TRANSLATIONS } from '../i18n/viewsTranslations';
+import { getLocalizedAssetName } from '../i18n/marketDataTranslations';
 
 export const PortfolioView: React.FC = () => {
   const { portfolio, addPortfolioPosition, removePortfolioPosition, assets, universalRates } =
     useMarket();
+  const { lang } = useI18n();
+  const locale = getNumberLocale(lang);
+  const tPort = VIEWS_TRANSLATIONS[lang].portfolio;
 
   const [showAddModal, setShowAddModal] = useState(false);
   const [newSymbol, setNewSymbol] = useState('PETR4');
@@ -49,6 +56,7 @@ export const PortfolioView: React.FC = () => {
 
     return {
       ...pos,
+      displayName: matching ? getLocalizedAssetName(matching, lang) : pos.name,
       currentPrice,
       totalCost,
       currentTotalValue,
@@ -87,7 +95,7 @@ export const PortfolioView: React.FC = () => {
     const found = assets.find((a) => a.symbol === sym || a.id === sym);
     if (found) {
       setNewSymbol(found.symbol);
-      setNewName(found.name);
+      setNewName(getLocalizedAssetName(found, lang));
       setNewBuyPrice(found.price > 0 ? found.price : 10);
       if (found.category === 'stocks_br') {
         setNewType('stock_br');
@@ -122,6 +130,11 @@ export const PortfolioView: React.FC = () => {
     setShowAddModal(false);
   };
 
+  const zeroDecimalStr = (0).toLocaleString(locale, {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
+
   return (
     <div className="space-y-6 pb-12 animate-in fade-in duration-300">
       {/* Portfolio Header */}
@@ -129,10 +142,10 @@ export const PortfolioView: React.FC = () => {
         <div>
           <h1 className="text-xl sm:text-2xl font-black text-white tracking-tight flex items-center gap-2">
             <Briefcase className="w-6 h-6 text-emerald-400" />
-            <span>Gerenciador de Carteiras Globais</span>
+            <span>{tPort.title}</span>
           </h1>
           <p className="text-xs text-slate-400 mt-1">
-            Controle de patrimônio unificado em Real, Euro e Dólar com valorização automática em tempo real.
+            {tPort.subtitle}
           </p>
         </div>
 
@@ -141,7 +154,7 @@ export const PortfolioView: React.FC = () => {
           className="flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-xs font-bold text-white shadow-lg shadow-emerald-950/40 transition cursor-pointer self-start sm:self-auto"
         >
           <PlusCircle className="w-4 h-4" />
-          <span>Nova Posição</span>
+          <span>{tPort.newPosition}</span>
         </button>
       </div>
 
@@ -150,18 +163,30 @@ export const PortfolioView: React.FC = () => {
         {/* Total Value */}
         <div className="bg-[#0d1627] rounded-2xl border border-slate-800 p-5 shadow-lg">
           <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">
-            Patrimônio Total da Carteira
+            {tPort.totalPortfolioValue}
           </span>
           <div className="text-2xl sm:text-3xl font-black font-mono-numbers text-white mt-1">
-            {formatCurrencyValue(totalPortfolioValueBRL, 'BRL')}
+            {formatCurrencyValue(totalPortfolioValueBRL, 'BRL', 2, locale)}
           </div>
           <div className="flex items-center gap-3 text-xs text-slate-400 mt-2 font-mono">
             <span>
-              ≈ € {portfolio.length > 0 ? (totalPortfolioValueBRL / (universalRates.BRL / (universalRates.EUR || 0.92))).toFixed(2) : '0,00'}
+              ≈ €{' '}
+              {portfolio.length > 0
+                ? (totalPortfolioValueBRL / (universalRates.BRL / (universalRates.EUR || 0.92))).toLocaleString(locale, {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  })
+                : zeroDecimalStr}
             </span>
             <span>•</span>
             <span>
-              ≈ $ {portfolio.length > 0 ? (totalPortfolioValueBRL / universalRates.BRL).toFixed(2) : '0,00'}
+              ≈ ${' '}
+              {portfolio.length > 0
+                ? (totalPortfolioValueBRL / universalRates.BRL).toLocaleString(locale, {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  })
+                : zeroDecimalStr}
             </span>
           </div>
         </div>
@@ -169,14 +194,14 @@ export const PortfolioView: React.FC = () => {
         {/* Total Profit / Loss */}
         <div className="bg-[#0d1627] rounded-2xl border border-slate-800 p-5 shadow-lg">
           <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">
-            Lucro / Prejuízo Total (P&L)
+            {tPort.totalPL}
           </span>
           <div
             className={`text-2xl sm:text-3xl font-black font-mono-numbers mt-1 flex items-baseline gap-1.5 ${
               portfolio.length === 0 ? 'text-slate-400' : isOverallPositive ? 'text-emerald-400' : 'text-rose-400'
             }`}
           >
-            <span>{portfolio.length > 0 && isOverallPositive ? '+' : ''}{formatCurrencyValue(totalPLBRL, 'BRL')}</span>
+            <span>{portfolio.length > 0 && isOverallPositive ? '+' : ''}{formatCurrencyValue(totalPLBRL, 'BRL', 2, locale)}</span>
           </div>
           <div
             className={`flex items-center gap-1 text-xs font-bold font-mono-numbers mt-2 ${
@@ -188,8 +213,11 @@ export const PortfolioView: React.FC = () => {
             ) : null}
             <span>
               {portfolio.length === 0
-                ? '0,00% de rentabilidade acumulada (zerado)'
-                : `${isOverallPositive ? '+' : ''}${totalPLPercent.toFixed(2)}% de rentabilidade acumulada`}
+                ? tPort.accumulatedZero
+                : `${isOverallPositive ? '+' : ''}${totalPLPercent.toLocaleString(locale, {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  })}% ${tPort.accumulatedReturnSuffix}`}
             </span>
           </div>
         </div>
@@ -198,10 +226,10 @@ export const PortfolioView: React.FC = () => {
         <div className="bg-[#0d1627] rounded-2xl border border-slate-800 p-5 shadow-lg flex flex-col justify-between">
           <div>
             <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">
-              Diversificação da Carteira
+              {tPort.diversification}
             </span>
             <div className="text-2xl sm:text-3xl font-black font-mono-numbers text-white mt-1">
-              {portfolio.length} <span className="text-xs font-normal text-slate-400">ativos</span>
+              {portfolio.length} <span className="text-xs font-normal text-slate-400">{tPort.assetsUnit}</span>
             </div>
           </div>
 
@@ -211,28 +239,28 @@ export const PortfolioView: React.FC = () => {
               <div
                 style={{ width: `${((typeTotals.stock_br || 0) / (totalPortfolioValueBRL || 1)) * 100}%` }}
                 className="bg-emerald-500 h-full"
-                title="Ações BR"
+                title={tPort.allocStocksBr}
               />
               <div
                 style={{ width: `${((typeTotals.stock_us || 0) / (totalPortfolioValueBRL || 1)) * 100}%` }}
                 className="bg-blue-500 h-full"
-                title="Ações US"
+                title={tPort.allocStocksUs}
               />
               <div
                 style={{ width: `${((typeTotals.crypto || 0) / (totalPortfolioValueBRL || 1)) * 100}%` }}
                 className="bg-amber-500 h-full"
-                title="Cripto"
+                title={tPort.allocCrypto}
               />
               <div
                 style={{ width: `${((typeTotals.forex || 0) / (totalPortfolioValueBRL || 1)) * 100}%` }}
                 className="bg-purple-500 h-full"
-                title="Forex / Euro"
+                title={tPort.allocForex}
               />
             </div>
           ) : (
             <div className="mt-3 flex items-center justify-between text-[11px] text-slate-500">
-              <span>Nenhum ativo adicionado</span>
-              <span className="text-[10px]">0% alocado</span>
+              <span>{tPort.noAssetsAdded}</span>
+              <span className="text-[10px]">{tPort.zeroAllocated}</span>
             </div>
           )}
         </div>
@@ -242,10 +270,10 @@ export const PortfolioView: React.FC = () => {
       <div className="rounded-2xl bg-[#0d1627] border border-slate-800 overflow-hidden shadow-xl">
         <div className="p-4 border-b border-slate-800 bg-[#070e1b] flex items-center justify-between">
           <h3 className="text-xs sm:text-sm font-bold text-white uppercase tracking-wider">
-            Posições Abertas no Portfólio
+            {tPort.openPositionsTitle}
           </h3>
           <span className="text-[11px] text-slate-400">
-            {portfolio.length > 0 ? 'Valores atualizados com a cotação do segundo' : 'Carteira zerada'}
+            {portfolio.length > 0 ? tPort.updatedEverySecond : tPort.emptyPortfolioBadge}
           </span>
         </div>
 
@@ -255,9 +283,9 @@ export const PortfolioView: React.FC = () => {
               <Wallet className="w-7 h-7" />
             </div>
             <div className="max-w-md space-y-1">
-              <h4 className="text-base font-bold text-white">Sua carteira está zerada e pronta</h4>
+              <h4 className="text-base font-bold text-white">{tPort.emptyTitle}</h4>
               <p className="text-xs text-slate-400 leading-relaxed">
-                Nenhum ativo foi inserido previamente. Adicione seus investimentos em Ações (B3 e Wall St), Criptomoedas ou Moedas para calcular o patrimônio total e o lucro/prejuízo em tempo real.
+                {tPort.emptyDesc}
               </p>
             </div>
             <button
@@ -265,7 +293,7 @@ export const PortfolioView: React.FC = () => {
               className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-xs font-bold text-white shadow-lg shadow-emerald-950 transition cursor-pointer"
             >
               <PlusCircle className="w-4 h-4" />
-              <span>Adicionar Primeiro Ativo</span>
+              <span>{tPort.addFirstAsset}</span>
             </button>
           </div>
         ) : (
@@ -273,13 +301,13 @@ export const PortfolioView: React.FC = () => {
             <table className="w-full text-left border-collapse text-xs">
               <thead>
                 <tr className="border-b border-slate-800 bg-slate-900/50 text-[11px] font-bold text-slate-400 uppercase tracking-wider">
-                  <th className="py-3 px-4">Ativo</th>
-                  <th className="py-3 px-4 text-right">Qtd</th>
-                  <th className="py-3 px-4 text-right">Preço Médio</th>
-                  <th className="py-3 px-4 text-right">Preço Atual</th>
-                  <th className="py-3 px-4 text-right">Valor Total</th>
-                  <th className="py-3 px-4 text-right">Retorno (P&L)</th>
-                  <th className="py-3 px-4 text-center">Ações</th>
+                  <th className="py-3 px-4">{tPort.colAsset}</th>
+                  <th className="py-3 px-4 text-right">{tPort.colQty}</th>
+                  <th className="py-3 px-4 text-right">{tPort.colAvgPrice}</th>
+                  <th className="py-3 px-4 text-right">{tPort.colCurrentPrice}</th>
+                  <th className="py-3 px-4 text-right">{tPort.colTotalValue}</th>
+                  <th className="py-3 px-4 text-right">{tPort.colReturnPL}</th>
+                  <th className="py-3 px-4 text-center">{tPort.colActions}</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-800/60">
@@ -290,14 +318,14 @@ export const PortfolioView: React.FC = () => {
                       <td className="py-3.5 px-4">
                         <div>
                           <div className="font-extrabold text-white text-xs">{pos.symbol}</div>
-                          <div className="text-[11px] text-slate-400">{pos.name}</div>
+                          <div className="text-[11px] text-slate-400">{pos.displayName}</div>
                         </div>
                       </td>
                       <td className="py-3.5 px-4 text-right font-mono-numbers font-semibold text-slate-200">
-                        {pos.quantity}
+                        {pos.quantity.toLocaleString(locale)}
                       </td>
                       <td className="py-3.5 px-4 text-right font-mono-numbers text-slate-300">
-                        {formatCurrencyValue(pos.averageBuyPrice, pos.currency)}
+                        {formatCurrencyValue(pos.averageBuyPrice, pos.currency, 2, locale)}
                       </td>
                       <td className="py-3.5 px-4 text-right">
                         <DualPrice
@@ -326,15 +354,18 @@ export const PortfolioView: React.FC = () => {
                           }`}
                         >
                           {isPos ? '+' : ''}
-                          {formatCurrencyValue(pos.profitLoss, pos.currency)} ({isPos ? '+' : ''}
-                          {pos.profitPercent.toFixed(2)}%)
+                          {formatCurrencyValue(pos.profitLoss, pos.currency, 2, locale)} ({isPos ? '+' : ''}
+                          {pos.profitPercent.toLocaleString(locale, {
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2,
+                          })}%)
                         </span>
                       </td>
                       <td className="py-3.5 px-4 text-center">
                         <button
                           onClick={() => removePortfolioPosition(pos.id)}
                           className="p-1.5 rounded-lg text-slate-500 hover:text-rose-400 hover:bg-rose-500/10 transition cursor-pointer"
-                          title="Remover posição da carteira"
+                          title={tPort.removeTooltip}
                         >
                           <Trash2 className="w-4 h-4" />
                         </button>
@@ -361,7 +392,7 @@ export const PortfolioView: React.FC = () => {
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-base font-bold text-white flex items-center gap-2">
                 <PlusCircle className="w-5 h-5 text-emerald-400" />
-                <span>Adicionar Nova Posição</span>
+                <span>{tPort.modalTitle}</span>
               </h3>
               <button onClick={() => setShowAddModal(false)} className="text-slate-400 hover:text-white">
                 <X className="w-5 h-5" />
@@ -371,39 +402,39 @@ export const PortfolioView: React.FC = () => {
             <form onSubmit={handleAddSubmit} className="space-y-4">
               <div>
                 <label className="block text-xs font-medium text-slate-300 mb-1">
-                  Selecionar do Catálogo (Opcional)
+                  {tPort.selectCatalogLabel}
                 </label>
                 <select
                   defaultValue=""
                   onChange={(e) => handleSelectAssetPreset(e.target.value)}
                   className="w-full bg-slate-950 border border-slate-700 rounded-xl px-3.5 py-2 text-xs text-white focus:outline-none focus:border-emerald-500"
                 >
-                  <option value="">-- Escolha um ativo ou digite manualmente abaixo --</option>
-                  <optgroup label="Ações Brasil (B3)">
+                  <option value="">{tPort.selectCatalogPlaceholder}</option>
+                  <optgroup label={tPort.groupStocksBr}>
                     {assets.filter((a) => a.category === 'stocks_br').slice(0, 15).map((a) => (
                       <option key={a.id} value={a.symbol}>
-                        {a.symbol} - {a.name}
+                        {a.symbol} - {getLocalizedAssetName(a, lang)}
                       </option>
                     ))}
                   </optgroup>
-                  <optgroup label="Ações EUA (Wall Street)">
+                  <optgroup label={tPort.groupStocksUs}>
                     {assets.filter((a) => a.category === 'stocks_us').slice(0, 15).map((a) => (
                       <option key={a.id} value={a.symbol}>
-                        {a.symbol} - {a.name}
+                        {a.symbol} - {getLocalizedAssetName(a, lang)}
                       </option>
                     ))}
                   </optgroup>
-                  <optgroup label="Criptomoedas">
+                  <optgroup label={tPort.groupCrypto}>
                     {assets.filter((a) => a.category === 'crypto').slice(0, 10).map((a) => (
                       <option key={a.id} value={a.symbol}>
-                        {a.symbol} - {a.name}
+                        {a.symbol} - {getLocalizedAssetName(a, lang)}
                       </option>
                     ))}
                   </optgroup>
-                  <optgroup label="Moedas & Câmbio">
+                  <optgroup label={tPort.groupForex}>
                     {assets.filter((a) => a.category === 'forex').slice(0, 10).map((a) => (
                       <option key={a.id} value={a.symbol}>
-                        {a.symbol} - {a.name}
+                        {a.symbol} - {getLocalizedAssetName(a, lang)}
                       </option>
                     ))}
                   </optgroup>
@@ -411,60 +442,60 @@ export const PortfolioView: React.FC = () => {
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-slate-300 mb-1">Ticker / Código</label>
+                <label className="block text-xs font-medium text-slate-300 mb-1">{tPort.tickerLabel}</label>
                 <input
                   type="text"
                   required
                   value={newSymbol}
                   onChange={(e) => setNewSymbol(e.target.value.toUpperCase())}
-                  placeholder="Ex: PETR4, AAPL, BTC/USD, EUR/BRL"
+                  placeholder={tPort.tickerPlaceholder}
                   className="w-full bg-slate-950 border border-slate-700 rounded-xl px-3.5 py-2 text-xs text-white font-mono uppercase focus:outline-none focus:border-emerald-500"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-slate-300 mb-1">Nome do Ativo</label>
+                <label className="block text-xs font-medium text-slate-300 mb-1">{tPort.assetNameLabel}</label>
                 <input
                   type="text"
                   value={newName}
                   onChange={(e) => setNewName(e.target.value)}
-                  placeholder="Ex: Petrobras PN"
+                  placeholder={tPort.assetNamePlaceholder}
                   className="w-full bg-slate-950 border border-slate-700 rounded-xl px-3.5 py-2 text-xs text-white focus:outline-none focus:border-emerald-500"
                 />
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-medium text-slate-300 mb-1">Categoria</label>
+                  <label className="block text-xs font-medium text-slate-300 mb-1">{tPort.categoryLabel}</label>
                   <select
                     value={newType}
                     onChange={(e) => setNewType(e.target.value as any)}
                     className="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none"
                   >
-                    <option value="stock_br">Ações Brasil (B3)</option>
-                    <option value="stock_us">Ações EUA</option>
-                    <option value="crypto">Criptomoeda</option>
-                    <option value="forex">Câmbio / Moeda</option>
+                    <option value="stock_br">{tPort.catStockBr}</option>
+                    <option value="stock_us">{tPort.catStockUs}</option>
+                    <option value="crypto">{tPort.catCrypto}</option>
+                    <option value="forex">{tPort.catForex}</option>
                   </select>
                 </div>
 
                 <div>
-                  <label className="block text-xs font-medium text-slate-300 mb-1">Moeda</label>
+                  <label className="block text-xs font-medium text-slate-300 mb-1">{tPort.currencyLabel}</label>
                   <select
                     value={newCurrency}
                     onChange={(e) => setNewCurrency(e.target.value as any)}
                     className="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none"
                   >
-                    <option value="BRL">Real (R$)</option>
-                    <option value="EUR">Euro (€)</option>
-                    <option value="USD">Dólar ($)</option>
+                    <option value="BRL">{tPort.curBrl}</option>
+                    <option value="EUR">{tPort.curEur}</option>
+                    <option value="USD">{tPort.curUsd}</option>
                   </select>
                 </div>
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-medium text-slate-300 mb-1">Quantidade</label>
+                  <label className="block text-xs font-medium text-slate-300 mb-1">{tPort.qtyLabel}</label>
                   <input
                     type="number"
                     step="any"
@@ -476,7 +507,7 @@ export const PortfolioView: React.FC = () => {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-medium text-slate-300 mb-1">Preço Médio de Compra</label>
+                  <label className="block text-xs font-medium text-slate-300 mb-1">{tPort.avgBuyPriceLabel}</label>
                   <input
                     type="number"
                     step="any"
@@ -494,13 +525,13 @@ export const PortfolioView: React.FC = () => {
                   onClick={() => setShowAddModal(false)}
                   className="px-3 py-1.5 rounded-lg border border-slate-700 text-xs text-slate-300 hover:bg-slate-800"
                 >
-                  Cancelar
+                  {tPort.cancel}
                 </button>
                 <button
                   type="submit"
                   className="px-4 py-1.5 rounded-lg bg-gradient-to-r from-emerald-600 to-teal-600 text-xs font-bold text-white hover:from-emerald-500 hover:to-teal-500 transition cursor-pointer"
                 >
-                  Adicionar à Carteira
+                  {tPort.addToPortfolio}
                 </button>
               </div>
             </form>

@@ -1,4 +1,9 @@
 import React, { Component, ErrorInfo, ReactNode } from 'react';
+import {
+  detectInitialLanguage,
+  LANG_STORAGE_KEY,
+  TRANSLATIONS,
+} from '../i18n/translations';
 
 interface Props {
   children: ReactNode;
@@ -8,6 +13,23 @@ interface Props {
 interface State {
   hasError: boolean;
   error: Error | null;
+}
+
+function getBoundaryCopy() {
+  let stored: string | null = null;
+  try {
+    if (typeof window !== 'undefined') {
+      stored = window.localStorage.getItem(LANG_STORAGE_KEY);
+    }
+  } catch {
+    stored = null;
+  }
+  const navLang =
+    typeof navigator !== 'undefined'
+      ? navigator.language || (Array.isArray(navigator.languages) ? navigator.languages[0] : '')
+      : 'en';
+  const lang = detectInitialLanguage(navLang, stored);
+  return TRANSLATIONS[lang].errorBoundary;
 }
 
 export class ErrorBoundary extends Component<Props, State> {
@@ -34,6 +56,8 @@ export class ErrorBoundary extends Component<Props, State> {
         return this.props.fallback;
       }
 
+      const copy = getBoundaryCopy();
+
       return (
         <div className="min-h-[300px] w-full flex items-center justify-center p-6 bg-[#0B1320] text-slate-100">
           <div className="max-w-md w-full bg-slate-900/90 border border-emerald-500/30 rounded-xl p-6 shadow-2xl text-center">
@@ -41,10 +65,10 @@ export class ErrorBoundary extends Component<Props, State> {
               €
             </div>
             <h3 className="text-lg font-bold text-white mb-2">
-              Módulo em Recuperação Automática
+              {copy.title}
             </h3>
             <p className="text-xs text-slate-400 mb-5 leading-relaxed">
-              Identificamos uma oscilação na renderização deste painel financeiro. As cotações globais e dados do DinhEuro continuam seguros e operantes.
+              {copy.description}
             </p>
             <div className="flex items-center justify-center gap-3">
               <button
@@ -52,14 +76,14 @@ export class ErrorBoundary extends Component<Props, State> {
                 onClick={this.handleReset}
                 className="px-4 py-2 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs rounded-lg transition-all shadow-md active:scale-95 cursor-pointer"
               >
-                Reconectar Módulo
+                {copy.reconnect}
               </button>
               <button
                 type="button"
                 onClick={() => window.location.reload()}
                 className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold text-xs rounded-lg border border-slate-700 transition-all cursor-pointer"
               >
-                Atualizar Página
+                {copy.reload}
               </button>
             </div>
           </div>

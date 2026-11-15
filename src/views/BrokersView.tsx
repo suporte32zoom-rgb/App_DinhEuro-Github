@@ -6,12 +6,9 @@ import {
   ExternalLink,
   CheckCircle,
   Search,
-  Globe,
-  Coins,
-  Zap,
-  TrendingUp,
-  Award,
 } from 'lucide-react';
+import { useI18n } from '../i18n/I18nContext';
+import { BROKERS_UI, getLocalizedBroker } from '../i18n/brokersTranslations';
 
 export interface BrokerInfo {
   id: string;
@@ -792,28 +789,38 @@ export const BROKERS_CATALOG: BrokerInfo[] = [
 ];
 
 export const BrokersView: React.FC = () => {
+  const { lang } = useI18n();
+  const tBrokers = BROKERS_UI[lang];
   const [filter, setFilter] = useState<'all' | 'brasil' | 'global' | 'crypto' | 'zero'>('all');
   const [searchTerm, setSearchTerm] = useState('');
 
-  const filteredBrokers = BROKERS_CATALOG.filter((broker) => {
-    // Category check
-    let matchesCategory = true;
-    if (filter === 'brasil') matchesCategory = broker.category === 'brasil';
-    else if (filter === 'global') matchesCategory = broker.category === 'global';
-    else if (filter === 'crypto') matchesCategory = broker.category === 'crypto';
-    else if (filter === 'zero') matchesCategory = !!broker.isZeroFee;
+  const filteredBrokers = BROKERS_CATALOG.map((broker) => ({
+    raw: broker,
+    localized: getLocalizedBroker(broker, lang),
+  }))
+    .filter(({ raw, localized }) => {
+      // Category check
+      let matchesCategory = true;
+      if (filter === 'brasil') matchesCategory = raw.category === 'brasil';
+      else if (filter === 'global') matchesCategory = raw.category === 'global';
+      else if (filter === 'crypto') matchesCategory = raw.category === 'crypto';
+      else if (filter === 'zero') matchesCategory = !!raw.isZeroFee;
 
-    // Search check
-    const matchesSearch =
-      searchTerm.trim() === '' ||
-      broker.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      broker.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      broker.regulation.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      broker.country.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      broker.features.some((f) => f.toLowerCase().includes(searchTerm.toLowerCase()));
+      // Search check across localized and raw fields
+      const q = searchTerm.trim().toLowerCase();
+      const matchesSearch =
+        q === '' ||
+        localized.name.toLowerCase().includes(q) ||
+        localized.description.toLowerCase().includes(q) ||
+        localized.regulation.toLowerCase().includes(q) ||
+        localized.country.toLowerCase().includes(q) ||
+        localized.features.some((f) => f.toLowerCase().includes(q)) ||
+        raw.country.toLowerCase().includes(q) ||
+        raw.description.toLowerCase().includes(q);
 
-    return matchesCategory && matchesSearch;
-  });
+      return matchesCategory && matchesSearch;
+    })
+    .map(({ localized }) => localized);
 
   return (
     <div className="space-y-6 pb-12 animate-in fade-in duration-300">
@@ -822,10 +829,10 @@ export const BrokersView: React.FC = () => {
         <div>
           <h1 className="text-xl sm:text-2xl font-black text-white tracking-tight flex items-center gap-2">
             <Building2 className="w-6 h-6 text-emerald-400" />
-            <span>Guia Oficial de Corretoras do Brasil & do Mundo</span>
+            <span>{tBrokers.title}</span>
           </h1>
           <p className="text-xs text-slate-400 mt-1">
-            Catálogo completo com {BROKERS_CATALOG.length} corretoras reguladas na B3, Wall Street, Europa e ecossistema Cripto. Compare taxas, spreads, plataformas e acesse os sites oficiais com segurança.
+            {tBrokers.subtitleBeforeCount} {BROKERS_CATALOG.length} {tBrokers.subtitleAfterCount}
           </p>
         </div>
 
@@ -834,7 +841,7 @@ export const BrokersView: React.FC = () => {
           <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
           <input
             type="text"
-            placeholder="Buscar por nome, país, taxa zero..."
+            placeholder={tBrokers.searchPlaceholder}
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="w-full bg-slate-900 border border-slate-700/80 rounded-xl pl-9.5 pr-4 py-2 text-xs text-white placeholder:text-slate-500 focus:outline-none focus:border-emerald-500 transition"
@@ -846,11 +853,11 @@ export const BrokersView: React.FC = () => {
       <div className="flex items-center gap-2 overflow-x-auto no-scrollbar py-1">
         {(
           [
-            { id: 'all', label: `Todas as Corretoras (${BROKERS_CATALOG.length})` },
-            { id: 'brasil', label: 'Brasil / B3 (12)' },
-            { id: 'global', label: 'Internacionais & Europa (12)' },
-            { id: 'crypto', label: 'Cripto & Web3 (7)' },
-            { id: 'zero', label: 'Taxa Zero / Low Cost' },
+            { id: 'all', label: `${tBrokers.tabAllPrefix} (${BROKERS_CATALOG.length})` },
+            { id: 'brasil', label: tBrokers.tabBrasil },
+            { id: 'global', label: tBrokers.tabGlobal },
+            { id: 'crypto', label: tBrokers.tabCrypto },
+            { id: 'zero', label: tBrokers.tabZero },
           ] as const
         ).map((item) => (
           <button
@@ -871,19 +878,21 @@ export const BrokersView: React.FC = () => {
       <div className="rounded-xl bg-gradient-to-r from-emerald-950/40 via-teal-950/30 to-blue-950/30 border border-emerald-500/30 p-4 flex items-start gap-3 shadow-lg">
         <ShieldCheck className="w-5 h-5 text-emerald-400 flex-shrink-0 mt-0.5" />
         <div className="text-xs text-slate-300 leading-relaxed">
-          <strong className="text-white">Transparência & Segurança Institucional:</strong> Todas as instituições listadas pelo DinhEuro são autorizadas pelos órgãos competentes de suas jurisdições: CVM e Banco Central no Brasil, SEC e FINRA nos Estados Unidos (com proteção SIPC de até $500.000), BaFin, FCA e FINMA na Europa. Sempre verifique os termos diretamente no portal oficial da instituição.
+          <strong className="text-white">{tBrokers.disclaimerBold}</strong> {tBrokers.disclaimerText}
         </div>
       </div>
 
       {/* Results Count */}
       <div className="flex items-center justify-between text-xs text-slate-400 px-1">
-        <span>Exibindo <strong>{filteredBrokers.length}</strong> instituições encontradas</span>
+        <span>
+          {tBrokers.showingPrefix} <strong>{filteredBrokers.length}</strong> {tBrokers.showingSuffix}
+        </span>
         {searchTerm && (
           <button
             onClick={() => setSearchTerm('')}
             className="text-emerald-400 hover:underline cursor-pointer"
           >
-            Limpar busca
+            {tBrokers.clearSearch}
           </button>
         )}
       </div>
@@ -914,7 +923,7 @@ export const BrokersView: React.FC = () => {
                     )}
                     {broker.isZeroFee && (
                       <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-emerald-500/15 border border-emerald-500/30 text-emerald-400">
-                        Taxa Zero
+                        {tBrokers.zeroFeeBadge}
                       </span>
                     )}
                   </div>
@@ -943,21 +952,21 @@ export const BrokersView: React.FC = () => {
               {/* Specs Grid */}
               <div className="mt-4 pt-3 border-t border-slate-800/80 space-y-2 text-xs">
                 <div className="flex justify-between items-center">
-                  <span className="text-slate-400">Corretagem:</span>
+                  <span className="text-slate-400">{tBrokers.specBrokerage}</span>
                   <span className="font-semibold text-slate-200 text-right">{broker.brokerageFee}</span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-slate-400">Câmbio / Spread:</span>
+                  <span className="text-slate-400">{tBrokers.specSpread}</span>
                   <span className="font-semibold text-slate-300 text-right">{broker.spreadCambio}</span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-slate-400">Depósito Mínimo:</span>
+                  <span className="text-slate-400">{tBrokers.specMinDeposit}</span>
                   <span className="font-semibold text-emerald-400 font-mono-numbers text-right">
                     {broker.minDeposit}
                   </span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-slate-400">Regulação Oficial:</span>
+                  <span className="text-slate-400">{tBrokers.specRegulation}</span>
                   <span className="font-semibold text-slate-300 text-right text-[11px] truncate max-w-[170px]" title={broker.regulation}>
                     {broker.regulation}
                   </span>
@@ -994,9 +1003,9 @@ export const BrokersView: React.FC = () => {
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-full py-2.5 rounded-xl bg-slate-800 hover:bg-gradient-to-r hover:from-emerald-600 hover:to-teal-600 text-xs font-bold text-slate-200 hover:text-white transition flex items-center justify-center gap-2 shadow-sm cursor-pointer active:scale-95"
-                title={`Acessar portal oficial de ${broker.name}`}
+                title={`${tBrokers.officialSiteTitlePrefix} ${broker.name}`}
               >
-                <span>Acessar Site Oficial</span>
+                <span>{tBrokers.officialSiteBtn}</span>
                 <ExternalLink className="w-3.5 h-3.5" />
               </a>
             </div>

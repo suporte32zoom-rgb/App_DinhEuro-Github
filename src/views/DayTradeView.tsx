@@ -36,9 +36,13 @@ import {
   AlertTriangle,
   Radio,
 } from 'lucide-react';
-import { useMarket, NavigationTab } from '../context/MarketContext';
+import { useMarket } from '../context/MarketContext';
 import { formatCurrencyValue, getDualCurrencyDisplay } from '../utils/finance';
 import { MarketAsset } from '../services/marketData';
+import { useI18n } from '../i18n/I18nContext';
+import { getNumberLocale } from '../i18n/translations';
+import { TRADING_TRANSLATIONS } from '../i18n/tradingTranslations';
+import { getLocalizedAssetName, getLocalizedNewsCategory, localizeNewsItem } from '../i18n/marketDataTranslations';
 
 export interface DayTradePosition {
   id: string;
@@ -99,7 +103,12 @@ const BROKERS_POOL = [
 ];
 
 export const DayTradeView: React.FC = () => {
-  const { assets, news, universalRates, setActiveTab, openAssetDetail, selectedAsset: globalSelectedAsset } = useMarket();
+  const { assets, news, universalRates, setActiveTab, selectedAsset: globalSelectedAsset } = useMarket();
+  const { lang } = useI18n();
+  const locale = getNumberLocale(lang);
+  const tDt = TRADING_TRANSLATIONS[lang].dayTrade;
+
+  type MarketWatchCategoryKey = 'all' | 'stocks' | 'futures' | 'forex' | 'crypto' | 'bdrs';
 
   // Curated list of high-liquidity assets for Day Trading dynamically connected to live assets
   const dayTradeAssets = useMemo(() => {
@@ -122,7 +131,7 @@ export const DayTradeView: React.FC = () => {
       {
         id: 'win_fut',
         symbol: 'WINFUT',
-        name: 'Mini Índice B3 Futuro',
+        name: tDt.winfutName,
         category: 'indices',
         price: winPrice,
         currency: 'BRL',
@@ -135,12 +144,13 @@ export const DayTradeView: React.FC = () => {
         flag: '🇧🇷',
         tickSize: 5,
         tickValue: 1.0, // 5 pts = R$ 1.00 por contrato
-        type: 'Futuros',
+        type: tDt.typeFutures,
+        categoryKey: 'futures' as const,
       },
       {
         id: 'wdo_fut',
         symbol: 'WDOFUT',
-        name: 'Mini Dólar B3 Futuro',
+        name: tDt.wdofutName,
         category: 'forex',
         price: wdoPrice,
         currency: 'BRL',
@@ -153,22 +163,31 @@ export const DayTradeView: React.FC = () => {
         flag: '🇧🇷',
         tickSize: 0.5,
         tickValue: 5.0, // 0.5 pt = R$ 5.00
-        type: 'Futuros',
+        type: tDt.typeFutures,
+        categoryKey: 'futures' as const,
       },
       ...assets.map((a) => ({
         ...a,
+        name: getLocalizedAssetName(a, lang),
         type:
           a.category === 'crypto'
-            ? 'Cripto'
+            ? tDt.typeCrypto
             : a.category === 'forex'
-            ? 'Forex'
+            ? tDt.typeForex
             : a.category === 'stocks_us'
-            ? 'BDRs'
-            : 'Ações',
+            ? tDt.typeBdrs
+            : tDt.typeStocks,
+        categoryKey: (a.category === 'crypto'
+          ? 'crypto'
+          : a.category === 'forex'
+          ? 'forex'
+          : a.category === 'stocks_us'
+          ? 'bdrs'
+          : 'stocks') as Exclude<MarketWatchCategoryKey, 'all' | 'futures'>,
       })),
     ];
-    return customList as (MarketAsset & { tickSize?: number; tickValue?: number; type: string })[];
-  }, [assets]);
+    return customList as (MarketAsset & { tickSize?: number; tickValue?: number; type: string; categoryKey: Exclude<MarketWatchCategoryKey, 'all'> })[];
+  }, [assets, lang, tDt]);
 
   // Selected Active Asset (synchronized with global market navigation)
   const [selectedSymbol, setSelectedSymbol] = useState<string>(() => {
@@ -185,8 +204,8 @@ export const DayTradeView: React.FC = () => {
 
   // Dual and Tri-currency real-time synchronized representation
   const dualAssetDisplay = useMemo(() => {
-    return getDualCurrencyDisplay(currentAsset.price, currentAsset.currency, universalRates);
-  }, [currentAsset.price, currentAsset.currency, universalRates]);
+    return getDualCurrencyDisplay(currentAsset.price, currentAsset.currency, universalRates, undefined, locale);
+  }, [currentAsset.price, currentAsset.currency, universalRates, locale]);
 
   // Active Main Center Tab
   const [activeCenterTab, setActiveCenterTab] = useState<'chart' | 'tape' | 'book' | 'indicators' | 'strategies'>('chart');
@@ -201,8 +220,8 @@ export const DayTradeView: React.FC = () => {
   const [showVWAP, setShowVWAP] = useState<boolean>(true);
   const [showVolume, setShowVolume] = useState<boolean>(true);
 
-  // Market Watch Tab in Right Column (Ações, Futuros, Forex, Cripto, BDRs)
-  const [marketWatchCategory, setMarketWatchCategory] = useState<'Todos' | 'Ações' | 'Futuros' | 'Forex' | 'Cripto' | 'BDRs'>('Todos');
+  // Market Watch Tab in Right Column
+  const [marketWatchCategory, setMarketWatchCategory] = useState<MarketWatchCategoryKey>('all');
   const [marketWatchSearch, setMarketWatchSearch] = useState<string>('');
 
   // Mobile Responsiveness: Tabs and Accordion Controls
@@ -287,11 +306,11 @@ export const DayTradeView: React.FC = () => {
       if (!isRiskLocked) {
         setIsRiskLocked(true);
         if (positions.length > 0) {
-          handleCloseAllPositions('Limite diário de perda atingido! Trava de risco institucional acionada.');
+          handleCloseAllPositions(tDt.notifications.riskLimitAutoClose);
         }
       }
     }
-  }, [totalDayPnl, dailyLossLimit, isRiskLocked, positions]);
+  }, [totalDayPnl, dailyLossLimit, isRiskLocked, positions, tDt.notifications.riskLimitAutoClose]);
 
   // Deep Institutional DOM Book and Times & Trades
   const [bookOffers, setBookOffers] = useState<BookOffer[]>([]);
@@ -334,7 +353,7 @@ export const DayTradeView: React.FC = () => {
       const qty = Math.random() > 0.8 ? Math.floor(Math.random() * 70 + 30) : Math.floor(Math.random() * 20 + 2);
       initialTrades.push({
         id: `trade_${now}_${i}`,
-        time: new Date(now - i * 1200).toLocaleTimeString('pt-BR', {
+        time: new Date(now - i * 1200).toLocaleTimeString(locale, {
           hour: '2-digit',
           minute: '2-digit',
           second: '2-digit',
@@ -348,7 +367,7 @@ export const DayTradeView: React.FC = () => {
       });
     }
     setTimesAndTrades(initialTrades);
-  }, [selectedSymbol, currentAsset.price]);
+  }, [selectedSymbol, currentAsset.price, locale]);
 
   // Live Real-Time Tape Stream (anchored strictly around live asset price)
   useEffect(() => {
@@ -361,7 +380,7 @@ export const DayTradeView: React.FC = () => {
 
       const newTrade: TradeTapeItem = {
         id: `tick_${Date.now()}_${Math.random()}`,
-        time: new Date().toLocaleTimeString('pt-BR', {
+        time: new Date().toLocaleTimeString(locale, {
           hour: '2-digit',
           minute: '2-digit',
           second: '2-digit',
@@ -378,12 +397,12 @@ export const DayTradeView: React.FC = () => {
     }, 2000);
 
     return () => clearInterval(interval);
-  }, [currentAsset]);
+  }, [currentAsset, locale]);
 
   // Order Execution Functions
   const handleExecuteOrder = (side: 'BUY' | 'SELL') => {
     if (isRiskLocked) {
-      setOrderNotification('❌ Trava de risco ativa! Limite de perda diário atingido.');
+      setOrderNotification(tDt.notifications.riskLockedError);
       setTimeout(() => setOrderNotification(null), 4000);
       return;
     }
@@ -412,12 +431,12 @@ export const DayTradeView: React.FC = () => {
       currentPrice: price,
       stopLoss: stopPrice,
       takeProfit: takePrice,
-      openTime: new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit', second: '2-digit' }),
+      openTime: new Date().toLocaleTimeString(locale, { hour: '2-digit', minute: '2-digit', second: '2-digit' }),
     };
 
     setPositions((prev) => [...prev, newPosition]);
     setOrderNotification(
-      `✓ Ordem de ${side === 'BUY' ? 'COMPRA' : 'VENDA'} executada: ${contracts}x ${currentAsset.symbol} a ${formatCurrencyValue(price, currentAsset.currency)}`
+      `${tDt.notifications.orderExecutedPrefix} ${side === 'BUY' ? tDt.sideBuy : tDt.sideSell} ${tDt.notifications.orderExecutedMiddle} ${contracts}x ${currentAsset.symbol} ${tDt.notifications.orderExecutedAt} ${formatCurrencyValue(price, currentAsset.currency, 2, locale)}`
     );
     setTimeout(() => setOrderNotification(null), 3000);
   };
@@ -448,7 +467,7 @@ export const DayTradeView: React.FC = () => {
       exitPrice: currentMarketPrice,
       pnlBrl: pnl,
       pnlUsd: pnl / (universalRates.BRL || 5.48),
-      closeTime: new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit', second: '2-digit' }),
+      closeTime: new Date().toLocaleTimeString(locale, { hour: '2-digit', minute: '2-digit', second: '2-digit' }),
     };
 
     setClosedTrades((prev) => [closed, ...prev]);
@@ -457,7 +476,7 @@ export const DayTradeView: React.FC = () => {
     setPositions((prev) => prev.filter((p) => p.id !== id));
 
     setOrderNotification(
-      `Posição encerrada: ${pos.symbol} com resultado de ${pnl >= 0 ? '+' : ''}${formatCurrencyValue(pnl, 'BRL')}`
+      `${tDt.notifications.positionClosedPrefix} ${pos.symbol} ${tDt.notifications.positionClosedResult} ${pnl >= 0 ? '+' : ''}${formatCurrencyValue(pnl, 'BRL', 2, locale)}`
     );
     setTimeout(() => setOrderNotification(null), 3000);
   };
@@ -492,7 +511,7 @@ export const DayTradeView: React.FC = () => {
         exitPrice: currentMarketPrice,
         pnlBrl: pnl,
         pnlUsd: pnl / (universalRates.BRL || 5.48),
-        closeTime: new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit', second: '2-digit' }),
+        closeTime: new Date().toLocaleTimeString(locale, { hour: '2-digit', minute: '2-digit', second: '2-digit' }),
       });
     });
 
@@ -501,7 +520,7 @@ export const DayTradeView: React.FC = () => {
     setAccountBalance((prev) => prev + batchPnl);
     setPositions([]);
 
-    setOrderNotification(reason || `Todas as posições foram zeradas a mercado! P&L consolidado: ${batchPnl >= 0 ? '+' : ''}${formatCurrencyValue(batchPnl, 'BRL')}`);
+    setOrderNotification(reason || `${tDt.notifications.allClosedPrefix} ${batchPnl >= 0 ? '+' : ''}${formatCurrencyValue(batchPnl, 'BRL', 2, locale)}`);
     setTimeout(() => setOrderNotification(null), 3500);
   };
 
@@ -521,10 +540,10 @@ export const DayTradeView: React.FC = () => {
         contracts: totalQty,
         entryPrice: currentMarketPrice,
         currentPrice: currentMarketPrice,
-        openTime: new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit', second: '2-digit' }),
+        openTime: new Date().toLocaleTimeString(locale, { hour: '2-digit', minute: '2-digit', second: '2-digit' }),
       };
       setPositions([newPos]);
-      setOrderNotification(`Inversão executada: Agora ${newSide === 'BUY' ? 'COMPRADO' : 'VENDIDO'} em ${totalQty}x ${currentAsset.symbol}`);
+      setOrderNotification(`${tDt.notifications.reverseExecutedPrefix} ${newSide === 'BUY' ? tDt.notifications.boughtState : tDt.notifications.soldState} ${tDt.notifications.inWord} ${totalQty}x ${currentAsset.symbol}`);
       setTimeout(() => setOrderNotification(null), 3000);
     }, 200);
   };
@@ -535,7 +554,7 @@ export const DayTradeView: React.FC = () => {
     setPositions([]);
     setClosedTrades([]);
     setIsRiskLocked(false);
-    setOrderNotification('Simulador reiniciado com sucesso! Saldo restaurado para R$ 100.000,00.');
+    setOrderNotification(tDt.notifications.simulatorReset);
     setTimeout(() => setOrderNotification(null), 3000);
   };
 
@@ -567,59 +586,59 @@ export const DayTradeView: React.FC = () => {
       {
         symbol: 'IBOVESPA',
         label: 'IBOV',
-        price: ibov && ibov.price > 0 ? ibov.price.toLocaleString('pt-BR', { maximumFractionDigits: 0 }) : '171.670',
+        price: (ibov && ibov.price > 0 ? ibov.price : 171670).toLocaleString(locale, { maximumFractionDigits: 0 }),
         change: ibov ? ibov.change24h : +0.68,
         spark: ibov?.sparkline?.length ? ibov.sparkline : [171000, 171300, 171500, 171670],
       },
       {
         symbol: 'USD/BRL',
-        label: 'DÓLAR',
-        price: usdBrl ? `R$ ${usdBrl.price.toFixed(3).replace('.', ',')}` : 'R$ 5,500',
+        label: tDt.dollarLabel,
+        price: formatCurrencyValue(usdBrl ? usdBrl.price : 5.500, 'BRL', 3, locale),
         change: usdBrl ? usdBrl.change24h : -0.52,
         spark: usdBrl?.sparkline?.length ? usdBrl.sparkline : [5.50, 5.48, 5.47, 5.500],
       },
       {
         symbol: 'EUR/BRL',
-        label: 'EURO',
-        price: eurBrl ? `R$ ${eurBrl.price.toFixed(3).replace('.', ',')}` : 'R$ 5,978',
+        label: tDt.euroLabel,
+        price: formatCurrencyValue(eurBrl ? eurBrl.price : 5.978, 'BRL', 3, locale),
         change: eurBrl ? eurBrl.change24h : +0.21,
         spark: eurBrl?.sparkline?.length ? eurBrl.sparkline : [5.95, 5.96, 5.97, 5.978],
       },
       {
         symbol: 'S&P 500',
         label: 'S&P 500',
-        price: sp500 && sp500.price > 0 ? sp500.price.toLocaleString('pt-BR', { minimumFractionDigits: 1, maximumFractionDigits: 1 }) : '7.575,4',
+        price: (sp500 && sp500.price > 0 ? sp500.price : 7575.4).toLocaleString(locale, { minimumFractionDigits: 1, maximumFractionDigits: 1 }),
         change: sp500 ? sp500.change24h : +0.48,
         spark: sp500?.sparkline?.length ? sp500.sparkline : [7520, 7540, 7560, 7575],
       },
       {
         symbol: 'BTC/USD',
         label: 'BTC/USD',
-        price: btc ? `$ ${btc.price.toLocaleString('pt-BR', { maximumFractionDigits: 0 })}` : '$ 87.950',
+        price: `$ ${(btc ? btc.price : 87950).toLocaleString(locale, { maximumFractionDigits: 0 })}`,
         change: btc ? btc.change24h : +1.84,
         spark: btc?.sparkline?.length ? btc.sparkline : [85200, 86400, 87100, 87950],
       },
       {
         symbol: 'PETR4',
         label: 'PETR4',
-        price: petr ? `R$ ${petr.price.toFixed(2).replace('.', ',')}` : 'R$ 38,65',
+        price: formatCurrencyValue(petr ? petr.price : 38.65, 'BRL', 2, locale),
         change: petr ? petr.change24h : +1.15,
         spark: petr?.sparkline?.length ? petr.sparkline : [38.1, 38.3, 38.5, 38.65],
       },
       {
         symbol: 'VALE3',
         label: 'VALE3',
-        price: vale ? `R$ ${vale.price.toFixed(2).replace('.', ',')}` : 'R$ 62,40',
+        price: formatCurrencyValue(vale ? vale.price : 62.40, 'BRL', 2, locale),
         change: vale ? vale.change24h : -0.42,
         spark: vale?.sparkline?.length ? vale.sparkline : [62.9, 62.7, 62.5, 62.4],
       },
     ];
-  }, [assets]);
+  }, [assets, locale, tDt]);
 
   // Filtered market watch items
   const filteredMarketWatch = useMemo(() => {
     return dayTradeAssets.filter((a) => {
-      if (marketWatchCategory !== 'Todos' && a.type !== marketWatchCategory) return false;
+      if (marketWatchCategory !== 'all' && a.categoryKey !== marketWatchCategory) return false;
       if (marketWatchSearch.trim()) {
         const query = marketWatchSearch.toLowerCase();
         return a.symbol.toLowerCase().includes(query) || a.name.toLowerCase().includes(query);
@@ -628,21 +647,30 @@ export const DayTradeView: React.FC = () => {
     });
   }, [dayTradeAssets, marketWatchCategory, marketWatchSearch]);
 
+  const marketWatchCategories: { key: MarketWatchCategoryKey; label: string }[] = [
+    { key: 'all', label: tDt.categories.all },
+    { key: 'stocks', label: tDt.categories.stocks },
+    { key: 'futures', label: tDt.categories.futures },
+    { key: 'forex', label: tDt.categories.forex },
+    { key: 'crypto', label: tDt.categories.crypto },
+    { key: 'bdrs', label: tDt.categories.bdrs },
+  ];
+
   // Left sidebar menu items definition
   const sidebarItems = [
-    { id: 'dashboard', label: 'Início', icon: Home, action: () => setActiveTab('dashboard') },
-    { id: 'mercados', label: 'Mercados', icon: Globe, action: () => setActiveTab('mercados') },
-    { id: 'graficos', label: 'Gráficos Avançados', icon: BarChart3, action: () => setActiveTab('graficos') },
-    { id: 'ordens', label: 'Ordens & Boleta', icon: FileText, action: () => setActiveCenterTab('book') },
-    { id: 'posicoes', label: 'Minhas Posições', icon: Activity, action: () => {} },
-    { id: 'carteira', label: 'Carteira', icon: Briefcase, action: () => setActiveTab('carteiras') },
-    { id: 'analises', label: 'Análises & Diagnóstico', icon: Sparkles, action: () => setActiveCenterTab('indicators') },
-    { id: 'noticias', label: 'Notícias do Mercado', icon: Newspaper, action: () => setActiveTab('noticias') },
-    { id: 'alertas', label: 'Alertas de Preço', icon: Bell, action: () => setShowAlertModal(true) },
-    { id: 'estrategias', label: 'Estratégias Scalping', icon: Target, action: () => setActiveCenterTab('strategies') },
-    { id: 'simulador', label: 'Resetar Simulador', icon: PlayCircle, action: handleResetSimulator },
-    { id: 'configuracoes', label: 'Gestão de Risco', icon: Settings, action: () => setShowRiskModal(true) },
-    { id: 'ajuda', label: 'Ajuda & Teclas de Atalho', icon: HelpCircle, action: () => setShowHelpModal(true) },
+    { id: 'dashboard', label: tDt.sidebar.dashboard, icon: Home, action: () => setActiveTab('dashboard') },
+    { id: 'mercados', label: tDt.sidebar.mercados, icon: Globe, action: () => setActiveTab('mercados') },
+    { id: 'graficos', label: tDt.sidebar.graficos, icon: BarChart3, action: () => setActiveTab('graficos') },
+    { id: 'ordens', label: tDt.sidebar.ordens, icon: FileText, action: () => setActiveCenterTab('book') },
+    { id: 'posicoes', label: tDt.sidebar.posicoes, icon: Activity, action: () => {} },
+    { id: 'carteira', label: tDt.sidebar.carteira, icon: Briefcase, action: () => setActiveTab('carteiras') },
+    { id: 'analises', label: tDt.sidebar.analises, icon: Sparkles, action: () => setActiveCenterTab('indicators') },
+    { id: 'noticias', label: tDt.sidebar.noticias, icon: Newspaper, action: () => setActiveTab('noticias') },
+    { id: 'alertas', label: tDt.sidebar.alertas, icon: Bell, action: () => setShowAlertModal(true) },
+    { id: 'estrategias', label: tDt.sidebar.estrategias, icon: Target, action: () => setActiveCenterTab('strategies') },
+    { id: 'simulador', label: tDt.sidebar.simulador, icon: PlayCircle, action: handleResetSimulator },
+    { id: 'configuracoes', label: tDt.sidebar.configuracoes, icon: Settings, action: () => setShowRiskModal(true) },
+    { id: 'ajuda', label: tDt.sidebar.ajuda, icon: HelpCircle, action: () => setShowHelpModal(true) },
   ];
 
   return (
@@ -653,7 +681,7 @@ export const DayTradeView: React.FC = () => {
       <div className="bg-[#050a14] border-b border-slate-800/90 px-2 py-1 flex items-center justify-between gap-3 overflow-x-auto no-scrollbar shrink-0 text-[11px] font-mono-numbers">
         <div className="flex items-center gap-1.5 shrink-0 text-slate-400 font-bold uppercase text-[10px] tracking-wider pr-2 border-r border-slate-800">
           <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-          <span>Feed Global Ao Vivo:</span>
+          <span>{tDt.feedGlobalLive}</span>
         </div>
 
         <div className="flex items-center gap-3 sm:gap-4 overflow-x-auto no-scrollbar flex-nowrap py-0.5">
@@ -696,7 +724,7 @@ export const DayTradeView: React.FC = () => {
         <div className="flex items-center gap-1.5 shrink-0 pl-2 border-l border-slate-800 text-[10px]">
           <span className="flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-emerald-500/15 border border-emerald-500/35 text-emerald-400 font-black uppercase tracking-wider shadow-sm">
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-            Simulador Paper
+            {tDt.paperSimulatorBadge}
           </span>
         </div>
       </div>
@@ -756,7 +784,7 @@ export const DayTradeView: React.FC = () => {
             {/* DinhEuro PRO Institutional Badge */}
             <div
               onClick={() => setActiveTab('sobre')}
-              title="DinhEuro Pro Terminal • Conectividade B3"
+              title={tDt.proSealTitle}
               className="mt-1 cursor-pointer group flex flex-col items-center"
             >
               <div className="w-7 h-7 rounded-full bg-gradient-to-br from-emerald-500 to-teal-700 p-0.5 shadow-md shadow-emerald-950 flex items-center justify-center">
@@ -779,14 +807,14 @@ export const DayTradeView: React.FC = () => {
                 <select
                   value={selectedSymbol}
                   onChange={(e) => setSelectedSymbol(e.target.value)}
-                  aria-label="Selecionar ativo para Day Trade"
+                  aria-label={tDt.selectAssetAria}
                   className="bg-[#060c18] border border-slate-700 hover:border-emerald-500 rounded px-2 pr-6 py-1 text-xs font-black text-white font-mono-numbers outline-none cursor-pointer max-w-[210px] truncate"
                 >
-                  <optgroup label="Futuros B3">
-                    <option value="WINFUT">WINFUT • Mini Índice B3</option>
-                    <option value="WDOFUT">WDOFUT • Mini Dólar B3</option>
+                  <optgroup label={tDt.groupFuturesB3}>
+                    <option value="WINFUT">WINFUT • {tDt.winfutShort}</option>
+                    <option value="WDOFUT">WDOFUT • {tDt.wdofutShort}</option>
                   </optgroup>
-                  <optgroup label="Ações Brasil (B3)">
+                  <optgroup label={tDt.groupStocksBr}>
                     {dayTradeAssets
                       .filter((a) => a.category === 'stocks_br')
                       .map((a) => (
@@ -795,7 +823,7 @@ export const DayTradeView: React.FC = () => {
                         </option>
                       ))}
                   </optgroup>
-                  <optgroup label="Wall Street & BDRs">
+                  <optgroup label={tDt.groupWallStBdrs}>
                     {dayTradeAssets
                       .filter((a) => a.category === 'stocks_us')
                       .map((a) => (
@@ -804,7 +832,7 @@ export const DayTradeView: React.FC = () => {
                         </option>
                       ))}
                   </optgroup>
-                  <optgroup label="Criptoativos">
+                  <optgroup label={tDt.groupCrypto}>
                     {dayTradeAssets
                       .filter((a) => a.category === 'crypto')
                       .map((a) => (
@@ -813,7 +841,7 @@ export const DayTradeView: React.FC = () => {
                         </option>
                       ))}
                   </optgroup>
-                  <optgroup label="Câmbio & Moedas">
+                  <optgroup label={tDt.groupForex}>
                     {dayTradeAssets
                       .filter((a) => a.category === 'forex')
                       .map((a) => (
@@ -822,7 +850,7 @@ export const DayTradeView: React.FC = () => {
                         </option>
                       ))}
                   </optgroup>
-                  <optgroup label="Índices Globais & Commodities">
+                  <optgroup label={tDt.groupIndicesCommodities}>
                     {dayTradeAssets
                       .filter((a) => a.category === 'indices' || a.category === 'commodities')
                       .map((a) => (
@@ -840,7 +868,7 @@ export const DayTradeView: React.FC = () => {
                 <div className="flex flex-col leading-tight">
                   <div className="flex items-baseline gap-1.5">
                     <span className="text-sm sm:text-base font-black text-white">
-                      {formatCurrencyValue(currentMarketPrice, currentAsset.currency)}
+                      {formatCurrencyValue(currentMarketPrice, currentAsset.currency, 2, locale)}
                     </span>
                     <span
                       className={`text-[10px] font-bold px-1.5 py-0.2 rounded ${
@@ -859,9 +887,9 @@ export const DayTradeView: React.FC = () => {
                 </div>
 
                 <div className="hidden 2xl:flex items-center gap-2 text-[10px] text-slate-400 pl-2 border-l border-slate-800/80">
-                  <span>Mín: <strong className="text-slate-200">{formatCurrencyValue(currentAsset.low24h, currentAsset.currency)}</strong></span>
-                  <span>Máx: <strong className="text-slate-200">{formatCurrencyValue(currentAsset.high24h, currentAsset.currency)}</strong></span>
-                  <span>Vol: <strong className="text-slate-200">{currentAsset.volume}</strong></span>
+                  <span>{tDt.minShort} <strong className="text-slate-200">{formatCurrencyValue(currentAsset.low24h, currentAsset.currency, 2, locale)}</strong></span>
+                  <span>{tDt.maxShort} <strong className="text-slate-200">{formatCurrencyValue(currentAsset.high24h, currentAsset.currency, 2, locale)}</strong></span>
+                  <span>{tDt.volShort} <strong className="text-slate-200">{currentAsset.volume}</strong></span>
                 </div>
               </div>
             </div>
@@ -869,11 +897,11 @@ export const DayTradeView: React.FC = () => {
             {/* Center: Functional Terminal Tabs */}
             <div className="flex items-center gap-1 bg-[#060c18] p-0.5 rounded border border-slate-800 text-[11px] font-bold">
               {[
-                { id: 'chart', label: 'Gráfico' },
-                { id: 'tape', label: 'Tape Reading' },
-                { id: 'book', label: 'Book de Ofertas' },
-                { id: 'indicators', label: 'Indicadores' },
-                { id: 'strategies', label: 'Estratégias' },
+                { id: 'chart', label: tDt.tabs.chart },
+                { id: 'tape', label: tDt.tabs.tape },
+                { id: 'book', label: tDt.tabs.book },
+                { id: 'indicators', label: tDt.tabs.indicators },
+                { id: 'strategies', label: tDt.tabs.strategies },
               ].map((tab) => (
                 <button
                   key={tab.id}
@@ -1060,7 +1088,7 @@ export const DayTradeView: React.FC = () => {
                     <g>
                       <line x1="0" y1="95" x2="700" y2="95" stroke="#3B82F6" strokeWidth="1.5" strokeDasharray="5 3" />
                       <text x="8" y="90" fill="#60A5FA" fontSize="9" fontWeight="bold">
-                        Preço Médio ({positions[0].side}): {formatCurrencyValue(positions[0].entryPrice, currentAsset.currency)}
+                        {tDt.avgPriceOverlay} ({positions[0].side === 'BUY' ? tDt.sideBuy : tDt.sideSell}): {formatCurrencyValue(positions[0].entryPrice, currentAsset.currency, 2, locale)}
                       </text>
                     </g>
                   )}
@@ -1068,10 +1096,10 @@ export const DayTradeView: React.FC = () => {
 
                 {/* Overlaid Indicators Legend */}
                 <div className="absolute top-2 left-2 flex items-center gap-1.5 text-[9px] font-mono-numbers">
-                  {showMA9 && <span className="text-sky-400 bg-sky-950/70 px-1 py-0.2 rounded border border-sky-500/30">MA 9: {formatCurrencyValue(currentMarketPrice * 1.001, currentAsset.currency)}</span>}
-                  {showMA21 && <span className="text-purple-400 bg-purple-950/70 px-1 py-0.2 rounded border border-purple-500/30">MA 21: {formatCurrencyValue(currentMarketPrice * 0.998, currentAsset.currency)}</span>}
-                  {showMA200 && <span className="text-amber-400 bg-amber-950/70 px-1 py-0.2 rounded border border-amber-500/30">MA 200: {formatCurrencyValue(currentMarketPrice * 0.985, currentAsset.currency)}</span>}
-                  {showVWAP && <span className="text-fuchsia-400 bg-fuchsia-950/70 px-1 py-0.2 rounded border border-fuchsia-500/30">VWAP: {formatCurrencyValue(currentMarketPrice * 0.999, currentAsset.currency)}</span>}
+                  {showMA9 && <span className="text-sky-400 bg-sky-950/70 px-1 py-0.2 rounded border border-sky-500/30">MA 9: {formatCurrencyValue(currentMarketPrice * 1.001, currentAsset.currency, 2, locale)}</span>}
+                  {showMA21 && <span className="text-purple-400 bg-purple-950/70 px-1 py-0.2 rounded border border-purple-500/30">MA 21: {formatCurrencyValue(currentMarketPrice * 0.998, currentAsset.currency, 2, locale)}</span>}
+                  {showMA200 && <span className="text-amber-400 bg-amber-950/70 px-1 py-0.2 rounded border border-amber-500/30">MA 200: {formatCurrencyValue(currentMarketPrice * 0.985, currentAsset.currency, 2, locale)}</span>}
+                  {showVWAP && <span className="text-fuchsia-400 bg-fuchsia-950/70 px-1 py-0.2 rounded border border-fuchsia-500/30">VWAP: {formatCurrencyValue(currentMarketPrice * 0.999, currentAsset.currency, 2, locale)}</span>}
                 </div>
               </div>
             )}
@@ -1082,20 +1110,20 @@ export const DayTradeView: React.FC = () => {
                 <div className="flex items-center justify-between pb-1.5 mb-1 border-b border-slate-800 text-[11px] shrink-0">
                   <span className="font-bold text-white flex items-center gap-1.5">
                     <Activity className="w-3.5 h-3.5 text-emerald-400" />
-                    Fita de Negócios Contínua (Times & Trades) • {currentAsset.symbol}
+                    {tDt.tapeTabTitle} • {currentAsset.symbol}
                   </span>
                   <div className="flex items-center gap-2 text-[10px] font-mono-numbers">
-                    <span className="text-slate-400">Preço Atual:</span>
-                    <strong className="text-white font-bold">{formatCurrencyValue(currentMarketPrice, currentAsset.currency)}</strong>
+                    <span className="text-slate-400">{tDt.currentPriceLabel}</span>
+                    <strong className="text-white font-bold">{formatCurrencyValue(currentMarketPrice, currentAsset.currency, 2, locale)}</strong>
                   </div>
                 </div>
 
                 <div className="grid grid-cols-5 py-1 px-2 text-[9px] font-bold text-slate-400 border-b border-slate-800/80 uppercase tracking-wider shrink-0">
-                  <span>Horário</span>
-                  <span>Preço Negociado</span>
-                  <span>Volume Lotes</span>
-                  <span>Comprador</span>
-                  <span className="text-right">Vendedor</span>
+                  <span>{tDt.colTime}</span>
+                  <span>{tDt.colTradedPrice}</span>
+                  <span>{tDt.colLotVolume}</span>
+                  <span>{tDt.colBuyer}</span>
+                  <span className="text-right">{tDt.colSeller}</span>
                 </div>
 
                 <div className="flex-1 overflow-y-auto no-scrollbar space-y-0.5 font-mono-numbers text-[10px]">
@@ -1108,9 +1136,9 @@ export const DayTradeView: React.FC = () => {
                     >
                       <span className="text-slate-400 text-[9px]">{t.time}</span>
                       <span className={`font-black ${t.aggressor === 'BUY' ? 'text-emerald-400' : 'text-rose-400'}`}>
-                        {formatCurrencyValue(t.price, currentAsset.currency)}
+                        {formatCurrencyValue(t.price, currentAsset.currency, 2, locale)}
                       </span>
-                      <span className="text-white font-bold">{t.qty} lotes</span>
+                      <span className="text-white font-bold">{t.qty} {tDt.lotsUnit}</span>
                       <span className="text-sky-300 font-medium">{t.buyerBroker}</span>
                       <span className="text-rose-300 font-medium text-right">{t.sellerBroker}</span>
                     </div>
@@ -1124,19 +1152,19 @@ export const DayTradeView: React.FC = () => {
                 <div className="flex items-center justify-between pb-1.5 mb-1 border-b border-slate-800 text-[11px] shrink-0">
                   <span className="font-bold text-white flex items-center gap-1.5">
                     <Layers className="w-3.5 h-3.5 text-sky-400" />
-                    Livro de Ofertas Vertical (DOM Ladder) • {currentAsset.symbol}
+                    {tDt.bookTabTitle} • {currentAsset.symbol}
                   </span>
                   <div className="flex items-center gap-2 text-[10px] font-mono-numbers">
-                    <span className="text-emerald-400 font-bold">Compra: {bookOffers.reduce((a, b) => a + b.bidQty, 0)}</span>
+                    <span className="text-emerald-400 font-bold">{tDt.buyTotalLabel} {bookOffers.reduce((a, b) => a + b.bidQty, 0)}</span>
                     <span className="text-slate-600">|</span>
-                    <span className="text-rose-400 font-bold">Venda: {bookOffers.reduce((a, b) => a + b.askQty, 0)}</span>
+                    <span className="text-rose-400 font-bold">{tDt.sellTotalLabel} {bookOffers.reduce((a, b) => a + b.askQty, 0)}</span>
                   </div>
                 </div>
 
                 <div className="grid grid-cols-3 py-1 px-2 text-[9px] font-bold text-slate-400 border-b border-slate-800/80 uppercase tracking-wider shrink-0">
-                  <span>Qtd Compra (Bid)</span>
-                  <span className="text-center">Preço Oficial</span>
-                  <span className="text-right">Qtd Venda (Ask)</span>
+                  <span>{tDt.colBidQty}</span>
+                  <span className="text-center">{tDt.colOfficialPrice}</span>
+                  <span className="text-right">{tDt.colAskQty}</span>
                 </div>
 
                 <div className="flex-1 overflow-y-auto no-scrollbar space-y-0.5 font-mono-numbers text-[10px]">
@@ -1144,7 +1172,7 @@ export const DayTradeView: React.FC = () => {
                     <div
                       key={idx}
                       onClick={() => setLimitPrice(b.price)}
-                      title={`Clique para carregar preço limite ${b.price} na boleta`}
+                      title={`${tDt.bookClickTitlePrefix} ${b.price} ${tDt.bookClickTitleSuffix}`}
                       className={`relative grid grid-cols-3 py-0.5 px-2 rounded transition cursor-pointer hover:bg-slate-800/60 ${
                         b.isPoc ? 'bg-amber-500/10 border border-amber-500/30' : ''
                       }`}
@@ -1165,7 +1193,7 @@ export const DayTradeView: React.FC = () => {
 
                       <span className="relative z-10 text-emerald-400 font-bold">{b.bidQty > 0 ? b.bidQty : ''}</span>
                       <span className="relative z-10 text-center font-black text-white">
-                        {formatCurrencyValue(b.price, currentAsset.currency)}
+                        {formatCurrencyValue(b.price, currentAsset.currency, 2, locale)}
                       </span>
                       <span className="relative z-10 text-right text-rose-400 font-bold">{b.askQty > 0 ? b.askQty : ''}</span>
                     </div>
@@ -1176,23 +1204,23 @@ export const DayTradeView: React.FC = () => {
 
             {activeCenterTab === 'indicators' && (
               <div className="w-full h-full flex flex-col rounded border border-slate-800 bg-[#070e1b] p-3 overflow-y-auto no-scrollbar space-y-2">
-                <h4 className="font-bold text-white text-xs">Diagnóstico Técnico Automatizado</h4>
+                <h4 className="font-bold text-white text-xs">{tDt.indicatorsTabTitle}</h4>
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-[11px]">
                   <div className="p-2 rounded bg-slate-900 border border-slate-800">
-                    <span className="text-slate-400 block text-[10px]">IFR / RSI (14)</span>
-                    <strong className="text-emerald-400 font-bold font-mono-numbers">56.4 (Neutro-Alta)</strong>
+                    <span className="text-slate-400 block text-[10px]">{tDt.rsiLabel}</span>
+                    <strong className="text-emerald-400 font-bold font-mono-numbers">{tDt.rsiStatus}</strong>
                   </div>
                   <div className="p-2 rounded bg-slate-900 border border-slate-800">
-                    <span className="text-slate-400 block text-[10px]">MACD (12, 26, 9)</span>
-                    <strong className="text-emerald-400 font-bold font-mono-numbers">+142.0 (Compra)</strong>
+                    <span className="text-slate-400 block text-[10px]">{tDt.macdLabel}</span>
+                    <strong className="text-emerald-400 font-bold font-mono-numbers">{tDt.macdStatus}</strong>
                   </div>
                   <div className="p-2 rounded bg-slate-900 border border-slate-800">
-                    <span className="text-slate-400 block text-[10px]">Estocástico Lento</span>
-                    <strong className="text-amber-400 font-bold font-mono-numbers">68.2 (Sobrecompra)</strong>
+                    <span className="text-slate-400 block text-[10px]">{tDt.stochLabel}</span>
+                    <strong className="text-amber-400 font-bold font-mono-numbers">{tDt.stochStatus}</strong>
                   </div>
                   <div className="p-2 rounded bg-slate-900 border border-slate-800">
-                    <span className="text-slate-400 block text-[10px]">Bandas de Bollinger</span>
-                    <strong className="text-sky-400 font-bold font-mono-numbers">Dentro da Banda</strong>
+                    <span className="text-slate-400 block text-[10px]">{tDt.bollingerLabel}</span>
+                    <strong className="text-sky-400 font-bold font-mono-numbers">{tDt.bollingerStatus}</strong>
                   </div>
                 </div>
               </div>
@@ -1200,15 +1228,15 @@ export const DayTradeView: React.FC = () => {
 
             {activeCenterTab === 'strategies' && (
               <div className="w-full h-full flex flex-col rounded border border-slate-800 bg-[#070e1b] p-3 overflow-y-auto no-scrollbar space-y-2 text-xs">
-                <h4 className="font-bold text-white">Estratégias de Scalping e Rompimento</h4>
+                <h4 className="font-bold text-white">{tDt.strategiesTabTitle}</h4>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                   <div className="p-2.5 rounded bg-slate-900 border border-slate-800">
-                    <span className="font-bold text-emerald-400 block">1. Pullback na VWAP</span>
-                    <p className="text-[11px] text-slate-400">Entrada na retração após toque e rejeição da linha média ponderada com confirmação de fluxo comprador.</p>
+                    <span className="font-bold text-emerald-400 block">{tDt.strat1Title}</span>
+                    <p className="text-[11px] text-slate-400">{tDt.strat1Desc}</p>
                   </div>
                   <div className="p-2.5 rounded bg-slate-900 border border-slate-800">
-                    <span className="font-bold text-sky-400 block">2. Cruzamento 9 x 21</span>
-                    <p className="text-[11px] text-slate-400">Gatilho de compra quando a MA 9 cruza para cima da MA 21 com candle fechado acima do patamar.</p>
+                    <span className="font-bold text-sky-400 block">{tDt.strat2Title}</span>
+                    <p className="text-[11px] text-slate-400">{tDt.strat2Desc}</p>
                   </div>
                 </div>
               </div>
@@ -1224,14 +1252,14 @@ export const DayTradeView: React.FC = () => {
               <div className="flex items-center justify-between pb-1 border-b border-slate-800/80 mb-1 shrink-0 text-xs">
                 <span className="font-bold text-white uppercase text-[10px] tracking-wider flex items-center gap-1">
                   <Activity className="w-3 h-3 text-emerald-400" />
-                  Minhas Posições ({positions.length})
+                  {tDt.myPositions} ({positions.length})
                 </span>
                 {positions.length > 0 && (
                   <button
                     onClick={() => handleCloseAllPositions()}
                     className="px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-500/40 text-[9px] font-bold"
                   >
-                    Zerar Todas
+                    {tDt.closeAllShort}
                   </button>
                 )}
               </div>
@@ -1239,19 +1267,19 @@ export const DayTradeView: React.FC = () => {
               <div className="flex-1 overflow-y-auto no-scrollbar">
                 {positions.length === 0 ? (
                   <div className="h-full flex items-center justify-center text-slate-500 text-[10px]">
-                    Nenhuma posição aberta no momento.
+                    {tDt.noOpenPositions}
                   </div>
                 ) : (
                   <table className="w-full text-left text-[10px] font-mono-numbers">
                     <thead className="bg-[#060c18] text-slate-400 border-b border-slate-800 sticky top-0">
                       <tr>
-                        <th className="py-0.5 px-1">Ativo</th>
-                        <th className="py-0.5 px-1">Lado</th>
-                        <th className="py-0.5 px-1 text-right">Qtd</th>
-                        <th className="py-0.5 px-1 text-right">Entrada</th>
-                        <th className="py-0.5 px-1 text-right">Atual</th>
+                        <th className="py-0.5 px-1">{tDt.colAsset}</th>
+                        <th className="py-0.5 px-1">{tDt.colSide}</th>
+                        <th className="py-0.5 px-1 text-right">{tDt.colQty}</th>
+                        <th className="py-0.5 px-1 text-right">{tDt.colEntry}</th>
+                        <th className="py-0.5 px-1 text-right">{tDt.colCurrent}</th>
                         <th className="py-0.5 px-1 text-right">P&L</th>
-                        <th className="py-0.5 px-1 text-center">Ação</th>
+                        <th className="py-0.5 px-1 text-center">{tDt.colAction}</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-slate-800/60">
@@ -1266,21 +1294,21 @@ export const DayTradeView: React.FC = () => {
                             <td className="py-0.5 px-1 font-bold text-white">{pos.symbol}</td>
                             <td className="py-0.5 px-1">
                               <span className={`px-1 py-0.2 rounded text-[8px] font-bold ${pos.side === 'BUY' ? 'text-emerald-400 bg-emerald-500/10' : 'text-rose-400 bg-rose-500/10'}`}>
-                                {pos.side}
+                                {pos.side === 'BUY' ? tDt.sideBuy : tDt.sideSell}
                               </span>
                             </td>
                             <td className="py-0.5 px-1 text-right text-slate-200">{pos.contracts}</td>
                             <td className="py-0.5 px-1 text-right text-slate-400">{pos.entryPrice}</td>
                             <td className="py-0.5 px-1 text-right text-white font-bold">{currentMarketPrice}</td>
                             <td className={`py-0.5 px-1 text-right font-bold ${pnlBrl >= 0 ? 'text-emerald-400' : 'text-rose-400'}`}>
-                              {pnlBrl >= 0 ? '+' : ''}{formatCurrencyValue(pnlBrl, 'BRL')}
+                              {pnlBrl >= 0 ? '+' : ''}{formatCurrencyValue(pnlBrl, 'BRL', 2, locale)}
                             </td>
                             <td className="py-0.5 px-1 text-center">
                               <button
                                 onClick={() => handleClosePosition(pos.id)}
                                 className="px-1 py-0.2 rounded bg-slate-800 hover:bg-rose-600 text-slate-300 text-[8px] font-bold transition"
                               >
-                                Zerar
+                                {tDt.flattenBtn}
                               </button>
                             </td>
                           </tr>
@@ -1297,7 +1325,7 @@ export const DayTradeView: React.FC = () => {
               <div className="flex items-center justify-between pb-1 border-b border-slate-800/80 shrink-0 text-xs">
                 <span className="font-bold text-white uppercase text-[10px] tracking-wider flex items-center gap-1">
                   <Target className="w-3 h-3 text-amber-400" />
-                  Performance do Dia
+                  {tDt.dayPerformance}
                 </span>
                 <span className="text-[10px] text-slate-400 font-mono-numbers flex items-center gap-1">
                   <Clock className="w-3 h-3 text-slate-500" />
@@ -1328,27 +1356,27 @@ export const DayTradeView: React.FC = () => {
                   </svg>
                   <div className="absolute flex flex-col items-center">
                     <span className="text-xs font-black font-mono-numbers text-white">{winRate}%</span>
-                    <span className="text-[7px] text-slate-400 uppercase font-bold">Acerto</span>
+                    <span className="text-[7px] text-slate-400 uppercase font-bold">{tDt.winRateLabel}</span>
                   </div>
                 </div>
 
                 {/* Performance Metrics Values */}
                 <div className="space-y-1 font-mono-numbers text-[10px] flex-1">
                   <div className="flex items-center justify-between">
-                    <span className="text-slate-400">Resultado Líquido:</span>
+                    <span className="text-slate-400">{tDt.netResultLabel}</span>
                     <strong className={`font-black text-xs ${totalDayPnl >= 0 ? 'text-emerald-400' : 'text-rose-400'}`}>
-                      {totalDayPnl >= 0 ? '+' : ''}{formatCurrencyValue(totalDayPnl, 'BRL')}
+                      {totalDayPnl >= 0 ? '+' : ''}{formatCurrencyValue(totalDayPnl, 'BRL', 2, locale)}
                     </strong>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-slate-400">Rentabilidade Dia:</span>
+                    <span className="text-slate-400">{tDt.dayReturnLabel}</span>
                     <span className={`font-bold ${totalDayPnl >= 0 ? 'text-emerald-400' : 'text-rose-400'}`}>
                       {totalDayPnl >= 0 ? '+' : ''}{returnPercentage}%
                     </span>
                   </div>
                   <div className="flex items-center justify-between text-slate-500 text-[9px]">
-                    <span>Trades: {winningTrades} Gain / {losingTrades} Loss</span>
-                    <span>Total: {totalTradesCount}</span>
+                    <span>{tDt.tradesWord} {winningTrades} Gain / {losingTrades} Loss</span>
+                    <span>{tDt.totalWord} {totalTradesCount}</span>
                   </div>
                 </div>
               </div>
@@ -1359,27 +1387,30 @@ export const DayTradeView: React.FC = () => {
               <div className="flex items-center justify-between pb-1 border-b border-slate-800/80 mb-1 shrink-0 text-xs">
                 <span className="font-bold text-white uppercase text-[10px] tracking-wider flex items-center gap-1">
                   <Newspaper className="w-3 h-3 text-sky-400" />
-                  Notícias do Mercado
+                  {tDt.marketNewsTitle}
                 </span>
-                <span className="text-[9px] text-emerald-400 font-bold uppercase">Tempo Real</span>
+                <span className="text-[9px] text-emerald-400 font-bold uppercase">{tDt.realTimeTag}</span>
               </div>
 
               <div className="flex-1 overflow-y-auto no-scrollbar space-y-1 text-[10px]">
-                {news.slice(0, 4).map((item, idx) => (
-                  <div
-                    key={item.id || idx}
-                    onClick={() => setActiveTab('noticias')}
-                    className="p-1 rounded bg-[#060c18] hover:bg-slate-800/60 border border-slate-800/60 transition cursor-pointer"
-                  >
-                    <div className="flex items-center justify-between text-[9px] text-slate-500 mb-0.5">
-                      <span className="font-mono-numbers">{item.datetime ? item.datetime.split(' ')[1] || '14:32' : '14:32'}</span>
-                      <span className="text-emerald-400 font-semibold">{item.category || 'Macro'}</span>
+                {news.slice(0, 4).map((item, idx) => {
+                  const localizedItem = localizeNewsItem(item, lang);
+                  return (
+                    <div
+                      key={item.id || idx}
+                      onClick={() => setActiveTab('noticias')}
+                      className="p-1 rounded bg-[#060c18] hover:bg-slate-800/60 border border-slate-800/60 transition cursor-pointer"
+                    >
+                      <div className="flex items-center justify-between text-[9px] text-slate-500 mb-0.5">
+                        <span className="font-mono-numbers">{localizedItem.datetime ? localizedItem.datetime.split(' ')[1] || '14:32' : '14:32'}</span>
+                        <span className="text-emerald-400 font-semibold">{getLocalizedNewsCategory(item.category || 'Macro', lang)}</span>
+                      </div>
+                      <p className="text-slate-300 font-medium line-clamp-1 text-[10px] leading-tight hover:text-white">
+                        {localizedItem.title}
+                      </p>
                     </div>
-                    <p className="text-slate-300 font-medium line-clamp-1 text-[10px] leading-tight hover:text-white">
-                      {item.title}
-                    </p>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             </div>
           </div>
@@ -1394,24 +1425,24 @@ export const DayTradeView: React.FC = () => {
             <div className="flex items-center justify-between pb-1 mb-1">
               <span className="font-bold text-white uppercase text-[10px] tracking-wider flex items-center gap-1">
                 <Globe className="w-3 h-3 text-emerald-400" />
-                Mercado em Tempo Real
+                {tDt.realTimeMarketTitle}
               </span>
-              <span className="text-[9px] text-slate-500 font-mono-numbers">{filteredMarketWatch.length} Ativos</span>
+              <span className="text-[9px] text-slate-500 font-mono-numbers">{filteredMarketWatch.length} {tDt.assetsCountSuffix}</span>
             </div>
 
             {/* Category tabs */}
             <div className="flex items-center gap-1 overflow-x-auto no-scrollbar py-0.5 text-[9px] font-bold mb-1">
-              {(['Todos', 'Ações', 'Futuros', 'Forex', 'Cripto', 'BDRs'] as const).map((cat) => (
+              {marketWatchCategories.map((cat) => (
                 <button
-                  key={cat}
-                  onClick={() => setMarketWatchCategory(cat)}
+                  key={cat.key}
+                  onClick={() => setMarketWatchCategory(cat.key)}
                   className={`px-1.5 py-0.5 rounded transition cursor-pointer shrink-0 ${
-                    marketWatchCategory === cat
+                    marketWatchCategory === cat.key
                       ? 'bg-emerald-600 text-white font-bold'
                       : 'bg-slate-900 text-slate-400 hover:text-white border border-slate-800'
                   }`}
                 >
-                  {cat}
+                  {cat.label}
                 </button>
               ))}
             </div>
@@ -1421,7 +1452,7 @@ export const DayTradeView: React.FC = () => {
               <Search className="w-3 h-3 text-slate-500 absolute left-2 top-1/2 -translate-y-1/2" />
               <input
                 type="text"
-                placeholder="Buscar ativo..."
+                placeholder={tDt.searchAssetPlaceholder}
                 value={marketWatchSearch}
                 onChange={(e) => setMarketWatchSearch(e.target.value)}
                 className="w-full bg-[#08111e] border border-slate-800 rounded pl-6 pr-2 py-0.5 text-[10px] text-white placeholder:text-slate-600 outline-none"
@@ -1449,11 +1480,11 @@ export const DayTradeView: React.FC = () => {
                     </div>
                     <div className="text-right">
                       <span className="font-bold text-white text-[10px] block font-mono-numbers">
-                        {formatCurrencyValue(item.price, item.currency)}
+                        {formatCurrencyValue(item.price, item.currency, 2, locale)}
                       </span>
                       <div className="flex items-center justify-end gap-1 text-[9px] font-mono-numbers">
                         <span className="text-slate-400 text-[8px]">
-                          ≈ {getDualCurrencyDisplay(item.price, item.currency, universalRates).secondaryFormatted}
+                          ≈ {getDualCurrencyDisplay(item.price, item.currency, universalRates, undefined, locale).secondaryFormatted}
                         </span>
                         <span className={`font-bold ${isPos ? 'text-emerald-400' : 'text-rose-400'}`}>
                           {isPos ? '+' : ''}{item.change24h}%
@@ -1472,7 +1503,7 @@ export const DayTradeView: React.FC = () => {
               <div className="flex items-center justify-between pb-1 border-b border-slate-800">
                 <span className="font-bold text-white uppercase text-[10px] tracking-wider flex items-center gap-1">
                   <SlidersHorizontal className="w-3 h-3 text-emerald-400" />
-                  Boleta de Execução Rápida
+                  {tDt.quickTicketTitle}
                 </span>
                 <span className="text-[9px] text-slate-400 font-mono-numbers font-semibold">
                   Spread: {currentAsset.symbol.includes('WIN') ? '5 pts' : '0.5 pt'}
@@ -1490,7 +1521,7 @@ export const DayTradeView: React.FC = () => {
                       : 'text-slate-400 hover:text-white'
                   }`}
                 >
-                  <ArrowUpRight className="w-3 h-3" /> COMPRA
+                  <ArrowUpRight className="w-3 h-3" /> {tDt.ticketBuyTab}
                 </button>
                 <button
                   type="button"
@@ -1501,7 +1532,7 @@ export const DayTradeView: React.FC = () => {
                       : 'text-slate-400 hover:text-white'
                   }`}
                 >
-                  <ArrowDownRight className="w-3 h-3" /> VENDA
+                  <ArrowDownRight className="w-3 h-3" /> {tDt.ticketSellTab}
                 </button>
               </div>
 
@@ -1516,7 +1547,7 @@ export const DayTradeView: React.FC = () => {
                       : 'bg-[#060c18] border-slate-800 text-slate-400 hover:text-white'
                   }`}
                 >
-                  A Mercado
+                  {tDt.marketOrderBtn}
                 </button>
                 <button
                   type="button"
@@ -1527,14 +1558,14 @@ export const DayTradeView: React.FC = () => {
                       : 'bg-[#060c18] border-slate-800 text-slate-400 hover:text-white'
                   }`}
                 >
-                  Ordem Limitada
+                  {tDt.limitOrderBtn}
                 </button>
               </div>
 
               {/* Quantity / Contratos */}
               <div>
                 <div className="flex items-center justify-between text-[10px] text-slate-400 mb-0.5">
-                  <span>Quantidade de Contratos:</span>
+                  <span>{tDt.contractsQtyLabel}</span>
                   <span className="font-mono-numbers text-white font-bold">{contracts}x</span>
                 </div>
                 <div className="flex items-center gap-1">
@@ -1568,7 +1599,7 @@ export const DayTradeView: React.FC = () => {
               {/* Limit Price if selected */}
               {orderType === 'LIMIT' && (
                 <div className="space-y-0.5">
-                  <span className="text-[10px] text-slate-400">Preço Limite:</span>
+                  <span className="text-[10px] text-slate-400">{tDt.limitPriceLabel}</span>
                   <input
                     type="number"
                     step={currentAsset.symbol.includes('WIN') ? 5 : 0.5}
@@ -1633,10 +1664,10 @@ export const DayTradeView: React.FC = () => {
                 >
                   <div className="flex items-center gap-1">
                     <ArrowUpRight className="w-3.5 h-3.5" />
-                    <span>COMPRAR {contracts}x {currentAsset.symbol}</span>
+                    <span>{tDt.buyActionVerb} {contracts}x {currentAsset.symbol}</span>
                   </div>
                   <span className="text-[10px] font-mono-numbers opacity-90">
-                    {formatCurrencyValue(currentMarketPrice, currentAsset.currency)} (≈ {dualAssetDisplay.secondaryFormatted})
+                    {formatCurrencyValue(currentMarketPrice, currentAsset.currency, 2, locale)} (≈ {dualAssetDisplay.secondaryFormatted})
                   </span>
                 </button>
               ) : (
@@ -1647,10 +1678,10 @@ export const DayTradeView: React.FC = () => {
                 >
                   <div className="flex items-center gap-1">
                     <ArrowDownRight className="w-3.5 h-3.5" />
-                    <span>VENDER {contracts}x {currentAsset.symbol}</span>
+                    <span>{tDt.sellActionVerb} {contracts}x {currentAsset.symbol}</span>
                   </div>
                   <span className="text-[10px] font-mono-numbers opacity-90">
-                    {formatCurrencyValue(currentMarketPrice, currentAsset.currency)} (≈ {dualAssetDisplay.secondaryFormatted})
+                    {formatCurrencyValue(currentMarketPrice, currentAsset.currency, 2, locale)} (≈ {dualAssetDisplay.secondaryFormatted})
                   </span>
                 </button>
               )}
@@ -1663,7 +1694,7 @@ export const DayTradeView: React.FC = () => {
                   className="py-1.5 px-2 rounded bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs uppercase tracking-wide transition cursor-pointer flex items-center justify-center gap-1 shadow-md shadow-amber-950"
                 >
                   <Square className="w-3 h-3 fill-current" />
-                  <span>ZERAR</span>
+                  <span>{tDt.flattenBtn.toUpperCase()}</span>
                 </button>
 
                 <button
@@ -1672,7 +1703,7 @@ export const DayTradeView: React.FC = () => {
                   className="py-1.5 px-2 rounded bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 font-bold text-xs uppercase tracking-wide transition cursor-pointer flex items-center justify-center gap-1"
                 >
                   <ArrowRightLeft className="w-3 h-3" />
-                  <span>Inverter</span>
+                  <span>{tDt.reverseBtn}</span>
                 </button>
               </div>
             </div>
@@ -1690,14 +1721,14 @@ export const DayTradeView: React.FC = () => {
                 <select
                   value={selectedSymbol}
                   onChange={(e) => setSelectedSymbol(e.target.value)}
-                  aria-label="Selecionar ativo para Day Trade"
+                  aria-label={tDt.selectAssetAria}
                   className="w-full bg-[#060c18] border border-slate-700 hover:border-emerald-500 rounded px-2 pr-6 py-1.5 text-xs font-black text-white font-mono-numbers outline-none cursor-pointer"
                 >
-                  <optgroup label="Futuros B3">
-                    <option value="WINFUT">WINFUT • Mini Índice B3</option>
-                    <option value="WDOFUT">WDOFUT • Mini Dólar B3</option>
+                  <optgroup label={tDt.groupFuturesB3}>
+                    <option value="WINFUT">WINFUT • {tDt.winfutShort}</option>
+                    <option value="WDOFUT">WDOFUT • {tDt.wdofutShort}</option>
                   </optgroup>
-                  <optgroup label="Ações Brasil (B3)">
+                  <optgroup label={tDt.groupStocksBr}>
                     {dayTradeAssets
                       .filter((a) => a.category === 'stocks_br')
                       .map((a) => (
@@ -1706,7 +1737,7 @@ export const DayTradeView: React.FC = () => {
                         </option>
                       ))}
                   </optgroup>
-                  <optgroup label="Wall Street & BDRs">
+                  <optgroup label={tDt.groupWallStBdrs}>
                     {dayTradeAssets
                       .filter((a) => a.category === 'stocks_us')
                       .map((a) => (
@@ -1715,7 +1746,7 @@ export const DayTradeView: React.FC = () => {
                         </option>
                       ))}
                   </optgroup>
-                  <optgroup label="Criptoativos">
+                  <optgroup label={tDt.groupCrypto}>
                     {dayTradeAssets
                       .filter((a) => a.category === 'crypto')
                       .map((a) => (
@@ -1724,7 +1755,7 @@ export const DayTradeView: React.FC = () => {
                         </option>
                       ))}
                   </optgroup>
-                  <optgroup label="Câmbio & Moedas">
+                  <optgroup label={tDt.groupForex}>
                     {dayTradeAssets
                       .filter((a) => a.category === 'forex')
                       .map((a) => (
@@ -1733,7 +1764,7 @@ export const DayTradeView: React.FC = () => {
                         </option>
                       ))}
                   </optgroup>
-                  <optgroup label="Índices Globais & Commodities">
+                  <optgroup label={tDt.groupIndicesCommodities}>
                     {dayTradeAssets
                       .filter((a) => a.category === 'indices' || a.category === 'commodities')
                       .map((a) => (
@@ -1749,7 +1780,7 @@ export const DayTradeView: React.FC = () => {
               {/* Price & Variation */}
               <div className="flex items-baseline gap-1.5 font-mono-numbers shrink-0">
                 <span className="text-sm font-black text-white">
-                  {formatCurrencyValue(currentMarketPrice, currentAsset.currency)}
+                  {formatCurrencyValue(currentMarketPrice, currentAsset.currency, 2, locale)}
                 </span>
                 <span
                   className={`text-[10px] font-bold px-1.5 py-0.5 rounded ${
@@ -1855,7 +1886,7 @@ export const DayTradeView: React.FC = () => {
                 <g>
                   <line x1="0" y1="95" x2="700" y2="95" stroke="#3B82F6" strokeWidth="1.5" strokeDasharray="5 3" />
                   <text x="8" y="90" fill="#60A5FA" fontSize="10" fontWeight="bold">
-                    PM ({positions[0].side}): {formatCurrencyValue(positions[0].entryPrice, currentAsset.currency)}
+                    {tDt.avgPriceOverlay} ({positions[0].side === 'BUY' ? tDt.sideBuy : tDt.sideSell}): {formatCurrencyValue(positions[0].entryPrice, currentAsset.currency, 2, locale)}
                   </text>
                 </g>
               )}
@@ -1883,7 +1914,7 @@ export const DayTradeView: React.FC = () => {
                 }`}
               >
                 <SlidersHorizontal className="w-3.5 h-3.5 text-emerald-400" />
-                <span>Boleta</span>
+                <span>{tDt.mobileTabs.ticket}</span>
               </button>
 
               <button
@@ -1896,7 +1927,7 @@ export const DayTradeView: React.FC = () => {
                 }`}
               >
                 <Globe className="w-3.5 h-3.5 text-emerald-400" />
-                <span>Mercado</span>
+                <span>{tDt.mobileTabs.market}</span>
               </button>
 
               <button
@@ -1909,7 +1940,7 @@ export const DayTradeView: React.FC = () => {
                 }`}
               >
                 <Layers className="w-3.5 h-3.5 text-emerald-400" />
-                <span>Book DOM</span>
+                <span>{tDt.mobileTabs.bookDom}</span>
               </button>
 
               <button
@@ -1922,7 +1953,7 @@ export const DayTradeView: React.FC = () => {
                 }`}
               >
                 <Activity className="w-3.5 h-3.5 text-emerald-400" />
-                <span>Tape</span>
+                <span>{tDt.mobileTabs.tape}</span>
               </button>
 
               <button
@@ -1935,7 +1966,7 @@ export const DayTradeView: React.FC = () => {
                 }`}
               >
                 <Briefcase className="w-3.5 h-3.5 text-emerald-400" />
-                <span>Posições ({positions.length})</span>
+                <span>{tDt.mobileTabs.positions} ({positions.length})</span>
               </button>
             </div>
 
@@ -1944,7 +1975,7 @@ export const DayTradeView: React.FC = () => {
               type="button"
               onClick={() => setIsMobilePanelCollapsed(!isMobilePanelCollapsed)}
               className="p-1 rounded bg-[#060c18] border border-slate-800 text-slate-400 hover:text-white shrink-0 cursor-pointer"
-              title={isMobilePanelCollapsed ? 'Expandir painel de operações' : 'Recolher painel de operações'}
+              title={isMobilePanelCollapsed ? tDt.expandPanelTitle : tDt.collapsePanelTitle}
             >
               {isMobilePanelCollapsed ? <ChevronDown className="w-4 h-4 text-emerald-400" /> : <ChevronUp className="w-4 h-4" />}
             </button>
@@ -1959,7 +1990,7 @@ export const DayTradeView: React.FC = () => {
                   <div className="flex items-center justify-between pb-1.5 border-b border-slate-800">
                     <span className="font-bold text-white uppercase text-xs tracking-wider flex items-center gap-1.5">
                       <SlidersHorizontal className="w-4 h-4 text-emerald-400" />
-                      Boleta de Execução Rápida • {currentAsset.symbol}
+                      {tDt.quickTicketTitle} • {currentAsset.symbol}
                     </span>
                     <span className="text-[10px] text-slate-400 font-mono-numbers">
                       Spread: {currentAsset.symbol.includes('WIN') ? '5 pts' : '0.5 pt'}
@@ -1977,7 +2008,7 @@ export const DayTradeView: React.FC = () => {
                           : 'text-slate-400 hover:text-white'
                       }`}
                     >
-                      <ArrowUpRight className="w-4 h-4" /> COMPRA
+                      <ArrowUpRight className="w-4 h-4" /> {tDt.ticketBuyTab}
                     </button>
                     <button
                       type="button"
@@ -1988,7 +2019,7 @@ export const DayTradeView: React.FC = () => {
                           : 'text-slate-400 hover:text-white'
                       }`}
                     >
-                      <ArrowDownRight className="w-4 h-4" /> VENDA
+                      <ArrowDownRight className="w-4 h-4" /> {tDt.ticketSellTab}
                     </button>
                   </div>
 
@@ -2003,7 +2034,7 @@ export const DayTradeView: React.FC = () => {
                           : 'bg-[#060c18] border-slate-800 text-slate-400 hover:text-white'
                       }`}
                     >
-                      A Mercado
+                      {tDt.marketOrderBtn}
                     </button>
                     <button
                       type="button"
@@ -2014,14 +2045,14 @@ export const DayTradeView: React.FC = () => {
                           : 'bg-[#060c18] border-slate-800 text-slate-400 hover:text-white'
                       }`}
                     >
-                      Ordem Limitada
+                      {tDt.limitOrderBtn}
                     </button>
                   </div>
 
                   {/* Contratos */}
                   <div>
                     <div className="flex items-center justify-between text-xs text-slate-400 mb-1">
-                      <span>Quantidade de Contratos:</span>
+                      <span>{tDt.contractsQtyLabel}</span>
                       <span className="font-mono-numbers text-white font-bold">{contracts}x</span>
                     </div>
                     <div className="flex items-center gap-2">
@@ -2055,7 +2086,7 @@ export const DayTradeView: React.FC = () => {
                   {/* Limit Price if selected */}
                   {orderType === 'LIMIT' && (
                     <div className="space-y-1">
-                      <span className="text-xs text-slate-400">Preço Limite:</span>
+                      <span className="text-xs text-slate-400">{tDt.limitPriceLabel}</span>
                       <input
                         type="number"
                         step={currentAsset.symbol.includes('WIN') ? 5 : 0.5}
@@ -2118,10 +2149,10 @@ export const DayTradeView: React.FC = () => {
                     >
                       <div className="flex items-center gap-1.5">
                         <ArrowUpRight className="w-4 h-4" />
-                        <span>COMPRAR {contracts}x {currentAsset.symbol}</span>
+                        <span>{tDt.buyActionVerb} {contracts}x {currentAsset.symbol}</span>
                       </div>
                       <span className="text-[11px] font-mono-numbers opacity-90">
-                        {formatCurrencyValue(currentMarketPrice, currentAsset.currency)}
+                        {formatCurrencyValue(currentMarketPrice, currentAsset.currency, 2, locale)}
                       </span>
                     </button>
                   ) : (
@@ -2132,10 +2163,10 @@ export const DayTradeView: React.FC = () => {
                     >
                       <div className="flex items-center gap-1.5">
                         <ArrowDownRight className="w-4 h-4" />
-                        <span>VENDER {contracts}x {currentAsset.symbol}</span>
+                        <span>{tDt.sellActionVerb} {contracts}x {currentAsset.symbol}</span>
                       </div>
                       <span className="text-[11px] font-mono-numbers opacity-90">
-                        {formatCurrencyValue(currentMarketPrice, currentAsset.currency)}
+                        {formatCurrencyValue(currentMarketPrice, currentAsset.currency, 2, locale)}
                       </span>
                     </button>
                   )}
@@ -2148,7 +2179,7 @@ export const DayTradeView: React.FC = () => {
                       className="py-2.5 px-3 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs uppercase tracking-wide transition cursor-pointer flex items-center justify-center gap-1.5 shadow-md shadow-amber-950"
                     >
                       <Square className="w-3.5 h-3.5 fill-current" />
-                      <span>ZERAR TUDO</span>
+                      <span>{tDt.flattenAllBtn}</span>
                     </button>
 
                     <button
@@ -2157,7 +2188,7 @@ export const DayTradeView: React.FC = () => {
                       className="py-2.5 px-3 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 font-bold text-xs uppercase tracking-wide transition cursor-pointer flex items-center justify-center gap-1.5"
                     >
                       <ArrowRightLeft className="w-3.5 h-3.5" />
-                      <span>Inverter</span>
+                      <span>{tDt.reverseBtn}</span>
                     </button>
                   </div>
                 </div>
@@ -2169,24 +2200,24 @@ export const DayTradeView: React.FC = () => {
                   <div className="flex items-center justify-between pb-1 border-b border-slate-800">
                     <span className="font-bold text-white uppercase text-xs tracking-wider flex items-center gap-1.5">
                       <Globe className="w-4 h-4 text-emerald-400" />
-                      Mercado em Tempo Real
+                      {tDt.realTimeMarketTitle}
                     </span>
-                    <span className="text-[10px] text-slate-500 font-mono-numbers">{filteredMarketWatch.length} Ativos</span>
+                    <span className="text-[10px] text-slate-500 font-mono-numbers">{filteredMarketWatch.length} {tDt.assetsCountSuffix}</span>
                   </div>
 
                   {/* Categories */}
                   <div className="flex items-center gap-1 overflow-x-auto no-scrollbar py-0.5 text-xs font-bold">
-                    {(['Todos', 'Ações', 'Futuros', 'Forex', 'Cripto', 'BDRs'] as const).map((cat) => (
+                    {marketWatchCategories.map((cat) => (
                       <button
-                        key={cat}
-                        onClick={() => setMarketWatchCategory(cat)}
+                        key={cat.key}
+                        onClick={() => setMarketWatchCategory(cat.key)}
                         className={`px-2.5 py-1 rounded-lg transition cursor-pointer shrink-0 ${
-                          marketWatchCategory === cat
+                          marketWatchCategory === cat.key
                             ? 'bg-emerald-600 text-white font-bold'
                             : 'bg-[#060c18] text-slate-400 hover:text-white border border-slate-800'
                         }`}
                       >
-                        {cat}
+                        {cat.label}
                       </button>
                     ))}
                   </div>
@@ -2196,7 +2227,7 @@ export const DayTradeView: React.FC = () => {
                     <Search className="w-3.5 h-3.5 text-slate-500 absolute left-2.5 top-1/2 -translate-y-1/2" />
                     <input
                       type="text"
-                      placeholder="Filtrar ativos para operar..."
+                      placeholder={tDt.filterAssetsMobilePlaceholder}
                       value={marketWatchSearch}
                       onChange={(e) => setMarketWatchSearch(e.target.value)}
                       className="w-full bg-[#060c18] border border-slate-800 rounded-lg pl-8 pr-3 py-1.5 text-xs text-white placeholder:text-slate-600 outline-none"
@@ -2227,7 +2258,7 @@ export const DayTradeView: React.FC = () => {
                           </div>
                           <div className="text-right">
                             <span className="font-bold text-white text-xs block">
-                              {formatCurrencyValue(item.price, item.currency)}
+                              {formatCurrencyValue(item.price, item.currency, 2, locale)}
                             </span>
                             <span className={`text-[10px] font-bold ${isPos ? 'text-emerald-400' : 'text-rose-400'}`}>
                               {isPos ? '+' : ''}{item.change24h}%
@@ -2246,17 +2277,17 @@ export const DayTradeView: React.FC = () => {
                   <div className="flex items-center justify-between pb-1 border-b border-slate-800">
                     <span className="font-bold text-white uppercase text-xs tracking-wider flex items-center gap-1.5">
                       <Layers className="w-4 h-4 text-emerald-400" />
-                      Book de Ofertas (DOM) • {currentAsset.symbol}
+                      {tDt.tabs.book} (DOM) • {currentAsset.symbol}
                     </span>
                     <span className="text-[10px] font-mono-numbers text-slate-400">
-                      Preço: <strong className="text-white">{formatCurrencyValue(currentMarketPrice, currentAsset.currency)}</strong>
+                      {tDt.priceShort} <strong className="text-white">{formatCurrencyValue(currentMarketPrice, currentAsset.currency, 2, locale)}</strong>
                     </span>
                   </div>
 
                   <div className="grid grid-cols-3 py-1 px-2 text-[10px] font-bold text-slate-400 border-b border-slate-800 uppercase">
-                    <span>Compra (Bid)</span>
-                    <span className="text-center">Preço</span>
-                    <span className="text-right">Venda (Ask)</span>
+                    <span>{tDt.bidMobile}</span>
+                    <span className="text-center">{tDt.colCurrent}</span>
+                    <span className="text-right">{tDt.askMobile}</span>
                   </div>
 
                   <div className="space-y-1 font-mono-numbers text-xs">
@@ -2275,7 +2306,7 @@ export const DayTradeView: React.FC = () => {
 
                         <span className="text-emerald-400 font-bold z-10">{row.bidQty}</span>
                         <span className="text-center font-bold text-white z-10">
-                          {formatCurrencyValue(row.price, currentAsset.currency)}
+                          {formatCurrencyValue(row.price, currentAsset.currency, 2, locale)}
                         </span>
                         <span className="text-right text-rose-400 font-bold z-10">{row.askQty}</span>
                       </div>
@@ -2293,15 +2324,15 @@ export const DayTradeView: React.FC = () => {
                       Tape Reading (Times & Trades) • {currentAsset.symbol}
                     </span>
                     <span className="text-[10px] font-mono-numbers text-emerald-400 font-bold">
-                      Fluxo em tempo real
+                      {tDt.liveFlowTag}
                     </span>
                   </div>
 
                   <div className="grid grid-cols-4 py-1 px-2 text-[10px] font-bold text-slate-400 border-b border-slate-800 uppercase">
-                    <span>Horário</span>
-                    <span>Preço</span>
-                    <span className="text-center">Qtd</span>
-                    <span className="text-right">Agressor</span>
+                    <span>{tDt.colTime}</span>
+                    <span>{tDt.priceShort.replace(':', '')}</span>
+                    <span className="text-center">{tDt.colQty}</span>
+                    <span className="text-right">{tDt.aggressorCol}</span>
                   </div>
 
                   <div className="space-y-1 max-h-[340px] overflow-y-auto no-scrollbar font-mono-numbers text-xs">
@@ -2313,9 +2344,9 @@ export const DayTradeView: React.FC = () => {
                         }`}
                       >
                         <span className="text-slate-400 text-[10px]">{t.time}</span>
-                        <span className="font-bold text-white">{formatCurrencyValue(t.price, currentAsset.currency)}</span>
+                        <span className="font-bold text-white">{formatCurrencyValue(t.price, currentAsset.currency, 2, locale)}</span>
                         <span className="text-center font-bold">{t.qty}</span>
-                        <span className="text-right font-black">{t.aggressor}</span>
+                        <span className="text-right font-black">{t.aggressor === 'BUY' ? tDt.sideBuy : tDt.sideSell}</span>
                       </div>
                     ))}
                   </div>
@@ -2328,7 +2359,7 @@ export const DayTradeView: React.FC = () => {
                   <div className="flex items-center justify-between pb-1 border-b border-slate-800">
                     <span className="font-bold text-white uppercase text-xs tracking-wider flex items-center gap-1.5">
                       <Briefcase className="w-4 h-4 text-emerald-400" />
-                      Minhas Posições ({positions.length})
+                      {tDt.myPositions} ({positions.length})
                     </span>
                     {positions.length > 0 && (
                       <button
@@ -2336,14 +2367,14 @@ export const DayTradeView: React.FC = () => {
                         onClick={() => handleCloseAllPositions()}
                         className="px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/40 text-[10px] font-bold"
                       >
-                        Zerar Todas
+                        {tDt.closeAllShort}
                       </button>
                     )}
                   </div>
 
                   {positions.length === 0 ? (
                     <div className="py-8 text-center text-slate-500 text-xs">
-                      Nenhuma posição aberta no momento. Utilize a Boleta para abrir novas ordens.
+                      {tDt.noOpenPositionsMobile}
                     </div>
                   ) : (
                     <div className="space-y-2 font-mono-numbers text-xs">
@@ -2359,24 +2390,24 @@ export const DayTradeView: React.FC = () => {
                               <div className="flex items-center gap-1.5">
                                 <span className="font-bold text-white text-xs">{pos.symbol}</span>
                                 <span className={`px-1 py-0.2 rounded text-[9px] font-bold ${pos.side === 'BUY' ? 'text-emerald-400 bg-emerald-500/10' : 'text-rose-400 bg-rose-500/10'}`}>
-                                  {pos.side}
+                                  {pos.side === 'BUY' ? tDt.sideBuy : tDt.sideSell}
                                 </span>
                                 <span className="text-[10px] text-slate-400 font-bold">{pos.contracts}x</span>
                               </div>
                               <div className="text-[10px] text-slate-400 mt-0.5">
-                                Entrada: {pos.entryPrice} | Atual: {currentMarketPrice}
+                                {tDt.entryShort} {pos.entryPrice} | {tDt.currentShort} {currentMarketPrice}
                               </div>
                             </div>
                             <div className="text-right">
                               <span className={`block font-black text-xs ${pnlBrl >= 0 ? 'text-emerald-400' : 'text-rose-400'}`}>
-                                {pnlBrl >= 0 ? '+' : ''}{pnlBrl.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
+                                {pnlBrl >= 0 ? '+' : ''}{pnlBrl.toLocaleString(locale, { style: 'currency', currency: 'BRL' })}
                               </span>
                               <button
                                 type="button"
                                 onClick={() => handleClosePosition(pos.id)}
                                 className="text-[9px] text-rose-400 hover:text-rose-300 underline font-bold mt-0.5"
                               >
-                                Fechar
+                                {tDt.closePositionMobile}
                               </button>
                             </div>
                           </div>
@@ -2399,12 +2430,12 @@ export const DayTradeView: React.FC = () => {
         <div className="flex items-center gap-3">
           <div className="flex items-center gap-1.5">
             <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-            <strong className="text-emerald-400 font-sans font-bold">Conexão: Estável</strong>
+            <strong className="text-emerald-400 font-sans font-bold">{tDt.connectionStable}</strong>
           </div>
           <span className="text-slate-600">|</span>
-          <span className="text-slate-400 hidden sm:inline">B3 Direct Market Feed • Liquidez Ativa</span>
+          <span className="text-slate-400 hidden sm:inline">{tDt.feedFooter}</span>
           <span className="text-slate-600 hidden sm:inline">|</span>
-          <span className="text-slate-400 hidden md:inline">Latência: 12ms • Servidor SP-01</span>
+          <span className="text-slate-400 hidden md:inline">{tDt.latencyFooter}</span>
         </div>
 
         {/* Center: System Clock */}
@@ -2416,10 +2447,10 @@ export const DayTradeView: React.FC = () => {
         <div className="flex items-center gap-2 text-[10px]">
           <span className="flex items-center gap-1 text-slate-400">
             <ShieldCheck className="w-3 h-3 text-emerald-400" />
-            Criptografia Ponta a Ponta
+            {tDt.e2eEncryption}
           </span>
           <span className="text-slate-600">|</span>
-          <span className="text-slate-500 hidden sm:inline">LGPD Auditado</span>
+          <span className="text-slate-500 hidden sm:inline">{tDt.lgpdAudited}</span>
         </div>
       </footer>
 
@@ -2433,7 +2464,7 @@ export const DayTradeView: React.FC = () => {
             <div className="flex items-center justify-between border-b border-slate-800 pb-2">
               <div className="flex items-center gap-2">
                 <ShieldCheck className="w-5 h-5 text-emerald-400" />
-                <h3 className="text-sm font-bold text-white uppercase tracking-wider">Gerenciador de Risco Diário</h3>
+                <h3 className="text-sm font-bold text-white uppercase tracking-wider">{tDt.riskModalTitle}</h3>
               </div>
               <button onClick={() => setShowRiskModal(false)} className="text-slate-400 hover:text-white">
                 <X className="w-4 h-4" />
@@ -2442,7 +2473,7 @@ export const DayTradeView: React.FC = () => {
 
             <div className="space-y-2.5 text-xs">
               <div>
-                <label className="text-slate-400 block mb-1">Meta Diária de Ganho (Gain Goal R$):</label>
+                <label className="text-slate-400 block mb-1">{tDt.gainGoalLabel}</label>
                 <input
                   type="number"
                   value={dailyProfitGoal}
@@ -2452,7 +2483,7 @@ export const DayTradeView: React.FC = () => {
               </div>
 
               <div>
-                <label className="text-slate-400 block mb-1">Limite Diário de Perda (Daily Stop Loss R$):</label>
+                <label className="text-slate-400 block mb-1">{tDt.dailyStopLossLabel}</label>
                 <input
                   type="number"
                   value={dailyLossLimit}
@@ -2463,12 +2494,12 @@ export const DayTradeView: React.FC = () => {
 
               {isRiskLocked && (
                 <div className="p-2.5 rounded-xl bg-rose-500/20 border border-rose-500/40 text-rose-300 text-xs flex items-center justify-between">
-                  <span>Trava de risco acionada!</span>
+                  <span>{tDt.riskLockTriggered}</span>
                   <button
                     onClick={() => setIsRiskLocked(false)}
                     className="px-2 py-1 rounded bg-rose-600 text-white font-bold"
                   >
-                    Desbloquear
+                    {tDt.unlockBtn}
                   </button>
                 </div>
               )}
@@ -2479,7 +2510,7 @@ export const DayTradeView: React.FC = () => {
                 onClick={() => setShowRiskModal(false)}
                 className="px-3 py-1.5 rounded-lg bg-emerald-600 text-white text-xs font-bold"
               >
-                Salvar Parâmetros
+                {tDt.saveParamsBtn}
               </button>
             </div>
           </div>
@@ -2492,14 +2523,14 @@ export const DayTradeView: React.FC = () => {
             <div className="flex items-center justify-between border-b border-slate-800 pb-2">
               <div className="flex items-center gap-2">
                 <Bell className="w-4 h-4 text-amber-400" />
-                <h3 className="font-bold text-white uppercase text-xs">Novo Alerta de Preço</h3>
+                <h3 className="font-bold text-white uppercase text-xs">{tDt.alertModalTitle}</h3>
               </div>
               <button onClick={() => setShowAlertModal(false)} className="text-slate-400 hover:text-white">
                 <X className="w-4 h-4" />
               </button>
             </div>
 
-            <p className="text-slate-400">Receba notificações instantâneas quando o ativo {currentAsset.symbol} atingir seu patamar:</p>
+            <p className="text-slate-400">{tDt.alertModalDescPrefix} {currentAsset.symbol} {tDt.alertModalDescSuffix}</p>
             <input
               type="number"
               defaultValue={currentMarketPrice}
@@ -2508,12 +2539,12 @@ export const DayTradeView: React.FC = () => {
             <button
               onClick={() => {
                 setShowAlertModal(false);
-                setOrderNotification(`Alerta configurado para ${currentAsset.symbol} no patamar especificado!`);
+                setOrderNotification(`${tDt.notifications.alertConfiguredPrefix} ${currentAsset.symbol} ${tDt.notifications.alertConfiguredSuffix}`);
                 setTimeout(() => setOrderNotification(null), 3000);
               }}
               className="w-full py-2 rounded bg-emerald-600 text-white font-bold"
             >
-              Criar Alerta
+              {tDt.createAlertBtn}
             </button>
           </div>
         </div>
@@ -2525,7 +2556,7 @@ export const DayTradeView: React.FC = () => {
             <div className="flex items-center justify-between border-b border-slate-800 pb-2">
               <div className="flex items-center gap-2">
                 <HelpCircle className="w-4 h-4 text-emerald-400" />
-                <h3 className="font-bold text-white uppercase text-xs">Atalhos de Teclado do Terminal</h3>
+                <h3 className="font-bold text-white uppercase text-xs">{tDt.helpModalTitle}</h3>
               </div>
               <button onClick={() => setShowHelpModal(false)} className="text-slate-400 hover:text-white">
                 <X className="w-4 h-4" />
@@ -2534,19 +2565,19 @@ export const DayTradeView: React.FC = () => {
 
             <div className="space-y-1.5 text-slate-300">
               <div className="flex justify-between p-1 bg-slate-900 rounded">
-                <span>Comprar a Mercado</span>
+                <span>{tDt.shortcutBuyMarket}</span>
                 <kbd className="px-1.5 py-0.5 bg-slate-800 rounded font-mono text-emerald-400 font-bold">Shift + B</kbd>
               </div>
               <div className="flex justify-between p-1 bg-slate-900 rounded">
-                <span>Vender a Mercado</span>
+                <span>{tDt.shortcutSellMarket}</span>
                 <kbd className="px-1.5 py-0.5 bg-slate-800 rounded font-mono text-rose-400 font-bold">Shift + S</kbd>
               </div>
               <div className="flex justify-between p-1 bg-slate-900 rounded">
-                <span>Zerar Posição Imediata</span>
-                <kbd className="px-1.5 py-0.5 bg-slate-800 rounded font-mono text-amber-400 font-bold">Espaço / Esc</kbd>
+                <span>{tDt.shortcutFlattenNow}</span>
+                <kbd className="px-1.5 py-0.5 bg-slate-800 rounded font-mono text-amber-400 font-bold">{tDt.shortcutSpaceEsc}</kbd>
               </div>
               <div className="flex justify-between p-1 bg-slate-900 rounded">
-                <span>Inverter Posição</span>
+                <span>{tDt.shortcutReverse}</span>
                 <kbd className="px-1.5 py-0.5 bg-slate-800 rounded font-mono text-sky-400 font-bold">Shift + R</kbd>
               </div>
             </div>
@@ -2555,7 +2586,7 @@ export const DayTradeView: React.FC = () => {
               onClick={() => setShowHelpModal(false)}
               className="w-full py-1.5 rounded bg-slate-800 text-slate-200 font-bold hover:text-white"
             >
-              Fechar
+              {tDt.closeBtn}
             </button>
           </div>
         </div>
