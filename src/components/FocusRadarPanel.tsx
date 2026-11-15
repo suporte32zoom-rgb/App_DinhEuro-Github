@@ -69,7 +69,7 @@ const FOCUS_MEDIAN_TABLE: FocusRow[] = [
   {
     indicator: 'Taxa Selic',
     unit: '% a.a.',
-    y2026: '13,50%',
+    y2026: '13,75%',
     y2027: '12,50%',
     y2028: '11,00%',
     y2029: '10,25%',
@@ -141,21 +141,21 @@ const MINI_TREND_CARDS: MiniChartCard[] = [
     id: 'selic-2026',
     title: 'Taxa Selic 2026',
     subtitle: 'Curva de juros (% a.a.)',
-    value2026: '13,50%',
+    value2026: '13,75%',
     trendLabel: 'Estabilização',
     trendType: 'up',
     strokeColor: '#38bdf8',
     fillGradientId: 'focusSelicGrad',
     points: [
-      { label: 'Out/26 (4 sem)', val: 13.0, svgY: 32 },
-      { label: 'Out/26 (3 sem)', val: 13.25, svgY: 25 },
-      { label: 'Out/26 (2 sem)', val: 13.5, svgY: 18 },
-      { label: 'Out/26 (1 sem)', val: 13.5, svgY: 18 },
-      { label: '06/11/2026', val: 13.5, svgY: 18 },
+      { label: 'Out/26 (4 sem)', val: 13.25, svgY: 32 },
+      { label: 'Out/26 (3 sem)', val: 13.50, svgY: 24 },
+      { label: 'Out/26 (2 sem)', val: 13.75, svgY: 16 },
+      { label: 'Out/26 (1 sem)', val: 13.75, svgY: 16 },
+      { label: '06/11/2026', val: 13.75, svgY: 16 },
     ],
-    pathD: 'M 4 33 C 38 30, 68 23, 102 18 C 138 18, 166 18, 194 18',
-    areaD: 'M 4 33 C 38 30, 68 23, 102 18 C 138 18, 166 18, 194 18 L 194 46 L 4 46 Z',
-    endPoint: { x: 194, y: 18 },
+    pathD: 'M 4 33 C 38 30, 68 22, 102 16 C 138 16, 166 16, 194 16',
+    areaD: 'M 4 33 C 38 30, 68 22, 102 16 C 138 16, 166 16, 194 16 L 194 46 L 4 46 Z',
+    endPoint: { x: 194, y: 16 },
   },
 ];
 
@@ -333,7 +333,7 @@ export const FocusRadarPanel: React.FC = () => {
         </div>
 
         <p className="text-xs text-slate-300 leading-relaxed">
-          O Boletim Focus divulgado pelo Banco Central do Brasil em novembro de 2026 consolida uma postura de cautela na política monetária. Com o IPCA projetado em 5,22% para o encerramento de 2026 e 4,76% para 2027, o mercado financeiro mantém a expectativa de uma taxa Selic elevada em 13,50% ao ano, buscando ancorar as expectativas inflacionárias frente às pressões de custos e ao comportamento da taxa de câmbio.
+          O Boletim Focus divulgado pelo Banco Central do Brasil em novembro de 2026 consolida uma postura de cautela na política monetária. Com o IPCA projetado em 5,22% para o encerramento de 2026 e 4,76% para 2027, o mercado financeiro mantém a expectativa de uma taxa Selic elevada em 13,75% ao ano, buscando ancorar as expectativas inflacionárias frente às pressões de custos e ao comportamento da taxa de câmbio.
         </p>
 
         <p className="text-xs text-slate-300 leading-relaxed">

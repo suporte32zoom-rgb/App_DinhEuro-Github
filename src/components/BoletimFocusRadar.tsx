@@ -37,7 +37,7 @@ const FOCUS_PROJECTIONS: FocusProjectionRow[] = [
   },
   {
     indicator: 'Taxa Selic (% a.a.)',
-    v2026: '13,50%',
+    v2026: '13,75%',
     v2027: '12,50%',
     v2028: '11,00%',
     v2029: '10,25%',
@@ -171,7 +171,7 @@ export const BoletimFocusRadar: React.FC = () => {
             <Percent className="w-3.5 h-3.5 text-sky-500 dark:text-sky-400" />
           </div>
           <div className="text-xs font-extrabold font-mono-numbers text-slate-900 dark:text-white">
-            Estável em 13,50% a.a.
+            Estável em 13,75% a.a.
           </div>
           <div className="text-[10px] font-medium text-slate-500 dark:text-slate-400">
             Taxa básica de juros
@@ -202,7 +202,7 @@ export const BoletimFocusRadar: React.FC = () => {
         </div>
 
         <p className="text-xs text-slate-700 dark:text-slate-300 leading-relaxed">
-          O Boletim Focus divulgado pelo Banco Central do Brasil em novembro de 2026 consolida uma postura de cautela na política monetária. Com o IPCA projetado em 5,22% para o encerramento de 2026 e 4,76% para 2027, o mercado financeiro mantém a expectativa de uma taxa Selic elevada em 13,50% ao ano, buscando ancorar as expectativas inflacionárias frente às pressões de custos e ao comportamento da taxa de câmbio.
+          O Boletim Focus divulgado pelo Banco Central do Brasil em novembro de 2026 consolida uma postura de cautela na política monetária. Com o IPCA projetado em 5,22% para o encerramento de 2026 e 4,76% para 2027, o mercado financeiro mantém a expectativa de uma taxa Selic elevada em 13,75% ao ano, buscando ancorar as expectativas inflacionárias frente às pressões de custos e ao comportamento da taxa de câmbio.
         </p>
 
         <p className="text-xs text-slate-700 dark:text-slate-300 leading-relaxed">

@@ -254,42 +254,48 @@ export const Footer: React.FC = () => {
             <strong className="text-slate-400">Aviso de Risco e Isenção de Responsabilidade Financeira:</strong> O DinhEuro (<span className="text-emerald-400 font-mono">dinheuro.com</span> / <span className="text-emerald-400 font-mono">dinheuro.com.br</span>) é um portal digital informativo e educacional de agregação de dados econômicos. As cotações em tempo real de ativos mundiais, taxas de câmbio (Euro, Dólar, Real), ações da B3, bolsas internacionais, criptoativos e simuladores são consolidados a partir de feeds institucionais de mercado, mesas de câmbio interbancário e livros públicos de negociação. O DinhEuro não presta consultoria de investimentos, análise de valores mobiliários ou recomendação direta de aporte financeiro. A negociação em mercados de renda variável e Forex envolve alto risco de perda do patrimônio investido.
           </p>
 
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-4 border-t border-slate-800/40 text-slate-500 text-[11px]">
-            <span>
-              © {new Date().getFullYear()} DinhEuro (dinheuro.com / dinheuro.com.br). Todos os direitos reservados.
-            </span>
-            <div className="flex items-center gap-4 text-slate-400 text-[11px]">
-              <button
-                type="button"
-                onClick={() => setActiveTab('termos')}
-                className="hover:text-white transition cursor-pointer"
-              >
-                Termos
-              </button>
-              <span>•</span>
-              <button
-                type="button"
-                onClick={() => setActiveTab('privacidade')}
-                className="hover:text-white transition cursor-pointer"
-              >
-                Privacidade
-              </button>
-              <span>•</span>
-              <button
-                type="button"
-                onClick={() => setActiveTab('cookies')}
-                className="hover:text-white transition cursor-pointer"
-              >
-                Cookies
-              </button>
-              <span>•</span>
-              <button
-                type="button"
-                onClick={() => setActiveTab('disclaimer')}
-                className="hover:text-white transition cursor-pointer"
-              >
-                Disclaimer
-              </button>
+          <div className="pt-4 border-t border-slate-800/40 space-y-3 text-slate-500 text-[11px] leading-relaxed">
+            <p className="text-center sm:text-left">
+              DinhEuro™ — Marca com registro requerido junto ao INPI (Processo nº 942746848). É expressamente proibida a cópia, reprodução, imitação ou utilização total ou parcial do nome, marca, logotipo, layout, conteúdos ou funcionalidades deste portal em quaisquer sites, aplicativos, plataformas ou categorias comerciais sem autorização prévia e por escrito do titular.
+            </p>
+
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
+              <span className="text-center sm:text-left">
+                © {new Date().getFullYear()} DinhEuro (dinheuro.com / dinheuro.com.br). Todos os direitos reservados.
+              </span>
+              <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 text-slate-400 text-[11px]">
+                <button
+                  type="button"
+                  onClick={() => setActiveTab('termos')}
+                  className="hover:text-white transition cursor-pointer"
+                >
+                  Termos
+                </button>
+                <span>•</span>
+                <button
+                  type="button"
+                  onClick={() => setActiveTab('privacidade')}
+                  className="hover:text-white transition cursor-pointer"
+                >
+                  Privacidade
+                </button>
+                <span>•</span>
+                <button
+                  type="button"
+                  onClick={() => setActiveTab('cookies')}
+                  className="hover:text-white transition cursor-pointer"
+                >
+                  Cookies
+                </button>
+                <span>•</span>
+                <button
+                  type="button"
+                  onClick={() => setActiveTab('disclaimer')}
+                  className="hover:text-white transition cursor-pointer"
+                >
+                  Disclaimer
+                </button>
+              </div>
             </div>
           </div>
         </div>

@@ -107,6 +107,9 @@ interface MarketContextType {
   setActiveTab: (tab: NavigationTab) => void;
   selectedMarketCategory: MarketCategoryFilter;
   setSelectedMarketCategory: (category: MarketCategoryFilter) => void;
+  selectedAcademyTarget: { courseId: string; moduleIndex?: number } | null;
+  setSelectedAcademyTarget: (target: { courseId: string; moduleIndex?: number } | null) => void;
+  openAcademyCourse: (courseId: string, moduleIndex?: number) => void;
   selectedAsset: MarketAsset | null;
   setSelectedAsset: (asset: MarketAsset | null) => void;
   openAssetDetail: (symbolOrId: string) => void;
@@ -195,6 +198,7 @@ export const MarketProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   });
 
   const [selectedMarketCategory, setSelectedMarketCategory] = useState<MarketCategoryFilter>('all');
+  const [selectedAcademyTarget, setSelectedAcademyTarget] = useState<{ courseId: string; moduleIndex?: number } | null>(null);
   const [selectedAsset, setSelectedAsset] = useState<MarketAsset | null>(null);
   const [finnhubKey, setFinnhubKey] = useState<string>(getStoredFinnhubKey());
   const [isLiveUpdating, setIsLiveUpdating] = useState<boolean>(true);
@@ -319,6 +323,14 @@ export const MarketProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, []);
 
+  const openAcademyCourse = useCallback(
+    (courseId: string, moduleIndex: number = 0) => {
+      setSelectedAcademyTarget({ courseId, moduleIndex });
+      setActiveTab('academy');
+    },
+    [setActiveTab]
+  );
+
   const openAssetDetail = useCallback((symbolOrId: string) => {
     const match = assets.find(
       (a) => a.id.toLowerCase() === symbolOrId.toLowerCase() || a.symbol.toLowerCase() === symbolOrId.toLowerCase()
@@ -394,6 +406,9 @@ export const MarketProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         setActiveTab,
         selectedMarketCategory,
         setSelectedMarketCategory,
+        selectedAcademyTarget,
+        setSelectedAcademyTarget,
+        openAcademyCourse,
         selectedAsset,
         setSelectedAsset,
         openAssetDetail,

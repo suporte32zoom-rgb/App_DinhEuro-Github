@@ -272,6 +272,7 @@ export const Header: React.FC = () => {
     { id: 'renda_fixa', label: 'Renda Fixa & Derivativos', icon: <Percent className="w-4 h-4" /> },
     { id: 'graficos', label: 'Gráficos Avançados', icon: <BarChart2 className="w-4 h-4" /> },
     { id: 'ferramentas', label: 'Ferramentas', icon: <Calculator className="w-4 h-4" /> },
+    { id: 'academy', label: 'Academy', badge: 'GRÁTIS', icon: <GraduationCap className="w-4 h-4 text-emerald-400" /> },
     { id: 'sobre', label: 'Sobre o DinhEuro', icon: <Info className="w-4 h-4" /> },
   ];
 

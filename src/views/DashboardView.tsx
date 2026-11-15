@@ -19,6 +19,7 @@ import { FocusRadarPanel } from '../components/FocusRadarPanel';
 import { MercosulEuDossierPanel } from '../components/MercosulEuDossierPanel';
 import { DrexDossierPanel } from '../components/DrexDossierPanel';
 import { UniversalCurrencyCalculator } from '../components/UniversalCurrencyCalculator';
+import { AcademyHighlightSection } from '../components/AcademyHighlightSection';
 
 export const DashboardView: React.FC = () => {
   const { assets, universalRates, news, setActiveTab, setSelectedAsset, openAssetDetail, refreshData, lastUpdated, apiSourceSummary } =
@@ -534,6 +535,9 @@ export const DashboardView: React.FC = () => {
           </button>
         </div>
       </div>
+
+      {/* DinhEuro Academy — Cursos Gratuitos em Destaque */}
+      <AcademyHighlightSection />
 
       {/* Real-Time Financial News & External Analysis with mandatory "Ler matéria" */}
       <div className="space-y-4 pt-2">
