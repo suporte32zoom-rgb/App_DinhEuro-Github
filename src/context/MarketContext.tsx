@@ -94,6 +94,8 @@ export type MarketCategoryFilter =
   | 'all'
   | 'stocks_br'
   | 'stocks_us'
+  | 'stocks_eu'
+  | 'stocks_asia'
   | 'indices'
   | 'forex'
   | 'crypto'

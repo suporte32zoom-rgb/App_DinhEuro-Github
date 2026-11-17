@@ -511,6 +511,222 @@ export function getAssetMetadata(
     };
   }
 
+  // 2B. European Equities
+  if (asset.category === 'stocks_eu') {
+    if (lang === 'en') {
+      return {
+        ticker: asset.symbol,
+        marketOrigin: 'Euronext / Xetra / SIX / LSE - Europe',
+        tags: ['European Equities', '#Europe', '#STOXX50', '#BlueChip', '#Multinational'],
+        description: `${localizedName} is a leading European listed corporation anchored in major continental and UK stock exchanges, forming a cornerstone of STOXX Europe 50 and FTSE indices.`,
+        week52High,
+        week52Low,
+        openPrice,
+        peRatioDisplay: asset.peRatio ? `${asset.peRatio}x` : '18.6x',
+        dividendYieldDisplay: asset.dividendYield ? `${asset.dividendYield}%` : '2.8%',
+        institutionalProfile: {
+          nature: 'European Public Limited Company',
+          sector: 'Industry, Luxury, Healthcare, Energy & Technology',
+          segment: 'European Regulated Exchanges (ESMA / FCA)',
+          benchmark: 'EURO STOXX 50 / DAX 40 / FTSE 100',
+          governance: 'IFRS / EU Corporate Governance Code',
+        },
+        aiDiagnosis: {
+          scenarioSummary: `${asset.symbol} maintains solid institutional sponsorship across European equity desks, combining global export revenues with resilient dividend distributions. Technical support sits at ${asset.currency} ${supportLevel} and resistance at ${asset.currency} ${resistanceLevel}.`,
+          supportLevel,
+          resistanceLevel,
+          liquidityAnalysis: 'Deep order-book liquidity on European primary venues.',
+          correlation: 'Sensitive to ECB / BoE monetary policy paths and EUR/USD parity.',
+          strengths: [
+            'Strong global brand franchises with high pricing power across exports.',
+            'Consistent free-cash-flow generation and shareholder dividend track record.',
+          ],
+          risks: [
+            'Exposure to European industrial energy costs and cross-border FX swings.',
+            'Regulatory compliance requirements across the European Single Market.',
+          ],
+        },
+      };
+    }
+    if (lang === 'es') {
+      return {
+        ticker: asset.symbol,
+        marketOrigin: 'Euronext / Xetra / SIX / LSE - Europa',
+        tags: ['Acciones Europa', '#Europa', '#STOXX50', '#BlueChip', '#Multinacional'],
+        description: `${localizedName} es una corporación europea líder cotizada en las principales bolsas del continente y Reino Unido, con fuerte peso en los índices EURO STOXX 50 y FTSE.`,
+        week52High,
+        week52Low,
+        openPrice,
+        peRatioDisplay: asset.peRatio ? `${asset.peRatio}x` : '18.6x',
+        dividendYieldDisplay: asset.dividendYield ? `${asset.dividendYield}%` : '2.8%',
+        institutionalProfile: {
+          nature: 'Sociedad Anónima Europea Cotizada',
+          sector: 'Industria, Lujo, Salud, Energía y Tecnología',
+          segment: 'Bolsas Europeas Reguladas (ESMA / FCA)',
+          benchmark: 'EURO STOXX 50 / DAX 40 / FTSE 100',
+          governance: 'Normativa IFRS / Código de Gobernanza UE',
+        },
+        aiDiagnosis: {
+          scenarioSummary: `${asset.symbol} mantiene sólido respaldo institucional en las mesas europeas, combinando ingresos globales por exportación con pagos consistentes de dividendos. Soporte en ${asset.currency} ${supportLevel} y resistencia en ${asset.currency} ${resistanceLevel}.`,
+          supportLevel,
+          resistanceLevel,
+          liquidityAnalysis: 'Amplia liquidez en el libro de órdenes de los mercados europeos.',
+          correlation: 'Sensible al ciclo de tasas del BCE / BoE y a la paridad EUR/USD.',
+          strengths: [
+            'Marcas globales líderes con elevado poder de fijación de precios.',
+            'Generación sólida de flujo de caja libre e historial recurrente de dividendos.',
+          ],
+          risks: [
+            'Exposición a costos energéticos industriales y variaciones cambiarias.',
+            'Marco regulatorio exigente en el mercado único europeo.',
+          ],
+        },
+      };
+    }
+
+    return {
+      ticker: asset.symbol,
+      marketOrigin: 'Euronext / Xetra / SIX / LSE - Europa',
+      tags: ['Ações Europa', '#Europa', '#STOXX50', '#BlueChip', '#Multinacional'],
+      description: `${asset.name} é uma corporação europeia de capital aberto listada nas principais bolsas do continente e do Reino Unido, com elevada representatividade nos índices EURO STOXX 50, DAX 40 e FTSE 100.`,
+      week52High,
+      week52Low,
+      openPrice,
+      peRatioDisplay: asset.peRatio ? `${asset.peRatio}x` : '18.6x',
+      dividendYieldDisplay: asset.dividendYield ? `${asset.dividendYield}%` : '2.8%',
+      institutionalProfile: {
+        nature: 'Corporação Aberta Europeia (Listed Equity)',
+        sector: 'Indústria, Luxo, Saúde, Energia e Tecnologia',
+        segment: 'Bolsas Reguladas da Europa (ESMA / FCA)',
+        benchmark: 'EURO STOXX 50 / DAX 40 / FTSE 100',
+        governance: 'IFRS Standard / Governança Corporativa UE',
+      },
+      aiDiagnosis: {
+        scenarioSummary: `${asset.symbol} apresenta sólido acompanhamento institucional nas mesas europeias, unindo receitas globais de exportação com distribuição recorrente de dividendos. Suporte técnico em ${asset.currency} ${supportLevel} e resistência em ${asset.currency} ${resistanceLevel}.`,
+        supportLevel,
+        resistanceLevel,
+        liquidityAnalysis: 'Alta liquidez diária nos livros de ofertas das principais praças europeias.',
+        correlation: 'Sensibilidade às decisões de juros do BCE / BoE e à taxa EUR/USD.',
+        strengths: [
+          'Liderança global em nichos de alto valor agregado e forte poder de repasse de preços.',
+          'Geração consistente de caixa livre e histórico maduro de proventos.',
+        ],
+        risks: [
+          'Exposição a custos energéticos industriais e oscilações cambiais entre EUR, GBP e CHF.',
+          'Rigidez regulatória em jurisdições da União Europeia e Reino Unido.',
+        ],
+      },
+    };
+  }
+
+  // 2C. Asia-Pacific Equities
+  if (asset.category === 'stocks_asia') {
+    if (lang === 'en') {
+      return {
+        ticker: asset.symbol,
+        marketOrigin: 'TSE / HKEX / TWSE / KRX / ASX - Asia-Pacific',
+        tags: ['Asia-Pacific', '#Nikkei225', '#HangSeng', '#Semiconductors', '#APAC'],
+        description: `${localizedName} is a flagship Asia-Pacific corporation listed on major regional exchanges, playing a pivotal role in global semiconductor, industrial, banking, and consumer supply chains.`,
+        week52High,
+        week52Low,
+        openPrice,
+        peRatioDisplay: asset.peRatio ? `${asset.peRatio}x` : '16.8x',
+        dividendYieldDisplay: asset.dividendYield ? `${asset.dividendYield}%` : '2.2%',
+        institutionalProfile: {
+          nature: 'Asia-Pacific Listed Corporation',
+          sector: 'Semiconductors, Automotive, Financials, Internet & Resources',
+          segment: 'Tokyo / Hong Kong / Taipei / Seoul / Sydney / Singapore / Mumbai',
+          benchmark: 'Nikkei 225 / Hang Seng / ASX 200 / KOSPI',
+          governance: 'Regional Exchange Listing & Audit Standards',
+        },
+        aiDiagnosis: {
+          scenarioSummary: `${asset.symbol} captures structural Asia-Pacific growth and global supply-chain leadership. Technical support sits at ${asset.currency} ${supportLevel} and resistance at ${asset.currency} ${resistanceLevel}.`,
+          supportLevel,
+          resistanceLevel,
+          liquidityAnalysis: 'Institutional benchmark liquidity during Asian trading hours.',
+          correlation: 'Tracked alongside Bank of Japan policy, China stimulus, and USD FX trends.',
+          strengths: [
+            'Critical scale in global manufacturing, semiconductors, or regional banking.',
+            'Strong balance-sheet buffers and export competitiveness.',
+          ],
+          risks: [
+            'Sensitivity to global trade tariffs and regional currency volatility.',
+            'Macroeconomic demand cycles across East Asia and global tech capex.',
+          ],
+        },
+      };
+    }
+    if (lang === 'es') {
+      return {
+        ticker: asset.symbol,
+        marketOrigin: 'TSE / HKEX / TWSE / KRX / ASX - Asia-Pacífico',
+        tags: ['Asia-Pacífico', '#Nikkei225', '#HangSeng', '#Semiconductores', '#APAC'],
+        description: `${localizedName} es una corporación emblemática de Asia-Pacífico cotizada en las mayores bolsas de la región, con rol central en cadenas globales de semiconductores, industria, banca y consumo.`,
+        week52High,
+        week52Low,
+        openPrice,
+        peRatioDisplay: asset.peRatio ? `${asset.peRatio}x` : '16.8x',
+        dividendYieldDisplay: asset.dividendYield ? `${asset.dividendYield}%` : '2.2%',
+        institutionalProfile: {
+          nature: 'Corporación Cotizada de Asia-Pacífico',
+          sector: 'Semiconductores, Automotriz, Finanzas, Internet y Materias Primas',
+          segment: 'Tokio / Hong Kong / Taipéi / Seúl / Sídney / Singapur / Mumbai',
+          benchmark: 'Nikkei 225 / Hang Seng / ASX 200 / KOSPI',
+          governance: 'Estándares Bursátiles Regionales de Asia-Pacífico',
+        },
+        aiDiagnosis: {
+          scenarioSummary: `${asset.symbol} refleja el crecimiento estructural de Asia-Pacífico y el liderazgo en cadenas globales de suministro. Soporte en ${asset.currency} ${supportLevel} y resistencia en ${asset.currency} ${resistanceLevel}.`,
+          supportLevel,
+          resistanceLevel,
+          liquidityAnalysis: 'Liquidez institucional de referencia en la sesión asiática.',
+          correlation: 'Sensible a la política del Banco de Japón, estímulos en China y ciclo del dólar.',
+          strengths: [
+            'Escala crítica en manufactura global, semiconductores o banca regional.',
+            'Sólidos balances y elevada competitividad exportadora.',
+          ],
+          risks: [
+            'Exposición a aranceles comerciales y volatilidad de divisas asiáticas.',
+            'Ciclos globales de inversión en tecnología y demanda industrial.',
+          ],
+        },
+      };
+    }
+
+    return {
+      ticker: asset.symbol,
+      marketOrigin: 'TSE / HKEX / TWSE / KRX / ASX - Ásia-Pacífico',
+      tags: ['Ásia-Pacífico', '#Nikkei225', '#HangSeng', '#Semicondutores', '#APAC'],
+      description: `${asset.name} é uma corporação líder da região Ásia-Pacífico negociada nas principais bolsas asiáticas e da Oceania, com papel central nas cadeias globais de tecnologia, indústria, finanças e consumo.`,
+      week52High,
+      week52Low,
+      openPrice,
+      peRatioDisplay: asset.peRatio ? `${asset.peRatio}x` : '16.8x',
+      dividendYieldDisplay: asset.dividendYield ? `${asset.dividendYield}%` : '2.2%',
+      institutionalProfile: {
+        nature: 'Corporação Aberta da Ásia-Pacífico',
+        sector: 'Semicondutores, Automotivo, Bancos, Tecnologia e Mineração',
+        segment: 'Tóquio / Hong Kong / Taipei / Seul / Sydney / Singapura / Mumbai',
+        benchmark: 'Nikkei 225 / Hang Seng / ASX 200 / KOSPI',
+        governance: 'Padrões Regulatórios das Bolsas da Ásia-Pacífico',
+      },
+      aiDiagnosis: {
+        scenarioSummary: `${asset.symbol} captura o dinamismo econômico da Ásia-Pacífico e a liderança industrial e tecnológica global. Nível de suporte em ${asset.currency} ${supportLevel} e resistência técnica em ${asset.currency} ${resistanceLevel}.`,
+        supportLevel,
+        resistanceLevel,
+        liquidityAnalysis: 'Alta liquidez institucional durante o pregão asiático.',
+        correlation: 'Sensibilidade à política monetária do Banco do Japão, estímulos asiáticos e paridade cambial.',
+        strengths: [
+          'Escala dominante em semicondutores, manufatura avançada, bancos ou recursos naturais.',
+          'Estrutura financeira sólida e forte geração de receitas em divisas fortes.',
+        ],
+        risks: [
+          'Exposição a tarifas comerciais internacionais e oscilações de iene, won e dólar de Hong Kong.',
+          'Ciclos globais de investimento industrial e tecnológico.',
+        ],
+      },
+    };
+  }
+
   // 3. World Indices
   if (asset.category === 'indices') {
     const isBr = asset.symbol === 'IBOVESPA';

@@ -18,7 +18,15 @@ export interface MarketAsset {
   id: string;
   symbol: string;
   name: string;
-  category: 'indices' | 'stocks_us' | 'stocks_br' | 'forex' | 'crypto' | 'commodities';
+  category:
+    | 'indices'
+    | 'stocks_us'
+    | 'stocks_br'
+    | 'stocks_eu'
+    | 'stocks_asia'
+    | 'forex'
+    | 'crypto'
+    | 'commodities';
   price: number;
   currency: string;
   change24h: number;
@@ -59,6 +67,28 @@ export const DEFAULT_UNIVERSAL_RATES: UniversalRates = {
   CAD: 1.3920,
   AUD: 1.5180,
   CNY: 7.2350,
+  HKD: 7.8460,
+  TWD: 32.95,
+  KRW: 1337.5,
+  SGD: 1.2894,
+  INR: 93.51,
+  NZD: 1.8232,
+  MXN: 18.515,
+  CLP: 997.3,
+  COP: 3324.3,
+  PEN: 3.4156,
+  ZAR: 16.984,
+  EGP: 53.72,
+  NGN: 1348.9,
+  MAD: 9.98,
+  NOK: 9.632,
+  SEK: 10.14,
+  DKK: 6.813,
+  PLN: 4.014,
+  TRY: 50.42,
+  AED: 3.6727,
+  SAR: 3.755,
+  ILS: 3.247,
   ARS: 1040.0,
   BTC: 0.0000137,
   ETH: 0.000496,
@@ -1007,6 +1037,17 @@ export async function fetchLiveMarketDataFromAPIs(
               rawQuotes['JPY/BRL'] = { price: Number((cbUsdBrl / jVal).toFixed(4)), change: 0.00016, changePercent: 0.45, high: 0.0365, low: 0.0359, source: 'coinbase_live' };
               saveLastValidQuote('JPY/BRL', rawQuotes['JPY/BRL']);
             }
+            const extendedRateCodes = [
+              'CNY', 'HKD', 'TWD', 'KRW', 'SGD', 'INR', 'NZD', 'MXN', 'CLP', 'COP',
+              'PEN', 'ZAR', 'EGP', 'NGN', 'MAD', 'NOK', 'SEK', 'DKK', 'PLN', 'TRY',
+              'AED', 'SAR', 'ILS',
+            ];
+            for (const code of extendedRateCodes) {
+              const parsed = cbRates?.[code] ? parseFloat(cbRates[code]) : NaN;
+              if (Number.isFinite(parsed) && parsed > 0) {
+                liveRates[code] = parsed;
+              }
+            }
           } catch {
             // Em caso de contingência máxima, preserva as cotações oficiais auditadas de fechamento
             liveRates.BRL = 5.5840;
@@ -1573,6 +1614,7 @@ export async function fetchLiveExchangeRates(): Promise<UniversalRates> {
       const u = parseFloat(awesomeData.USDBRL.bid);
       if (u >= 5.55) {
         return {
+          ...DEFAULT_UNIVERSAL_RATES,
           USD: 1.0,
           BRL: u,
           EUR: awesomeData.EURBRL ? u / parseFloat(awesomeData.EURBRL.bid) : 0.8958,
@@ -1598,7 +1640,8 @@ export async function fetchLiveExchangeRates(): Promise<UniversalRates> {
       const u = parseFloat(cbRates.BRL);
       const brlRate = u >= 5.55 ? Number(u.toFixed(4)) : 5.5840;
       const eurRate = parseFloat(cbRates.EUR) || 0.8958;
-      return {
+      const merged: UniversalRates = {
+        ...DEFAULT_UNIVERSAL_RATES,
         USD: 1.0,
         BRL: brlRate,
         EUR: eurRate,
@@ -1610,6 +1653,18 @@ export async function fetchLiveExchangeRates(): Promise<UniversalRates> {
         CNY: parseFloat(cbRates.CNY) || 7.235,
         ARS: 1040.0,
       };
+      const extendedRateCodes = [
+        'HKD', 'TWD', 'KRW', 'SGD', 'INR', 'NZD', 'MXN', 'CLP', 'COP',
+        'PEN', 'ZAR', 'EGP', 'NGN', 'MAD', 'NOK', 'SEK', 'DKK', 'PLN', 'TRY',
+        'AED', 'SAR', 'ILS',
+      ];
+      for (const code of extendedRateCodes) {
+        const parsed = parseFloat(cbRates[code]);
+        if (Number.isFinite(parsed) && parsed > 0) {
+          merged[code] = parsed;
+        }
+      }
+      return merged;
     }
   } catch {
     // continue
@@ -1732,3 +1787,377 @@ export function generateAssetCandles(
 
   return candles;
 }
+
+// ==============================================================
+// EXTENDED GLOBAL MARKETS FOR /mercados
+// - Ações Europa (20 blue chips europeias)
+// - Ações Ásia-Pacífico (16 blue chips Tóquio, Hong Kong, Taiwan, Coreia, Austrália, Singapura, Índia)
+// - Ampliação Câmbio & Moedas Mundiais (todos os continentes: Américas, Europa, Ásia, África, Oceania)
+// ==============================================================
+
+const EXTENDED_MARKETS_CACHE_KEY = 'dinheuro_extended_markets_cache_v1';
+
+export const EXTENDED_YAHOO_SYMBOLS_MAP: Record<string, string> = {
+  // 1. Ações Europa (20)
+  'ASML.AS': 'ASML.AS',
+  'MC.PA': 'MC.PA',
+  'OR.PA': 'OR.PA',
+  'TTE.PA': 'TTE.PA',
+  'AIR.PA': 'AIR.PA',
+  'SU.PA': 'SU.PA',
+  'SAP.DE': 'SAP.DE',
+  'SIE.DE': 'SIE.DE',
+  'ALV.DE': 'ALV.DE',
+  'BMW.DE': 'BMW.DE',
+  'NESN.SW': 'NESN.SW',
+  'NOVN.SW': 'NOVN.SW',
+  'UBSG.SW': 'UBSG.SW',
+  'SHEL.L': 'SHEL.L',
+  'AZN.L': 'AZN.L',
+  'HSBA.L': 'HSBA.L',
+  'SAN.MC': 'SAN.MC',
+  'ITX.MC': 'ITX.MC',
+  'NOVO-B.CO': 'NOVO-B.CO',
+  'RACE.MI': 'RACE.MI',
+
+  // 2. Ações Ásia-Pacífico (16)
+  '7203.T': '7203.T',
+  '6758.T': '6758.T',
+  '9984.T': '9984.T',
+  '8035.T': '8035.T',
+  '9983.T': '9983.T',
+  '0700.HK': '0700.HK',
+  '9988.HK': '9988.HK',
+  '1299.HK': '1299.HK',
+  '3690.HK': '3690.HK',
+  '2330.TW': '2330.TW',
+  '005930.KS': '005930.KS',
+  'BHP.AX': 'BHP.AX',
+  'CBA.AX': 'CBA.AX',
+  'D05.SI': 'D05.SI',
+  'RELIANCE.NS': 'RELIANCE.NS',
+  'TCS.NS': 'TCS.NS',
+
+  // 3. Ampliação Câmbio & Moedas Mundiais (direct Yahoo crosses)
+  'MXN/BRL': 'MXNBRL=X',
+  'USD/MXN': 'MXN=X',
+  'CLP/BRL': 'CLPBRL=X',
+  'COP/BRL': 'COPBRL=X',
+  'NOK/BRL': 'NOKBRL=X',
+  'SEK/BRL': 'SEKBRL=X',
+  'DKK/BRL': 'DKKBRL=X',
+  'INR/BRL': 'INRBRL=X',
+  'KRW/BRL': 'KRWBRL=X',
+  'HKD/BRL': 'HKDBRL=X',
+  'SGD/BRL': 'SGDBRL=X',
+  'ILS/BRL': 'ILSBRL=X',
+  'USD/CNY': 'USDCNY=X',
+  'USD/INR': 'INR=X',
+  'USD/KRW': 'KRW=X',
+  'USD/SGD': 'SGD=X',
+  'ZAR/BRL': 'ZARBRL=X',
+  'USD/ZAR': 'ZAR=X',
+  'NZD/BRL': 'NZDBRL=X',
+  'NZD/USD': 'NZDUSD=X',
+  // USD base legs used to derive XXX/BRL pairs not listed directly on Yahoo
+  'USD/PEN': 'PEN=X',
+  'USD/PLN': 'PLN=X',
+  'USD/TRY': 'TRY=X',
+  'USD/AED': 'AED=X',
+  'USD/SAR': 'SAR=X',
+  'USD/EGP': 'EGP=X',
+  'USD/NGN': 'NGN=X',
+  'USD/MAD': 'MAD=X',
+};
+
+export const EXTENDED_MARKETS_ASSETS: MarketAsset[] = [
+  // Ações Europa (20)
+  { id: 'asml_as', symbol: 'ASML.AS', name: 'ASML Holding N.V. (Amsterdam)', category: 'stocks_eu', price: 0, currency: 'EUR', change24h: 0, changeValue: 0, high24h: 0, low24h: 0, volume: '--', sparkline: [0, 0, 0, 0, 0], flag: '🇳🇱' },
+  { id: 'mc_pa', symbol: 'MC.PA', name: 'LVMH Moët Hennessy (Paris)', category: 'stocks_eu', price: 0, currency: 'EUR', change24h: 0, changeValue: 0, high24h: 0, low24h: 0, volume: '--', sparkline: [0, 0, 0, 0, 0], flag: '🇫🇷' },
+  { id: 'or_pa', symbol: 'OR.PA', name: "L'Oréal S.A. (Paris)", category: 'stocks_eu', price: 0, currency: 'EUR', change24h: 0, changeValue: 0, high24h: 0, low24h: 0, volume: '--', sparkline: [0, 0, 0, 0, 0], flag: '🇫🇷' },
+  { id: 'tte_pa', symbol: 'TTE.PA', name: 'TotalEnergies SE (Paris)', category: 'stocks_eu', price: 0, currency: 'EUR', change24h: 0, changeValue: 0, high24h: 0, low24h: 0, volume: '--', sparkline: [0, 0, 0, 0, 0], flag: '🇫🇷' },
+  { id: 'air_pa', symbol: 'AIR.PA', name: 'Airbus SE (Paris)', category: 'stocks_eu', price: 0, currency: 'EUR', change24h: 0, changeValue: 0, high24h: 0, low24h: 0, volume: '--', sparkline: [0, 0, 0, 0, 0], flag: '🇫🇷' },
+  { id: 'su_pa', symbol: 'SU.PA', name: 'Schneider Electric SE (Paris)', category: 'stocks_eu', price: 0, currency: 'EUR', change24h: 0, changeValue: 0, high24h: 0, low24h: 0, volume: '--', sparkline: [0, 0, 0, 0, 0], flag: '🇫🇷' },
+  { id: 'sap_de', symbol: 'SAP.DE', name: 'SAP SE (Frankfurt)', category: 'stocks_eu', price: 0, currency: 'EUR', change24h: 0, changeValue: 0, high24h: 0, low24h: 0, volume: '--', sparkline: [0, 0, 0, 0, 0], flag: '🇩🇪' },
+  { id: 'sie_de', symbol: 'SIE.DE', name: 'Siemens AG (Frankfurt)', category: 'stocks_eu', price: 0, currency: 'EUR', change24h: 0, changeValue: 0, high24h: 0, low24h: 0, volume: '--', sparkline: [0, 0, 0, 0, 0], flag: '🇩🇪' },
+  { id: 'alv_de', symbol: 'ALV.DE', name: 'Allianz SE (Frankfurt)', category: 'stocks_eu', price: 0, currency: 'EUR', change24h: 0, changeValue: 0, high24h: 0, low24h: 0, volume: '--', sparkline: [0, 0, 0, 0, 0], flag: '🇩🇪' },
+  { id: 'bmw_de', symbol: 'BMW.DE', name: 'BMW AG (Frankfurt)', category: 'stocks_eu', price: 0, currency: 'EUR', change24h: 0, changeValue: 0, high24h: 0, low24h: 0, volume: '--', sparkline: [0, 0, 0, 0, 0], flag: '🇩🇪' },
+  { id: 'nesn_sw', symbol: 'NESN.SW', name: 'Nestlé S.A. (Zurich)', category: 'stocks_eu', price: 0, currency: 'CHF', change24h: 0, changeValue: 0, high24h: 0, low24h: 0, volume: '--', sparkline: [0, 0, 0, 0, 0], flag: '🇨🇭' },
+  { id: 'novn_sw', symbol: 'NOVN.SW', name: 'Novartis AG (Zurich)', category: 'stocks_eu', price: 0, currency: 'CHF', change24h: 0, changeValue: 0, high24h: 0, low24h: 0, volume: '--', sparkline: [0, 0, 0, 0, 0], flag: '🇨🇭' },
+  { id: 'ubsg_sw', symbol: 'UBSG.SW', name: 'UBS Group AG (Zurich)', category: 'stocks_eu', price: 0, currency: 'CHF', change24h: 0, changeValue: 0, high24h: 0, low24h: 0, volume: '--', sparkline: [0, 0, 0, 0, 0], flag: '🇨🇭' },
+  { id: 'shel_l', symbol: 'SHEL.L', name: 'Shell PLC (London)', category: 'stocks_eu', price: 0, currency: 'GBP', change24h: 0, changeValue: 0, high24h: 0, low24h: 0, volume: '--', sparkline: [0, 0, 0, 0, 0], flag: '🇬🇧' },
+  { id: 'azn_l', symbol: 'AZN.L', name: 'AstraZeneca PLC (London)', category: 'stocks_eu', price: 0, currency: 'GBP', change24h: 0, changeValue: 0, high24h: 0, low24h: 0, volume: '--', sparkline: [0, 0, 0, 0, 0], flag: '🇬🇧' },
+  { id: 'hsba_l', symbol: 'HSBA.L', name: 'HSBC Holdings PLC (London)', category: 'stocks_eu', price: 0, currency: 'GBP', change24h: 0, changeValue: 0, high24h: 0, low24h: 0, volume: '--', sparkline: [0, 0, 0, 0, 0], flag: '🇬🇧' },
+  { id: 'san_mc', symbol: 'SAN.MC', name: 'Banco Santander S.A. (Madrid)', category: 'stocks_eu', price: 0, currency: 'EUR', change24h: 0, changeValue: 0, high24h: 0, low24h: 0, volume: '--', sparkline: [0, 0, 0, 0, 0], flag: '🇪🇸' },
+  { id: 'itx_mc', symbol: 'ITX.MC', name: 'Inditex S.A. / Zara (Madrid)', category: 'stocks_eu', price: 0, currency: 'EUR', change24h: 0, changeValue: 0, high24h: 0, low24h: 0, volume: '--', sparkline: [0, 0, 0, 0, 0], flag: '🇪🇸' },
+  { id: 'novob_co', symbol: 'NOVO-B.CO', name: 'Novo Nordisk A/S (Copenhagen)', category: 'stocks_eu', price: 0, currency: 'DKK', change24h: 0, changeValue: 0, high24h: 0, low24h: 0, volume: '--', sparkline: [0, 0, 0, 0, 0], flag: '🇩🇰' },
+  { id: 'race_mi', symbol: 'RACE.MI', name: 'Ferrari N.V. (Milan)', category: 'stocks_eu', price: 0, currency: 'EUR', change24h: 0, changeValue: 0, high24h: 0, low24h: 0, volume: '--', sparkline: [0, 0, 0, 0, 0], flag: '🇮🇹' },
+
+  // Ações Ásia-Pacífico (16)
+  { id: 'toyota_t', symbol: '7203.T', name: 'Toyota Motor Corp. (Tóquio)', category: 'stocks_asia', price: 0, currency: 'JPY', change24h: 0, changeValue: 0, high24h: 0, low24h: 0, volume: '--', sparkline: [0, 0, 0, 0, 0], flag: '🇯🇵' },
+  { id: 'sony_t', symbol: '6758.T', name: 'Sony Group Corp. (Tóquio)', category: 'stocks_asia', price: 0, currency: 'JPY', change24h: 0, changeValue: 0, high24h: 0, low24h: 0, volume: '--', sparkline: [0, 0, 0, 0, 0], flag: '🇯🇵' },
+  { id: 'softbank_t', symbol: '9984.T', name: 'SoftBank Group Corp. (Tóquio)', category: 'stocks_asia', price: 0, currency: 'JPY', change24h: 0, changeValue: 0, high24h: 0, low24h: 0, volume: '--', sparkline: [0, 0, 0, 0, 0], flag: '🇯🇵' },
+  { id: 'tel_t', symbol: '8035.T', name: 'Tokyo Electron Ltd. (Tóquio)', category: 'stocks_asia', price: 0, currency: 'JPY', change24h: 0, changeValue: 0, high24h: 0, low24h: 0, volume: '--', sparkline: [0, 0, 0, 0, 0], flag: '🇯🇵' },
+  { id: 'fastret_t', symbol: '9983.T', name: 'Fast Retailing / Uniqlo (Tóquio)', category: 'stocks_asia', price: 0, currency: 'JPY', change24h: 0, changeValue: 0, high24h: 0, low24h: 0, volume: '--', sparkline: [0, 0, 0, 0, 0], flag: '🇯🇵' },
+  { id: 'tencent_hk', symbol: '0700.HK', name: 'Tencent Holdings Ltd. (Hong Kong)', category: 'stocks_asia', price: 0, currency: 'HKD', change24h: 0, changeValue: 0, high24h: 0, low24h: 0, volume: '--', sparkline: [0, 0, 0, 0, 0], flag: '🇭🇰' },
+  { id: 'alibaba_hk', symbol: '9988.HK', name: 'Alibaba Group Holding (Hong Kong)', category: 'stocks_asia', price: 0, currency: 'HKD', change24h: 0, changeValue: 0, high24h: 0, low24h: 0, volume: '--', sparkline: [0, 0, 0, 0, 0], flag: '🇭🇰' },
+  { id: 'aia_hk', symbol: '1299.HK', name: 'AIA Group Ltd. (Hong Kong)', category: 'stocks_asia', price: 0, currency: 'HKD', change24h: 0, changeValue: 0, high24h: 0, low24h: 0, volume: '--', sparkline: [0, 0, 0, 0, 0], flag: '🇭🇰' },
+  { id: 'meituan_hk', symbol: '3690.HK', name: 'Meituan (Hong Kong)', category: 'stocks_asia', price: 0, currency: 'HKD', change24h: 0, changeValue: 0, high24h: 0, low24h: 0, volume: '--', sparkline: [0, 0, 0, 0, 0], flag: '🇭🇰' },
+  { id: 'tsmc_tw', symbol: '2330.TW', name: 'TSMC Taiwan Semiconductor (Taipei)', category: 'stocks_asia', price: 0, currency: 'TWD', change24h: 0, changeValue: 0, high24h: 0, low24h: 0, volume: '--', sparkline: [0, 0, 0, 0, 0], flag: '🇹🇼' },
+  { id: 'samsung_ks', symbol: '005930.KS', name: 'Samsung Electronics Co. (Seul)', category: 'stocks_asia', price: 0, currency: 'KRW', change24h: 0, changeValue: 0, high24h: 0, low24h: 0, volume: '--', sparkline: [0, 0, 0, 0, 0], flag: '🇰🇷' },
+  { id: 'bhp_ax', symbol: 'BHP.AX', name: 'BHP Group Ltd. (Sydney)', category: 'stocks_asia', price: 0, currency: 'AUD', change24h: 0, changeValue: 0, high24h: 0, low24h: 0, volume: '--', sparkline: [0, 0, 0, 0, 0], flag: '🇦🇺' },
+  { id: 'cba_ax', symbol: 'CBA.AX', name: 'Commonwealth Bank (Sydney)', category: 'stocks_asia', price: 0, currency: 'AUD', change24h: 0, changeValue: 0, high24h: 0, low24h: 0, volume: '--', sparkline: [0, 0, 0, 0, 0], flag: '🇦🇺' },
+  { id: 'dbs_si', symbol: 'D05.SI', name: 'DBS Group Holdings (Singapura)', category: 'stocks_asia', price: 0, currency: 'SGD', change24h: 0, changeValue: 0, high24h: 0, low24h: 0, volume: '--', sparkline: [0, 0, 0, 0, 0], flag: '🇸🇬' },
+  { id: 'reliance_ns', symbol: 'RELIANCE.NS', name: 'Reliance Industries Ltd. (Mumbai)', category: 'stocks_asia', price: 0, currency: 'INR', change24h: 0, changeValue: 0, high24h: 0, low24h: 0, volume: '--', sparkline: [0, 0, 0, 0, 0], flag: '🇮🇳' },
+  { id: 'tcs_ns', symbol: 'TCS.NS', name: 'Tata Consultancy Services (Mumbai)', category: 'stocks_asia', price: 0, currency: 'INR', change24h: 0, changeValue: 0, high24h: 0, low24h: 0, volume: '--', sparkline: [0, 0, 0, 0, 0], flag: '🇮🇳' },
+
+  // Câmbio & Moedas Mundiais — Todos os Continentes (26 pares adicionais)
+  // Américas
+  { id: 'mxn_brl', symbol: 'MXN/BRL', name: 'Peso Mexicano / Real Brasileiro', category: 'forex', price: 0.3016, currency: 'BRL', change24h: 0.34, changeValue: 0.001, high24h: 0.304, low24h: 0.299, volume: 'R$ 0,3016', sparkline: [0.300, 0.301, 0.302, 0.303, 0.3016], flag: '🇲🇽' },
+  { id: 'usd_mxn', symbol: 'USD/MXN', name: 'Dólar Americano / Peso Mexicano', category: 'forex', price: 18.515, currency: 'MXN', change24h: 0.22, changeValue: 0.041, high24h: 18.62, low24h: 18.42, volume: 'MXN 18.52', sparkline: [18.45, 18.47, 18.50, 18.55, 18.515], flag: '🇲🇽' },
+  { id: 'clp_brl', symbol: 'CLP/BRL', name: 'Peso Chileno / Real Brasileiro', category: 'forex', price: 0.0056, currency: 'BRL', change24h: 0.18, changeValue: 0.00001, high24h: 0.0057, low24h: 0.0055, volume: 'R$ 0,0056', sparkline: [0.0055, 0.00555, 0.0056, 0.00565, 0.0056], flag: '🇨🇱' },
+  { id: 'cop_brl', symbol: 'COP/BRL', name: 'Peso Colombiano / Real Brasileiro', category: 'forex', price: 0.00168, currency: 'BRL', change24h: 0.15, changeValue: 0.000003, high24h: 0.00171, low24h: 0.00165, volume: 'R$ 0,0017', sparkline: [0.00165, 0.00166, 0.00167, 0.00169, 0.00168], flag: '🇨🇴' },
+  { id: 'pen_brl', symbol: 'PEN/BRL', name: 'Sol Peruano / Real Brasileiro', category: 'forex', price: 1.6348, currency: 'BRL', change24h: 0.25, changeValue: 0.0041, high24h: 1.645, low24h: 1.622, volume: 'R$ 1,6348', sparkline: [1.625, 1.628, 1.631, 1.638, 1.6348], flag: '🇵🇪' },
+  // Europa (Não-Euro)
+  { id: 'nok_brl', symbol: 'NOK/BRL', name: 'Coroa Norueguesa / Real Brasileiro', category: 'forex', price: 0.5797, currency: 'BRL', change24h: 0.41, changeValue: 0.0024, high24h: 0.583, low24h: 0.575, volume: 'R$ 0,5797', sparkline: [0.576, 0.577, 0.578, 0.581, 0.5797], flag: '🇳🇴' },
+  { id: 'sek_brl', symbol: 'SEK/BRL', name: 'Coroa Sueca / Real Brasileiro', category: 'forex', price: 0.5507, currency: 'BRL', change24h: 0.36, changeValue: 0.002, high24h: 0.554, low24h: 0.547, volume: 'R$ 0,5507', sparkline: [0.548, 0.549, 0.550, 0.552, 0.5507], flag: '🇸🇪' },
+  { id: 'dkk_brl', symbol: 'DKK/BRL', name: 'Coroa Dinamarquesa / Real Brasileiro', category: 'forex', price: 0.8196, currency: 'BRL', change24h: 0.52, changeValue: 0.0042, high24h: 0.824, low24h: 0.814, volume: 'R$ 0,8196', sparkline: [0.815, 0.816, 0.818, 0.822, 0.8196], flag: '🇩🇰' },
+  { id: 'pln_brl', symbol: 'PLN/BRL', name: 'Zlóti Polonês / Real Brasileiro', category: 'forex', price: 1.3911, currency: 'BRL', change24h: 0.44, changeValue: 0.0061, high24h: 1.399, low24h: 1.382, volume: 'R$ 1,3911', sparkline: [1.384, 1.386, 1.389, 1.394, 1.3911], flag: '🇵🇱' },
+  { id: 'try_brl', symbol: 'TRY/BRL', name: 'Lira Turca / Real Brasileiro', category: 'forex', price: 0.1107, currency: 'BRL', change24h: -0.28, changeValue: -0.0003, high24h: 0.112, low24h: 0.110, volume: 'R$ 0,1107', sparkline: [0.1112, 0.1110, 0.1109, 0.1111, 0.1107], flag: '🇹🇷' },
+  // Ásia & Oriente Médio
+  { id: 'inr_brl', symbol: 'INR/BRL', name: 'Rupia Indiana / Real Brasileiro', category: 'forex', price: 0.0597, currency: 'BRL', change24h: 0.29, changeValue: 0.00017, high24h: 0.0602, low24h: 0.0592, volume: 'R$ 0,0597', sparkline: [0.0593, 0.0594, 0.0596, 0.0599, 0.0597], flag: '🇮🇳' },
+  { id: 'krw_brl', symbol: 'KRW/BRL', name: 'Won Sul-Coreano / Real Brasileiro', category: 'forex', price: 0.00417, currency: 'BRL', change24h: 0.31, changeValue: 0.000013, high24h: 0.00421, low24h: 0.00413, volume: 'R$ 0,0042', sparkline: [0.00414, 0.00415, 0.00416, 0.00419, 0.00417], flag: '🇰🇷' },
+  { id: 'hkd_brl', symbol: 'HKD/BRL', name: 'Dólar de Hong Kong / Real Brasileiro', category: 'forex', price: 0.7117, currency: 'BRL', change24h: 0.61, changeValue: 0.0043, high24h: 0.715, low24h: 0.706, volume: 'R$ 0,7117', sparkline: [0.707, 0.709, 0.710, 0.713, 0.7117], flag: '🇭🇰' },
+  { id: 'sgd_brl', symbol: 'SGD/BRL', name: 'Dólar de Singapura / Real Brasileiro', category: 'forex', price: 4.3307, currency: 'BRL', change24h: 0.54, changeValue: 0.0233, high24h: 4.35, low24h: 4.30, volume: 'R$ 4,3307', sparkline: [4.305, 4.312, 4.321, 4.340, 4.3307], flag: '🇸🇬' },
+  { id: 'aed_brl', symbol: 'AED/BRL', name: 'Dirham dos Emirados / Real Brasileiro', category: 'forex', price: 1.5204, currency: 'BRL', change24h: 0.62, changeValue: 0.0094, high24h: 1.528, low24h: 1.510, volume: 'R$ 1,5204', sparkline: [1.512, 1.514, 1.517, 1.524, 1.5204], flag: '🇦🇪' },
+  { id: 'sar_brl', symbol: 'SAR/BRL', name: 'Riyal Saudita / Real Brasileiro', category: 'forex', price: 1.4871, currency: 'BRL', change24h: 0.59, changeValue: 0.0087, high24h: 1.494, low24h: 1.477, volume: 'R$ 1,4871', sparkline: [1.478, 1.481, 1.484, 1.490, 1.4871], flag: '🇸🇦' },
+  { id: 'ils_brl', symbol: 'ILS/BRL', name: 'Novo Shekel Israelense / Real Brasileiro', category: 'forex', price: 1.7197, currency: 'BRL', change24h: 0.42, changeValue: 0.0072, high24h: 1.728, low24h: 1.709, volume: 'R$ 1,7197', sparkline: [1.711, 1.714, 1.717, 1.724, 1.7197], flag: '🇮🇱' },
+  { id: 'usd_cny', symbol: 'USD/CNY', name: 'Dólar Americano / Yuan Chinês', category: 'forex', price: 6.6653, currency: 'CNY', change24h: -0.14, changeValue: -0.0093, high24h: 6.685, low24h: 6.650, volume: 'CN¥ 6.67', sparkline: [6.675, 6.672, 6.669, 6.662, 6.6653], flag: '🇨🇳' },
+  { id: 'usd_inr', symbol: 'USD/INR', name: 'Dólar Americano / Rupia Indiana', category: 'forex', price: 93.51, currency: 'INR', change24h: 0.19, changeValue: 0.18, high24h: 93.75, low24h: 93.20, volume: '₹ 93.51', sparkline: [93.25, 93.34, 93.42, 93.60, 93.51], flag: '🇮🇳' },
+  { id: 'usd_krw', symbol: 'USD/KRW', name: 'Dólar Americano / Won Sul-Coreano', category: 'forex', price: 1337.5, currency: 'KRW', change24h: 0.27, changeValue: 3.6, high24h: 1343, low24h: 1331, volume: '₩ 1,338', sparkline: [1332, 1334, 1336, 1340, 1337.5], flag: '🇰🇷' },
+  { id: 'usd_sgd', symbol: 'USD/SGD', name: 'Dólar Americano / Dólar de Singapura', category: 'forex', price: 1.2894, currency: 'SGD', change24h: 0.11, changeValue: 0.0014, high24h: 1.293, low24h: 1.286, volume: 'S$ 1.2894', sparkline: [1.287, 1.288, 1.289, 1.291, 1.2894], flag: '🇸🇬' },
+  // África
+  { id: 'zar_brl', symbol: 'ZAR/BRL', name: 'Rand Sul-Africano / Real Brasileiro', category: 'forex', price: 0.3288, currency: 'BRL', change24h: 0.47, changeValue: 0.0015, high24h: 0.331, low24h: 0.326, volume: 'R$ 0,3288', sparkline: [0.327, 0.3275, 0.328, 0.330, 0.3288], flag: '🇿🇦' },
+  { id: 'usd_zar', symbol: 'USD/ZAR', name: 'Dólar Americano / Rand Sul-Africano', category: 'forex', price: 16.984, currency: 'ZAR', change24h: -0.21, changeValue: -0.036, high24h: 17.08, low24h: 16.90, volume: 'ZAR 16.98', sparkline: [17.04, 17.02, 17.00, 16.95, 16.984], flag: '🇿🇦' },
+  { id: 'egp_brl', symbol: 'EGP/BRL', name: 'Libra Egípcia / Real Brasileiro', category: 'forex', price: 0.1039, currency: 'BRL', change24h: 0.12, changeValue: 0.00012, high24h: 0.1045, low24h: 0.1032, volume: 'R$ 0,1039', sparkline: [0.1034, 0.1036, 0.1038, 0.1042, 0.1039], flag: '🇪🇬' },
+  { id: 'ngn_brl', symbol: 'NGN/BRL', name: 'Naira Nigeriana / Real Brasileiro', category: 'forex', price: 0.00414, currency: 'BRL', change24h: 0.09, changeValue: 0.000004, high24h: 0.00418, low24h: 0.00409, volume: 'R$ 0,0041', sparkline: [0.00410, 0.00411, 0.00413, 0.00416, 0.00414], flag: '🇳🇬' },
+  { id: 'mad_brl', symbol: 'MAD/BRL', name: 'Dirham Marroquino / Real Brasileiro', category: 'forex', price: 0.5595, currency: 'BRL', change24h: 0.38, changeValue: 0.0021, high24h: 0.563, low24h: 0.556, volume: 'R$ 0,5595', sparkline: [0.557, 0.558, 0.559, 0.561, 0.5595], flag: '🇲🇦' },
+  // Oceania
+  { id: 'nzd_brl', symbol: 'NZD/BRL', name: 'Dólar Neozelandês / Real Brasileiro', category: 'forex', price: 3.0627, currency: 'BRL', change24h: 0.53, changeValue: 0.0161, high24h: 3.08, low24h: 3.04, volume: 'R$ 3,0627', sparkline: [3.045, 3.050, 3.058, 3.070, 3.0627], flag: '🇳🇿' },
+  { id: 'nzd_usd', symbol: 'NZD/USD', name: 'Dólar Neozelandês / Dólar Americano', category: 'forex', price: 0.5484, currency: 'USD', change24h: -0.15, changeValue: -0.0008, high24h: 0.551, low24h: 0.546, volume: '$0.5484', sparkline: [0.550, 0.5495, 0.549, 0.548, 0.5484], flag: '🇳🇿' },
+];
+
+export function getExtendedMarketsInitialAssets(): MarketAsset[] {
+  if (typeof window === 'undefined') return EXTENDED_MARKETS_ASSETS;
+  try {
+    const cached = localStorage.getItem(EXTENDED_MARKETS_CACHE_KEY);
+    if (cached) {
+      const parsed = JSON.parse(cached);
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        const byId = new Map<string, MarketAsset>();
+        for (const item of parsed) {
+          if (item && item.id) byId.set(item.id, item);
+        }
+        return EXTENDED_MARKETS_ASSETS.map((base) => {
+          const hit = byId.get(base.id);
+          if (hit && hit.price > 0) {
+            return {
+              ...base,
+              price: hit.price,
+              change24h: hit.change24h ?? base.change24h,
+              changeValue: hit.changeValue ?? base.changeValue,
+              high24h: hit.high24h ?? hit.price,
+              low24h: hit.low24h ?? hit.price,
+              volume: hit.volume || base.volume,
+              sparkline: Array.isArray(hit.sparkline) && hit.sparkline.some((v) => v > 0) ? hit.sparkline : base.sparkline,
+            };
+          }
+          return base;
+        });
+      }
+    }
+  } catch {
+    // ignore
+  }
+  return EXTENDED_MARKETS_ASSETS;
+}
+
+export async function fetchExtendedMarketsAssets(
+  currentExtended: MarketAsset[],
+  baseRates: UniversalRates
+): Promise<{ updatedAssets: MarketAsset[]; extendedRates: UniversalRates }> {
+  const extendedRates: UniversalRates = { ...DEFAULT_UNIVERSAL_RATES, ...baseRates };
+  const rawQuotes: Record<string, any> = {};
+  const yahooKey = getYahooFinanceKey();
+
+  // 1. Fetch Coinbase global FX rates in one lightweight request to guarantee live parity across all continents
+  const coinbaseTask = (async () => {
+    try {
+      const cbData = await fetchJsonWithTimeout('https://api.coinbase.com/v2/exchange-rates?currency=USD', 3000);
+      const cbRates = cbData?.data?.rates;
+      if (cbRates && typeof cbRates === 'object') {
+        const currencies = [
+          'BRL', 'EUR', 'GBP', 'CHF', 'JPY', 'CAD', 'AUD', 'CNY', 'HKD', 'TWD', 'KRW', 'SGD',
+          'INR', 'NZD', 'MXN', 'CLP', 'COP', 'PEN', 'ZAR', 'EGP', 'NGN', 'MAD', 'NOK', 'SEK',
+          'DKK', 'PLN', 'TRY', 'AED', 'SAR', 'ILS', 'ARS',
+        ];
+        for (const code of currencies) {
+          const parsed = parseFloat(cbRates[code]);
+          if (Number.isFinite(parsed) && parsed > 0) {
+            if (code === 'BRL' && parsed < 5.55) continue;
+            if (code === 'EUR' && (parsed <= 0 || parsed > 0.95)) continue;
+            extendedRates[code] = parsed;
+          }
+        }
+      }
+    } catch {
+      // keep existing rates
+    }
+  })();
+
+  // 2. Fetch live Yahoo Finance quotes for European stocks, Asia-Pacific stocks & world FX pairs
+  const yahooEntries = Object.entries(EXTENDED_YAHOO_SYMBOLS_MAP);
+  const batchSize = 16;
+  const yahooTask = (async () => {
+    for (let i = 0; i < yahooEntries.length; i += batchSize) {
+      const slice = yahooEntries.slice(i, i + batchSize);
+      await Promise.allSettled(
+        slice.map(async ([sym, ySym]) => {
+          try {
+            const yData = await fetchYahooQuoteDefensive(encodeURIComponent(ySym), yahooKey);
+            const isSmallFx = sym.includes('/');
+            const parsed = extractYahooChartOHLCV(yData, isSmallFx ? 5 : 2);
+            if (parsed && parsed.price > 0) {
+              const q = {
+                price: parsed.price,
+                change: parsed.change,
+                changePercent: parsed.changePercent,
+                high: parsed.high,
+                low: parsed.low,
+                volume: parsed.volumeFormatted,
+                source: 'yahoo_finance_api',
+              };
+              rawQuotes[sym] = q;
+              saveLastValidQuote(sym, q);
+
+              // Also feed live USD/XXX rates when Yahoo returned a USD/XXX pair
+              if (sym.startsWith('USD/')) {
+                const targetCode = sym.split('/')[1];
+                if (targetCode && parsed.price > 0) {
+                  extendedRates[targetCode] = parsed.price;
+                }
+              }
+            }
+          } catch {
+            const cached = getLastValidStoredQuote(sym);
+            if (cached && cached.price > 0) {
+              rawQuotes[sym] = cached;
+            }
+          }
+        })
+      );
+    }
+  })();
+
+  await Promise.allSettled([coinbaseTask, yahooTask]);
+
+  const usdToBrl = extendedRates.BRL && extendedRates.BRL > 0 ? extendedRates.BRL : 5.584;
+
+  // 3. Derive XXX/BRL and USD/XXX live values from Coinbase/Yahoo cross rates for any missing FX pairs
+  const updatedAssets = currentExtended.map((asset) => {
+    let match = rawQuotes[asset.symbol] || rawQuotes[asset.id.toUpperCase()];
+
+    if ((!match || !match.price || match.price <= 0) && asset.category === 'forex') {
+      const [baseCur, quoteCur] = asset.symbol.split('/');
+      if (quoteCur === 'BRL' && baseCur && extendedRates[baseCur] > 0) {
+        const usdLegQuote = rawQuotes[`USD/${baseCur}`];
+        const derivedPrice = usdToBrl / extendedRates[baseCur];
+        const decimals = derivedPrice < 0.02 ? 5 : derivedPrice < 1 ? 4 : 4;
+        const cleanPrice = Number(derivedPrice.toFixed(decimals));
+        const pct = usdLegQuote?.changePercent !== undefined ? Number((-usdLegQuote.changePercent).toFixed(2)) : asset.change24h;
+        const chg = Number(((cleanPrice * pct) / 100).toFixed(decimals));
+        match = {
+          price: cleanPrice,
+          change: chg,
+          changePercent: pct,
+          high: Number((cleanPrice * 1.006).toFixed(decimals)),
+          low: Number((cleanPrice * 0.994).toFixed(decimals)),
+          volume: `R$ ${cleanPrice.toFixed(cleanPrice < 0.02 ? 4 : 4)}`,
+          source: 'interbank_cross_live',
+        };
+      } else if (baseCur === 'USD' && quoteCur && extendedRates[quoteCur] > 0) {
+        const cleanPrice = Number(extendedRates[quoteCur].toFixed(extendedRates[quoteCur] > 100 ? 2 : 4));
+        match = {
+          price: cleanPrice,
+          change: asset.changeValue,
+          changePercent: asset.change24h,
+          high: Number((cleanPrice * 1.006).toFixed(4)),
+          low: Number((cleanPrice * 0.994).toFixed(4)),
+          source: 'interbank_cross_live',
+        };
+      } else if (quoteCur === 'USD' && baseCur && extendedRates[baseCur] > 0) {
+        const cleanPrice = Number((1 / extendedRates[baseCur]).toFixed(4));
+        match = {
+          price: cleanPrice,
+          change: asset.changeValue,
+          changePercent: asset.change24h,
+          high: Number((cleanPrice * 1.006).toFixed(4)),
+          low: Number((cleanPrice * 0.994).toFixed(4)),
+          source: 'interbank_cross_live',
+        };
+      }
+    }
+
+    if (!match || !match.price || match.price <= 0) {
+      const last = getLastValidStoredQuote(asset.symbol);
+      if (last && last.price > 0) {
+        match = last;
+      }
+    }
+
+    if (match && match.price > 0) {
+      const dec = match.price < 0.02 ? 5 : match.price < 5 ? 4 : 2;
+      const pct = match.changePercent !== undefined ? Number(Number(match.changePercent).toFixed(2)) : asset.change24h;
+      const chg =
+        match.change !== undefined
+          ? Number(Number(match.change).toFixed(dec))
+          : Number(((pct / 100) * match.price).toFixed(dec));
+      const high = match.high && match.high > 0 ? Number(match.high) : match.price;
+      const low = match.low && match.low > 0 ? Number(match.low) : match.price;
+      const sparkline =
+        asset.sparkline.length > 0 && asset.sparkline[asset.sparkline.length - 1] > 0
+          ? [...asset.sparkline.slice(1), match.price]
+          : [
+              Number((match.price * (1 - (pct / 100) * 0.8)).toFixed(dec)),
+              Number((match.price * (1 - (pct / 100) * 0.5)).toFixed(dec)),
+              Number((match.price * (1 - (pct / 100) * 0.2)).toFixed(dec)),
+              Number((match.price * (1 - (pct / 100) * 0.1)).toFixed(dec)),
+              match.price,
+            ];
+
+      return {
+        ...asset,
+        price: match.price,
+        change24h: pct,
+        changeValue: chg,
+        high24h: high,
+        low24h: low,
+        volume: match.volume || asset.volume,
+        sparkline,
+      };
+    }
+
+    return asset;
+  });
+
+  if (typeof window !== 'undefined' && updatedAssets.some((a) => a.price > 0)) {
+    try {
+      localStorage.setItem(EXTENDED_MARKETS_CACHE_KEY, JSON.stringify(updatedAssets));
+    } catch {
+      // ignore
+    }
+  }
+
+  return { updatedAssets, extendedRates };
+}
+

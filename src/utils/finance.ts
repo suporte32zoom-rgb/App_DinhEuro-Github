@@ -30,6 +30,27 @@ export function convertCurrency(
     AUD: 1.4271,
     CNY: 6.6738,
     HKD: 7.7820,
+    TWD: 32.95,
+    KRW: 1337.5,
+    SGD: 1.2894,
+    INR: 93.51,
+    NZD: 1.8232,
+    MXN: 18.515,
+    CLP: 997.3,
+    COP: 3324.3,
+    PEN: 3.4156,
+    ZAR: 16.984,
+    EGP: 53.72,
+    NGN: 1348.9,
+    MAD: 9.98,
+    NOK: 9.632,
+    SEK: 10.14,
+    DKK: 6.813,
+    PLN: 4.014,
+    TRY: 50.42,
+    AED: 3.6727,
+    SAR: 3.755,
+    ILS: 3.247,
     ARS: 1015.0,
     BTC: 0.00001246,
     ETH: 0.0004128,
@@ -322,7 +343,16 @@ export function getDualCurrencyDisplay(
   const valueInBRL = valueInUSD * brlRate;
   const valueInEUR = valueInUSD * eurRate;
 
-  const decimals = normCur === 'JPY' ? 0 : price < 10 && normCur !== 'BRL' ? 4 : 2;
+  const decimals =
+    normCur === 'JPY' || normCur === 'KRW'
+      ? 0
+      : price > 0 && price < 0.02
+      ? 5
+      : price > 0 && price < 1
+      ? 4
+      : price < 10 && normCur !== 'BRL'
+      ? 4
+      : 2;
   const primaryFormatted = formatCurrencyValue(price, normCur, decimals);
 
   if (normCur === 'BRL') {

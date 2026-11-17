@@ -56,12 +56,15 @@ export function extractYahooChartOHLCV(
   const validOpens = getValidPositiveNumbers(quote?.open);
   const validVolumes = getValidPositiveNumbers(quote?.volume);
 
+  // London Stock Exchange (.L) tickers are often quoted in pence (GBp / GBX); normalize to GBP
+  const unitScale = m.currency === 'GBp' || m.currency === 'GBX' ? 0.01 : 1;
+
   const rawPrice =
-    typeof m.regularMarketPrice === 'number' && Number.isFinite(m.regularMarketPrice) && m.regularMarketPrice > 0
+    (typeof m.regularMarketPrice === 'number' && Number.isFinite(m.regularMarketPrice) && m.regularMarketPrice > 0
       ? m.regularMarketPrice
       : validCloses.length > 0
       ? validCloses[validCloses.length - 1]
-      : 0;
+      : 0) * unitScale;
 
   if (rawPrice <= 0) return null;
 
@@ -70,11 +73,11 @@ export function extractYahooChartOHLCV(
   const currentPrice = roundPrice(rawPrice);
 
   const rawPrevClose =
-    typeof m.chartPreviousClose === 'number' && Number.isFinite(m.chartPreviousClose) && m.chartPreviousClose > 0
+    (typeof m.chartPreviousClose === 'number' && Number.isFinite(m.chartPreviousClose) && m.chartPreviousClose > 0
       ? m.chartPreviousClose
       : typeof m.previousClose === 'number' && Number.isFinite(m.previousClose) && m.previousClose > 0
       ? m.previousClose
-      : rawPrice;
+      : rawPrice / unitScale) * unitScale;
 
   const previousClose = roundPrice(rawPrevClose);
   const change = roundPrice(currentPrice - previousClose);
@@ -83,16 +86,16 @@ export function extractYahooChartOHLCV(
   // Use meta High/Low ONLY if strictly > 0; otherwise read real exchange High/Low from indicators.quote[0]
   const rawHigh =
     typeof m.regularMarketDayHigh === 'number' && Number.isFinite(m.regularMarketDayHigh) && m.regularMarketDayHigh > 0
-      ? m.regularMarketDayHigh
+      ? m.regularMarketDayHigh * unitScale
       : validHighs.length > 0
-      ? validHighs[validHighs.length - 1]
+      ? validHighs[validHighs.length - 1] * unitScale
       : rawPrice;
 
   const rawLow =
     typeof m.regularMarketDayLow === 'number' && Number.isFinite(m.regularMarketDayLow) && m.regularMarketDayLow > 0
-      ? m.regularMarketDayLow
+      ? m.regularMarketDayLow * unitScale
       : validLows.length > 0
-      ? validLows[validLows.length - 1]
+      ? validLows[validLows.length - 1] * unitScale
       : rawPrice;
 
   const high = roundPrice(Math.max(rawHigh, rawLow));
@@ -100,9 +103,9 @@ export function extractYahooChartOHLCV(
 
   const rawOpen =
     typeof m.regularMarketOpen === 'number' && Number.isFinite(m.regularMarketOpen) && m.regularMarketOpen > 0
-      ? m.regularMarketOpen
+      ? m.regularMarketOpen * unitScale
       : validOpens.length > 0
-      ? validOpens[validOpens.length - 1]
+      ? validOpens[validOpens.length - 1] * unitScale
       : rawPrevClose;
   const open = roundPrice(rawOpen);
 

@@ -23,7 +23,12 @@ import {
   getLocalizedAssetSymbol,
   getLocalizedCategoryLabel,
 } from '../i18n/marketDataTranslations';
-import { MarketAsset } from '../services/marketData';
+import {
+  MarketAsset,
+  UniversalRates,
+  getExtendedMarketsInitialAssets,
+  fetchExtendedMarketsAssets,
+} from '../services/marketData';
 import { formatCurrencyValue } from '../utils/finance';
 import { DualPrice } from '../components/DualPrice';
 
@@ -44,30 +49,63 @@ export const MarketsView: React.FC = () => {
   const [sortOrder, setSortOrder] = useState<'desc' | 'asc'>('desc');
   const [visibleCount, setVisibleCount] = useState<number>(20);
   const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
+  const [extendedAssets, setExtendedAssets] = useState<MarketAsset[]>(() =>
+    getExtendedMarketsInitialAssets()
+  );
+  const [extendedRates, setExtendedRates] = useState<UniversalRates>({});
+
+  // Carrega cotações ao vivo da Europa, Ásia-Pacífico e moedas de todos os continentes exclusivamente no painel /mercados
+  useEffect(() => {
+    let isMounted = true;
+    const syncExtended = async () => {
+      try {
+        const res = await fetchExtendedMarketsAssets(extendedAssets, universalRates);
+        if (!isMounted) return;
+        setExtendedAssets(res.updatedAssets);
+        setExtendedRates(res.extendedRates);
+      } catch {
+        // preserva últimos valores válidos ou cache local
+      }
+    };
+    syncExtended();
+    return () => {
+      isMounted = false;
+    };
+  }, [lastUpdated]);
+
+  const allAssets = useMemo(() => [...assets, ...extendedAssets], [assets, extendedAssets]);
+  const effectiveRates = useMemo(
+    () => ({ ...universalRates, ...extendedRates }),
+    [universalRates, extendedRates]
+  );
 
   // Dynamic counts per category
   const categoryCounts = useMemo(() => {
     const counts: Record<string, number> = {
-      all: assets.length,
+      all: allAssets.length,
       stocks_us: 0,
       stocks_br: 0,
+      stocks_eu: 0,
+      stocks_asia: 0,
       indices: 0,
       forex: 0,
       crypto: 0,
       commodities: 0,
     };
-    assets.forEach((a) => {
+    allAssets.forEach((a) => {
       if (counts[a.category] !== undefined) {
         counts[a.category]++;
       }
     });
     return counts;
-  }, [assets]);
+  }, [allAssets]);
 
   const categories: { id: MarketCategoryFilter; label: string; count: number }[] = [
     { id: 'all', label: t.header.categories.all.label, count: categoryCounts.all },
     { id: 'stocks_us', label: t.header.categories.stocks_us.label, count: categoryCounts.stocks_us },
     { id: 'stocks_br', label: t.header.categories.stocks_br.label, count: categoryCounts.stocks_br },
+    { id: 'stocks_eu', label: t.header.categories.stocks_eu.label, count: categoryCounts.stocks_eu },
+    { id: 'stocks_asia', label: t.header.categories.stocks_asia.label, count: categoryCounts.stocks_asia },
     { id: 'indices', label: t.header.categories.indices.label, count: categoryCounts.indices },
     { id: 'forex', label: t.header.categories.forex.label, count: categoryCounts.forex },
     { id: 'crypto', label: t.header.categories.crypto.label, count: categoryCounts.crypto },
@@ -81,7 +119,7 @@ export const MarketsView: React.FC = () => {
   // Filter
   const filtered = useMemo(() => {
     const term = search.trim().toLowerCase();
-    return assets.filter((asset) => {
+    return allAssets.filter((asset) => {
       const matchesCategory = selectedCategory === 'all' || asset.category === selectedCategory;
       const matchesSearch =
         !term ||
@@ -91,7 +129,7 @@ export const MarketsView: React.FC = () => {
         getLocalizedAssetName(asset, lang).toLowerCase().includes(term);
       return matchesCategory && matchesSearch;
     });
-  }, [assets, selectedCategory, search, lang]);
+  }, [allAssets, selectedCategory, search, lang]);
 
   // Sort
   const sorted = useMemo(() => {
@@ -140,7 +178,12 @@ export const MarketsView: React.FC = () => {
   const handleManualRefresh = async () => {
     setIsRefreshing(true);
     try {
-      await refreshData();
+      const [, extRes] = await Promise.all([
+        refreshData(),
+        fetchExtendedMarketsAssets(extendedAssets, universalRates),
+      ]);
+      setExtendedAssets(extRes.updatedAssets);
+      setExtendedRates(extRes.extendedRates);
     } finally {
       setTimeout(() => setIsRefreshing(false), 600);
     }
@@ -163,7 +206,7 @@ export const MarketsView: React.FC = () => {
             {t.markets.title}
           </h1>
           <p className="text-xs text-slate-400 mt-1 flex flex-wrap items-center gap-1.5">
-            <span>{assets.length} {t.markets.assetsListed}</span>
+            <span>{allAssets.length} {t.markets.assetsListed}</span>
             <span>•</span>
             <span className="text-slate-300 font-medium">{getLocalizedApiSourceSummary(apiSourceSummary, lang)}</span>
             <span>•</span>
@@ -331,7 +374,7 @@ export const MarketsView: React.FC = () => {
                       <DualPrice
                         price={asset.price}
                         currency={asset.currency}
-                        rates={universalRates}
+                        rates={effectiveRates}
                         layout="compact"
                         primaryClassName="font-mono-numbers font-bold text-white text-xs sm:text-sm"
                         secondaryClassName="text-[11px] font-mono-numbers text-emerald-400 font-medium"
@@ -353,15 +396,46 @@ export const MarketsView: React.FC = () => {
                         </span>
                         <span className="text-[10px] font-mono-numbers text-slate-400 mt-0.5">
                           {asset.changeValue >= 0 ? '+' : ''}
-                          {formatCurrencyValue(asset.changeValue, asset.currency, asset.currency === 'JPY' ? 0 : asset.price < 5 ? 4 : 2)}
+                          {formatCurrencyValue(
+                            asset.changeValue,
+                            asset.currency,
+                            asset.currency === 'JPY' || asset.currency === 'KRW'
+                              ? 0
+                              : asset.price > 0 && asset.price < 0.02
+                              ? 5
+                              : asset.price < 5
+                              ? 4
+                              : 2
+                          )}
                         </span>
                       </div>
                     </td>
 
                     <td className="py-3.5 px-4 text-right hidden md:table-cell font-mono-numbers text-[11px] text-slate-400">
                       <div>
-                        {formatCurrencyValue(asset.high24h, asset.currency, asset.currency === 'JPY' ? 0 : asset.price < 5 ? 4 : 2)} /{' '}
-                        {formatCurrencyValue(asset.low24h, asset.currency, asset.currency === 'JPY' ? 0 : asset.price < 5 ? 4 : 2)}
+                        {formatCurrencyValue(
+                          asset.high24h,
+                          asset.currency,
+                          asset.currency === 'JPY' || asset.currency === 'KRW'
+                            ? 0
+                            : asset.price > 0 && asset.price < 0.02
+                            ? 5
+                            : asset.price < 5
+                            ? 4
+                            : 2
+                        )}{' '}
+                        /{' '}
+                        {formatCurrencyValue(
+                          asset.low24h,
+                          asset.currency,
+                          asset.currency === 'JPY' || asset.currency === 'KRW'
+                            ? 0
+                            : asset.price > 0 && asset.price < 0.02
+                            ? 5
+                            : asset.price < 5
+                            ? 4
+                            : 2
+                        )}
                       </div>
                     </td>
 

@@ -474,6 +474,16 @@ export const TRANSLATIONS: Record<SupportedLanguage, AppTranslations> = {
           shortLabel: 'EUA',
           description: 'AAPL, NVDA, MSFT, TSLA...',
         },
+        stocks_eu: {
+          label: 'Ações Europa',
+          shortLabel: 'Europa',
+          description: 'ASML, LVMH, SAP, Shell...',
+        },
+        stocks_asia: {
+          label: 'Ações Ásia-Pacífico',
+          shortLabel: 'Ásia-Pac.',
+          description: 'Toyota, Sony, Tencent, TSMC...',
+        },
         indices: {
           label: 'Índices Mundiais',
           shortLabel: 'Índices',
@@ -677,6 +687,8 @@ export const TRANSLATIONS: Record<SupportedLanguage, AppTranslations> = {
         indices: 'Índices',
         stocks_us: 'Ações EUA',
         stocks_br: 'Ações B3',
+        stocks_eu: 'Ações Europa',
+        stocks_asia: 'Ásia-Pacífico',
         forex: 'Câmbio',
         crypto: 'Cripto',
         commodities: 'Commodities',
@@ -945,6 +957,16 @@ export const TRANSLATIONS: Record<SupportedLanguage, AppTranslations> = {
           shortLabel: 'US',
           description: 'AAPL, NVDA, MSFT, TSLA...',
         },
+        stocks_eu: {
+          label: 'Europe Equities',
+          shortLabel: 'Europe',
+          description: 'ASML, LVMH, SAP, Shell...',
+        },
+        stocks_asia: {
+          label: 'Asia-Pacific Equities',
+          shortLabel: 'Asia-Pac',
+          description: 'Toyota, Sony, Tencent, TSMC...',
+        },
         indices: {
           label: 'World Indices',
           shortLabel: 'Indices',
@@ -1148,6 +1170,8 @@ export const TRANSLATIONS: Record<SupportedLanguage, AppTranslations> = {
         indices: 'Indices',
         stocks_us: 'US Stocks',
         stocks_br: 'B3 Stocks',
+        stocks_eu: 'Europe Stocks',
+        stocks_asia: 'Asia-Pacific',
         forex: 'Forex',
         crypto: 'Crypto',
         commodities: 'Commodities',
@@ -1416,6 +1440,16 @@ export const TRANSLATIONS: Record<SupportedLanguage, AppTranslations> = {
           shortLabel: 'EE. UU.',
           description: 'AAPL, NVDA, MSFT, TSLA...',
         },
+        stocks_eu: {
+          label: 'Acciones Europa',
+          shortLabel: 'Europa',
+          description: 'ASML, LVMH, SAP, Shell...',
+        },
+        stocks_asia: {
+          label: 'Acciones Asia-Pacífico',
+          shortLabel: 'Asia-Pac.',
+          description: 'Toyota, Sony, Tencent, TSMC...',
+        },
         indices: {
           label: 'Índices Mundiales',
           shortLabel: 'Índices',
@@ -1619,6 +1653,8 @@ export const TRANSLATIONS: Record<SupportedLanguage, AppTranslations> = {
         indices: 'Índices',
         stocks_us: 'Acciones EE. UU.',
         stocks_br: 'Acciones B3',
+        stocks_eu: 'Acciones Europa',
+        stocks_asia: 'Asia-Pacífico',
         forex: 'Divisas',
         crypto: 'Cripto',
         commodities: 'Materias Primas',
