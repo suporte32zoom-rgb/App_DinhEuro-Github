@@ -58,6 +58,60 @@ export const DAILY_INSIGHTS_UI_COPY: Record<
 
 export const DAILY_INSIGHTS_ITEMS: DailyInsightItem[] = [
   {
+    id: 'dolar-ibovespa-cautela-fiscal-wall-street-2026',
+    imageUrl: '/assets/aistudio/image_24999f1b.png',
+    translations: {
+      pt: {
+        tag: 'MERCADO FINANCEIRO & CÂMBIO',
+        title:
+          'Dólar encosta em R$ 5,81 e fecha próximo a R$ 5,78 com cautela fiscal no Brasil e queda em Wall Street',
+        summary:
+          'Após atingir máxima intradiária de R$ 5,81, o dólar comercial fechou cotado em torno de R$ 5,78, enquanto o Ibovespa oscilou perto dos 169,5 mil pontos diante das incertezas fiscais e do recuo das bolsas de Nova York.',
+        dateAuthor: '17/11/2026 • Redação DinhEuro',
+        source: 'UOL Economia / CNN Brasil',
+        imageAlt:
+          'Painel de cotações do Ibovespa e do dólar comercial no pregão da B3',
+        fullContent: [
+          'O mercado financeiro brasileiro encerrou esta terça-feira (17) marcado por forte volatilidade nos ativos domésticos. O dólar comercial chegou a bater R$ 5,81 durante a manhã — maior patamar intradiário desde abril de 2025 — antes de reduzir o ritmo e fechar na casa de R$ 5,78.',
+          'No mercado acionário, o Ibovespa tentou ensaiar uma recuperação após a queda de 1,83% registrada na véspera, chegando a superar os 171 mil pontos, mas perdeu fôlego ao longo da tarde e encerrou próximo da estabilidade, na faixa de 169.527 pontos.',
+          'A cautela dos investidores reflete a saída contínua de capital estrangeiro da B3 — que acumula saldo negativo de R$ 15,5 bilhões desde o segundo turno eleitoral — somada à pressão nos juros futuros de longo prazo, com contratos acima de 15% ao ano, e ao recuo generalizado dos índices Dow Jones, S&P 500 e Nasdaq em Nova York.',
+        ],
+      },
+      en: {
+        tag: 'FINANCIAL MARKETS & FX',
+        title:
+          'US dollar nears BRL 5.81 and closes around BRL 5.78 amid fiscal caution in Brazil and Wall Street slide',
+        summary:
+          'After hitting an intraday high of BRL 5.81, the commercial dollar closed near BRL 5.78, while the Ibovespa hovered around 169,500 points amid fiscal uncertainty and losses across New York equities.',
+        dateAuthor: 'Nov 17, 2026 • DinhEuro Editorial',
+        source: 'UOL Economia / CNN Brasil',
+        imageAlt:
+          'Ibovespa and US dollar exchange rate display board at the B3 trading floor',
+        fullContent: [
+          'Brazil’s financial market ended Tuesday (17) marked by sharp volatility across domestic assets. The commercial US dollar reached BRL 5.81 in morning trading—its highest intraday level since April 2025—before paring gains to settle around BRL 5.78.',
+          'In equities, the benchmark Ibovespa attempted an early rebound after dropping 1.83% in the prior session, briefly climbing past 171,000 points before losing momentum in the afternoon to finish nearly flat around 169,527 points.',
+          'Investor caution reflects ongoing foreign capital outflows from B3—now totaling a net negative BRL 15.5 billion since the presidential runoff election—alongside upward pressure on long-term interest-rate futures, with contracts trading above 15% a year, and broad declines across the Dow Jones, S&P 500, and Nasdaq in New York.',
+        ],
+      },
+      es: {
+        tag: 'MERCADO FINANCIERO Y DIVISAS',
+        title:
+          'El dólar roza R$ 5,81 y cierra cerca de R$ 5,78 por cautela fiscal en Brasil y caída en Wall Street',
+        summary:
+          'Tras alcanzar un máximo intradiario de R$ 5,81, el dólar comercial cerró en torno a R$ 5,78, mientras el Ibovespa osciló cerca de los 169,5 mil puntos ante la incertidumbre fiscal y el retroceso de las bolsas de Nueva York.',
+        dateAuthor: '17/11/2026 • Redacción DinhEuro',
+        source: 'UOL Economia / CNN Brasil',
+        imageAlt:
+          'Panel de cotizaciones del Ibovespa y del dólar comercial en la bolsa brasileña B3',
+        fullContent: [
+          'El mercado financiero brasileño cerró este martes (17) marcado por una fuerte volatilidad en los activos locales. El dólar comercial llegó a alcanzar R$ 5,81 durante la mañana —su mayor nivel intradiario desde abril de 2025— antes de moderar el avance y cerrar en torno a R$ 5,78.',
+          'En el mercado bursátil, el índice Ibovespa intentó ensayar una recuperación tras la caída del 1,83% registrada en la jornada previa, llegando a superar los 171 mil puntos, pero perdió impulso durante la tarde y terminó cerca de la estabilidad, en el rango de los 169.527 puntos.',
+          'La cautela de los inversores refleja la salida continua de capital extranjero de B3 —que acumula un saldo negativo de R$ 15,5 mil millones desde la segunda vuelta electoral—, sumada a la presión en las tasas de interés futuras de largo plazo, con contratos por encima del 15% anual, y al retroceso generalizado de los índices Dow Jones, S&P 500 y Nasdaq en Nueva York.',
+        ],
+      },
+    },
+  },
+  {
     id: 'lula-trump-xi-putin-ucrania-canada-2026',
     imageUrl: '/assets/aistudio/image_f609767d.png',
     translations: {
