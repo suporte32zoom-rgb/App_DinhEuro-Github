@@ -17,7 +17,7 @@ export interface DailyInsightItem {
   translations: Record<SupportedLanguage, DailyInsightLocalized>;
 }
 
-export const MAX_DAILY_INSIGHTS = 8;
+export const MAX_DAILY_INSIGHTS = 9;
 
 export const DAILY_INSIGHTS_UI_COPY: Record<
   SupportedLanguage,
@@ -57,6 +57,60 @@ export const DAILY_INSIGHTS_UI_COPY: Record<
 };
 
 export const DAILY_INSIGHTS_ITEMS: DailyInsightItem[] = [
+  {
+    id: 'fed-juros-inflacao-williams-2026',
+    imageUrl: '/assets/aistudio/image_87b108f6.png',
+    translations: {
+      pt: {
+        tag: 'JUROS & FEDERAL RESERVE',
+        title:
+          'Dirigentes do Fed alertam que inflação nos EUA ainda exige cautela e mercado precifica alta de juros',
+        summary:
+          'Em discurso nesta terça-feira (17), o presidente do Fed de Nova York, John Williams, afirmou que a economia americana segue forte e que o banco central ainda tem trabalho a fazer para levar a inflação à meta, reforçando apostas de aperto monetário em dezembro.',
+        dateAuthor: '17/11/2026 • Redação DinhEuro',
+        source: 'InfoMoney / Dow Jones',
+        imageAlt:
+          'Sede do Federal Reserve (Banco Central dos Estados Unidos) em Washington, D.C.',
+        fullContent: [
+          'Os rumos da taxa básica de juros dos Estados Unidos voltaram ao centro das atenções dos mercados globais nesta terça-feira (17) após declarações de dirigentes do Federal Reserve (Fed) sobre a persistência das pressões inflacionárias.',
+          'Durante evento à tarde, o presidente do Fed de Nova York, John Williams, destacou que a atividade econômica americana permanece robusta, mas avaliou que a inflação ainda não caminha na direção necessária para convergir à meta oficial, indicando que o banco central tem trabalho adicional pela frente.',
+          'De acordo com dados da LSEG, os contratos futuros apontam 96% de probabilidade de um novo aumento de 0,25 ponto percentual na reunião de dezembro do Fed, mantendo os rendimentos dos títulos do Tesouro americano pressionados e exigindo cautela dos mercados emergentes.',
+        ],
+      },
+      en: {
+        tag: 'RATES & FEDERAL RESERVE',
+        title:
+          'Fed officials warn US inflation still warrants caution as markets price in rate hike',
+        summary:
+          'In remarks on Tuesday (17), New York Fed President John Williams said the U.S. economy remains resilient and that the central bank still has work to do to bring inflation back to target, reinforcing bets on monetary tightening in December.',
+        dateAuthor: 'Nov 17, 2026 • DinhEuro Editorial',
+        source: 'InfoMoney / Dow Jones',
+        imageAlt:
+          'Federal Reserve Board headquarters building in Washington, D.C.',
+        fullContent: [
+          'The trajectory of U.S. benchmark interest rates returned to the spotlight across global markets on Tuesday (17) after remarks from Federal Reserve (Fed) officials underscoring the persistence of inflationary pressures.',
+          'Speaking at an afternoon event, New York Fed President John Williams noted that U.S. economic activity remains robust, but cautioned that inflation is not yet moving on the path required to converge toward the official target, signaling the central bank still has more work ahead.',
+          'According to LSEG data, futures contracts reflect a 96% probability of another 0.25-percentage-point rate increase at the Fed’s December policy meeting, keeping U.S. Treasury yields elevated and prompting caution across emerging markets.',
+        ],
+      },
+      es: {
+        tag: 'TASAS Y RESERVA FEDERAL',
+        title:
+          'Directivos de la Fed advierten que la inflación en EE. UU. aún exige cautela y el mercado descuenta alza de tasas',
+        summary:
+          'En un discurso este martes (17), el presidente de la Fed de Nueva York, John Williams, afirmó que la economía estadounidense sigue sólida y que el banco central aún tiene trabajo por hacer para llevar la inflación a la meta, reforzando apuestas de ajuste monetario en diciembre.',
+        dateAuthor: '17/11/2026 • Redacción DinhEuro',
+        source: 'InfoMoney / Dow Jones',
+        imageAlt:
+          'Sede de la Reserva Federal de Estados Unidos en Washington, D.C.',
+        fullContent: [
+          'El rumbo de la tasa de interés de referencia de Estados Unidos volvió al centro de la atención de los mercados globales este martes (17) tras declaraciones de directivos de la Reserva Federal (Fed) sobre la persistencia de las presiones inflacionarias.',
+          'Durante un evento por la tarde, el presidente de la Fed de Nueva York, John Williams, destacó que la actividad económica estadounidense se mantiene sólida, pero evaluó que la inflación aún no avanza en la dirección necesaria para converger hacia la meta oficial, indicando que el banco central tiene tarea pendiente.',
+          'De acuerdo con datos de LSEG, los contratos futuros reflejan una probabilidad del 96% de un nuevo incremento de 0,25 puntos porcentuales en la reunión de diciembre de la Fed, manteniendo presionados los rendimientos de los bonos del Tesoro estadounidense y exigiendo cautela a los mercados emergentes.',
+        ],
+      },
+    },
+  },
   {
     id: 'eua-restricoes-chips-ia-brasil-2026',
     imageUrl: '/assets/aistudio/image_72477e45.png',
