@@ -58,6 +58,72 @@ export const DAILY_INSIGHTS_UI_COPY: Record<
 
 export const DAILY_INSIGHTS_ITEMS: DailyInsightItem[] = [
   {
+    id: 'trump-filipinas-asia-comercio-seguranca-2026',
+    imageUrl: '/assets/aistudio/image_e9f58b10.png',
+    translations: {
+      pt: {
+        tag: 'GEOPOLÍTICA E COMÉRCIO',
+        title:
+          'Trump chega às Filipinas para viagem à Ásia com foco em comércio e segurança regional',
+        summary:
+          'Em sua primeira viagem internacional após as eleições de meio de mandato, Donald Trump desembarca em Manila para a cúpula da Asean, reunião do Quad e negociações comerciais na Ásia antes de seguir para a China.',
+        dateAuthor: '17/11/2026 • Por Estadão Conteúdo',
+        source: 'Associated Press / Estadão Conteúdo',
+        imageAlt:
+          'Presidente dos Estados Unidos Donald Trump desembarcando em Manila, nas Filipinas, para a cúpula da Asean e reuniões comerciais na Ásia',
+        fullContent: [
+          'O presidente dos Estados Unidos, Donald Trump, chegou nesta terça-feira (17) às Filipinas, primeira parada de uma viagem de três dias à Ásia marcada por negociações comerciais e encontros com aliados regionais. A agenda inclui reuniões com líderes do Sudeste Asiático, um acordo com a Tailândia e uma visita à China, onde estão previstas conversas sobre armas nucleares com Xi Jinping e Vladimir Putin. Trump também mencionou a possibilidade de se reunir com o líder norte-coreano Kim Jong Un.',
+          'É a primeira viagem internacional do republicano desde as derrotas de seu partido nas eleições de meio de mandato. O presidente deixa os EUA em meio a problemas no setor aéreo e à repercussão da saída de Jensen Huang da Nvidia, após o executivo admitir um caso com uma suposta agente do governo chinês. Pequim negou envolvimento.',
+          'Em Manila, Trump participará da cúpula da Associação das Nações do Sudeste Asiático (Asean) como convidado de honra, com recepção e jantar de gala. Antes, deverá se reunir com os líderes do Quad, formado por EUA, Austrália, Índia e Japão, que busca conter a influência chinesa na Ásia-Pacífico. Será o primeiro encontro do grupo desde o retorno de Trump à Casa Branca.',
+          'O presidente também deve assinar um acordo comercial com a Tailândia. Em outubro de 2025, os países anunciaram um entendimento preliminar pelo qual Bangkok eliminaria tarifas sobre a maioria dos produtos americanos e barreiras a importações de automóveis, alimentos e medicamentos. O governo Trump afirmou ainda que a Tailândia compraria mais de US$ 18 bilhões em aeronaves dos EUA, além de produtos agrícolas e gás natural liquefeito (GNL). Em fevereiro, a Suprema Corte americana derrubou a tarifa de 19% imposta por Trump sobre produtos tailandeses, levando o governo a estabelecer uma taxa substituta de 12,5% em julho.',
+          'Em uma reunião especial com os líderes da Asean, Trump deverá abordar comércio, segurança, a violência em Mianmar e as disputas no Mar do Sul da China. Os países do bloco negociam um pacto de não agressão com Pequim, que reivindica quase toda a região marítima, enquanto Washington rejeita as reivindicações chinesas e reafirma sua obrigação de defender as Filipinas, aliadas por tratado, em caso de ataque armado.',
+          'A chegada de Trump foi precedida por um protesto de cerca de 1.500 manifestantes de esquerda em Manila, que criticaram a influência dos EUA sobre a política externa filipina. Na quarta-feira (18), Trump será recebido pelo presidente Ferdinand Marcos Jr. com honras militares e banquete de Estado no Palácio de Malacañang, além de uma possível visita à ex-primeira-dama Imelda Marcos, de 97 anos.',
+          'O presidente americano também deverá anunciar acordos e investimentos em aviação, defesa, energia e tecnologia antes de seguir a Shenzhen, na China, para a cúpula da Cooperação Econômica Ásia-Pacífico (Apec).',
+        ],
+      },
+      en: {
+        tag: 'GEOPOLITICS & TRADE',
+        title:
+          'Trump arrives in the Philippines for Asia trip focused on trade and regional security',
+        summary:
+          'On his first international trip since the midterm elections, Donald Trump lands in Manila for the ASEAN summit, a Quad meeting, and trade talks in Asia before heading to China.',
+        dateAuthor: 'Nov 17, 2026 • By Estadão Conteúdo',
+        source: 'Associated Press / Estadão Conteúdo',
+        imageAlt:
+          'U.S. President Donald Trump arriving in Manila, Philippines, for the ASEAN summit and regional trade meetings',
+        fullContent: [
+          'U.S. President Donald Trump arrived on Tuesday (17) in the Philippines, the first stop on a three-day trip to Asia marked by trade negotiations and meetings with regional allies. The itinerary includes sessions with Southeast Asian leaders, an agreement with Thailand, and a visit to China, where talks on nuclear weapons with Xi Jinping and Vladimir Putin are expected. Trump also raised the possibility of meeting North Korean leader Kim Jong Un.',
+          'It is the Republican president’s first international trip since his party’s losses in the midterm elections. He leaves the United States amid aviation-sector disruptions and fallout from Jensen Huang’s departure from Nvidia after the executive admitted an affair with an alleged Chinese government agent. Beijing denied any involvement.',
+          'In Manila, Trump will attend the Association of Southeast Asian Nations (ASEAN) summit as guest of honor, including a reception and gala dinner. Earlier, he is set to meet with leaders of the Quad—comprising the United States, Australia, India, and Japan—aimed at countering Chinese influence in the Indo-Pacific, marking the group’s first summit since Trump returned to the White House.',
+          'The president is also expected to sign a trade agreement with Thailand. In October 2025, the two countries announced a preliminary framework under which Bangkok would eliminate tariffs on most U.S. goods and remove import barriers on automobiles, food, and pharmaceuticals. The Trump administration also stated that Thailand would purchase more than US$ 18 billion in U.S. aircraft, alongside agricultural goods and liquefied natural gas (LNG). In February, the U.S. Supreme Court struck down Trump’s 19% tariff on Thai products, prompting the administration to introduce a replacement 12.5% duty in July.',
+          'In a special session with ASEAN leaders, Trump is expected to address trade, security, violence in Myanmar, and disputes in the South China Sea. Bloc members are negotiating a non-aggression pact with Beijing, which claims nearly the entire maritime corridor, while Washington rejects China’s claims and reaffirms its treaty obligation to defend the Philippines in the event of an armed attack.',
+          'Trump’s arrival was preceded by a protest of roughly 1,500 left-wing demonstrators in Manila criticizing U.S. influence over Philippine foreign policy. On Wednesday (18), Trump will be welcomed by President Ferdinand Marcos Jr. with military honors and a state banquet at Malacañang Palace, along with a possible visit to 97-year-old former first lady Imelda Marcos.',
+          'The U.S. president is also slated to announce deals and investments in aviation, defense, energy, and technology before traveling to Shenzhen, China, for the Asia-Pacific Economic Cooperation (APEC) summit.',
+        ],
+      },
+      es: {
+        tag: 'GEOPOLÍTICA Y COMERCIO',
+        title:
+          'Trump llega a Filipinas en viaje por Asia con foco en comercio y seguridad regional',
+        summary:
+          'En su primer viaje internacional tras las elecciones de medio término, Donald Trump aterriza en Manila para la cumbre de la Asean, reunión del Quad y negociaciones comerciales en Asia antes de seguir rumbo a China.',
+        dateAuthor: '17/11/2026 • Por Estadão Conteúdo',
+        source: 'Associated Press / Estadão Conteúdo',
+        imageAlt:
+          'El presidente de Estados Unidos Donald Trump llegando a Manila, Filipinas, para la cumbre de la Asean y reuniones comerciales en Asia',
+        fullContent: [
+          'El presidente de Estados Unidos, Donald Trump, llegó este martes (17) a Filipinas, primera escala de una gira de tres días por Asia marcada por negociaciones comerciales y encuentros con aliados regionales. La agenda incluye reuniones con líderes del Sudeste Asiático, un acuerdo con Tailandia y una visita a China, donde están previstas conversaciones sobre armas nucleares con Xi Jinping y Vladímir Putin. Trump también mencionó la posibilidad de reunirse con el líder norcoreano Kim Jong Un.',
+          'Es el primer viaje internacional del republicano desde las derrotas de su partido en las elecciones de medio término. El mandatario deja EE. UU. en medio de problemas en el sector aéreo y la repercusión por la salida de Jensen Huang de Nvidia, luego de que el ejecutivo admitiera una relación con una supuesta agente del gobierno chino. Pekín negó cualquier implicación.',
+          'En Manila, Trump participará en la cumbre de la Asociación de Naciones del Sudeste Asiático (Asean) como invitado de honor, con recepción y cena de gala. Previamente, deberá reunirse con los líderes del Quad —integrado por EE. UU., Australia, India y Japón—, que busca contener la influencia china en Asia-Pacífico, en el primer encuentro del grupo desde el regreso de Trump a la Casa Blanca.',
+          'El presidente también prevé firmar un acuerdo comercial con Tailandia. En octubre de 2025, ambos países anunciaron un entendimiento preliminar por el cual Bangkok eliminaría aranceles sobre la mayoría de los productos estadounidenses y barreras a importaciones de automóviles, alimentos y medicamentos. El gobierno de Trump afirmó además que Tailandia compraría más de US$ 18 mil millones en aeronaves estadounidenses, además de productos agrícolas y gas natural licuado (GNL). En febrero, la Corte Suprema de EE. UU. anuló el arancel del 19% impuesto por Trump a productos tailandeses, lo que llevó a la administración a fijar una tasa sustitutiva del 12,5% en julio.',
+          'En una reunión especial con los líderes de la Asean, Trump deberá abordar comercio, seguridad, la violencia en Myanmar y las disputas en el Mar de China Meridional. Los países del bloque negocian un pacto de no agresión con Pekín, que reclama casi toda esa zona marítima, mientras Washington rechaza las reivindicaciones chinas y reafirma su obligación de defender a Filipinas, aliada por tratado, en caso de ataque armado.',
+          'La llegada de Trump estuvo precedida por una protesta de cerca de 1.500 manifestantes de izquierda en Manila, que criticaron la influencia de EE. UU. sobre la política exterior filipina. El miércoles (18), Trump será recibido por el presidente Ferdinand Marcos Jr. con honores militares y banquete de Estado en el Palacio de Malacañán, además de una posible visita a la exprimera dama Imelda Marcos, de 97 años.',
+          'El mandatario estadounidense también anunciará acuerdos e inversiones en aviación, defensa, energía y tecnología antes de trasladarse a Shenzhen, China, para la cumbre de Cooperación Económica Asia-Pacífico (Apec).',
+        ],
+      },
+    },
+  },
+  {
     id: 'ue-direitos-autor-ia-2026',
     imageUrl: '/assets/aistudio/image_05dbcb78.png',
     translations: {
