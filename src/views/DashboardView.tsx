@@ -28,6 +28,7 @@ import { DrexDossierPanel } from '../components/DrexDossierPanel';
 import { UniversalCurrencyCalculator } from '../components/UniversalCurrencyCalculator';
 import { AcademyHighlightSection } from '../components/AcademyHighlightSection';
 import { HomeSeoEditorialSection } from '../components/HomeSeoEditorialSection';
+import { DailyInsightsSidebar } from '../components/DailyInsightsSidebar';
 
 export const DashboardView: React.FC = () => {
   const { assets, universalRates, news, setActiveTab, setSelectedAsset, openAssetDetail, refreshData, lastUpdated, apiSourceSummary } =
@@ -469,8 +470,9 @@ export const DashboardView: React.FC = () => {
           <DrexDossierPanel />
         </div>
 
-        {/* Right: Universal Currency Matrix */}
-        <div className="bg-white dark:bg-[#0d1627] rounded-xl border border-slate-200 dark:border-slate-800 p-4 sm:p-5 flex flex-col justify-between space-y-4 shadow-sm self-start">
+        {/* Right: Universal Currency Matrix + Desktop-only Daily Insights */}
+        <div className="self-start">
+          <div className="bg-white dark:bg-[#0d1627] rounded-xl border border-slate-200 dark:border-slate-800 p-4 sm:p-5 flex flex-col justify-between space-y-4 shadow-sm">
           <div>
             <div className="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-3 mb-3">
               <div className="flex items-center gap-2">
@@ -542,6 +544,10 @@ export const DashboardView: React.FC = () => {
             <span>{t.dashboard.openFullSimulator}</span>
             <ChevronRight className="w-3.5 h-3.5" />
           </button>
+        </div>
+
+          {/* Insights do Dia (exibição exclusiva em desktop >= 1024px) */}
+          <DailyInsightsSidebar />
         </div>
       </div>
 
