@@ -55,6 +55,22 @@ export interface ViewsTranslations {
     avgBuyPriceLabel: string;
     cancel: string;
     addToPortfolio: string;
+    perfSectionTitle: string;
+    perfSectionSubtitle: string;
+    perfPeriodLabel: string;
+    perfEquityChartTitle: string;
+    perfAssetChartTitle: string;
+    perfModeValue: string;
+    perfModeReturn: string;
+    perfSeriesPortfolio: string;
+    perfSeriesCostBasis: string;
+    perfSeriesPortfolioPct: string;
+    perfPeriodReturn: string;
+    perfPeriodHighLow: string;
+    perfBestAsset: string;
+    perfEmptyChartTitle: string;
+    perfEmptyChartDesc: string;
+    perfSyncedBadge: string;
   };
   news: {
     title: string;
@@ -269,6 +285,22 @@ export const VIEWS_TRANSLATIONS: Record<SupportedLanguage, ViewsTranslations> = 
       avgBuyPriceLabel: 'Preço Médio de Compra',
       cancel: 'Cancelar',
       addToPortfolio: 'Adicionar à Carteira',
+      perfSectionTitle: 'Performance Histórica da Carteira',
+      perfSectionSubtitle: 'Curva de evolução patrimonial, custo investido e comparativo percentual por ativo via Recharts.',
+      perfPeriodLabel: 'Período:',
+      perfEquityChartTitle: 'Evolução Patrimonial vs. Capital Investido',
+      perfAssetChartTitle: 'Rentabilidade Comparativa por Ativo (%)',
+      perfModeValue: 'Valor Patrimonial',
+      perfModeReturn: 'Rentabilidade (%)',
+      perfSeriesPortfolio: 'Patrimônio da Carteira',
+      perfSeriesCostBasis: 'Capital Investido (Custo)',
+      perfSeriesPortfolioPct: 'Carteira Consolidada (%)',
+      perfPeriodReturn: 'Variação no Período',
+      perfPeriodHighLow: 'Máx / Mín no Período',
+      perfBestAsset: 'Destaque do Período',
+      perfEmptyChartTitle: 'Gráficos de performance prontos para sua carteira',
+      perfEmptyChartDesc: 'Adicione seu primeiro ativo para acompanhar a evolução histórica em linha, comparativo contra o custo médio e desempenho individual.',
+      perfSyncedBadge: 'Série Histórica Sincronizada',
     },
     news: {
       title: 'Notícias & Cenário Político-Financeiro',
@@ -491,6 +523,22 @@ export const VIEWS_TRANSLATIONS: Record<SupportedLanguage, ViewsTranslations> = 
       avgBuyPriceLabel: 'Average Purchase Price',
       cancel: 'Cancel',
       addToPortfolio: 'Add to Portfolio',
+      perfSectionTitle: 'Historical Portfolio Performance',
+      perfSectionSubtitle: 'Wealth trajectory curve, invested cost basis, and per-asset percentage return powered by Recharts.',
+      perfPeriodLabel: 'Period:',
+      perfEquityChartTitle: 'Portfolio Value vs. Cost Basis',
+      perfAssetChartTitle: 'Comparative Asset Performance (%)',
+      perfModeValue: 'Portfolio Value',
+      perfModeReturn: 'Return (%)',
+      perfSeriesPortfolio: 'Portfolio Value',
+      perfSeriesCostBasis: 'Invested Cost Basis',
+      perfSeriesPortfolioPct: 'Consolidated Portfolio (%)',
+      perfPeriodReturn: 'Period Return',
+      perfPeriodHighLow: 'Period High / Low',
+      perfBestAsset: 'Top Performer',
+      perfEmptyChartTitle: 'Performance line charts ready for your portfolio',
+      perfEmptyChartDesc: 'Add your first holding to track historical equity curves, compare against cost basis, and inspect per-asset returns.',
+      perfSyncedBadge: 'Historical Series Synced',
     },
     news: {
       title: 'News & Political-Financial Desk',
@@ -713,6 +761,22 @@ export const VIEWS_TRANSLATIONS: Record<SupportedLanguage, ViewsTranslations> = 
       avgBuyPriceLabel: 'Precio Promedio de Compra',
       cancel: 'Cancelar',
       addToPortfolio: 'Agregar a la Cartera',
+      perfSectionTitle: 'Rendimiento Histórico de la Cartera',
+      perfSectionSubtitle: 'Curva de evolución patrimonial, capital invertido y comparativa porcentual por activo con Recharts.',
+      perfPeriodLabel: 'Período:',
+      perfEquityChartTitle: 'Evolución Patrimonial vs. Capital Invertido',
+      perfAssetChartTitle: 'Rendimiento Comparativo por Activo (%)',
+      perfModeValue: 'Valor Patrimonial',
+      perfModeReturn: 'Rentabilidad (%)',
+      perfSeriesPortfolio: 'Patrimonio de la Cartera',
+      perfSeriesCostBasis: 'Capital Invertido (Costo)',
+      perfSeriesPortfolioPct: 'Cartera Consolidada (%)',
+      perfPeriodReturn: 'Variación del Período',
+      perfPeriodHighLow: 'Máx / Mín del Período',
+      perfBestAsset: 'Mejor Activo del Período',
+      perfEmptyChartTitle: 'Gráficos de rendimiento listos para tu cartera',
+      perfEmptyChartDesc: 'Agrega tu primer activo para seguir la evolución histórica en línea, comparar contra el costo promedio y ver el desempeño individual.',
+      perfSyncedBadge: 'Serie Histórica Sincronizada',
     },
     news: {
       title: 'Noticias & Escenario Político-Financiero',

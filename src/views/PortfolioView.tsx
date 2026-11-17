@@ -18,6 +18,7 @@ import { useI18n } from '../i18n/I18nContext';
 import { getNumberLocale } from '../i18n/translations';
 import { VIEWS_TRANSLATIONS } from '../i18n/viewsTranslations';
 import { getLocalizedAssetName } from '../i18n/marketDataTranslations';
+import { PortfolioPerformanceChart } from '../components/PortfolioPerformanceChart';
 
 export const PortfolioView: React.FC = () => {
   const { portfolio, addPortfolioPosition, removePortfolioPosition, assets, universalRates } =
@@ -265,6 +266,13 @@ export const PortfolioView: React.FC = () => {
           )}
         </div>
       </div>
+
+      {/* Historical Portfolio Performance Line Charts (Recharts) */}
+      <PortfolioPerformanceChart
+        positions={positionsWithLiveMetrics}
+        universalRates={universalRates}
+        onAddAsset={() => setShowAddModal(true)}
+      />
 
       {/* Positions Table or Empty State */}
       <div className="rounded-2xl bg-[#0d1627] border border-slate-800 overflow-hidden shadow-xl">
