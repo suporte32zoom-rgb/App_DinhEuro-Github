@@ -86,7 +86,7 @@ export const DailyInsightsSidebar: React.FC = () => {
                       onError={() =>
                         setFailedThumbIds((prev) => ({ ...prev, [item.id]: true }))
                       }
-                      className="w-full h-full object-cover group-hover:scale-105 transition duration-300"
+                      className="w-full h-full object-cover object-[50%_20%] group-hover:scale-105 transition duration-300"
                     />
                   ) : (
                     <Globe2 className="w-6 h-6 text-emerald-400/80" />
@@ -138,7 +138,7 @@ export const DailyInsightsSidebar: React.FC = () => {
                   alt={activeContent.imageAlt}
                   referrerPolicy="no-referrer"
                   onError={() => setModalImgFailed(true)}
-                  className="w-full h-full object-cover object-center"
+                  className="w-full h-full object-cover object-[50%_20%]"
                 />
               ) : (
                 <div className="w-full h-full bg-gradient-to-br from-[#0c1a30] via-[#0B1320] to-[#07111a] flex items-center justify-center">
