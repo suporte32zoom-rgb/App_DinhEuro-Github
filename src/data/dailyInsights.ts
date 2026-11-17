@@ -58,6 +58,66 @@ export const DAILY_INSIGHTS_UI_COPY: Record<
 
 export const DAILY_INSIGHTS_ITEMS: DailyInsightItem[] = [
   {
+    id: 'lula-trump-xi-putin-ucrania-canada-2026',
+    imageUrl: '/assets/aistudio/image_f609767d.png',
+    translations: {
+      pt: {
+        tag: 'GEOPOLÍTICA & DIPLOMACIA',
+        title:
+          'Lula sugeriu encontro entre Trump, Xi e Putin para discutir Ucrânia, diz Canadá',
+        summary:
+          'O primeiro-ministro canadense Mark Carney atribuiu ao presidente Lula a ideia da reunião inédita entre os líderes dos EUA, China e Rússia, marcada para quinta-feira (19) durante a cúpula da Apec em Shenzhen.',
+        dateAuthor: '17/11/2026 • Por Marina Verenicz',
+        source: 'CBN / SBT News',
+        imageAlt:
+          'Presidente brasileiro Luiz Inácio Lula da Silva em reunião com o primeiro-ministro canadense Mark Carney durante a cúpula da Asean nas Filipinas',
+        fullContent: [
+          'O presidente Luiz Inácio Lula da Silva teria sido o responsável por sugerir a reunião entre Donald Trump, Vladimir Putin e Xi Jinping, marcada para quinta-feira (19), na China. A informação foi revelada pelo primeiro-ministro canadense, Mark Carney, após um encontro com Lula nas Filipinas, durante a cúpula da Associação das Nações do Sudeste Asiático (Asean).',
+          'Segundo Carney, o brasileiro apresentou a iniciativa como uma tentativa de contribuir para o fim da guerra entre Rússia e Ucrânia. O premiê classificou a proposta como interessante e atribuiu diretamente a Lula a articulação, versão que foi confirmada por integrantes do governo brasileiro.',
+          'A reunião será realizada em Shenzhen, durante a cúpula da Cooperação Econômica Ásia-Pacífico (Apec), e reunirá pela primeira vez nesse formato os presidentes das três principais potências nucleares. O Ministério das Relações Exteriores da China classificou o encontro como um acontecimento de importância histórica voltado à segurança internacional e estabilidade estratégica.',
+          'Apesar da intenção atribuída a Lula, ainda não há consenso sobre a inclusão da guerra na Ucrânia entre os principais assuntos da reunião. Segundo a imprensa americana, a Casa Branca pretende concentrar as discussões no controle de armamentos nucleares — após o vencimento do tratado New START em fevereiro de 2026 — e em questões relacionadas ao Irã, enquanto autoridades russas veem oportunidade para tratar do conflito ucraniano.',
+          'O presidente ucraniano, Volodymyr Zelensky, manifestou preocupação com a possibilidade de as grandes potências discutirem o conflito sem a participação de Kiev. Embora a cúpula entre Trump, Putin e Xi esteja confirmada para quinta-feira (19), o alcance das negociações e a possibilidade de avanços concretos permanecem indefinidos.',
+        ],
+      },
+      en: {
+        tag: 'GEOPOLITICS & DIPLOMACY',
+        title:
+          'Lula suggested meeting between Trump, Xi, and Putin to discuss Ukraine, says Canada',
+        summary:
+          'Canadian Prime Minister Mark Carney credited President Lula with proposing the unprecedented meeting among the leaders of the U.S., China, and Russia, scheduled for Thursday (19) during the APEC summit in Shenzhen.',
+        dateAuthor: 'Nov 17, 2026 • By Marina Verenicz',
+        source: 'CBN / SBT News',
+        imageAlt:
+          'Brazilian President Luiz Inácio Lula da Silva meeting with Canadian Prime Minister Mark Carney during the ASEAN summit in the Philippines',
+        fullContent: [
+          'Brazilian President Luiz Inácio Lula da Silva reportedly proposed the meeting among Donald Trump, Vladimir Putin, and Xi Jinping scheduled for Thursday (19) in China. The disclosure was made by Canadian Prime Minister Mark Carney following a bilateral meeting with Lula in the Philippines during the Association of Southeast Asian Nations (ASEAN) summit.',
+          'According to Carney, the Brazilian leader framed the initiative as an effort to help bring the war between Russia and Ukraine to an end. The Canadian prime minister described the proposal as interesting and directly credited Lula with brokering the idea, an account confirmed by members of the Brazilian government.',
+          'The meeting will take place in Shenzhen during the Asia-Pacific Economic Cooperation (APEC) summit and will bring together the presidents of the three leading nuclear powers in this format for the first time. China’s Ministry of Foreign Affairs described the gathering as an event of historic significance aimed at international security and strategic stability.',
+          'Despite the objective attributed to Lula, there is still no consensus on placing the war in Ukraine among the summit’s primary agenda items. According to U.S. media, the White House intends to focus talks on nuclear arms control—following the expiration of the New START treaty in February 2026—and matters concerning Iran, whereas Russian officials see an opening to address the Ukrainian conflict.',
+          'Ukrainian President Volodymyr Zelensky voiced concern that major powers might discuss the conflict without Kyiv at the table. Although the summit among Trump, Putin, and Xi is confirmed for Thursday (19), the scope of negotiations and the prospects for concrete breakthroughs remain uncertain.',
+        ],
+      },
+      es: {
+        tag: 'GEOPOLÍTICA & DIPLOMACIA',
+        title:
+          'Lula sugirió reunión entre Trump, Xi y Putin para debatir sobre Ucrania, dice Canadá',
+        summary:
+          'El primer ministro canadiense Mark Carney atribuyó al presidente Lula la idea del encuentro inédito entre los líderes de EE. UU., China y Rusia, previsto para el jueves (19) durante la cumbre de la Apec en Shenzhen.',
+        dateAuthor: '17/11/2026 • Por Marina Verenicz',
+        source: 'CBN / SBT News',
+        imageAlt:
+          'El presidente brasileño Luiz Inácio Lula da Silva reunido con el primer ministro canadiense Mark Carney durante la cumbre de la Asean en Filipinas',
+        fullContent: [
+          'El presidente Luiz Inácio Lula da Silva habría sido el responsable de sugerir la reunión entre Donald Trump, Vladímir Putin y Xi Jinping, prevista para el jueves (19) en China. La información fue revelada por el primer ministro canadiense, Mark Carney, tras un encuentro con Lula en Filipinas durante la cumbre de la Asociación de Naciones del Sudeste Asiático (Asean).',
+          'Según Carney, el mandatario brasileño presentó la iniciativa como un intento de contribuir al fin de la guerra entre Rusia y Ucrania. El jefe de gobierno canadiense calificó la propuesta de interesante y atribuyó directamente a Lula la articulación, versión que fue confirmada por integrantes del gobierno brasileño.',
+          'La reunión se celebrará en Shenzhen durante la cumbre de Cooperación Económica Asia-Pacífico (Apec) y reunirá por primera vez en este formato a los presidentes de las tres principales potencias nucleares. El Ministerio de Relaciones Exteriores de China calificó el encuentro como un acontecimiento de importancia histórica orientado a la seguridad internacional y la estabilidad estratégica.',
+          'Pese a la intención atribuida a Lula, aún no existe consenso sobre la inclusión de la guerra en Ucrania entre los asuntos centrales de la cita. Según la prensa estadounidense, la Casa Blanca pretende centrar las conversaciones en el control de armas nucleares —tras el vencimiento del tratado New START en febrero de 2026— y en cuestiones vinculadas a Irán, mientras que autoridades rusas ven una oportunidad para abordar el conflicto ucraniano.',
+          'El presidente ucraniano, Volodímir Zelenski, expresó preocupación ante la posibilidad de que las grandes potencias debatan el conflicto sin la participación de Kiev. Aunque la cumbre entre Trump, Putin y Xi está confirmada para el jueves (19), el alcance de las negociaciones y la posibilidad de avances concretos permanecen indefinidos.',
+        ],
+      },
+    },
+  },
+  {
     id: 'trump-filipinas-asia-comercio-seguranca-2026',
     imageUrl: '/assets/aistudio/image_e9f58b10.png',
     translations: {
