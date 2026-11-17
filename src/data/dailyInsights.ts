@@ -17,7 +17,7 @@ export interface DailyInsightItem {
   translations: Record<SupportedLanguage, DailyInsightLocalized>;
 }
 
-export const MAX_DAILY_INSIGHTS = 7;
+export const MAX_DAILY_INSIGHTS = 8;
 
 export const DAILY_INSIGHTS_UI_COPY: Record<
   SupportedLanguage,
@@ -57,6 +57,60 @@ export const DAILY_INSIGHTS_UI_COPY: Record<
 };
 
 export const DAILY_INSIGHTS_ITEMS: DailyInsightItem[] = [
+  {
+    id: 'eua-restricoes-chips-ia-brasil-2026',
+    imageUrl: '/assets/aistudio/image_72477e45.png',
+    translations: {
+      pt: {
+        tag: 'TECNOLOGIA & COMÉRCIO GLOBAL',
+        title:
+          'EUA impõem novas restrições à exportação de chips avançados de IA para Brasil e mais 11 países',
+        summary:
+          'O Departamento de Comércio dos Estados Unidos anunciou exigência de licenças para envio e acesso remoto a semicondutores de inteligência artificial em 12 países — incluindo o Brasil —, pressionando ações de tecnologia antes do balanço da Nvidia.',
+        dateAuthor: '17/11/2026 • Redação DinhEuro',
+        source: 'Bloomberg / Al Jazeera',
+        imageAlt:
+          'Sala limpa de fabricação de semicondutores e wafers de silício usados em chips avançados de inteligência artificial',
+        fullContent: [
+          'O governo dos Estados Unidos anunciou novas regras de controle de exportação que exigem autorização prévia do Departamento de Comércio para a venda, reexportação ou acesso remoto em nuvem de chips avançados de inteligência artificial destinados a 12 países, entre eles Brasil, Singapura, Malásia, Tailândia, Indonésia e Índia.',
+          'Segundo autoridades americanas, a medida busca impedir que empresas chinesas contornem as sanções vigentes utilizando centros de dados instalados em terceiros países para treinar modelos avançados de IA. O anúncio ocorre em meio à crise corporativa na Nvidia após a saída do CEO Jensen Huang e à véspera da divulgação do balanço trimestral da fabricante.',
+          'A notícia provocou queda nas ações de semicondutores nos Estados Unidos e na Ásia, derrubando índices em Tóquio, Seul e Hong Kong, enquanto investidores reavaliam os impactos regulatórios sobre a cadeia global de infraestrutura de IA.',
+        ],
+      },
+      en: {
+        tag: 'TECHNOLOGY & GLOBAL TRADE',
+        title:
+          'US imposes new export curbs on advanced AI chips for Brazil and 11 other countries',
+        summary:
+          'The U.S. Department of Commerce announced licensing requirements for shipping and remote cloud access to artificial intelligence semiconductors across 12 countries—including Brazil—pressuring tech stocks ahead of Nvidia’s earnings report.',
+        dateAuthor: 'Nov 17, 2026 • DinhEuro Editorial',
+        source: 'Bloomberg / Al Jazeera',
+        imageAlt:
+          'Semiconductor cleanroom manufacturing silicon wafers used in advanced artificial intelligence chips',
+        fullContent: [
+          'The United States government announced new export-control rules requiring prior authorization from the Department of Commerce for the sale, re-export, or remote cloud access of advanced artificial intelligence chips destined for 12 countries, including Brazil, Singapore, Malaysia, Thailand, Indonesia, and India.',
+          'According to U.S. officials, the measure aims to prevent Chinese companies from circumventing existing sanctions by using data centers located in third countries to train advanced AI models. The announcement comes amid corporate turmoil at Nvidia following the departure of CEO Jensen Huang and on the eve of the chipmaker’s quarterly earnings release.',
+          'The news triggered declines in semiconductor shares across the United States and Asia, dragging down equity indexes in Tokyo, Seoul, and Hong Kong as investors reassess regulatory headwinds facing the global AI infrastructure supply chain.',
+        ],
+      },
+      es: {
+        tag: 'TECNOLOGÍA Y COMERCIO GLOBAL',
+        title:
+          'EE. UU. impone nuevas restricciones a la exportación de chips avanzados de IA para Brasil y otros 11 países',
+        summary:
+          'El Departamento de Comercio de Estados Unidos anunció la exigencia de licencias para el envío y acceso remoto a semiconductores de inteligencia artificial en 12 países —incluido Brasil—, presionando a las acciones tecnológicas antes del balance de Nvidia.',
+        dateAuthor: '17/11/2026 • Redacción DinhEuro',
+        source: 'Bloomberg / Al Jazeera',
+        imageAlt:
+          'Sala limpia de fabricación de semiconductores y obleas de silicio utilizadas en chips avanzados de inteligencia artificial',
+        fullContent: [
+          'El gobierno de Estados Unidos anunció nuevas normas de control de exportaciones que exigen autorización previa del Departamento de Comercio para la venta, reexportación o acceso remoto en la nube a chips avanzados de inteligencia artificial destinados a 12 países, entre ellos Brasil, Singapur, Malasia, Tailandia, Indonesia e India.',
+          'Según autoridades estadounidenses, la medida busca impedir que empresas chinas eludan las sanciones vigentes utilizando centros de datos instalados en terceros países para entrenar modelos avanzados de IA. El anuncio se produce en medio de la crisis corporativa en Nvidia tras la salida del CEO Jensen Huang y en la víspera de la publicación de los resultados trimestrales del fabricante.',
+          'La noticia provocó caídas en las acciones de semiconductores en Estados Unidos y Asia, arrastrando a los índices en Tokio, Seúl y Hong Kong mientras los inversores reevalúan el impacto regulatorio sobre la cadena global de infraestructura de IA.',
+        ],
+      },
+    },
+  },
   {
     id: 'senado-plp-299-pacote-ajuste-fiscal-2027',
     imageUrl: '/assets/aistudio/image_459c4fc4.png',
