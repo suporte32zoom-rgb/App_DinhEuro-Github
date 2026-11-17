@@ -17,7 +17,7 @@ export interface DailyInsightItem {
   translations: Record<SupportedLanguage, DailyInsightLocalized>;
 }
 
-export const MAX_DAILY_INSIGHTS = 6;
+export const MAX_DAILY_INSIGHTS = 7;
 
 export const DAILY_INSIGHTS_UI_COPY: Record<
   SupportedLanguage,
@@ -57,6 +57,60 @@ export const DAILY_INSIGHTS_UI_COPY: Record<
 };
 
 export const DAILY_INSIGHTS_ITEMS: DailyInsightItem[] = [
+  {
+    id: 'senado-plp-299-pacote-ajuste-fiscal-2027',
+    imageUrl: '/assets/aistudio/image_459c4fc4.png',
+    translations: {
+      pt: {
+        tag: 'POLÍTICA ECONÔMICA & FISCAL',
+        title:
+          'Senado vota destaques finais do pacote de ajuste fiscal de até R$ 56,1 bilhões para 2027',
+        summary:
+          'Após aprovar o texto-base do PLP 299/2026, o Senado analisa os destaques pendentes do pacote fiscal do governo antes de enviá-lo à Câmara, mirando uma economia estimada entre R$ 45,1 bilhões e R$ 56,1 bilhões no próximo ano.',
+        dateAuthor: '17/11/2026 • Redação DinhEuro',
+        source: 'Agência Senado / Veja',
+        imageAlt:
+          'Plenário do Senado Federal em sessão durante a votação dos destaques do pacote de ajuste fiscal',
+        fullContent: [
+          'O Plenário do Senado Federal retomou nesta terça-feira (17) a análise dos destaques ao Projeto de Lei Complementar (PLP 299/2026), peça central do pacote de ajuste fiscal articulado pela equipe econômica para conter o avanço da dívida pública.',
+          'O projeto promove alterações nas regras do arcabouço fiscal, autorizando bloqueios adicionais de despesas para o cumprimento da meta primária e reduzindo de 2,5% para 2% o teto de crescimento real dos gastos a partir de 2027 nos exercícios em que houver gatilhos de contenção.',
+          'O texto também restringe o uso de créditos tributários para abatimento de impostos federais, ajusta regras de repasses da Lei Kandir e estabelece prazos para a regulamentação dos chamados supersalários no funcionalismo. A expectativa do Executivo é concluir a tramitação no Senado e acelerar a votação na Câmara dos Deputados ainda nesta semana.',
+        ],
+      },
+      en: {
+        tag: 'ECONOMIC & FISCAL POLICY',
+        title:
+          'Senate votes on final amendments to fiscal adjustment package of up to BRL 56.1 billion for 2027',
+        summary:
+          'After approving the core text of PLP 299/2026, the Brazilian Senate reviews pending amendments to the government’s fiscal package before sending it to the Lower House, targeting estimated savings of BRL 45.1 billion to BRL 56.1 billion next year.',
+        dateAuthor: 'Nov 17, 2026 • DinhEuro Editorial',
+        source: 'Agência Senado / Veja',
+        imageAlt:
+          'Brazilian Federal Senate plenary in session during voting on the fiscal adjustment package',
+        fullContent: [
+          'The Brazilian Federal Senate plenary resumed on Tuesday (17) its review of proposed amendments to Complementary Bill (PLP 299/2026), the centerpiece of the fiscal adjustment package crafted by the economic team to curb the rise of public debt.',
+          'The bill revises Brazil’s fiscal framework rules, authorizing additional spending freezes to meet the primary budget target and lowering the real spending growth ceiling from 2.5% to 2% starting in 2027 during fiscal years when containment triggers apply.',
+          'The legislation also curbs the use of tax credits to offset federal taxes, adjusts Kandir Law revenue-transfer rules, and sets deadlines to regulate top-tier public-sector compensation above the constitutional cap. The Executive branch aims to wrap up Senate deliberations and fast-track a vote in the Chamber of Deputies later this week.',
+        ],
+      },
+      es: {
+        tag: 'POLÍTICA ECONÓMICA Y FISCAL',
+        title:
+          'El Senado vota los puntos finales del paquete de ajuste fiscal de hasta R$ 56,1 mil millones para 2027',
+        summary:
+          'Tras aprobar el texto base del PLP 299/2026, el Senado brasileño analiza las enmiendas pendientes del paquete fiscal del gobierno antes de enviarlo a la Cámara de Diputados, apuntando a un ahorro estimado de entre R$ 45,1 mil millones y R$ 56,1 mil millones el próximo año.',
+        dateAuthor: '17/11/2026 • Redacción DinhEuro',
+        source: 'Agência Senado / Veja',
+        imageAlt:
+          'Pleno del Senado Federal de Brasil en sesión durante la votación del paquete de ajuste fiscal',
+        fullContent: [
+          'El Pleno del Senado Federal retomó este martes (17) el análisis de las enmiendas al Proyecto de Ley Complementaria (PLP 299/2026), pieza central del paquete de ajuste fiscal articulado por el equipo económico para contener el avance de la deuda pública.',
+          'El proyecto introduce cambios en las reglas del marco fiscal, autorizando bloqueos adicionales de gastos para cumplir la meta primaria y reduciendo del 2,5% al 2% el techo de crecimiento real del gasto a partir de 2027 en los ejercicios en que se activen gatillos de contención.',
+          'El texto también restringe el uso de créditos tributarios para compensar impuestos federales, ajusta las reglas de transferencias de la Ley Kandir y fija plazos para reglamentar los llamados sobresueldos en el sector público. La expectativa del Ejecutivo es concluir la tramitación en el Senado y acelerar la votación en la Cámara de Diputados esta misma semana.',
+        ],
+      },
+    },
+  },
   {
     id: 'dolar-ibovespa-cautela-fiscal-wall-street-2026',
     imageUrl: '/assets/aistudio/image_24999f1b.png',
