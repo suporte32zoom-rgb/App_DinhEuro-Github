@@ -17,7 +17,7 @@ export interface DailyInsightItem {
   translations: Record<SupportedLanguage, DailyInsightLocalized>;
 }
 
-export const MAX_DAILY_INSIGHTS = 9;
+export const MAX_DAILY_INSIGHTS = 10;
 
 export const DAILY_INSIGHTS_UI_COPY: Record<
   SupportedLanguage,
@@ -57,6 +57,60 @@ export const DAILY_INSIGHTS_UI_COPY: Record<
 };
 
 export const DAILY_INSIGHTS_ITEMS: DailyInsightItem[] = [
+  {
+    id: 'balancos-3t26-cemig-hapvida-bb-2026',
+    imageUrl: '/assets/aistudio/image_c38b3f81.png',
+    translations: {
+      pt: {
+        tag: 'EMPRESAS & BALANÇOS',
+        title:
+          'Temporada de balanços movimenta a B3 com salto no lucro da Cemig e forte alta de Hapvida',
+        summary:
+          'Enquanto Hapvida liderou os ganhos do Ibovespa subindo quase 10% após resultados trimestrais e a Cemig dobrou seu lucro para R$ 1,72 bilhão, Banco do Brasil recuou após revisar projeções e dividendos.',
+        dateAuthor: '17/11/2026 • Redação DinhEuro',
+        source: 'TradeMap / UOL',
+        imageAlt:
+          'Mesa de operações na B3 acompanhando balanços corporativos do 3T26 de Cemig, Hapvida, XP Inc. e Banco do Brasil',
+        fullContent: [
+          'A reta final da temporada de resultados do terceiro trimestre de 2026 ditou o ritmo das negociações corporativas na Bolsa brasileira nesta terça-feira (17), com forte dispersão entre os papéis listados no Ibovespa.',
+          'Entre os destaques positivos, a Cemig reportou lucro líquido de R$ 1,72 bilhão no período — mais que o dobro do registrado um ano antes —, enquanto a XP Inc. elevou seu lucro em 4%, para R$ 1,4 bilhão, e o PagBank apurou ganho de R$ 611 milhões (+7%). No pregão, as ações da Hapvida dispararam perto de 10%, liderando as altas do índice ao lado de Cosan e CSN.',
+          'Na ponta negativa, o Banco do Brasil sofreu pressão vendedora após reduzir sua projeção de lucro e revisar o fluxo de dividendos, enquanto construtoras e varejistas ligadas ao ciclo doméstico recuaram diante da curva de juros elevada.',
+        ],
+      },
+      en: {
+        tag: 'COMPANIES & EARNINGS',
+        title:
+          'Earnings season drives B3 trading as Cemig profit surges and Hapvida rallies',
+        summary:
+          'While Hapvida led Ibovespa gainers surging nearly 10% after quarterly results and Cemig doubled its profit to BRL 1.72 billion, Banco do Brasil retreated after revising its guidance and dividend outlook.',
+        dateAuthor: 'Nov 17, 2026 • DinhEuro Editorial',
+        source: 'TradeMap / UOL',
+        imageAlt:
+          'B3 trading desk tracking 3Q26 corporate earnings for Cemig, Hapvida, XP Inc., and Banco do Brasil',
+        fullContent: [
+          'The closing stretch of the third-quarter 2026 earnings season set the pace for corporate stock trading on Brazil’s exchange on Tuesday (17), producing sharp dispersion across Ibovespa constituents.',
+          'Among positive standouts, Cemig reported net income of BRL 1.72 billion for the quarter—more than double its figure from a year earlier—while XP Inc. grew profit by 4% to BRL 1.4 billion and PagBank posted net earnings of BRL 611 million (+7%). In equity trading, Hapvida shares jumped nearly 10%, leading index gains alongside Cosan and CSN.',
+          'On the downside, Banco do Brasil faced selling pressure after trimming its profit guidance and revising dividend payouts, while domestic-cycle homebuilders and retailers slipped under elevated interest-rate expectations.',
+        ],
+      },
+      es: {
+        tag: 'EMPRESAS Y BALANCES',
+        title:
+          'La temporada de resultados mueve la bolsa B3 con salto en las ganancias de Cemig y fuerte alza de Hapvida',
+        summary:
+          'Mientras Hapvida lideró las ganancias del Ibovespa al subir casi un 10% tras sus resultados trimestrales y Cemig duplicó su beneficio hasta R$ 1,72 mil millones, Banco do Brasil retrocedió tras revisar proyecciones y dividendos.',
+        dateAuthor: '17/11/2026 • Redacción DinhEuro',
+        source: 'TradeMap / UOL',
+        imageAlt:
+          'Mesa de operaciones en la B3 siguiendo los balances corporativos del 3T26 de Cemig, Hapvida, XP Inc. y Banco do Brasil',
+        fullContent: [
+          'La recta final de la temporada de resultados del tercer trimestre de 2026 marcó el ritmo de las negociaciones corporativas en la bolsa brasileña este martes (17), con fuerte dispersión entre las acciones que integran el Ibovespa.',
+          'Entre los destacados positivos, Cemig reportó una utilidad neta de R$ 1,72 mil millones en el período —más del doble de lo registrado un año atrás—, mientras XP Inc. elevó su beneficio en un 4% hasta R$ 1,4 mil millones y PagBank alcanzó una ganancia de R$ 611 millones (+7%). En la rueda, los títulos de Hapvida se dispararon cerca de un 10%, liderando las subas del índice junto a Cosan y CSN.',
+          'En el lado negativo, Banco do Brasil sufrió presión vendedora tras recortar su proyección de ganancias y revisar el flujo de dividendos, mientras constructoras y minoristas ligadas al ciclo local retrocedieron frente a la elevada curva de tasas de interés.',
+        ],
+      },
+    },
+  },
   {
     id: 'fed-juros-inflacao-williams-2026',
     imageUrl: '/assets/aistudio/image_87b108f6.png',
