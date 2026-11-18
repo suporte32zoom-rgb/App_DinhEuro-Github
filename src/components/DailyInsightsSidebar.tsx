@@ -1,10 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import {
   Newspaper,
   ChevronRight,
-  X,
-  Calendar,
-  Building2,
   Globe2,
   BookOpen,
 } from 'lucide-react';
@@ -21,22 +18,33 @@ import {
   syncEditorialArticlesSchema,
   type EditorialArticleSchemaInput,
 } from '../utils/seo';
+import { EditorialInsightModal } from './EditorialInsightModal';
 
-function extractIsoDate(dateAuthor: string): string {
+function extractIsoDate(dateAuthor: string, fallbackIso?: string): string {
+  if (fallbackIso) return fallbackIso;
   const brMatch = dateAuthor.match(/(\d{2})\/(\d{2})\/(\d{4})/);
   if (brMatch) {
     return `${brMatch[3]}-${brMatch[2]}-${brMatch[1]}`;
   }
-  const enMatch = dateAuthor.match(/Nov\s+(\d{2}),\s+(\d{4})/i);
+  const ptWrittenMatch = dateAuthor.match(/(\d{1,2})\s+de\s+novembro\s+de\s+(\d{4})/i);
+  if (ptWrittenMatch) {
+    return `${ptWrittenMatch[2]}-11-${ptWrittenMatch[1].padStart(2, '0')}`;
+  }
+  const esWrittenMatch = dateAuthor.match(/(\d{1,2})\s+de\s+noviembre\s+de\s+(\d{4})/i);
+  if (esWrittenMatch) {
+    return `${esWrittenMatch[2]}-11-${esWrittenMatch[1].padStart(2, '0')}`;
+  }
+  const enMatch = dateAuthor.match(/Nov\s+(\d{1,2}),\s+(\d{4})/i);
   if (enMatch) {
-    return `${enMatch[2]}-11-${enMatch[1]}`;
+    return `${enMatch[2]}-11-${enMatch[1].padStart(2, '0')}`;
   }
   return '2026-11-17';
 }
 
-function toInsightSchemaInput(
+export function toInsightSchemaInput(
   item: DailyInsightItem,
-  lang: 'pt' | 'en' | 'es'
+  lang: 'pt' | 'en' | 'es',
+  basePath: string = '/#insight-'
 ): EditorialArticleSchemaInput {
   const loc = item.translations[lang];
   return {
@@ -45,23 +53,27 @@ function toInsightSchemaInput(
     headline: loc.title,
     description: loc.summary,
     articleSection: loc.tag,
-    datePublished: extractIsoDate(loc.dateAuthor),
+    datePublished: extractIsoDate(loc.dateAuthor, item.isoDate),
     authorName: loc.source || 'Redação DinhEuro',
     imageUrl: item.imageUrl,
-    url: `${CANONICAL_ORIGIN}/#insight-${item.id}`,
-    articleBody: loc.fullContent.join('\n\n'),
-    keywords: [loc.tag, 'DinhEuro', 'Insights do Dia'],
+    url: `${CANONICAL_ORIGIN}${basePath}${item.id}`,
+    articleBody: loc.fullContent
+      .map((line) => (line.startsWith('## ') ? line.slice(3) : line))
+      .join('\n\n'),
+    keywords:
+      loc.keywords && loc.keywords.length > 0
+        ? loc.keywords
+        : [loc.tag, 'DinhEuro', 'Insights do Dia'],
   };
 }
 
 export const DailyInsightsSidebar: React.FC = () => {
   const { lang } = useI18n();
   const copy = DAILY_INSIGHTS_UI_COPY[lang];
-  const items = DAILY_INSIGHTS_ITEMS.slice(0, MAX_DAILY_INSIGHTS);
+  const items = useMemo(() => DAILY_INSIGHTS_ITEMS.slice(0, MAX_DAILY_INSIGHTS), []);
 
   const [selectedInsight, setSelectedInsight] = useState<DailyInsightItem | null>(null);
   const [failedThumbIds, setFailedThumbIds] = useState<Record<string, boolean>>({});
-  const [modalImgFailed, setModalImgFailed] = useState(false);
 
   useEffect(() => {
     const insightSchemas = items.map((item) => toInsightSchemaInput(item, lang));
@@ -70,21 +82,7 @@ export const DailyInsightsSidebar: React.FC = () => {
     syncEditorialArticlesSchema(lang, [...insightSchemas, ...dossierSchemas], focused);
   }, [lang, selectedInsight, items]);
 
-  useEffect(() => {
-    if (!selectedInsight) return;
-    setModalImgFailed(false);
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        setSelectedInsight(null);
-      }
-    };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [selectedInsight]);
-
   if (items.length === 0) return null;
-
-  const activeContent = selectedInsight ? selectedInsight.translations[lang] : null;
 
   return (
     <>
@@ -109,7 +107,7 @@ export const DailyInsightsSidebar: React.FC = () => {
           </span>
         </div>
 
-        {/* Lista de cards (preparada para até 6 insights diários) */}
+        {/* Lista de cards */}
         <div className="space-y-3">
           {items.map((item) => {
             const loc = item.translations[lang];
@@ -163,114 +161,11 @@ export const DailyInsightsSidebar: React.FC = () => {
       </section>
 
       {/* Modal Interativo de Leitura Completa */}
-      {selectedInsight && activeContent && (
-        <div
-          role="dialog"
-          aria-modal="true"
-          aria-labelledby="daily-insight-modal-title"
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-4 sm:p-6 animate-in fade-in duration-200"
-          onClick={() => setSelectedInsight(null)}
-        >
-          <div
-            className="w-full max-w-2xl max-h-[90vh] rounded-2xl bg-[#0b1322] border border-slate-700/80 shadow-2xl overflow-hidden flex flex-col text-slate-100"
-            onClick={(e) => e.stopPropagation()}
-          >
-            {/* Imagem em destaque */}
-            <div className="relative h-52 sm:h-64 w-full bg-[#070d18] border-b border-slate-800 shrink-0 overflow-hidden">
-              {!modalImgFailed ? (
-                <img
-                  src={selectedInsight.imageUrl}
-                  alt={activeContent.imageAlt}
-                  referrerPolicy="no-referrer"
-                  onError={() => setModalImgFailed(true)}
-                  className="w-full h-full object-cover object-[50%_20%]"
-                />
-              ) : (
-                <div className="w-full h-full bg-gradient-to-br from-[#0c1a30] via-[#0B1320] to-[#07111a] flex items-center justify-center">
-                  <Globe2 className="w-14 h-14 text-emerald-400/70" />
-                </div>
-              )}
-
-              <div
-                className="absolute inset-0 bg-gradient-to-t from-[#0b1322] via-[#0b1322]/45 to-transparent"
-                aria-hidden="true"
-              />
-
-              {/* Tag sobreposta e botão fechar */}
-              <div className="absolute top-3.5 left-4 right-4 flex items-center justify-between">
-                <span className="text-[11px] font-bold uppercase tracking-wider text-emerald-300 bg-[#070d18]/85 px-2.5 py-1 rounded-lg border border-emerald-500/30 backdrop-blur-sm">
-                  {activeContent.tag}
-                </span>
-                <button
-                  type="button"
-                  onClick={() => setSelectedInsight(null)}
-                  aria-label={copy.closeModalLabel}
-                  className="w-8 h-8 rounded-xl bg-[#070d18]/85 hover:bg-slate-800 border border-slate-700 text-slate-300 hover:text-white flex items-center justify-center transition cursor-pointer backdrop-blur-sm"
-                >
-                  <X className="w-4 h-4" />
-                </button>
-              </div>
-            </div>
-
-            {/* Corpo rolável da matéria completa */}
-            <div className="p-5 sm:p-7 overflow-y-auto space-y-5">
-              <div className="space-y-3 border-b border-slate-800 pb-4">
-                <h2
-                  id="daily-insight-modal-title"
-                  className="text-lg sm:text-xl font-extrabold text-white leading-snug tracking-tight"
-                >
-                  {activeContent.title}
-                </h2>
-
-                <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 text-xs text-slate-400">
-                  <span className="inline-flex items-center gap-1.5 text-slate-300 font-medium">
-                    <Calendar className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
-                    {activeContent.dateAuthor}
-                  </span>
-                  <span className="inline-flex items-center gap-1.5 text-slate-400">
-                    <Building2 className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
-                    <span>
-                      <strong className="text-slate-300 font-semibold">{copy.sourceLabel}:</strong>{' '}
-                      {activeContent.source}
-                    </span>
-                  </span>
-                </div>
-              </div>
-
-              {/* Lead em destaque discreto */}
-              <p className="text-sm font-medium text-emerald-100/90 bg-emerald-500/5 border-l-2 border-emerald-500 px-4 py-3 rounded-r-xl leading-relaxed">
-                {activeContent.summary}
-              </p>
-
-              {/* Texto completo formatado em parágrafos legíveis */}
-              <div className="space-y-4">
-                {activeContent.fullContent.map((paragraph, idx) => (
-                  <p
-                    key={idx}
-                    className="text-sm text-slate-300 leading-relaxed"
-                  >
-                    {paragraph}
-                  </p>
-                ))}
-              </div>
-            </div>
-
-            {/* Rodapé do modal */}
-            <div className="px-5 sm:px-7 py-3.5 border-t border-slate-800 bg-[#080f1e] flex items-center justify-between gap-3 shrink-0">
-              <span className="text-[11px] text-slate-400 truncate">
-                {activeContent.source}
-              </span>
-              <button
-                type="button"
-                onClick={() => setSelectedInsight(null)}
-                className="px-4 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-semibold text-white border border-slate-700 transition cursor-pointer shrink-0"
-              >
-                {copy.closeModalLabel}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      <EditorialInsightModal
+        item={selectedInsight}
+        lang={lang}
+        onClose={() => setSelectedInsight(null)}
+      />
     </>
   );
 };

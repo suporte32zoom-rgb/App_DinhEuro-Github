@@ -137,3 +137,48 @@ test('buildEditorialArticlesSchema outputs valid NewsArticle and Dossier Article
   assert.ok('image' in singleSchema);
   assert.deepEqual(singleSchema.image, ['https://dinheuro.com/assets/aistudio/image_c38b3f81.png']);
 });
+
+test('APEC 2026 editorial insight preserves prior items and emits valid NewsArticle image JSON-LD', async () => {
+  const fs = await import('node:fs');
+  const path = await import('node:path');
+  const { buildEditorialArticlesSchema } = await import('./seo.ts');
+
+  const source = fs.readFileSync(
+    path.resolve(process.cwd(), 'src/data/dailyInsights.ts'),
+    'utf8'
+  );
+  assert.ok(source.includes('export const MAX_DAILY_INSIGHTS = 11;'));
+  const idMatches = source.match(/^\s+id:\s*'[^']+',/gm) || [];
+  assert.equal(idMatches.length, 11);
+  assert.ok(source.includes("id: 'apec-2026-trump-xi-putin-shenzhen'"));
+  assert.ok(source.includes("imageUrl: '/assets/aistudio/image_e7fa591e.png'"));
+  assert.ok(
+    source.includes(
+      'Donald Trump, Xi Jinping e Vladimir Putin durante encontro na Cúpula da APEC 2026 em Shenzhen, na China'
+    )
+  );
+
+  const schema = buildEditorialArticlesSchema('pt', [], {
+    id: 'apec-2026-trump-xi-putin-shenzhen',
+    schemaType: 'NewsArticle',
+    headline:
+      'Cúpula da APEC 2026: Trump, Xi Jinping e Putin Fazem Primeiro Contato na China Antes de Reunião Trilateral Histórica',
+    description:
+      'Líderes dos Estados Unidos, China e Rússia se encontram em Shenzhen antes de cúpula trilateral nesta quinta-feira (19); negociações sobre tarifas comerciais, semicondutores de IA, conflitos geopolíticos e cadeias de suprimentos estão no radar dos mercados globais.',
+    articleSection: 'Geopolítica & Comércio Global',
+    datePublished: '2026-11-18',
+    imageUrl: '/assets/aistudio/image_e7fa591e.png',
+    keywords: [
+      'trump xi putin apec 2026',
+      'reunião trilateral china',
+      'comércio global tarifas',
+      'semicondutores inteligência artificial nvidia',
+      'geopolítica e dólar hoje',
+      'mercados globais shenzhen',
+    ],
+  });
+  assert.equal(schema['@type'], 'NewsArticle');
+  assert.ok('image' in schema);
+  assert.deepEqual(schema.image, ['https://dinheuro.com/assets/aistudio/image_e7fa591e.png']);
+  assert.equal(schema.datePublished, '2026-11-18');
+});

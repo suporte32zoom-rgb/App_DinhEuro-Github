@@ -8,16 +8,19 @@ export interface DailyInsightLocalized {
   dateAuthor: string;
   source: string;
   imageAlt: string;
+  readingTime?: string;
+  keywords?: string[];
   fullContent: string[];
 }
 
 export interface DailyInsightItem {
   id: string;
+  isoDate?: string;
   imageUrl: string;
   translations: Record<SupportedLanguage, DailyInsightLocalized>;
 }
 
-export const MAX_DAILY_INSIGHTS = 10;
+export const MAX_DAILY_INSIGHTS = 11;
 
 export const DAILY_INSIGHTS_UI_COPY: Record<
   SupportedLanguage,
@@ -57,6 +60,108 @@ export const DAILY_INSIGHTS_UI_COPY: Record<
 };
 
 export const DAILY_INSIGHTS_ITEMS: DailyInsightItem[] = [
+  {
+    id: 'apec-2026-trump-xi-putin-shenzhen',
+    isoDate: '2026-11-18',
+    imageUrl: '/assets/aistudio/image_e7fa591e.png',
+    translations: {
+      pt: {
+        tag: 'Geopolítica & Comércio Global',
+        title:
+          'Cúpula da APEC 2026: Trump, Xi Jinping e Putin Fazem Primeiro Contato na China Antes de Reunião Trilateral Histórica',
+        summary:
+          'Líderes dos Estados Unidos, China e Rússia se encontram em Shenzhen antes de cúpula trilateral nesta quinta-feira (19); negociações sobre tarifas comerciais, semicondutores de IA, conflitos geopolíticos e cadeias de suprimentos estão no radar dos mercados globais.',
+        dateAuthor: '18 de novembro de 2026 • Redação DinhEuro',
+        source: 'APEC 2026 / Redação DinhEuro',
+        readingTime: '4 min',
+        keywords: [
+          'trump xi putin apec 2026',
+          'reunião trilateral china',
+          'comércio global tarifas',
+          'semicondutores inteligência artificial nvidia',
+          'geopolítica e dólar hoje',
+          'mercados globais shenzhen',
+        ],
+        imageAlt:
+          'Donald Trump, Xi Jinping e Vladimir Putin durante encontro na Cúpula da APEC 2026 em Shenzhen, na China',
+        fullContent: [
+          'Os mercados financeiros e as chancelarias globais acompanham com máxima atenção a movimentação diplomática em Shenzhen, no sul da China. Nesta quarta-feira (18), os presidentes dos Estados Unidos, Donald Trump, da China, Xi Jinping, e da Rússia, Vladimir Putin, realizaram o primeiro contato pessoal durante a recepção oficial da cúpula da Cooperação Econômica Ásia-Pacífico (APEC), preparando o terreno para uma reunião trilateral inédita agendada para esta quinta-feira (19).',
+          '## Recepção Diplomática e Sinais de Distensão',
+          'Ao desembarcar em Shenzhen vindo de Manila, Trump foi recebido com honras militares pelo presidente Xi Jinping, que destacou o interesse de Pequim em construir uma relação bilateral estrategicamente estável, pautada pela reciprocidade. Durante o banquete de boas-vindas da APEC, Trump e Putin também apertaram as mãos — no primeiro encontro presencial entre ambos desde a cúpula realizada no Alasca em agosto de 2025 — e posaram para registros oficiais ao lado do anfitrião chinês.',
+          '## O Que Está na Mesa: Tarifas, Chips de IA e Conflitos',
+          'Embora analistas internacionais apontem que a reunião trilateral terá duração estimada inferior a uma hora, a pauta concentra os principais vetores de risco para a economia global e para os ativos financeiros:',
+          '1. Trégua Comercial e Protecionismo: Nos discursos inaugurais para executivos do fórum empresarial da APEC, Xi Jinping defendeu o sistema multilateral baseado nas regras da Organização Mundial do Comércio (OMC) e criticou o avanço das tarifas protecionistas. Washington e Pequim buscam evitar uma nova escalada tarifária antes do vencimento da atual trégua comercial no início de 2027.',
+          '2. Disputa por Semicondutores e Inteligência Artificial: As negociações ocorrem logo após novas restrições impostas pelos Estados Unidos à exportação de chips avançados de inteligência artificial para o mercado chinês, medida que pressiona empresas do setor de tecnologia e provoca reações regulatórias de Pequim.',
+          '3. Segurança Global e Energia: Além das tratativas sobre o encerramento do conflito na Ucrânia — tema abordado previamente entre Xi e Putin —, a pauta inclui a crise no Oriente Médio envolvendo o Irã e o controle de armamentos nucleares, fatores que exercem influência direta sobre a cotação do petróleo e a busca por proteção em dólar e ouro.',
+          '## Impacto para Economias Emergentes e Mercados',
+          'A concentração de poder decisório entre Washington, Pequim e Moscou levou observadores a compararem o encontro à histórica Conferência de Yalta de 1945, gerando cautela entre economias médias da Europa e da Ásia. Para o mercado brasileiro e o agronegócio exportador, eventuais acordos de compra agrícola ou realinhamentos tarifários entre Estados Unidos e China podem redesenhar fluxos comerciais globais ao longo de 2027.',
+        ],
+      },
+      en: {
+        tag: 'Geopolitics & Global Trade',
+        title:
+          'APEC Summit 2026: Trump, Xi Jinping, and Putin Make First Contact in China Ahead of Historic Trilateral Meeting',
+        summary:
+          'Leaders of the United States, China, and Russia meet in Shenzhen ahead of Thursday’s (19) trilateral summit; talks on trade tariffs, AI semiconductors, geopolitical conflicts, and supply chains are in global market focus.',
+        dateAuthor: 'Nov 18, 2026 • DinhEuro Editorial',
+        source: 'APEC 2026 / DinhEuro Editorial',
+        readingTime: '4 min read',
+        keywords: [
+          'trump xi putin apec 2026',
+          'china trilateral summit',
+          'global trade tariffs',
+          'ai semiconductors nvidia',
+          'geopolitics us dollar',
+          'shenzhen global markets',
+        ],
+        imageAlt:
+          'Donald Trump, Xi Jinping, and Vladimir Putin during a meeting at the 2026 APEC Summit in Shenzhen, China',
+        fullContent: [
+          'Global financial markets and diplomatic ministries are closely monitoring events in Shenzhen, southern China. On Wednesday (18), U.S. President Donald Trump, Chinese President Xi Jinping, and Russian President Vladimir Putin made their first in-person contact during the official welcome reception of the Asia-Pacific Economic Cooperation (APEC) summit, setting the stage for an unprecedented trilateral meeting scheduled for Thursday (19).',
+          '## Diplomatic Reception and Signals of De-escalation',
+          'Upon arriving in Shenzhen from Manila, Trump was welcomed with military honors by President Xi Jinping, who emphasized Beijing’s interest in building a strategically stable bilateral relationship anchored in reciprocity. During the APEC welcome banquet, Trump and Putin also shook hands—marking their first face-to-face encounter since the August 2025 summit in Alaska—and posed for official photographs alongside their Chinese host.',
+          '## What Is on the Table: Tariffs, AI Chips, and Conflicts',
+          'Although international analysts note that the trilateral meeting is expected to last under an hour, its agenda concentrates the main risk drivers for the global economy and financial assets:',
+          '1. Trade Truce and Protectionism: In opening remarks to executives at the APEC business forum, Xi Jinping defended the rules-based multilateral system under the World Trade Organization (WTO) and criticized rising protectionist tariffs. Washington and Beijing are seeking to avert a fresh tariff escalation before the current trade truce expires in early 2027.',
+          '2. Semiconductors and Artificial Intelligence Dispute: Talks come right after new U.S. export restrictions on advanced artificial intelligence chips bound for the Chinese market, a move pressuring technology shares and prompting regulatory responses from Beijing.',
+          '3. Global Security and Energy: Beyond negotiations aimed at ending the war in Ukraine—a topic discussed earlier between Xi and Putin—the agenda covers the Middle East crisis involving Iran and nuclear arms control, factors with direct influence over crude oil pricing and safe-haven demand in the U.S. dollar and gold.',
+          '## Impact on Emerging Economies and Markets',
+          'The concentration of decision-making power among Washington, Beijing, and Moscow led observers to compare the gathering to the historic 1945 Yalta Conference, prompting caution among mid-sized European and Asian economies. For Brazilian markets and agricultural exporters, potential U.S.–China agricultural purchase accords or tariff realignments could reshape global trade flows throughout 2027.',
+        ],
+      },
+      es: {
+        tag: 'Geopolítica y Comercio Global',
+        title:
+          'Cumbre APEC 2026: Trump, Xi Jinping y Putin Tienen Primer Contacto en China Antes de Histórica Reunión Trilateral',
+        summary:
+          'Líderes de Estados Unidos, China y Rusia se reúnen en Shenzhen antes de la cumbre trilateral de este jueves (19); negociaciones sobre aranceles, semiconductores de IA, conflictos geopolíticos y cadenas de suministro están en el foco de los mercados.',
+        dateAuthor: '18 de noviembre de 2026 • Redacción DinhEuro',
+        source: 'APEC 2026 / Redacción DinhEuro',
+        readingTime: '4 min',
+        keywords: [
+          'trump xi putin apec 2026',
+          'reunion trilateral china',
+          'comercio global aranceles',
+          'semiconductores inteligencia artificial',
+          'geopolitica dolar mercados shenzhen',
+        ],
+        imageAlt:
+          'Donald Trump, Xi Jinping y Vladimir Putin durante un encuentro en la Cumbre de la APEC 2026 en Shenzhen, China',
+        fullContent: [
+          'Los mercados financieros y las cancillerías globales siguen con máxima atención los movimientos diplomáticos en Shenzhen, en el sur de China. Este miércoles (18), los presidentes de Estados Unidos, Donald Trump, de China, Xi Jinping, y de Rusia, Vladimir Putin, mantuvieron su primer contacto personal durante la recepción oficial de la cumbre de Cooperación Económica Asia-Pacífico (APEC), preparando el terreno para una reunión trilateral inédita prevista para este jueves (19).',
+          '## Recepción Diplomática y Señales de Distensión',
+          'Al aterrizar en Shenzhen procedente de Manila, Trump fue recibido con honores militares por el presidente Xi Jinping, quien destacó el interés de Pekín en construir una relación bilateral estratégicamente estable y basada en la reciprocidad. Durante el banquete de bienvenida de la APEC, Trump y Putin también se estrecharon la mano —en su primer encuentro presencial desde la cumbre celebrada en Alaska en agosto de 2025— y posaron para fotografías oficiales junto al anfitrión chino.',
+          '## Qué Está Sobre la Mesa: Aranceles, Chips de IA y Conflictos',
+          'Aunque analistas internacionales señalan que la reunión trilateral tendría una duración estimada inferior a una hora, la agenda concentra los principales vectores de riesgo para la economía mundial y los activos financieros:',
+          '1. Tregua Comercial y Proteccionismo: En sus discursos inaugurales ante ejecutivos del foro empresarial de la APEC, Xi Jinping defendió el sistema multilateral basado en las reglas de la Organización Mundial del Comercio (OMC) y criticó el avance de los aranceles proteccionistas. Washington y Pekín buscan evitar una nueva escalada arancelaria antes del vencimiento de la actual tregua comercial a comienzos de 2027.',
+          '2. Disputa por Semiconductores e Inteligencia Artificial: Las conversaciones ocurren tras nuevas restricciones impuestas por Estados Unidos a la exportación de chips avanzados de inteligencia artificial hacia el mercado chino, una medida que presiona al sector tecnológico y genera respuestas regulatorias de Pekín.',
+          '3. Seguridad Global y Energía: Además de las gestiones sobre el fin del conflicto en Ucrania —tema abordado previamente entre Xi y Putin—, la agenda incluye la crisis en Medio Oriente con Irán y el control de armas nucleares, factores que influyen directamente en el precio del petróleo y en la demanda de refugio en dólar y oro.',
+          '## Impacto para Economías Emergentes y Mercados',
+          'La concentración del poder de decisión entre Washington, Pekín y Moscú llevó a observadores a comparar la cita con la histórica Conferencia de Yalta de 1945, generando cautela entre economías medias de Europa y Asia. Para el mercado brasileño y el agronegocio exportador, eventuales acuerdos agrícolas o reajustes arancelarios entre Estados Unidos y China podrían reconfigurar los flujos comerciales globales a lo largo de 2027.',
+        ],
+      },
+    },
+  },
   {
     id: 'balancos-3t26-cemig-hapvida-bb-2026',
     imageUrl: '/assets/aistudio/image_c38b3f81.png',
