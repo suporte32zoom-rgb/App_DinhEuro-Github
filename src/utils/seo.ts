@@ -454,6 +454,7 @@ export function buildStructuredDataSchemas(lang: SupportedLanguage = 'pt') {
     '@id': `${CANONICAL_ORIGIN}/#organization`,
     name: 'DinhEuro',
     url: `${CANONICAL_ORIGIN}/`,
+    email: 'admin@dinheiro.com',
     logo: {
       '@type': 'ImageObject',
       url: `${CANONICAL_ORIGIN}/logo.png`,
