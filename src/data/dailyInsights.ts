@@ -20,7 +20,7 @@ export interface DailyInsightItem {
   translations: Record<SupportedLanguage, DailyInsightLocalized>;
 }
 
-export const MAX_DAILY_INSIGHTS = 11;
+export const MAX_DAILY_INSIGHTS = 12;
 
 export const DAILY_INSIGHTS_UI_COPY: Record<
   SupportedLanguage,
@@ -60,6 +60,115 @@ export const DAILY_INSIGHTS_UI_COPY: Record<
 };
 
 export const DAILY_INSIGHTS_ITEMS: DailyInsightItem[] = [
+  {
+    id: 'aladi-cosmeticos-exportacao-brasil-2026',
+    isoDate: '2026-11-18',
+    imageUrl: '/assets/aistudio/image_559daecb.png',
+    translations: {
+      pt: {
+        tag: 'Comércio Exterior & Economia Regional',
+        title:
+          'Comércio Exterior: Brasil Simplifica Exportação de Cosméticos para a América Latina via Acordo da Aladi',
+        summary:
+          'Decreto federal internaliza acordo da Associação Latino-Americana de Integração (Aladi) que elimina barreiras técnicas e reduz custos regulatórios em um mercado regional estimado em US$ 55 bilhões.',
+        dateAuthor: '18 de novembro de 2026 • Redação DinhEuro',
+        source: 'MDIC / MRE / Anvisa / Aladi • Redação DinhEuro',
+        readingTime: '3 min',
+        keywords: [
+          'exportação cosméticos brasil',
+          'acordo aladi comércio exterior',
+          'balança comercial brasil 2026',
+          'comércio américa latina mdic',
+          'exportações brasileiras superávit',
+        ],
+        imageAlt:
+          'Vista aérea de terminal portuário de contêineres e navio cargueiro operando exportações brasileiras para a América Latina',
+        fullContent: [
+          'O governo federal publicou decreto que internaliza no Brasil o acordo da Associação Latino-Americana de Integração (Aladi) voltado à eliminação de obstáculos técnicos no comércio de produtos de higiene pessoal, perfumaria e cosméticos. A medida reduz exigências regulatórias e custos operacionais para exportadores brasileiros, sem promover alterações nas alíquotas tarifárias vigentes.',
+          'Com a publicação, o Brasil torna-se o primeiro signatário a concluir os procedimentos internos do acordo firmado em fevereiro de 2026, que abrange também Argentina, Bolívia, Chile, Equador, Paraguai, Peru e Uruguai (com participação do México nas rodadas de negociação). A convergência regulatória atende a um mercado latino-americano estimado em mais de US$ 55 bilhões.',
+          '## Desempenho da Balança Comercial do Setor',
+          'De acordo com dados consolidados do Ministério do Desenvolvimento, Indústria, Comércio e Serviços (MDIC), o Brasil ocupa a posição de terceiro maior mercado global de higiene pessoal, perfumaria e cosméticos, atrás apenas dos Estados Unidos e da China, reunindo mais de 3 mil empresas e exportando para cerca de 190 destinos.',
+          'Os números recentes demonstram o peso estratégico da região para a balança comercial brasileira do segmento:',
+          '- Volume Exportado: As vendas externas brasileiras do setor atingiram US$ 1,06 bilhão em 2025, representando uma expansão de 20,1% na comparação anual e garantindo superávit setorial de US$ 29,6 milhões;',
+          '- Concentração Regional: Os países integrantes da Aladi absorveram 76,3% de todas as exportações brasileiras do ramo (cerca de US$ 791 milhões), liderados por Argentina (US$ 222 milhões), México (US$ 115 milhões), Colômbia (US$ 104 milhões), Chile (US$ 100 milhões) e Paraguai (US$ 73 milhões).',
+          '## Redução de Burocracia e Convergência Sanitária',
+          'A iniciativa foi coordenada pelo MDIC, pelo Ministério das Relações Exteriores (MRE) e pela Agência Nacional de Vigilância Sanitária (Anvisa), trazendo ganhos de eficiência especialmente para micro, pequenas e médias indústrias exportadoras:',
+          '1. Fim do Certificado de Livre Venda: Elimina a obrigatoriedade desse documento na comercialização entre os países aderentes;',
+          '2. Padronização Técnica: Aproxima critérios de rotulagem, boas práticas de fabricação (BPF) e revisão de ingredientes com base em referências internacionais;',
+          '3. Notificação Simplificada: Substitui registros sanitários prévios mais lentos por procedimentos ágeis de notificação baseados em avaliação de risco, preservando os padrões de segurança ao consumidor e farmacovigilância.',
+          'O acordo entra em vigor operacional 60 dias após pelo menos dois países signatários comunicarem oficialmente à Secretaria-Geral da Aladi a conclusão de suas etapas internas.',
+        ],
+      },
+      en: {
+        tag: 'Foreign Trade & Regional Economy',
+        title:
+          'Foreign Trade: Brazil Simplifies Cosmetics Exports to Latin America Under ALADI Accord',
+        summary:
+          'A federal decree incorporates the Latin American Integration Association (ALADI) agreement eliminating technical barriers and lowering regulatory costs across a regional market estimated at US$ 55 billion.',
+        dateAuthor: 'Nov 18, 2026 • DinhEuro Editorial',
+        source: 'MDIC / MRE / Anvisa / ALADI • DinhEuro Editorial',
+        readingTime: '3 min read',
+        keywords: [
+          'brazil cosmetics exports',
+          'aladi foreign trade agreement',
+          'brazil trade balance 2026',
+          'latin america trade mdic',
+          'brazilian exports surplus',
+        ],
+        imageAlt:
+          'Aerial view of a container port terminal and cargo vessel handling Brazilian exports to Latin America',
+        fullContent: [
+          'Brazil’s federal government has published a decree incorporating into domestic law the Latin American Integration Association (ALADI) agreement aimed at eliminating technical barriers in trade of personal care, perfumery, and cosmetics products. The measure reduces regulatory requirements and operating costs for Brazilian exporters without altering current customs tariff rates.',
+          'With this enactment, Brazil becomes the first signatory to complete domestic ratification procedures for the accord signed in February 2026, which also encompasses Argentina, Bolivia, Chile, Ecuador, Paraguay, Peru, and Uruguay (with Mexico participating in the negotiating rounds). Regulatory convergence targets a Latin American market estimated at over US$ 55 billion.',
+          '## Sector Trade Balance Performance',
+          'According to consolidated data from Brazil’s Ministry of Development, Industry, Trade and Services (MDIC), Brazil ranks as the world’s third-largest market for personal hygiene, perfumery, and cosmetics—behind only the United States and China—bringing together over 3,000 companies and exporting to roughly 190 destinations.',
+          'Recent trade figures highlight the region’s strategic weight in Brazil’s sectoral trade balance:',
+          '- Export Volume: Brazilian foreign sales in the segment reached US$ 1.06 billion in 2025, marking 20.1% year-on-year growth and securing a sector trade surplus of US$ 29.6 million;',
+          '- Regional Concentration: ALADI member states absorbed 76.3% of all Brazilian sector exports (roughly US$ 791 million), led by Argentina (US$ 222 million), Mexico (US$ 115 million), Colombia (US$ 104 million), Chile (US$ 100 million), and Paraguay (US$ 73 million).',
+          '## Less Red Tape and Sanitary Convergence',
+          'The initiative was coordinated by MDIC, the Ministry of Foreign Affairs (MRE), and the Brazilian Health Regulatory Agency (Anvisa), delivering efficiency gains particularly for micro, small, and medium-sized exporters:',
+          '1. End of the Certificate of Free Sale: Eliminates the requirement for this document in trade among participating countries;',
+          '2. Technical Standardization: Aligns labeling rules, good manufacturing practices (GMP), and ingredient reviews with international benchmarks;',
+          '3. Simplified Notification: Replaces slower prior sanitary registrations with streamlined risk-based notification procedures while safeguarding consumer safety and pharmacovigilance standards.',
+          'The agreement takes operational effect 60 days after at least two signatory nations officially notify the ALADI General Secretariat that they have completed domestic procedures.',
+        ],
+      },
+      es: {
+        tag: 'Comercio Exterior y Economía Regional',
+        title:
+          'Comercio Exterior: Brasil Simplifica la Exportación de Cosméticos hacia América Latina mediante Acuerdo de la Aladi',
+        summary:
+          'Decreto federal internaliza el acuerdo de la Asociación Latinoamericana de Integración (Aladi) que elimina barreras técnicas y reduce costos regulatorios en un mercado regional estimado en US$ 55 mil millones.',
+        dateAuthor: '18 de noviembre de 2026 • Redacción DinhEuro',
+        source: 'MDIC / MRE / Anvisa / Aladi • Redacción DinhEuro',
+        readingTime: '3 min',
+        keywords: [
+          'exportacion cosmeticos brasil',
+          'acuerdo aladi comercio exterior',
+          'balanza comercial brasil 2026',
+          'comercio america latina mdic',
+          'exportaciones brasilenas superavit',
+        ],
+        imageAlt:
+          'Vista aérea de terminal portuario de contenedores y buque de carga operando exportaciones brasileñas hacia América Latina',
+        fullContent: [
+          'El gobierno federal de Brasil publicó un decreto que internaliza el acuerdo de la Asociación Latinoamericana de Integración (Aladi) destinado a eliminar obstáculos técnicos en el comercio de productos de higiene personal, perfumería y cosméticos. La medida reduce exigencias regulatorias y costos operativos para los exportadores brasileños, sin introducir cambios en los aranceles vigentes.',
+          'Con la publicación, Brasil se convierte en el primer signatario en concluir los trámites internos del acuerdo suscrito en febrero de 2026, que abarca también a Argentina, Bolivia, Chile, Ecuador, Paraguay, Perú y Uruguay (con participación de México en las rondas de negociación). La convergencia regulatoria atiende a un mercado latinoamericano estimado en más de US$ 55 mil millones.',
+          '## Desempeño de la Balanza Comercial del Sector',
+          'Según datos consolidados del Ministerio de Desarrollo, Industria, Comercio y Servicios (MDIC), Brasil ocupa el tercer puesto mundial en higiene personal, perfumería y cosméticos, detrás únicamente de Estados Unidos y China, reuniendo más de 3 mil empresas y exportando a cerca de 190 destinos.',
+          'Las cifras recientes evidencian el peso estratégico de la región para la balanza comercial brasileña del segmento:',
+          '- Volumen Exportado: Las ventas externas brasileñas del sector alcanzaron US$ 1,06 mil millones en 2025, lo que representa una expansión interanual del 20,1% y un superávit sectorial de US$ 29,6 millones;',
+          '- Concentración Regional: Los países integrantes de la Aladi absorbieron el 76,3% de todas las exportaciones brasileñas del rubro (cerca de US$ 791 millones), encabezados por Argentina (US$ 222 millones), México (US$ 115 millones), Colombia (US$ 104 millones), Chile (US$ 100 millones) y Paraguay (US$ 73 millones).',
+          '## Reducción de Burocracia y Convergencia Sanitaria',
+          'La iniciativa fue coordinada por el MDIC, el Ministerio de Relaciones Exteriores (MRE) y la Agencia Nacional de Vigilancia Sanitaria (Anvisa), generando mejoras de eficiencia especialmente para micro, pequeñas y medianas industrias exportadoras:',
+          '1. Fin del Certificado de Libre Venta: Elimina la obligatoriedad de este documento en el comercio entre los países adherentes;',
+          '2. Estandarización Técnica: Aproxima criterios de etiquetado, buenas prácticas de fabricación (BPF) y revisión de ingredientes con base en referencias internacionales;',
+          '3. Notificación Simplificada: Sustituye registros sanitarios previos más lentos por procedimientos ágiles de notificación basados en evaluación de riesgo, preservando la seguridad del consumidor y la farmacovigilancia.',
+          'El acuerdo entrará en vigor operativo 60 días después de que al menos dos países signatarios comuniquen oficialmente a la Secretaría General de la Aladi la conclusión de sus etapas internas.',
+        ],
+      },
+    },
+  },
   {
     id: 'apec-2026-trump-xi-putin-shenzhen',
     isoDate: '2026-11-18',

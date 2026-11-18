@@ -138,7 +138,7 @@ test('buildEditorialArticlesSchema outputs valid NewsArticle and Dossier Article
   assert.deepEqual(singleSchema.image, ['https://dinheuro.com/assets/aistudio/image_c38b3f81.png']);
 });
 
-test('APEC 2026 editorial insight preserves prior items and emits valid NewsArticle image JSON-LD', async () => {
+test('APEC 2026 and ALADI 2026 editorial insights preserve prior items up to 12 max cards and emit valid NewsArticle image JSON-LD', async () => {
   const fs = await import('node:fs');
   const path = await import('node:path');
   const { buildEditorialArticlesSchema } = await import('./seo.ts');
@@ -147,11 +147,13 @@ test('APEC 2026 editorial insight preserves prior items and emits valid NewsArti
     path.resolve(process.cwd(), 'src/data/dailyInsights.ts'),
     'utf8'
   );
-  assert.ok(source.includes('export const MAX_DAILY_INSIGHTS = 11;'));
+  assert.ok(source.includes('export const MAX_DAILY_INSIGHTS = 12;'));
   const idMatches = source.match(/^\s+id:\s*'[^']+',/gm) || [];
-  assert.equal(idMatches.length, 11);
+  assert.equal(idMatches.length, 12);
   assert.ok(source.includes("id: 'apec-2026-trump-xi-putin-shenzhen'"));
+  assert.ok(source.includes("id: 'aladi-cosmeticos-exportacao-brasil-2026'"));
   assert.ok(source.includes("imageUrl: '/assets/aistudio/image_e7fa591e.png'"));
+  assert.ok(source.includes("imageUrl: '/assets/aistudio/image_559daecb.png'"));
   assert.ok(
     source.includes(
       'Donald Trump, Xi Jinping e Vladimir Putin durante encontro na Cúpula da APEC 2026 em Shenzhen, na China'
@@ -159,26 +161,25 @@ test('APEC 2026 editorial insight preserves prior items and emits valid NewsArti
   );
 
   const schema = buildEditorialArticlesSchema('pt', [], {
-    id: 'apec-2026-trump-xi-putin-shenzhen',
+    id: 'aladi-cosmeticos-exportacao-brasil-2026',
     schemaType: 'NewsArticle',
     headline:
-      'Cúpula da APEC 2026: Trump, Xi Jinping e Putin Fazem Primeiro Contato na China Antes de Reunião Trilateral Histórica',
+      'Comércio Exterior: Brasil Simplifica Exportação de Cosméticos para a América Latina via Acordo da Aladi',
     description:
-      'Líderes dos Estados Unidos, China e Rússia se encontram em Shenzhen antes de cúpula trilateral nesta quinta-feira (19); negociações sobre tarifas comerciais, semicondutores de IA, conflitos geopolíticos e cadeias de suprimentos estão no radar dos mercados globais.',
-    articleSection: 'Geopolítica & Comércio Global',
+      'Decreto federal internaliza acordo da Associação Latino-Americana de Integração (Aladi) que elimina barreiras técnicas e reduz custos regulatórios em um mercado regional estimado em US$ 55 bilhões.',
+    articleSection: 'Comércio Exterior & Economia Regional',
     datePublished: '2026-11-18',
-    imageUrl: '/assets/aistudio/image_e7fa591e.png',
+    imageUrl: '/assets/aistudio/image_559daecb.png',
     keywords: [
-      'trump xi putin apec 2026',
-      'reunião trilateral china',
-      'comércio global tarifas',
-      'semicondutores inteligência artificial nvidia',
-      'geopolítica e dólar hoje',
-      'mercados globais shenzhen',
+      'exportação cosméticos brasil',
+      'acordo aladi comércio exterior',
+      'balança comercial brasil 2026',
+      'comércio américa latina mdic',
+      'exportações brasileiras superávit',
     ],
   });
   assert.equal(schema['@type'], 'NewsArticle');
   assert.ok('image' in schema);
-  assert.deepEqual(schema.image, ['https://dinheuro.com/assets/aistudio/image_e7fa591e.png']);
+  assert.deepEqual(schema.image, ['https://dinheuro.com/assets/aistudio/image_559daecb.png']);
   assert.equal(schema.datePublished, '2026-11-18');
 });

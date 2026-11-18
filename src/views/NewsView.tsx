@@ -27,7 +27,10 @@ import {
   type EditorialArticleSchemaInput,
 } from '../utils/seo';
 
-const FEATURED_NEWS_EDITORIAL_IDS = new Set(['apec-2026-trump-xi-putin-shenzhen']);
+const FEATURED_NEWS_EDITORIAL_IDS = new Set([
+  'aladi-cosmeticos-exportacao-brasil-2026',
+  'apec-2026-trump-xi-putin-shenzhen',
+]);
 
 export const NewsView: React.FC = () => {
   const { news, refreshData } = useMarket();
@@ -124,20 +127,23 @@ export const NewsView: React.FC = () => {
     const editorialSchemas = filteredEditorialArticles.map((item) =>
       toInsightSchemaInput(item, lang, '/noticias#insight-')
     );
-    const newsSchemas: EditorialArticleSchemaInput[] = filteredNews.slice(0, 10).map((item) => ({
-      id: item.id,
-      schemaType: 'NewsArticle',
-      headline: item.title,
-      description: item.summary,
-      articleSection: item.category,
-      datePublished: item.timestamp
-        ? new Date(item.timestamp).toISOString().split('T')[0]
-        : '2026-11-17',
-      authorName: item.source || 'Redação DinhEuro',
-      url: item.url || `${CANONICAL_ORIGIN}/noticias`,
-      imageUrl: item.imageUrl || `${CANONICAL_ORIGIN}/logo.png`,
-      keywords: [item.category, 'DinhEuro', 'Macroeconomia'],
-    }));
+    const remainingSlots = Math.max(0, 12 - editorialSchemas.length);
+    const newsSchemas: EditorialArticleSchemaInput[] = filteredNews
+      .slice(0, remainingSlots)
+      .map((item) => ({
+        id: item.id,
+        schemaType: 'NewsArticle',
+        headline: item.title,
+        description: item.summary,
+        articleSection: item.category,
+        datePublished: item.timestamp
+          ? new Date(item.timestamp).toISOString().split('T')[0]
+          : '2026-11-17',
+        authorName: item.source || 'Redação DinhEuro',
+        url: item.url || `${CANONICAL_ORIGIN}/noticias`,
+        imageUrl: item.imageUrl || `${CANONICAL_ORIGIN}/logo.png`,
+        keywords: [item.category, 'DinhEuro', 'Macroeconomia'],
+      }));
     const dossierSchemas = getInstitutionalDossiersSchemaInputs(lang);
     const focused = selectedEditorial
       ? toInsightSchemaInput(selectedEditorial, lang, '/noticias#insight-')
