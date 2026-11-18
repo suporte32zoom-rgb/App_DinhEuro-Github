@@ -80,8 +80,12 @@ test('ROUTE_SEO_METADATA provides unique long-tail SEO titles and descriptions f
   }
 });
 
-test('buildStructuredDataSchemas produces valid WebSite SearchAction and FinancialService/WebApplication JSON-LD', () => {
-  const { websiteSchema, financialServiceSchema } = buildStructuredDataSchemas('pt');
+test('buildStructuredDataSchemas produces valid Organization, WebSite SearchAction, and FinancialService/WebApplication JSON-LD', () => {
+  const { organizationSchema, websiteSchema, financialServiceSchema } =
+    buildStructuredDataSchemas('pt');
+  assert.equal(organizationSchema['@type'], 'Organization');
+  assert.equal(organizationSchema.url, 'https://dinheuro.com/');
+  assert.equal(organizationSchema.logo.url, 'https://dinheuro.com/logo.png');
   assert.equal(websiteSchema['@type'], 'WebSite');
   assert.equal(websiteSchema.potentialAction['@type'], 'SearchAction');
   assert.equal(
@@ -89,6 +93,47 @@ test('buildStructuredDataSchemas produces valid WebSite SearchAction and Financi
     'https://dinheuro.com/?q={search_term_string}'
   );
   assert.deepEqual(financialServiceSchema['@type'], ['FinancialService', 'WebApplication']);
+  assert.equal(financialServiceSchema.logo, 'https://dinheuro.com/logo.png');
   assert.equal(financialServiceSchema.isAccessibleForFree, true);
   assert.equal(financialServiceSchema.offers.price, '0');
+});
+
+test('ROUTE_SEO_METADATA injects high-RPM FX, global equity, and E-E-A-T macro keywords across target routes', () => {
+  assert.ok(ROUTE_SEO_METADATA.dashboard.pt.description.includes('168 ativos globais'));
+  assert.ok(ROUTE_SEO_METADATA.dashboard.pt.keywords.includes('EUR to BRL live rate'));
+  assert.ok(ROUTE_SEO_METADATA.ferramentas.pt.keywords.includes('spread bancário e iof remessa'));
+  assert.ok(ROUTE_SEO_METADATA.mercados.pt.keywords.includes('fechamento ibovespa hoje'));
+  assert.ok(ROUTE_SEO_METADATA.graficos.pt.keywords.includes('gráfico d3 v7 análise técnica'));
+  assert.ok(
+    ROUTE_SEO_METADATA.renda_fixa.pt.keywords.includes('como funciona o modelo black scholes opções')
+  );
+  assert.ok(ROUTE_SEO_METADATA.noticias.pt.keywords.includes('boletim focus banco central resumo'));
+});
+
+test('buildEditorialArticlesSchema outputs valid NewsArticle and Dossier Article JSON-LD linked to Organization', async () => {
+  const { buildEditorialArticlesSchema, getInstitutionalDossiersSchemaInputs } = await import(
+    './seo.ts'
+  );
+  const dossiers = getInstitutionalDossiersSchemaInputs('pt');
+  assert.equal(dossiers.length, 3);
+
+  const listSchema = buildEditorialArticlesSchema('pt', dossiers);
+  assert.equal(listSchema['@type'], 'ItemList');
+  assert.ok('itemListElement' in listSchema);
+  assert.equal(listSchema.numberOfItems, 3);
+  assert.equal(listSchema.itemListElement[0].item['@type'], 'Article');
+  assert.equal(listSchema.itemListElement[0].item.publisher['@type'], 'Organization');
+  assert.equal(listSchema.itemListElement[0].item.publisher.logo.url, 'https://dinheuro.com/logo.png');
+
+  const singleSchema = buildEditorialArticlesSchema('pt', dossiers, {
+    id: 'test-insight',
+    schemaType: 'NewsArticle',
+    headline: 'Teste Insight do Dia',
+    description: 'Resumo executivo',
+    datePublished: '2026-11-17',
+    imageUrl: '/assets/aistudio/image_c38b3f81.png',
+  });
+  assert.equal(singleSchema['@type'], 'NewsArticle');
+  assert.ok('image' in singleSchema);
+  assert.deepEqual(singleSchema.image, ['https://dinheuro.com/assets/aistudio/image_c38b3f81.png']);
 });

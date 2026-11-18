@@ -102,9 +102,17 @@ export const ToolsView: React.FC = () => {
     <div className="space-y-6 pb-12 animate-in fade-in duration-300">
       {/* Header */}
       <div className="border-b border-slate-800 pb-5">
-        <h1 className="text-xl sm:text-2xl font-black text-white tracking-tight flex items-center gap-2">
-          <Calculator className="w-6 h-6 text-emerald-400" />
-          <span>{t.tools.title}</span>
+        <h1 className="text-xl sm:text-2xl font-bold text-white tracking-tight flex items-center gap-2">
+          <Calculator className="w-6 h-6 text-emerald-400 shrink-0" />
+          <span>
+            {activeTool === 'cambio'
+              ? t.tools.titleFx
+              : activeTool === 'juros'
+              ? t.tools.titleCompound
+              : activeTool === 'inflacao'
+              ? t.tools.titleInflation
+              : t.tools.titleTax}
+          </span>
         </h1>
         <p className="text-xs text-slate-400 mt-1">
           {t.tools.subtitle}

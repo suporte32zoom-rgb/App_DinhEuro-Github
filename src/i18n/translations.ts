@@ -227,6 +227,10 @@ export interface AppTranslations {
   };
   tools: {
     title: string;
+    titleFx: string;
+    titleCompound: string;
+    titleInflation: string;
+    titleTax: string;
     subtitle: string;
     tabFx: string;
     tabCompound: string;
@@ -695,9 +699,13 @@ export const TRANSLATIONS: Record<SupportedLanguage, AppTranslations> = {
       },
     },
     tools: {
-      title: 'Ferramentas & Simuladores Financeiros Globais',
+      title: 'Calculadora de Câmbio Universal: Conversão de Euro e Dólar em Tempo Real',
+      titleFx: 'Calculadora de Câmbio Universal: Conversão de Euro e Dólar em Tempo Real',
+      titleCompound: 'Simulador de Juros Compostos, Taxa Selic e Renda Fixa',
+      titleInflation: 'Simulador de Inflação IPCA e Poder de Compra',
+      titleTax: 'Calculadora de Lucro em Ações da B3 e Imposto (DARF)',
       subtitle:
-        'Cálculos precisos em tempo real para conversão de Euro para Real, dólar comercial, planejamento de juros compostos e tributação.',
+        'Converter Euro para Real (EUR/BRL) e dólar comercial hoje em tempo real, simular como enviar remessa internacional mais barata (spread bancário e IOF), conta global para viagens, projeção Taxa Selic e inflação IPCA.',
       tabFx: 'Calculadora de Câmbio Universal',
       tabCompound: 'Juros Compostos & Renda Fixa',
       tabInflation: 'Poder de Compra & Inflação',
@@ -879,21 +887,21 @@ export const TRANSLATIONS: Record<SupportedLanguage, AppTranslations> = {
     },
     seoBlock: {
       eyebrow: 'Guia & Indexação Global de Cotações',
-      heading: 'Cotação do Euro Hoje, Dólar Comercial e Moedas Fortes em Tempo Real',
+      heading: 'Cotação do Euro Hoje, Dólar Comercial, Remessas Internacionais e B3 em Tempo Real',
       lead:
-        'O DinhEuro consolida em uma única interface institucional o acompanhamento contínuo de câmbio internacional, bolsas brasileiras e americanas, renda fixa e criptoativos para investidores e viajantes.',
+        'O DinhEuro reúne cotações em tempo real do Euro (EUR to BRL live rate), Dólar comercial (USD BRL exchange rate today), 168 ativos globais, simulações de spread bancário e IOF, gráficos D3 v7 e dossiês oficiais do Banco Central e MDIC.',
       cards: [
         {
-          title: 'Cotação do Euro hoje em Real (EUR/BRL)',
-          body: 'Consulte o valor do Euro comercial hoje convertido automaticamente para Real Brasileiro na calculadora padrão (1 EUR → BRL), com cálculo imediato de paridade direta, inversa, máxima, mínima diária e simulação opcional de spread e IOF para remessas.',
+          title: 'Cotação Euro Hoje Real, Converter Euro para Real & Remessas',
+          body: 'Converta Euro para Real (1 EUR → BRL) e acompanhe o dólar comercial hoje em tempo real (EUR to BRL live rate & USD BRL exchange rate today). Compare como enviar remessa internacional mais barata simulando spread bancário, IOF de remessa e conta global internacional para viagens (international money transfer fees).',
         },
         {
-          title: 'Valor do Dólar comercial hoje (USD/BRL)',
-          body: 'Acompanhe a oscilação do Dólar comercial em tempo real frente ao Real e ao Euro (EUR/USD), integrando dados interbancários para tomada de decisão em câmbio, proteção patrimonial em moeda forte e comércio exterior.',
+          title: 'Fechamento Ibovespa Hoje, Ações B3, EUA, Europa & D3 v7',
+          body: 'Monitore o fechamento Ibovespa hoje, ações da B3 com maior dividendo e ações americanas e europeias em tempo real. Explore o gráfico D3 v7 para análise técnica e descubra como funciona o modelo Black-Scholes para opções na aba de derivativos.',
         },
         {
-          title: 'Moedas fortes, Bolsas e Criptoativos',
-          body: 'Monitoramento unificado de USD, EUR, GBP, CHF, JPY, CAD, AUD, ARS, índices como Ibovespa, S&P 500, Nasdaq e DAX, além de Bitcoin, Ethereum e Solana com conversão instantânea entre moedas.',
+          title: 'Boletim Focus Banco Central, Drex, Selic/IPCA & Mercosul-UE',
+          body: 'Acesse o resumo do Boletim Focus do Banco Central com projeção da Taxa Selic e inflação IPCA, entenda o que é o Drex (moeda digital do Banco Central) e acompanhe o impacto econômico do Acordo Mercosul–União Europeia.',
         },
       ],
     },
@@ -1178,9 +1186,13 @@ export const TRANSLATIONS: Record<SupportedLanguage, AppTranslations> = {
       },
     },
     tools: {
-      title: 'Global Financial Tools & Calculators',
+      title: 'Universal Currency Calculator: Real-Time Euro & Dollar Conversion',
+      titleFx: 'Universal Currency Calculator: Real-Time Euro & Dollar Conversion',
+      titleCompound: 'Compound Interest, Selic Rate & Fixed Income Simulator',
+      titleInflation: 'IPCA / CPI Inflation & Purchasing Power Simulator',
+      titleTax: 'Brazil B3 Capital Gains & DARF Tax Calculator',
       subtitle:
-        'Real-time calculations for Euro to Brazilian Real conversion, commercial Dollar, compound interest projections, and tax estimates.',
+        'Check EUR to BRL live rate and USD BRL exchange rate today, compare international money transfer fees (bank spread & IOF), model global travel accounts, Selic rate yields, and inflation impact.',
       tabFx: 'Universal Currency Calculator',
       tabCompound: 'Compound Interest & Fixed Income',
       tabInflation: 'Purchasing Power & Inflation',
@@ -1362,21 +1374,21 @@ export const TRANSLATIONS: Record<SupportedLanguage, AppTranslations> = {
     },
     seoBlock: {
       eyebrow: 'Global Market Reference',
-      heading: 'Live Euro to BRL, Commercial Dollar & Major Currencies in Real Time',
+      heading: 'EUR to BRL Live Rate, USD/BRL Exchange Rate & International Transfer Fees',
       lead:
-        'DinhEuro unifies live interbank exchange rates, Brazilian and US equities, fixed income intelligence, and digital asset tracking in a single institutional portal.',
+        'DinhEuro unifies EUR to BRL live rate, USD BRL exchange rate today, 168 global equities and FX pairs, international money transfer fees modeling, D3 v7 technical charts, and macroeconomic dossiers.',
       cards: [
         {
-          title: 'Live Euro to Brazilian Real (EUR/BRL)',
-          body: 'Check the live commercial Euro rate converted to Brazilian Real in the default 1 EUR → BRL calculator with bid/ask spread toggles, daily highs and lows, and remittance cost modeling.',
+          title: 'EUR to BRL Live Rate, USD/BRL & International Transfer Fees',
+          body: 'Convert Euro to Brazilian Real (1 EUR → BRL) and monitor USD BRL exchange rate today in real time. Model international money transfer fees, bank spread, IOF taxes, and multi-currency global travel accounts.',
         },
         {
-          title: 'Live Commercial US Dollar (USD/BRL)',
-          body: 'Monitor real-time USD/BRL and EUR/USD interbank parity to support cross-border transfers, currency hedging, and international portfolio valuation.',
+          title: 'Ibovespa Close, B3 Dividend Stocks, US/EU Equities & D3 v7',
+          body: 'Track Ibovespa close, high-dividend Brazilian B3 shares, and US and European stocks in real time alongside D3 v7 technical analysis candlestick charts and Black-Scholes options pricing with Greeks.',
         },
         {
-          title: 'Major Currencies, Equities & Crypto',
-          body: 'Unified tracking across USD, EUR, GBP, CHF, JPY, CAD, AUD, ARS, global benchmarks (S&P 500, Nasdaq, Ibovespa, DAX), plus Bitcoin, Ethereum, and Solana.',
+          title: 'Central Bank Focus Report, Drex CBDC & Mercosur–EU Accord',
+          body: 'Read the Central Bank of Brazil Focus Report summary with Selic rate and IPCA inflation forecasts, our Drex digital currency technical dossier, and the Mercosur–European Union trade impact analysis.',
         },
       ],
     },
@@ -1661,9 +1673,13 @@ export const TRANSLATIONS: Record<SupportedLanguage, AppTranslations> = {
       },
     },
     tools: {
-      title: 'Herramientas & Simuladores Financieros Globales',
+      title: 'Calculadora de Cambio Universal: Conversión de Euro y Dólar en Tiempo Real',
+      titleFx: 'Calculadora de Cambio Universal: Conversión de Euro y Dólar en Tiempo Real',
+      titleCompound: 'Simulador de Interés Compuesto, Tasa Selic y Renta Fija',
+      titleInflation: 'Simulador de Inflación IPCA y Poder Adquisitivo',
+      titleTax: 'Calculadora de Ganancia en Acciones B3 e Impuesto (DARF)',
       subtitle:
-        'Cálculos precisos en tiempo real para conversión de Euro a Real, dólar comercial, interés compuesto e impuestos.',
+        'Convierte Euro a Real (EUR/BRL) y dólar comercial en tiempo real, calcula cómo enviar remesa internacional más barata (spread bancario e IOF), cuenta global para viajes, tasa Selic e inflación IPCA.',
       tabFx: 'Calculadora de Cambio Universal',
       tabCompound: 'Interés Compuesto & Renta Fija',
       tabInflation: 'Poder Adquisitivo & Inflación',
@@ -1845,21 +1861,21 @@ export const TRANSLATIONS: Record<SupportedLanguage, AppTranslations> = {
     },
     seoBlock: {
       eyebrow: 'Referencia Global de Cotizaciones',
-      heading: 'Cotización del Euro Hoy, Dólar Comercial y Divisas Fuertes en Tiempo Real',
+      heading: 'Cotización del Euro Hoy, Dólar Comercial, Remesas Internacionales y B3',
       lead:
-        'DinhEuro reúne en una interfaz institucional el seguimiento continuo del mercado cambiario internacional, bolsas de Brasil y Estados Unidos, renta fija y criptoactivos.',
+        'DinhEuro reúne cotizaciones en tiempo real del Euro (EUR to BRL live rate), Dólar comercial (USD BRL exchange rate today), 168 activos globales, simulación de spread bancario e IOF, gráficos D3 v7 y dossiers macroeconómicos.',
       cards: [
         {
-          title: 'Cotización del Euro hoy en Real (EUR/BRL)',
-          body: 'Consulta el valor del Euro comercial hoy convertido automáticamente a Real Brasileño (1 EUR → BRL) con paridad directa e inversa, máximos y mínimos diarios y simulación de costos de envío.',
+          title: 'Euro a Real (EUR/BRL), Dólar Comercial y Remesas Baratas',
+          body: 'Convierte Euro a Real (1 EUR → BRL) y sigue el dólar comercial hoy en tiempo real. Calcula cómo enviar remesa internacional más barata comparando spread bancario, IOF y cuenta global internacional para viajes.',
         },
         {
-          title: 'Valor del Dólar comercial hoy (USD/BRL)',
-          body: 'Monitorea la cotización del Dólar comercial frente al Real y al Euro (EUR/USD) en tiempo real para operaciones internacionales, cobertura patrimonial y comercio exterior.',
+          title: 'Cierre Ibovespa, Acciones B3, EE. UU., Europa & D3 v7',
+          body: 'Sigue el cierre del Ibovespa hoy, acciones de B3 con mayores dividendos y acciones americanas y europeas en tiempo real junto con gráficos D3 v7 de análisis técnico y el modelo Black-Scholes de opciones.',
         },
         {
-          title: 'Divisas fuertes, Bolsas y Criptoactivos',
-          body: 'Seguimiento unificado de USD, EUR, GBP, CHF, JPY, CAD, AUD, ARS, índices como S&P 500, Nasdaq, Ibovespa y DAX, además de Bitcoin, Ethereum y Solana.',
+          title: 'Boletín Focus, Drex Moneda Digital, Selic/IPCA & Mercosur-UE',
+          body: 'Consulta el resumen del Boletín Focus del Banco Central con proyección de tasa Selic e inflación IPCA, qué es el Drex moneda digital y el impacto económico del Acuerdo Mercosur–Unión Europea.',
         },
       ],
     },

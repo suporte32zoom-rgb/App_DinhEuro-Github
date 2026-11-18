@@ -15,6 +15,44 @@ import {
   MAX_DAILY_INSIGHTS,
   DailyInsightItem,
 } from '../data/dailyInsights';
+import {
+  CANONICAL_ORIGIN,
+  getInstitutionalDossiersSchemaInputs,
+  syncEditorialArticlesSchema,
+  type EditorialArticleSchemaInput,
+} from '../utils/seo';
+
+function extractIsoDate(dateAuthor: string): string {
+  const brMatch = dateAuthor.match(/(\d{2})\/(\d{2})\/(\d{4})/);
+  if (brMatch) {
+    return `${brMatch[3]}-${brMatch[2]}-${brMatch[1]}`;
+  }
+  const enMatch = dateAuthor.match(/Nov\s+(\d{2}),\s+(\d{4})/i);
+  if (enMatch) {
+    return `${enMatch[2]}-11-${enMatch[1]}`;
+  }
+  return '2026-11-17';
+}
+
+function toInsightSchemaInput(
+  item: DailyInsightItem,
+  lang: 'pt' | 'en' | 'es'
+): EditorialArticleSchemaInput {
+  const loc = item.translations[lang];
+  return {
+    id: item.id,
+    schemaType: 'NewsArticle',
+    headline: loc.title,
+    description: loc.summary,
+    articleSection: loc.tag,
+    datePublished: extractIsoDate(loc.dateAuthor),
+    authorName: loc.source || 'Redação DinhEuro',
+    imageUrl: item.imageUrl,
+    url: `${CANONICAL_ORIGIN}/#insight-${item.id}`,
+    articleBody: loc.fullContent.join('\n\n'),
+    keywords: [loc.tag, 'DinhEuro', 'Insights do Dia'],
+  };
+}
 
 export const DailyInsightsSidebar: React.FC = () => {
   const { lang } = useI18n();
@@ -24,6 +62,13 @@ export const DailyInsightsSidebar: React.FC = () => {
   const [selectedInsight, setSelectedInsight] = useState<DailyInsightItem | null>(null);
   const [failedThumbIds, setFailedThumbIds] = useState<Record<string, boolean>>({});
   const [modalImgFailed, setModalImgFailed] = useState(false);
+
+  useEffect(() => {
+    const insightSchemas = items.map((item) => toInsightSchemaInput(item, lang));
+    const dossierSchemas = getInstitutionalDossiersSchemaInputs(lang);
+    const focused = selectedInsight ? toInsightSchemaInput(selectedInsight, lang) : null;
+    syncEditorialArticlesSchema(lang, [...insightSchemas, ...dossierSchemas], focused);
+  }, [lang, selectedInsight, items]);
 
   useEffect(() => {
     if (!selectedInsight) return;

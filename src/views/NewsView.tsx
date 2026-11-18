@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import {
   ExternalLink,
   Search,
@@ -17,6 +17,12 @@ import { NewsItem, INITIAL_NEWS } from '../services/marketData';
 import { useI18n } from '../i18n/I18nContext';
 import { VIEWS_TRANSLATIONS } from '../i18n/viewsTranslations';
 import { localizeNewsItem } from '../i18n/marketDataTranslations';
+import {
+  CANONICAL_ORIGIN,
+  getInstitutionalDossiersSchemaInputs,
+  syncEditorialArticlesSchema,
+  type EditorialArticleSchemaInput,
+} from '../utils/seo';
 
 export const NewsView: React.FC = () => {
   const { news, refreshData } = useMarket();
@@ -81,6 +87,25 @@ export const NewsView: React.FC = () => {
       })
       .map((item) => localizeNewsItem(item, lang));
   }, [consolidatedNews, filterCategory, newsSearch, lang]);
+
+  useEffect(() => {
+    const newsSchemas: EditorialArticleSchemaInput[] = filteredNews.slice(0, 10).map((item) => ({
+      id: item.id,
+      schemaType: 'NewsArticle',
+      headline: item.title,
+      description: item.summary,
+      articleSection: item.category,
+      datePublished: item.timestamp
+        ? new Date(item.timestamp).toISOString().split('T')[0]
+        : '2026-11-17',
+      authorName: item.source || 'Redação DinhEuro',
+      url: item.url || `${CANONICAL_ORIGIN}/noticias`,
+      imageUrl: `${CANONICAL_ORIGIN}/logo.png`,
+      keywords: [item.category, 'DinhEuro', 'Macroeconomia'],
+    }));
+    const dossierSchemas = getInstitutionalDossiersSchemaInputs(lang);
+    syncEditorialArticlesSchema(lang, [...newsSchemas, ...dossierSchemas]);
+  }, [filteredNews, lang]);
 
   const handleManualRefresh = async () => {
     setIsRefreshing(true);
