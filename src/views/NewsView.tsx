@@ -162,19 +162,19 @@ export const NewsView: React.FC = () => {
   return (
     <div className="space-y-6 pb-12 animate-in fade-in duration-300">
       {/* Page Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-800 pb-5">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#E2E8F0] dark:border-slate-800 pb-5">
         <div>
           <div className="flex items-center gap-2">
-            <h1 className="text-xl sm:text-2xl font-black text-white tracking-tight flex items-center gap-2">
-              <Newspaper className="w-6 h-6 text-emerald-400" />
+            <h1 className="text-xl sm:text-2xl font-black text-[#0F172A] dark:text-white tracking-tight flex items-center gap-2">
+              <Newspaper className="w-6 h-6 text-[#003399] dark:text-emerald-400" />
               <span>{tNews.title}</span>
             </h1>
-            <span className="flex items-center gap-1 text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 font-bold uppercase tracking-wider">
+            <span className="flex items-center gap-1 text-[10px] px-2 py-0.5 rounded-full bg-[#E3F7F2] dark:bg-emerald-500/15 border border-[#009B77]/35 dark:border-emerald-500/30 text-[#006B52] dark:text-emerald-400 font-bold uppercase tracking-wider">
               <Radio className="w-3 h-3 animate-pulse" />
               {tNews.liveBadge}
             </span>
           </div>
-          <p className="text-xs text-slate-400 mt-1 max-w-3xl">
+          <p className="text-xs text-[#475569] dark:text-slate-400 mt-1 max-w-3xl">
             {tNews.subtitle}
           </p>
         </div>
@@ -182,23 +182,23 @@ export const NewsView: React.FC = () => {
         {/* Action Bar (Search + Refresh) */}
         <div className="flex items-center gap-2.5 w-full sm:w-auto">
           <div className="relative flex-1 sm:w-72">
-            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#475569] dark:text-slate-400" />
             <input
               type="text"
               placeholder={tNews.searchPlaceholder}
               value={newsSearch}
               onChange={(e) => setNewsSearch(e.target.value)}
-              className="w-full bg-slate-900 border border-slate-700/80 rounded-xl pl-9.5 pr-4 py-2 text-xs text-white placeholder:text-slate-500 focus:outline-none focus:border-emerald-500 transition"
+              className="w-full bg-[#FFFFFF] dark:bg-slate-900 border border-[#CBD5E1] dark:border-slate-700/80 rounded-xl pl-9.5 pr-4 py-2 text-xs text-[#0F172A] dark:text-white placeholder:text-[#94A3B8] dark:placeholder:text-slate-500 focus:outline-none focus:border-[#003399] dark:focus:border-emerald-500 transition"
             />
           </div>
 
           <button
             onClick={handleManualRefresh}
             disabled={isRefreshing}
-            className="p-2 rounded-xl bg-slate-900 border border-slate-700/80 hover:border-emerald-500/50 text-slate-300 hover:text-white transition cursor-pointer flex-shrink-0"
+            className="p-2 rounded-xl bg-[#FFFFFF] dark:bg-slate-900 border border-[#CBD5E1] dark:border-slate-700/80 hover:border-[#003399]/50 dark:hover:border-emerald-500/50 text-[#003399] dark:text-slate-300 hover:text-[#002266] dark:hover:text-white transition cursor-pointer flex-shrink-0"
             title={tNews.refreshTitle}
           >
-            <RefreshCw className={`w-4 h-4 text-emerald-400 ${isRefreshing ? 'animate-spin' : ''}`} />
+            <RefreshCw className={`w-4 h-4 text-[#009B77] dark:text-emerald-400 ${isRefreshing ? 'animate-spin' : ''}`} />
           </button>
         </div>
       </div>
@@ -211,10 +211,11 @@ export const NewsView: React.FC = () => {
             <button
               key={cat.id}
               onClick={() => setFilterCategory(cat.id)}
+              data-on-dark={isSelected ? 'true' : undefined}
               className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold transition cursor-pointer flex-shrink-0 select-none ${
                 isSelected
-                  ? 'bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-md shadow-emerald-950/40'
-                  : 'bg-slate-900 border border-slate-800 text-slate-400 hover:text-white hover:bg-slate-800'
+                  ? 'bg-[#003399] text-white dark:bg-gradient-to-r dark:from-emerald-600 dark:to-teal-600 shadow-md'
+                  : 'bg-[#FFFFFF] dark:bg-slate-900 border border-[#E2E8F0] dark:border-slate-800 text-[#475569] dark:text-slate-400 hover:text-[#003399] dark:hover:text-white hover:bg-[#E6EEFF] dark:hover:bg-slate-800'
               }`}
             >
               {cat.label}
@@ -224,14 +225,14 @@ export const NewsView: React.FC = () => {
       </div>
 
       {/* Feed Status Summary */}
-      <div className="flex items-center justify-between text-xs text-slate-400 px-1">
+      <div className="flex items-center justify-between text-xs text-[#475569] dark:text-slate-400 px-1">
         <span className="flex items-center gap-1.5">
           <span>{tNews.showingPrefix} <strong>{totalCount}</strong> {tNews.showingSuffix}</span>
         </span>
         {newsSearch && (
           <button
             onClick={() => setNewsSearch('')}
-            className="text-emerald-400 hover:underline cursor-pointer"
+            className="text-[#003399] dark:text-emerald-400 hover:underline cursor-pointer"
           >
             {tNews.clearSearch}
           </button>
@@ -246,10 +247,13 @@ export const NewsView: React.FC = () => {
             <article
               key={editorial.id}
               onClick={() => setSelectedEditorial(editorial)}
-              className="rounded-2xl bg-[#0d1627] border border-slate-800 hover:border-emerald-500/40 overflow-hidden shadow-xl transition flex flex-col justify-between group cursor-pointer"
+              className="rounded-2xl bg-[#FFFFFF] dark:bg-[#0d1627] border border-[#E2E8F0] dark:border-slate-800 hover:border-[#003399]/40 dark:hover:border-emerald-500/40 overflow-hidden shadow-xl transition flex flex-col justify-between group cursor-pointer"
             >
               {/* Capa institucional com object-cover */}
-              <div className="relative h-44 w-full bg-[#070d18] border-b border-slate-800 overflow-hidden shrink-0">
+              <div
+                data-overlay-dark="true"
+                className="relative h-44 w-full bg-[#002266] dark:bg-[#070d18] border-b border-[#E2E8F0] dark:border-slate-800 overflow-hidden shrink-0"
+              >
                 <img
                   src={editorial.imageUrl}
                   alt={loc.imageAlt}
@@ -257,10 +261,10 @@ export const NewsView: React.FC = () => {
                   className="w-full h-full object-cover object-[50%_20%] group-hover:scale-105 transition duration-300"
                 />
                 <div
-                  className="absolute inset-0 bg-gradient-to-t from-[#0d1627]/80 via-transparent to-transparent"
+                  className="absolute inset-0 bg-gradient-to-t from-[#002266]/85 via-transparent to-transparent dark:from-[#0d1627]/80"
                   aria-hidden="true"
                 />
-                <span className="absolute top-3 left-3 text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-md bg-[#070d18]/85 text-emerald-400 border border-emerald-500/30 backdrop-blur-sm">
+                <span className="absolute top-3 left-3 text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-md bg-[#002266]/90 dark:bg-[#070d18]/85 text-[#E3F7F2] dark:text-emerald-400 border border-[#009B77]/50 dark:border-emerald-500/30 backdrop-blur-sm">
                   {insightsCopy.sectionBadge}
                 </span>
               </div>
@@ -268,36 +272,37 @@ export const NewsView: React.FC = () => {
               <div className="p-4 sm:p-5 flex-1 flex flex-col justify-between space-y-3">
                 <div className="space-y-2.5">
                   <div className="flex items-center justify-between gap-2 text-[11px]">
-                    <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-md bg-emerald-500/10 text-emerald-400 border border-emerald-500/25 truncate">
+                    <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-md bg-[#E3F7F2] dark:bg-emerald-500/10 text-[#006B52] dark:text-emerald-400 border border-[#009B77]/30 dark:border-emerald-500/25 truncate">
                       {loc.tag}
                     </span>
-                    <span className="text-[10px] font-semibold text-slate-400 flex items-center gap-1 flex-shrink-0">
-                      <Clock className="w-3 h-3 text-amber-400" />
+                    <span className="text-[10px] font-semibold text-[#475569] dark:text-slate-400 flex items-center gap-1 flex-shrink-0">
+                      <Clock className="w-3 h-3 text-[#D99B00] dark:text-amber-400" />
                       <span>{loc.readingTime || '4 min'}</span>
                     </span>
                   </div>
 
-                  <h2 className="text-sm sm:text-base font-bold text-white group-hover:text-emerald-300 transition leading-snug">
+                  <h2 className="text-sm sm:text-base font-bold text-[#0F172A] dark:text-white group-hover:text-[#003399] dark:group-hover:text-emerald-300 transition leading-snug">
                     {loc.title}
                   </h2>
-                  <p className="text-xs text-slate-400 leading-relaxed line-clamp-3">
+                  <p className="text-xs text-[#475569] dark:text-slate-400 leading-relaxed line-clamp-3">
                     {loc.summary}
                   </p>
                 </div>
 
-                <div className="pt-3 border-t border-slate-800/80 flex items-center justify-between gap-2">
-                  <div className="flex items-center gap-1.5 text-xs text-slate-300 font-semibold truncate">
-                    <span className="w-2 h-2 rounded-full bg-emerald-400 shrink-0"></span>
+                <div className="pt-3 border-t border-[#E2E8F0] dark:border-slate-800/80 flex items-center justify-between gap-2">
+                  <div className="flex items-center gap-1.5 text-xs text-[#1E293B] dark:text-slate-300 font-semibold truncate">
+                    <span className="w-2 h-2 rounded-full bg-[#009B77] dark:bg-emerald-400 shrink-0"></span>
                     <span className="truncate" title={loc.dateAuthor}>{loc.dateAuthor}</span>
                   </div>
 
                   <button
                     type="button"
+                    data-on-dark="true"
                     onClick={(e) => {
                       e.stopPropagation();
                       setSelectedEditorial(editorial);
                     }}
-                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-xs font-bold text-white shadow-sm shadow-emerald-950 transition active:scale-95 cursor-pointer flex-shrink-0"
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#003399] hover:bg-[#002266] dark:bg-gradient-to-r dark:from-emerald-600 dark:to-teal-600 dark:hover:from-emerald-500 dark:hover:to-teal-500 text-xs font-bold text-white shadow-sm transition active:scale-95 cursor-pointer flex-shrink-0"
                   >
                     <span>{insightsCopy.readMoreLabel}</span>
                     <BookOpen className="w-3.5 h-3.5" />
@@ -318,33 +323,33 @@ export const NewsView: React.FC = () => {
           return (
             <article
               key={item.id || `news_idx_${index}`}
-              className="rounded-2xl bg-[#0d1627] border border-slate-800 hover:border-slate-700/80 overflow-hidden shadow-xl transition flex flex-col justify-between group"
+              className="rounded-2xl bg-[#FFFFFF] dark:bg-[#0d1627] border border-[#E2E8F0] dark:border-slate-800 hover:border-[#003399]/35 dark:hover:border-slate-700/80 overflow-hidden shadow-xl transition flex flex-col justify-between group"
             >
               {/* Text-Only News Card Body */}
               <div className="p-4 sm:p-5 flex-1 flex flex-col justify-between space-y-3">
                 <div className="space-y-2.5">
                   <div className="flex items-center justify-between gap-2 text-[11px]">
-                    <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-md bg-emerald-500/10 text-emerald-400 border border-emerald-500/25">
+                    <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-md bg-[#E3F7F2] dark:bg-emerald-500/10 text-[#006B52] dark:text-emerald-400 border border-[#009B77]/30 dark:border-emerald-500/25">
                       {item.category}
                     </span>
-                    <span className="text-[10px] font-semibold text-slate-400 flex items-center gap-1 flex-shrink-0">
-                      <Clock className="w-3 h-3 text-amber-400" />
+                    <span className="text-[10px] font-semibold text-[#475569] dark:text-slate-400 flex items-center gap-1 flex-shrink-0">
+                      <Clock className="w-3 h-3 text-[#D99B00] dark:text-amber-400" />
                       <span>{item.datetime || tNews.nowFallback}</span>
                     </span>
                   </div>
 
-                  <h2 className="text-sm sm:text-base font-bold text-white group-hover:text-emerald-300 transition leading-snug">
+                  <h2 className="text-sm sm:text-base font-bold text-[#0F172A] dark:text-white group-hover:text-[#003399] dark:group-hover:text-emerald-300 transition leading-snug">
                     {item.title}
                   </h2>
-                  <p className="text-xs text-slate-400 leading-relaxed line-clamp-4">
+                  <p className="text-xs text-[#475569] dark:text-slate-400 leading-relaxed line-clamp-4">
                     {item.summary}
                   </p>
                 </div>
 
                 {/* Footer with Agency Name & External Direct Link */}
-                <div className="pt-3 border-t border-slate-800/80 flex items-center justify-between gap-2">
-                  <div className="flex items-center gap-1.5 text-xs text-slate-300 font-semibold truncate">
-                    <span className="w-2 h-2 rounded-full bg-emerald-400"></span>
+                <div className="pt-3 border-t border-[#E2E8F0] dark:border-slate-800/80 flex items-center justify-between gap-2">
+                  <div className="flex items-center gap-1.5 text-xs text-[#1E293B] dark:text-slate-300 font-semibold truncate">
+                    <span className="w-2 h-2 rounded-full bg-[#009B77] dark:bg-emerald-400"></span>
                     <span className="truncate" title={item.source}>{item.source}</span>
                   </div>
 
@@ -352,7 +357,8 @@ export const NewsView: React.FC = () => {
                     href={safeUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-xs font-bold text-white shadow-sm shadow-emerald-950 transition active:scale-95 cursor-pointer flex-shrink-0"
+                    data-on-dark="true"
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#003399] hover:bg-[#002266] dark:bg-gradient-to-r dark:from-emerald-600 dark:to-teal-600 dark:hover:from-emerald-500 dark:hover:to-teal-500 text-xs font-bold text-white shadow-sm transition active:scale-95 cursor-pointer flex-shrink-0"
                     title={`${tNews.readFullTitlePrefix} ${item.source}`}
                     onClick={(e) => e.stopPropagation()}
                   >

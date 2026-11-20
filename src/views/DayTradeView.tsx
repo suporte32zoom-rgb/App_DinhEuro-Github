@@ -103,7 +103,13 @@ const BROKERS_POOL = [
 ];
 
 export const DayTradeView: React.FC = () => {
-  const { assets, news, universalRates, setActiveTab, selectedAsset: globalSelectedAsset } = useMarket();
+  const { assets, news, universalRates, setActiveTab, selectedAsset: globalSelectedAsset, theme } = useMarket();
+  const isLight = theme === 'light';
+  const dtGridStroke = isLight ? '#E2E8F0' : '#1e293b';
+  const dtUpHex = isLight ? '#009B77' : '#10B981';
+  const dtDownHex = isLight ? '#DC2626' : '#EF4444';
+  const dtMa9Hex = isLight ? '#003399' : '#38BDF8';
+  const dtMa200Hex = isLight ? '#D99B00' : '#F59E0B';
   const { lang } = useI18n();
   const locale = getNumberLocale(lang);
   const tDt = TRADING_TRANSLATIONS[lang].dayTrade;
@@ -710,7 +716,7 @@ export const DayTradeView: React.FC = () => {
                 <svg className="w-10 h-3 overflow-visible shrink-0" viewBox="0 0 40 12">
                   <polyline
                     fill="none"
-                    stroke={isPos ? '#10b981' : '#ef4444'}
+                    stroke={isPos ? dtUpHex : dtDownHex}
                     strokeWidth="1.2"
                     points="0,8 12,4 24,9 40,2"
                   />
@@ -987,16 +993,16 @@ export const DayTradeView: React.FC = () => {
                 <svg className="w-full h-full flex-1" viewBox="0 0 700 280" preserveAspectRatio="none">
                   <defs>
                     <linearGradient id="vol-grad" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="0%" stopColor="#10b981" stopOpacity="0.4" />
-                      <stop offset="100%" stopColor="#10b981" stopOpacity="0.05" />
+                      <stop offset="0%" stopColor={dtUpHex} stopOpacity="0.4" />
+                      <stop offset="100%" stopColor={dtUpHex} stopOpacity="0.05" />
                     </linearGradient>
                   </defs>
 
                   {/* Horizontal Gridlines */}
-                  <line x1="0" y1="50" x2="700" y2="50" stroke="#1e293b" strokeDasharray="3 3" opacity="0.4" />
-                  <line x1="0" y1="100" x2="700" y2="100" stroke="#1e293b" strokeDasharray="3 3" opacity="0.4" />
-                  <line x1="0" y1="150" x2="700" y2="150" stroke="#1e293b" strokeDasharray="3 3" opacity="0.4" />
-                  <line x1="0" y1="200" x2="700" y2="200" stroke="#1e293b" strokeDasharray="3 3" opacity="0.4" />
+                  <line x1="0" y1="50" x2="700" y2="50" stroke={dtGridStroke} strokeDasharray="3 3" opacity={isLight ? '0.9' : '0.4'} />
+                  <line x1="0" y1="100" x2="700" y2="100" stroke={dtGridStroke} strokeDasharray="3 3" opacity={isLight ? '0.9' : '0.4'} />
+                  <line x1="0" y1="150" x2="700" y2="150" stroke={dtGridStroke} strokeDasharray="3 3" opacity={isLight ? '0.9' : '0.4'} />
+                  <line x1="0" y1="200" x2="700" y2="200" stroke={dtGridStroke} strokeDasharray="3 3" opacity={isLight ? '0.9' : '0.4'} />
 
                   {/* Candlesticks & Volume Histogram */}
                   {Array.from({ length: 35 }).map((_, i) => {
@@ -1006,7 +1012,7 @@ export const DayTradeView: React.FC = () => {
                     const close = isUp ? open - 18 : open + 16;
                     const high = Math.min(open, close) - 12;
                     const low = Math.max(open, close) + 12;
-                    const color = isUp ? '#10B981' : '#EF4444';
+                    const color = isUp ? dtUpHex : dtDownHex;
                     const volHeight = Math.abs(Math.sin(i * 0.5)) * 38 + 8;
 
                     return (
@@ -1038,12 +1044,12 @@ export const DayTradeView: React.FC = () => {
                     );
                   })}
 
-                  {/* MA 9 Line (Cyan) */}
+                  {/* MA 9 Line */}
                   {showMA9 && (
                     <path
                       d="M 12 118 Q 180 85, 360 98 T 685 92"
                       fill="none"
-                      stroke="#38BDF8"
+                      stroke={dtMa9Hex}
                       strokeWidth="1.8"
                       opacity="0.95"
                     />
@@ -1060,12 +1066,12 @@ export const DayTradeView: React.FC = () => {
                     />
                   )}
 
-                  {/* MA 200 Line (Amber) */}
+                  {/* MA 200 Line (Gold / Amber) */}
                   {showMA200 && (
                     <path
                       d="M 12 142 Q 220 130, 420 128 T 685 120"
                       fill="none"
-                      stroke="#F59E0B"
+                      stroke={dtMa200Hex}
                       strokeWidth="2.2"
                       opacity="0.85"
                     />
@@ -1819,16 +1825,16 @@ export const DayTradeView: React.FC = () => {
             <svg className="w-full h-full flex-1" viewBox="0 0 700 280" preserveAspectRatio="none">
               <defs>
                 <linearGradient id="vol-grad-mob" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="#10b981" stopOpacity="0.4" />
-                  <stop offset="100%" stopColor="#10b981" stopOpacity="0.05" />
+                  <stop offset="0%" stopColor={dtUpHex} stopOpacity="0.4" />
+                  <stop offset="100%" stopColor={dtUpHex} stopOpacity="0.05" />
                 </linearGradient>
               </defs>
 
               {/* Gridlines */}
-              <line x1="0" y1="50" x2="700" y2="50" stroke="#1e293b" strokeDasharray="3 3" opacity="0.4" />
-              <line x1="0" y1="100" x2="700" y2="100" stroke="#1e293b" strokeDasharray="3 3" opacity="0.4" />
-              <line x1="0" y1="150" x2="700" y2="150" stroke="#1e293b" strokeDasharray="3 3" opacity="0.4" />
-              <line x1="0" y1="200" x2="700" y2="200" stroke="#1e293b" strokeDasharray="3 3" opacity="0.4" />
+              <line x1="0" y1="50" x2="700" y2="50" stroke={dtGridStroke} strokeDasharray="3 3" opacity={isLight ? '0.9' : '0.4'} />
+              <line x1="0" y1="100" x2="700" y2="100" stroke={dtGridStroke} strokeDasharray="3 3" opacity={isLight ? '0.9' : '0.4'} />
+              <line x1="0" y1="150" x2="700" y2="150" stroke={dtGridStroke} strokeDasharray="3 3" opacity={isLight ? '0.9' : '0.4'} />
+              <line x1="0" y1="200" x2="700" y2="200" stroke={dtGridStroke} strokeDasharray="3 3" opacity={isLight ? '0.9' : '0.4'} />
 
               {/* Candlesticks & Volume */}
               {Array.from({ length: 35 }).map((_, i) => {
@@ -1838,7 +1844,7 @@ export const DayTradeView: React.FC = () => {
                 const close = isUp ? open - 18 : open + 16;
                 const high = Math.min(open, close) - 12;
                 const low = Math.max(open, close) + 12;
-                const color = isUp ? '#10B981' : '#EF4444';
+                const color = isUp ? dtUpHex : dtDownHex;
                 const volHeight = Math.abs(Math.sin(i * 0.5)) * 38 + 8;
 
                 return (
@@ -1869,13 +1875,13 @@ export const DayTradeView: React.FC = () => {
 
               {/* Indicator Lines */}
               {showMA9 && (
-                <path d="M 12 118 Q 180 85, 360 98 T 685 92" fill="none" stroke="#38BDF8" strokeWidth="1.8" opacity="0.95" />
+                <path d="M 12 118 Q 180 85, 360 98 T 685 92" fill="none" stroke={dtMa9Hex} strokeWidth="1.8" opacity="0.95" />
               )}
               {showMA21 && (
                 <path d="M 12 126 Q 200 100, 380 112 T 685 106" fill="none" stroke="#C084FC" strokeWidth="1.8" opacity="0.9" />
               )}
               {showMA200 && (
-                <path d="M 12 142 Q 220 130, 420 128 T 685 120" fill="none" stroke="#F59E0B" strokeWidth="2.2" opacity="0.85" />
+                <path d="M 12 142 Q 220 130, 420 128 T 685 120" fill="none" stroke={dtMa200Hex} strokeWidth="2.2" opacity="0.85" />
               )}
               {showVWAP && (
                 <path d="M 12 112 Q 170 92, 340 104 T 685 98" fill="none" stroke="#E879F9" strokeWidth="1.8" strokeDasharray="4 3" opacity="0.85" />

@@ -35,7 +35,7 @@ export const Footer: React.FC = () => {
   return (
     <footer
       aria-label="Rodapé institucional DinhEuro"
-      className="bg-[#050a14] border-t border-slate-800/90 text-slate-400 text-xs mt-16 pt-12 pb-8"
+      className="bg-[#F4F7F9] dark:bg-[#050a14] border-t border-[#E2E8F0] dark:border-slate-800/90 text-[#475569] dark:text-slate-400 text-xs mt-16 pt-12 pb-8"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 space-y-8">
         {/* Main Footer Grid */}
@@ -49,39 +49,39 @@ export const Footer: React.FC = () => {
                 className="w-10 h-10 rounded-full border border-amber-400/50 shadow-md bg-white/5"
               />
               <div>
-                <span className="text-xl font-black text-white tracking-tight">
-                  Dinh<span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-teal-300 to-amber-400">Euro</span>
+                <span className="text-xl font-black text-[#003399] dark:text-white tracking-tight">
+                  Dinh<span className="text-transparent bg-clip-text bg-gradient-to-r from-[#009B77] via-[#006B52] to-[#009B77] dark:from-emerald-400 dark:via-teal-300 dark:to-amber-400">Euro</span>
                 </span>
-                <p className="text-[10px] uppercase font-bold text-emerald-400 tracking-wider">
+                <p className="text-[10px] uppercase font-bold text-[#006B52] dark:text-emerald-400 tracking-wider">
                   {t.footer.tagline}
                 </p>
               </div>
             </div>
 
-            <p className="text-slate-400 text-xs leading-relaxed max-w-sm">
+            <p className="text-[#475569] dark:text-slate-400 text-xs leading-relaxed max-w-sm">
               {t.footer.description}
             </p>
 
             {/* Compliance & Status Badges */}
             <div className="space-y-1.5 pt-1">
-              <div className="flex items-center gap-2 text-[11px] text-emerald-400 font-medium">
-                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+              <div className="flex items-center gap-2 text-[11px] text-[#006B52] dark:text-emerald-400 font-medium">
+                <span className="w-2 h-2 rounded-full bg-[#009B77] dark:bg-emerald-400 animate-pulse"></span>
                 <span>{t.footer.infraStatus}</span>
               </div>
-              <div className="flex items-center gap-2 text-[11px] text-slate-400">
-                <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
+              <div className="flex items-center gap-2 text-[11px] text-[#475569] dark:text-slate-400">
+                <ShieldCheck className="w-3.5 h-3.5 text-[#003399] dark:text-emerald-400" />
                 <span>{t.footer.lgpdCompliance}</span>
               </div>
             </div>
 
             {/* DPO Direct Contact */}
-            <div className="pt-2 text-[11px] text-slate-400 flex items-center gap-1.5">
-              <Mail className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+            <div className="pt-2 text-[11px] text-[#475569] dark:text-slate-400 flex items-center gap-1.5">
+              <Mail className="w-3.5 h-3.5 text-[#D99B00] dark:text-amber-400 shrink-0" />
               <span>{t.footer.dpoLabel}</span>
               <a
                 href="mailto:admin@dinheiro.com"
                 aria-label="Enviar e-mail institucional para admin@dinheiro.com"
-                className="text-emerald-400 hover:underline font-mono font-medium"
+                className="text-[#003399] dark:text-emerald-400 hover:underline font-mono font-medium"
               >
                 admin@dinheiro.com
               </a>
@@ -90,7 +90,7 @@ export const Footer: React.FC = () => {
 
           {/* Col 3: Navegação Hub */}
           <div className="space-y-2.5">
-            <span className="text-xs font-bold text-white uppercase tracking-wider block">
+            <span className="text-xs font-bold text-[#002266] dark:text-white uppercase tracking-wider block">
               {t.footer.navHubTitle}
             </span>
             <ul className="space-y-1.5 text-xs">
@@ -98,7 +98,7 @@ export const Footer: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setActiveTab('dashboard')}
-                  className="hover:text-emerald-400 transition cursor-pointer text-left"
+                  className="hover:text-[#003399] dark:hover:text-emerald-400 transition cursor-pointer text-left"
                 >
                   {t.footer.navDashboard}
                 </button>
@@ -107,7 +107,7 @@ export const Footer: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setActiveTab('mercados')}
-                  className="hover:text-emerald-400 transition cursor-pointer text-left"
+                  className="hover:text-[#003399] dark:hover:text-emerald-400 transition cursor-pointer text-left"
                 >
                   {t.footer.navMarkets}
                 </button>
@@ -116,7 +116,7 @@ export const Footer: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setActiveTab('carteiras')}
-                  className="hover:text-emerald-400 transition cursor-pointer text-left"
+                  className="hover:text-[#003399] dark:hover:text-emerald-400 transition cursor-pointer text-left"
                 >
                   {t.footer.navPortfolios}
                 </button>
@@ -125,7 +125,7 @@ export const Footer: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setActiveTab('noticias')}
-                  className="hover:text-emerald-400 transition cursor-pointer text-left"
+                  className="hover:text-[#003399] dark:hover:text-emerald-400 transition cursor-pointer text-left"
                 >
                   {t.footer.navNews}
                 </button>
@@ -134,7 +134,7 @@ export const Footer: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setActiveTab('corretoras')}
-                  className="hover:text-emerald-400 transition cursor-pointer text-left"
+                  className="hover:text-[#003399] dark:hover:text-emerald-400 transition cursor-pointer text-left"
                 >
                   {t.footer.navBrokers}
                 </button>
@@ -144,7 +144,7 @@ export const Footer: React.FC = () => {
 
           {/* Col 4: Recursos & Análise */}
           <div className="space-y-2.5">
-            <span className="text-xs font-bold text-white uppercase tracking-wider block">
+            <span className="text-xs font-bold text-[#002266] dark:text-white uppercase tracking-wider block">
               {t.footer.resourcesTitle}
             </span>
             <ul className="space-y-1.5 text-xs">
@@ -152,7 +152,7 @@ export const Footer: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setActiveTab('graficos')}
-                  className="hover:text-emerald-400 transition cursor-pointer text-left"
+                  className="hover:text-[#003399] dark:hover:text-emerald-400 transition cursor-pointer text-left"
                 >
                   {t.footer.resCharts}
                 </button>
@@ -161,7 +161,7 @@ export const Footer: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setActiveTab('ferramentas')}
-                  className="hover:text-emerald-400 transition cursor-pointer text-left"
+                  className="hover:text-[#003399] dark:hover:text-emerald-400 transition cursor-pointer text-left"
                 >
                   {t.footer.resTools}
                 </button>
@@ -170,7 +170,7 @@ export const Footer: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setActiveTab('academy')}
-                  className="hover:text-emerald-400 transition cursor-pointer text-left"
+                  className="hover:text-[#003399] dark:hover:text-emerald-400 transition cursor-pointer text-left"
                 >
                   {t.footer.resAcademy}
                 </button>
@@ -179,7 +179,7 @@ export const Footer: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setActiveTab('sobre')}
-                  className="hover:text-emerald-400 transition cursor-pointer text-left font-semibold text-slate-300"
+                  className="hover:text-[#003399] dark:hover:text-emerald-400 transition cursor-pointer text-left font-semibold text-[#1E293B] dark:text-slate-300"
                 >
                   {t.footer.resAbout}
                 </button>
@@ -188,9 +188,9 @@ export const Footer: React.FC = () => {
                 <button
                   type="button"
                   onClick={scrollToTop}
-                  className="flex items-center gap-1 text-amber-400 hover:text-amber-300 transition pt-1 cursor-pointer font-semibold"
+                  className="flex items-center gap-1 text-[#003399] hover:text-[#002266] dark:text-amber-400 dark:hover:text-amber-300 transition pt-1 cursor-pointer font-semibold"
                 >
-                  <ArrowUp className="w-3.5 h-3.5" />
+                  <ArrowUp className="w-3.5 h-3.5 text-[#D99B00] dark:text-amber-400" />
                   <span>{t.footer.backToTop}</span>
                 </button>
               </li>
@@ -199,8 +199,8 @@ export const Footer: React.FC = () => {
 
           {/* Col 5: Jurídico & Compliance (Obrigatório) */}
           <div className="space-y-2.5">
-            <span className="text-xs font-bold text-white uppercase tracking-wider block flex items-center gap-1.5">
-              <Lock className="w-3.5 h-3.5 text-emerald-400" />
+            <span className="text-xs font-bold text-[#002266] dark:text-white uppercase tracking-wider block flex items-center gap-1.5">
+              <Lock className="w-3.5 h-3.5 text-[#009B77] dark:text-emerald-400" />
               <span>{t.footer.legalTitle}</span>
             </span>
             <ul className="space-y-1.5 text-xs">
@@ -208,7 +208,7 @@ export const Footer: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setActiveTab('termos')}
-                  className="hover:text-emerald-400 transition cursor-pointer text-left flex items-center gap-1"
+                  className="hover:text-[#003399] dark:hover:text-emerald-400 transition cursor-pointer text-left flex items-center gap-1"
                 >
                   <span>{t.footer.terms}</span>
                 </button>
@@ -217,7 +217,7 @@ export const Footer: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setActiveTab('privacidade')}
-                  className="hover:text-emerald-400 transition cursor-pointer text-left flex items-center gap-1"
+                  className="hover:text-[#003399] dark:hover:text-emerald-400 transition cursor-pointer text-left flex items-center gap-1"
                 >
                   <span>{t.footer.privacy}</span>
                 </button>
@@ -226,7 +226,7 @@ export const Footer: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setActiveTab('cookies')}
-                  className="hover:text-emerald-400 transition cursor-pointer text-left flex items-center gap-1"
+                  className="hover:text-[#003399] dark:hover:text-emerald-400 transition cursor-pointer text-left flex items-center gap-1"
                 >
                   <span>{t.footer.cookies}</span>
                 </button>
@@ -235,7 +235,7 @@ export const Footer: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setActiveTab('disclaimer')}
-                  className="hover:text-emerald-400 transition cursor-pointer text-left flex items-center gap-1"
+                  className="hover:text-[#003399] dark:hover:text-emerald-400 transition cursor-pointer text-left flex items-center gap-1"
                 >
                   <span>{t.footer.disclaimer}</span>
                 </button>
@@ -244,7 +244,7 @@ export const Footer: React.FC = () => {
                 <button
                   type="button"
                   onClick={handleReopenCookieBanner}
-                  className="inline-flex items-center gap-1.5 text-[11px] font-semibold text-amber-400 hover:text-amber-300 bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 px-2.5 py-1 rounded-lg transition cursor-pointer"
+                  className="inline-flex items-center gap-1.5 text-[11px] font-semibold text-[#D99B00] hover:text-[#003399] bg-[#FEF7E0] hover:bg-[#E6EEFF] border border-[#E5A910]/40 hover:border-[#003399]/30 dark:text-amber-400 dark:hover:text-amber-300 dark:bg-amber-500/10 dark:hover:bg-amber-500/20 dark:border-amber-500/30 px-2.5 py-1 rounded-lg transition cursor-pointer"
                 >
                   <Sliders className="w-3 h-3" />
                   <span>{t.footer.cookiePrefs}</span>
@@ -255,12 +255,12 @@ export const Footer: React.FC = () => {
         </div>
 
         {/* Disclaimer Financeiro e Transparência de Dados */}
-        <div className="pt-6 border-t border-slate-800/80 text-[11px] text-slate-500 leading-relaxed space-y-2">
+        <div className="pt-6 border-t border-[#E2E8F0] dark:border-slate-800/80 text-[11px] text-[#475569] dark:text-slate-500 leading-relaxed space-y-2">
           <p>
-            <strong className="text-slate-400">{t.footer.disclaimerPrefix}</strong> DinhEuro (<span className="text-emerald-400 font-mono">dinheuro.com</span> / <span className="text-emerald-400 font-mono">dinheuro.com.br</span>) {t.footer.disclaimerBody}
+            <strong className="text-[#1E293B] dark:text-slate-400">{t.footer.disclaimerPrefix}</strong> DinhEuro (<span className="text-[#003399] dark:text-emerald-400 font-mono">dinheuro.com</span> / <span className="text-[#006B52] dark:text-emerald-400 font-mono">dinheuro.com.br</span>) {t.footer.disclaimerBody}
           </p>
 
-          <div className="pt-4 border-t border-slate-800/40 space-y-3 text-slate-500 text-[11px] leading-relaxed">
+          <div className="pt-4 border-t border-[#E2E8F0] dark:border-slate-800/40 space-y-3 text-[#475569] dark:text-slate-500 text-[11px] leading-relaxed">
             <p className="text-center sm:text-left">
               {t.footer.brandProtection}
             </p>
@@ -269,11 +269,11 @@ export const Footer: React.FC = () => {
               <span className="text-center sm:text-left">
                 © {new Date().getFullYear()} DinhEuro (dinheuro.com / dinheuro.com.br). {t.footer.copyrightSuffix}
               </span>
-              <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 text-slate-400 text-[11px]">
+              <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 text-[#475569] dark:text-slate-400 text-[11px]">
                 <button
                   type="button"
                   onClick={() => setActiveTab('termos')}
-                  className="hover:text-white transition cursor-pointer"
+                  className="hover:text-[#003399] dark:hover:text-white transition cursor-pointer"
                 >
                   {t.footer.shortTerms}
                 </button>
@@ -281,7 +281,7 @@ export const Footer: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setActiveTab('privacidade')}
-                  className="hover:text-white transition cursor-pointer"
+                  className="hover:text-[#003399] dark:hover:text-white transition cursor-pointer"
                 >
                   {t.footer.shortPrivacy}
                 </button>
@@ -289,7 +289,7 @@ export const Footer: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setActiveTab('cookies')}
-                  className="hover:text-white transition cursor-pointer"
+                  className="hover:text-[#003399] dark:hover:text-white transition cursor-pointer"
                 >
                   {t.footer.shortCookies}
                 </button>
@@ -297,7 +297,7 @@ export const Footer: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setActiveTab('disclaimer')}
-                  className="hover:text-white transition cursor-pointer"
+                  className="hover:text-[#003399] dark:hover:text-white transition cursor-pointer"
                 >
                   {t.footer.shortDisclaimer}
                 </button>

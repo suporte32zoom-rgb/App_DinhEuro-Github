@@ -151,24 +151,24 @@ export const UniversalCurrencyCalculator: React.FC<UniversalCurrencyCalculatorPr
   return (
     <section
       aria-labelledby="universal-currency-calculator-title"
-      className="rounded-2xl bg-[#0d1627] border border-slate-800 p-5 sm:p-6 shadow-xl space-y-5"
+      className="rounded-2xl bg-[#FFFFFF] dark:bg-[#0d1627] border border-[#E2E8F0] dark:border-slate-800 p-5 sm:p-6 shadow-xl space-y-5"
     >
       {/* Top Header & Real-Time Controls */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-800 pb-4">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-[#E2E8F0] dark:border-slate-800 pb-4">
         <div className="space-y-1">
           <div className="flex items-center gap-2">
-            <Calculator className="w-5 h-5 text-emerald-400 shrink-0" />
+            <Calculator className="w-5 h-5 text-[#003399] dark:text-emerald-400 shrink-0" />
             <h2
               id="universal-currency-calculator-title"
-              className="text-base sm:text-lg font-bold text-white tracking-tight"
+              className="text-base sm:text-lg font-bold text-[#0F172A] dark:text-white tracking-tight"
             >
               {t.calculator.title}
             </h2>
           </div>
-          <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-slate-400">
+          <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-[#475569] dark:text-slate-400">
             <span>
               {t.calculator.sourceLabel ? `${t.calculator.sourceLabel} ` : ''}
-              <strong className={dataSource === 'awesomeapi' ? 'text-emerald-400' : 'text-amber-400'}>
+              <strong className={dataSource === 'awesomeapi' ? 'text-[#006B52] dark:text-emerald-400' : 'text-[#D99B00] dark:text-amber-400'}>
                 {dataSource === 'awesomeapi' ? t.calculator.sourceLive : t.calculator.sourceFallback}
               </strong>
             </span>
@@ -190,7 +190,7 @@ export const UniversalCurrencyCalculator: React.FC<UniversalCurrencyCalculatorPr
             {apiTimestamp && (
               <>
                 <span aria-hidden="true">·</span>
-                <span className="font-mono-numbers text-slate-500">{t.calculator.marketRef} {apiTimestamp}</span>
+                <span className="font-mono-numbers text-[#475569] dark:text-slate-500">{t.calculator.marketRef} {apiTimestamp}</span>
               </>
             )}
           </div>
@@ -201,15 +201,16 @@ export const UniversalCurrencyCalculator: React.FC<UniversalCurrencyCalculatorPr
           <div
             role="group"
             aria-label={t.calculator.quoteModeAria}
-            className="inline-flex items-center p-1 rounded-xl bg-slate-900 border border-slate-800"
+            className="inline-flex items-center p-1 rounded-xl bg-[#F4F7F9] dark:bg-slate-900 border border-[#E2E8F0] dark:border-slate-800"
           >
             <button
               type="button"
               onClick={() => setQuoteMode('bid')}
-              className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition cursor-pointer whitespace-nowrap shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400 ${
+              data-on-dark={quoteMode === 'bid' ? 'true' : undefined}
+              className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition cursor-pointer whitespace-nowrap shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#003399] dark:focus-visible:ring-emerald-400 ${
                 quoteMode === 'bid'
-                  ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40'
-                  : 'text-slate-400 hover:text-white border border-transparent'
+                  ? 'bg-[#003399] text-white border border-[#002266] dark:bg-emerald-500/20 dark:text-emerald-300 dark:border-emerald-500/40'
+                  : 'text-[#475569] dark:text-slate-400 hover:text-[#0F172A] dark:hover:text-white border border-transparent'
               }`}
             >
               {t.calculator.bidMode}
@@ -217,10 +218,11 @@ export const UniversalCurrencyCalculator: React.FC<UniversalCurrencyCalculatorPr
             <button
               type="button"
               onClick={() => setQuoteMode('ask')}
-              className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition cursor-pointer whitespace-nowrap shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400 ${
+              data-on-dark={quoteMode === 'ask' ? 'true' : undefined}
+              className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition cursor-pointer whitespace-nowrap shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#003399] dark:focus-visible:ring-emerald-400 ${
                 quoteMode === 'ask'
-                  ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40'
-                  : 'text-slate-400 hover:text-white border border-transparent'
+                  ? 'bg-[#003399] text-white border border-[#002266] dark:bg-emerald-500/20 dark:text-emerald-300 dark:border-emerald-500/40'
+                  : 'text-[#475569] dark:text-slate-400 hover:text-[#0F172A] dark:hover:text-white border border-transparent'
               }`}
             >
               {t.calculator.askMode}
@@ -231,10 +233,10 @@ export const UniversalCurrencyCalculator: React.FC<UniversalCurrencyCalculatorPr
             type="button"
             onClick={() => syncFromAwesomeApi(true)}
             disabled={isRefreshing}
-            className="min-h-[40px] inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700/80 hover:border-emerald-500/40 text-xs font-semibold text-slate-200 transition cursor-pointer whitespace-nowrap shrink-0 disabled:opacity-60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400"
+            className="min-h-[40px] inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-[#F4F7F9] dark:bg-slate-900 hover:bg-[#E6EEFF] dark:hover:bg-slate-800 border border-[#E2E8F0] dark:border-slate-700/80 hover:border-[#003399]/40 dark:hover:border-emerald-500/40 text-xs font-semibold text-[#1E293B] dark:text-slate-200 transition cursor-pointer whitespace-nowrap shrink-0 disabled:opacity-60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#003399] dark:focus-visible:ring-emerald-400"
             title={t.calculator.refresh}
           >
-            <RefreshCw className={`w-3.5 h-3.5 text-emerald-400 ${isRefreshing ? 'animate-spin' : ''}`} />
+            <RefreshCw className={`w-3.5 h-3.5 text-[#009B77] dark:text-emerald-400 ${isRefreshing ? 'animate-spin' : ''}`} />
             <span>{isRefreshing ? t.calculator.syncing : t.calculator.refresh}</span>
           </button>
         </div>
@@ -244,10 +246,10 @@ export const UniversalCurrencyCalculator: React.FC<UniversalCurrencyCalculatorPr
       {syncError && (
         <div
           role="status"
-          className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 px-4 py-2.5 rounded-xl bg-amber-500/10 border border-amber-500/30 text-xs text-amber-300"
+          className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 px-4 py-2.5 rounded-xl bg-[#FEF7E0] dark:bg-amber-500/10 border border-[#E5A910]/40 dark:border-amber-500/30 text-xs text-[#926200] dark:text-amber-300"
         >
           <div className="flex items-center gap-2">
-            <AlertCircle className="w-4 h-4 shrink-0 text-amber-400" />
+            <AlertCircle className="w-4 h-4 shrink-0 text-[#D99B00] dark:text-amber-400" />
             <span>
               {t.calculator.fallbackNotice} ({syncError === '__CACHED__' ? t.calculator.cachedRatesBadge : syncError})
             </span>
@@ -255,7 +257,7 @@ export const UniversalCurrencyCalculator: React.FC<UniversalCurrencyCalculatorPr
           <button
             type="button"
             onClick={() => syncFromAwesomeApi(true)}
-            className="text-xs font-semibold underline hover:text-amber-200 cursor-pointer self-start sm:self-auto whitespace-nowrap shrink-0"
+            className="text-xs font-semibold underline hover:text-[#002266] dark:hover:text-amber-200 cursor-pointer self-start sm:self-auto whitespace-nowrap shrink-0"
           >
             {t.calculator.retry}
           </button>
@@ -265,19 +267,19 @@ export const UniversalCurrencyCalculator: React.FC<UniversalCurrencyCalculatorPr
       {/* Main Conversion Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-stretch">
         {/* Source Input Column */}
-        <div className="lg:col-span-5 bg-[#070d18] rounded-xl border border-slate-800 p-4 space-y-3">
+        <div className="lg:col-span-5 bg-[#F4F7F9] dark:bg-[#070d18] rounded-xl border border-[#E2E8F0] dark:border-slate-800 p-4 space-y-3">
           <div className="flex items-center justify-between gap-2">
-            <label htmlFor="universal-calc-amount" className="text-xs font-medium text-slate-400">
+            <label htmlFor="universal-calc-amount" className="text-xs font-medium text-[#475569] dark:text-slate-400">
               {t.calculator.sourceAmount}
             </label>
-            <span className="text-xs font-mono-numbers text-slate-400">
+            <span className="text-xs font-mono-numbers text-[#475569] dark:text-slate-400">
               {fromMeta.flag} {t.calculator.currencyNames[fromMeta.code] || fromMeta.name}
             </span>
           </div>
 
           <div className="flex items-center gap-2">
             <div className="relative flex-1 min-w-0">
-              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-xs font-mono-numbers font-bold text-slate-400 pointer-events-none">
+              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-xs font-mono-numbers font-bold text-[#475569] dark:text-slate-400 pointer-events-none">
                 {fromMeta.symbol}
               </span>
               <input
@@ -288,7 +290,7 @@ export const UniversalCurrencyCalculator: React.FC<UniversalCurrencyCalculatorPr
                 inputMode="decimal"
                 value={amountInput}
                 onChange={(e) => setAmountInput(e.target.value)}
-                className="w-full min-h-[44px] bg-slate-900 border border-slate-700 focus:border-emerald-500 rounded-xl pl-11 pr-3 py-2 text-lg font-bold font-mono-numbers text-white focus:outline-none transition"
+                className="w-full min-h-[44px] bg-[#FFFFFF] dark:bg-slate-900 border border-[#E2E8F0] dark:border-slate-700 focus:border-[#003399] dark:focus:border-emerald-500 rounded-xl pl-11 pr-3 py-2 text-lg font-bold font-mono-numbers text-[#0F172A] dark:text-white focus:outline-none transition"
                 aria-label={t.calculator.amountAria}
               />
             </div>
@@ -297,7 +299,7 @@ export const UniversalCurrencyCalculator: React.FC<UniversalCurrencyCalculatorPr
               value={fromCurrency}
               onChange={(e) => setFromCurrency(e.target.value)}
               aria-label={t.calculator.fromCurrencyAria}
-              className="min-h-[44px] bg-slate-900 border border-slate-700 focus:border-emerald-500 rounded-xl px-3 py-2 text-xs font-bold text-white focus:outline-none cursor-pointer shrink-0"
+              className="min-h-[44px] bg-[#FFFFFF] dark:bg-slate-900 border border-[#E2E8F0] dark:border-slate-700 focus:border-[#003399] dark:focus:border-emerald-500 rounded-xl px-3 py-2 text-xs font-bold text-[#0F172A] dark:text-white focus:outline-none cursor-pointer shrink-0"
             >
               {DINHEURO_CALCULATOR_CURRENCIES.map((cur) => (
                 <option key={cur.code} value={cur.code}>
@@ -318,8 +320,8 @@ export const UniversalCurrencyCalculator: React.FC<UniversalCurrencyCalculatorPr
                   onClick={() => setAmountInput(String(preset))}
                   className={`px-2.5 py-1 rounded-lg text-[11px] font-mono-numbers font-semibold transition cursor-pointer whitespace-nowrap shrink-0 border ${
                     isSelected
-                      ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40'
-                      : 'bg-slate-900/90 text-slate-400 hover:text-white border-slate-800 hover:border-slate-700'
+                      ? 'bg-[#E6EEFF] text-[#003399] border-[#003399]/40 dark:bg-emerald-500/20 dark:text-emerald-300 dark:border-emerald-500/40'
+                      : 'bg-[#FFFFFF] dark:bg-slate-900/90 text-[#475569] dark:text-slate-400 hover:text-[#003399] dark:hover:text-white border-[#E2E8F0] dark:border-slate-800 hover:border-[#6699CC] dark:hover:border-slate-700'
                   }`}
                 >
                   {preset.toLocaleString(numberLocale)}
@@ -329,14 +331,14 @@ export const UniversalCurrencyCalculator: React.FC<UniversalCurrencyCalculatorPr
           </div>
         </div>
 
-        {/* Center Swap Button */}
+        {/* Center Swap Button (Gold Conversion Arrow Accent) */}
         <div className="lg:col-span-2 flex items-center justify-center">
           <button
             type="button"
             onClick={handleSwap}
             aria-label={t.calculator.swapAria}
             title={t.calculator.swapTitle}
-            className="w-full lg:w-auto min-h-[44px] px-4 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700 hover:border-emerald-500/50 text-emerald-400 hover:text-emerald-300 transition cursor-pointer flex items-center justify-center gap-2 text-xs font-semibold whitespace-nowrap shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400"
+            className="w-full lg:w-auto min-h-[44px] px-4 py-2.5 rounded-xl bg-[#FEF7E0] dark:bg-slate-900 hover:bg-[#E5A910]/25 dark:hover:bg-slate-800 border border-[#E5A910]/60 dark:border-slate-700 hover:border-[#D99B00] dark:hover:border-emerald-500/50 text-[#D99B00] dark:text-emerald-400 hover:text-[#002266] dark:hover:text-emerald-300 transition cursor-pointer flex items-center justify-center gap-2 text-xs font-semibold whitespace-nowrap shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E5A910] dark:focus-visible:ring-emerald-400"
           >
             <ArrowRightLeft className="w-4 h-4" />
             <span className="lg:hidden">{t.calculator.swapButton} {fromCurrency} ↔ {toCurrency}</span>
@@ -344,23 +346,23 @@ export const UniversalCurrencyCalculator: React.FC<UniversalCurrencyCalculatorPr
         </div>
 
         {/* Target Result Column */}
-        <div className="lg:col-span-5 bg-[#070d18] rounded-xl border border-slate-800 p-4 space-y-3 flex flex-col justify-between">
+        <div className="lg:col-span-5 bg-[#F4F7F9] dark:bg-[#070d18] rounded-xl border border-[#E2E8F0] dark:border-slate-800 p-4 space-y-3 flex flex-col justify-between">
           <div className="flex items-center justify-between gap-2">
-            <span className="text-xs font-medium text-slate-400">{t.calculator.convertedAmount} ({quoteMode === 'bid' ? t.calculator.buyLabel : t.calculator.sellLabel})</span>
-            <span className="text-xs font-mono-numbers text-slate-400">
+            <span className="text-xs font-medium text-[#475569] dark:text-slate-400">{t.calculator.convertedAmount} ({quoteMode === 'bid' ? t.calculator.buyLabel : t.calculator.sellLabel})</span>
+            <span className="text-xs font-mono-numbers text-[#475569] dark:text-slate-400">
               {toMeta.flag} {t.calculator.currencyNames[toMeta.code] || toMeta.name}
             </span>
           </div>
 
           <div className="flex items-center gap-2">
             <div
-              className="flex-1 min-w-0 min-h-[44px] bg-slate-900/70 border border-slate-800 rounded-xl px-3.5 py-2 flex items-center justify-between"
+              className="flex-1 min-w-0 min-h-[44px] bg-[#FFFFFF] dark:bg-slate-900/70 border border-[#E2E8F0] dark:border-slate-800 rounded-xl px-3.5 py-2 flex items-center justify-between"
               aria-live="polite"
             >
               {isLoading ? (
-                <div className="h-5 w-32 bg-slate-800 rounded animate-pulse" />
+                <div className="h-5 w-32 bg-[#E2E8F0] dark:bg-slate-800 rounded animate-pulse" />
               ) : (
-                <span className="text-lg sm:text-xl font-black font-mono-numbers text-emerald-400 truncate">
+                <span className="text-lg sm:text-xl font-black font-mono-numbers text-[#006B52] dark:text-emerald-400 truncate">
                   {formatConvertedAmount(conversion.convertedAmount, toCurrency, numberLocale)}
                 </span>
               )}
@@ -370,7 +372,7 @@ export const UniversalCurrencyCalculator: React.FC<UniversalCurrencyCalculatorPr
               value={toCurrency}
               onChange={(e) => setToCurrency(e.target.value)}
               aria-label={t.calculator.toCurrencyAria}
-              className="min-h-[44px] bg-slate-900 border border-slate-700 focus:border-emerald-500 rounded-xl px-3 py-2 text-xs font-bold text-white focus:outline-none cursor-pointer shrink-0"
+              className="min-h-[44px] bg-[#FFFFFF] dark:bg-slate-900 border border-[#E2E8F0] dark:border-slate-700 focus:border-[#003399] dark:focus:border-emerald-500 rounded-xl px-3 py-2 text-xs font-bold text-[#0F172A] dark:text-white focus:outline-none cursor-pointer shrink-0"
             >
               {DINHEURO_CALCULATOR_CURRENCIES.map((cur) => (
                 <option key={cur.code} value={cur.code}>
@@ -381,16 +383,16 @@ export const UniversalCurrencyCalculator: React.FC<UniversalCurrencyCalculatorPr
           </div>
 
           {/* Direct & Inverse Unit Parity */}
-          <div className="flex flex-wrap items-center justify-between gap-2 text-[11px] font-mono-numbers text-slate-400 pt-1">
+          <div className="flex flex-wrap items-center justify-between gap-2 text-[11px] font-mono-numbers text-[#475569] dark:text-slate-400 pt-1">
             <span>
               1 {fromCurrency} ={' '}
-              <strong className="text-slate-200">
+              <strong className="text-[#0F172A] dark:text-slate-200">
                 {formatUnitRate(conversion.directRate, toCurrency, numberLocale)} {toCurrency}
               </strong>
             </span>
             <span>
               1 {toCurrency} ={' '}
-              <strong className="text-slate-200">
+              <strong className="text-[#0F172A] dark:text-slate-200">
                 {formatUnitRate(conversion.inverseRate, fromCurrency, numberLocale)} {fromCurrency}
               </strong>
             </span>
@@ -400,29 +402,29 @@ export const UniversalCurrencyCalculator: React.FC<UniversalCurrencyCalculatorPr
 
       {/* Market Stats Strip (High / Low / 24h Variation / BRL Reference) */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-1">
-        <div className="bg-[#070d18] rounded-xl border border-slate-800/90 px-3.5 py-2.5">
-          <span className="text-[11px] text-slate-400 block">{t.calculator.brlEquivalent}</span>
-          <span className="text-sm font-bold font-mono-numbers text-white">
+        <div className="bg-[#F4F7F9] dark:bg-[#070d18] rounded-xl border border-[#E2E8F0] dark:border-slate-800/90 px-3.5 py-2.5">
+          <span className="text-[11px] text-[#475569] dark:text-slate-400 block">{t.calculator.brlEquivalent}</span>
+          <span className="text-sm font-bold font-mono-numbers text-[#003399] dark:text-white">
             {formatConvertedAmount(conversion.amountInBrl, 'BRL', numberLocale)}
           </span>
         </div>
 
-        <div className="bg-[#070d18] rounded-xl border border-slate-800/90 px-3.5 py-2.5">
-          <span className="text-[11px] text-slate-400 block">
+        <div className="bg-[#F4F7F9] dark:bg-[#070d18] rounded-xl border border-[#E2E8F0] dark:border-slate-800/90 px-3.5 py-2.5">
+          <span className="text-[11px] text-[#475569] dark:text-slate-400 block">
             {activePairForRange ? `${t.calculator.dayHigh} (${activePairForRange.code}/BRL)` : t.calculator.baseParity}
           </span>
-          <span className="text-sm font-bold font-mono-numbers text-slate-200">
+          <span className="text-sm font-bold font-mono-numbers text-[#0F172A] dark:text-slate-200">
             {activePairForRange && activePairForRange.code !== 'BRL'
               ? formatConvertedAmount(activePairForRange.highBrl, 'BRL', numberLocale)
               : formatConvertedAmount(1, 'BRL', numberLocale)}
           </span>
         </div>
 
-        <div className="bg-[#070d18] rounded-xl border border-slate-800/90 px-3.5 py-2.5">
-          <span className="text-[11px] text-slate-400 block">
+        <div className="bg-[#F4F7F9] dark:bg-[#070d18] rounded-xl border border-[#E2E8F0] dark:border-slate-800/90 px-3.5 py-2.5">
+          <span className="text-[11px] text-[#475569] dark:text-slate-400 block">
             {activePairForRange ? `${t.calculator.dayLow} (${activePairForRange.code}/BRL)` : t.calculator.activeMode}
           </span>
-          <span className="text-sm font-bold font-mono-numbers text-slate-200">
+          <span className="text-sm font-bold font-mono-numbers text-[#0F172A] dark:text-slate-200">
             {activePairForRange && activePairForRange.code !== 'BRL'
               ? formatConvertedAmount(activePairForRange.lowBrl, 'BRL', numberLocale)
               : quoteMode === 'bid'
@@ -431,8 +433,8 @@ export const UniversalCurrencyCalculator: React.FC<UniversalCurrencyCalculatorPr
           </span>
         </div>
 
-        <div className="bg-[#070d18] rounded-xl border border-slate-800/90 px-3.5 py-2.5">
-          <span className="text-[11px] text-slate-400 block">
+        <div className="bg-[#F4F7F9] dark:bg-[#070d18] rounded-xl border border-[#E2E8F0] dark:border-slate-800/90 px-3.5 py-2.5">
+          <span className="text-[11px] text-[#475569] dark:text-slate-400 block">
             {activePairForRange && activePairForRange.code !== 'BRL'
               ? `${t.calculator.change24h} (${activePairForRange.code})`
               : t.calculator.change24h}
@@ -440,7 +442,7 @@ export const UniversalCurrencyCalculator: React.FC<UniversalCurrencyCalculatorPr
           {activePairForRange && activePairForRange.code !== 'BRL' ? (
             <span
               className={`inline-flex items-center gap-1 text-sm font-bold font-mono-numbers ${
-                activePairForRange.pctChange >= 0 ? 'text-emerald-400' : 'text-rose-400'
+                activePairForRange.pctChange >= 0 ? 'text-[#009B77] dark:text-emerald-400' : 'text-[#DC2626] dark:text-rose-400'
               }`}
             >
               {activePairForRange.pctChange >= 0 ? (
@@ -452,7 +454,7 @@ export const UniversalCurrencyCalculator: React.FC<UniversalCurrencyCalculatorPr
               {activePairForRange.pctChange.toFixed(2)}%
             </span>
           ) : (
-            <span className="text-sm font-bold font-mono-numbers text-slate-400">
+            <span className="text-sm font-bold font-mono-numbers text-[#475569] dark:text-slate-400">
               {(0).toLocaleString(numberLocale, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}%
             </span>
           )}
@@ -460,22 +462,22 @@ export const UniversalCurrencyCalculator: React.FC<UniversalCurrencyCalculatorPr
       </div>
 
       {/* Optional Remittance Costs Breakdown (IOF + Spread) */}
-      <div className="border-t border-slate-800 pt-4">
+      <div className="border-t border-[#E2E8F0] dark:border-slate-800 pt-4">
         <button
           type="button"
           onClick={() => setShowFees((prev) => !prev)}
           aria-expanded={showFees}
-          className="inline-flex items-center gap-2 text-xs font-semibold text-slate-300 hover:text-emerald-400 transition cursor-pointer"
+          className="inline-flex items-center gap-2 text-xs font-semibold text-[#003399] dark:text-slate-300 hover:text-[#002266] dark:hover:text-emerald-400 transition cursor-pointer"
         >
-          {showFees ? <ChevronUp className="w-4 h-4 text-emerald-400" /> : <ChevronDown className="w-4 h-4 text-slate-400" />}
+          {showFees ? <ChevronUp className="w-4 h-4 text-[#003399] dark:text-emerald-400" /> : <ChevronDown className="w-4 h-4 text-[#475569] dark:text-slate-400" />}
           <span>{t.calculator.toggleRemittanceFees}</span>
         </button>
 
         {showFees && (
-          <div className="mt-3 bg-[#070d18] rounded-xl border border-slate-800 p-4 space-y-3">
+          <div className="mt-3 bg-[#F4F7F9] dark:bg-[#070d18] rounded-xl border border-[#E2E8F0] dark:border-slate-800 p-4 space-y-3">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
               <div>
-                <label htmlFor="calc-spread" className="text-slate-400 block mb-1">
+                <label htmlFor="calc-spread" className="text-[#475569] dark:text-slate-400 block mb-1">
                   {t.calculator.brokerSpread}
                 </label>
                 <input
@@ -485,12 +487,12 @@ export const UniversalCurrencyCalculator: React.FC<UniversalCurrencyCalculatorPr
                   step="0.1"
                   value={spreadPercent}
                   onChange={(e) => setSpreadPercent(Math.max(0, Number(e.target.value)))}
-                  className="w-full min-h-[40px] bg-slate-900 border border-slate-700 rounded-lg px-3 py-1.5 text-xs font-mono-numbers text-white focus:outline-none focus:border-emerald-500"
+                  className="w-full min-h-[40px] bg-[#FFFFFF] dark:bg-slate-900 border border-[#E2E8F0] dark:border-slate-700 rounded-lg px-3 py-1.5 text-xs font-mono-numbers text-[#0F172A] dark:text-white focus:outline-none focus:border-[#003399] dark:focus:border-emerald-500"
                 />
               </div>
 
               <div>
-                <label htmlFor="calc-iof" className="text-slate-400 block mb-1">
+                <label htmlFor="calc-iof" className="text-[#475569] dark:text-slate-400 block mb-1">
                   {t.calculator.iofLabel}
                 </label>
                 <input
@@ -500,27 +502,27 @@ export const UniversalCurrencyCalculator: React.FC<UniversalCurrencyCalculatorPr
                   step="0.01"
                   value={iofPercent}
                   onChange={(e) => setIofPercent(Math.max(0, Number(e.target.value)))}
-                  className="w-full min-h-[40px] bg-slate-900 border border-slate-700 rounded-lg px-3 py-1.5 text-xs font-mono-numbers text-white focus:outline-none focus:border-emerald-500"
+                  className="w-full min-h-[40px] bg-[#FFFFFF] dark:bg-slate-900 border border-[#E2E8F0] dark:border-slate-700 rounded-lg px-3 py-1.5 text-xs font-mono-numbers text-[#0F172A] dark:text-white focus:outline-none focus:border-[#003399] dark:focus:border-emerald-500"
                 />
               </div>
             </div>
 
-            <div className="pt-3 border-t border-slate-800 grid grid-cols-1 sm:grid-cols-3 gap-2 text-xs">
+            <div className="pt-3 border-t border-[#E2E8F0] dark:border-slate-800 grid grid-cols-1 sm:grid-cols-3 gap-2 text-xs">
               <div className="flex sm:block justify-between">
-                <span className="text-slate-400 block">Spread ({spreadPercent}%):</span>
-                <span className="font-mono-numbers font-semibold text-rose-400">
+                <span className="text-[#475569] dark:text-slate-400 block">Spread ({spreadPercent}%):</span>
+                <span className="font-mono-numbers font-semibold text-[#DC2626] dark:text-rose-400">
                   -{formatConvertedAmount(spreadAmount, toCurrency, numberLocale)}
                 </span>
               </div>
               <div className="flex sm:block justify-between">
-                <span className="text-slate-400 block">IOF ({iofPercent}%):</span>
-                <span className="font-mono-numbers font-semibold text-rose-400">
+                <span className="text-[#475569] dark:text-slate-400 block">IOF ({iofPercent}%):</span>
+                <span className="font-mono-numbers font-semibold text-[#DC2626] dark:text-rose-400">
                   -{formatConvertedAmount(iofAmount, toCurrency, numberLocale)}
                 </span>
               </div>
               <div className="flex sm:block justify-between sm:text-right">
-                <span className="text-slate-300 font-semibold block">{t.calculator.netEffectiveTotal}</span>
-                <span className="font-mono-numbers font-bold text-sm text-emerald-400">
+                <span className="text-[#1E293B] dark:text-slate-300 font-semibold block">{t.calculator.netEffectiveTotal}</span>
+                <span className="font-mono-numbers font-bold text-sm text-[#006B52] dark:text-emerald-400">
                   {formatConvertedAmount(netConvertedAmount, toCurrency, numberLocale)}
                 </span>
               </div>
@@ -530,12 +532,12 @@ export const UniversalCurrencyCalculator: React.FC<UniversalCurrencyCalculatorPr
       </div>
 
       {/* Multi-Currency Simultaneous Conversion Matrix */}
-      <div className="border-t border-slate-800 pt-4 space-y-3">
+      <div className="border-t border-[#E2E8F0] dark:border-slate-800 pt-4 space-y-3">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
-          <h3 className="text-xs font-bold text-slate-200">
+          <h3 className="text-xs font-bold text-[#0F172A] dark:text-slate-200">
             {t.calculator.matrixTitle}
           </h3>
-          <span className="text-[11px] text-slate-400">
+          <span className="text-[11px] text-[#475569] dark:text-slate-400">
             {t.calculator.matrixHint}
           </span>
         </div>
@@ -558,21 +560,21 @@ export const UniversalCurrencyCalculator: React.FC<UniversalCurrencyCalculatorPr
                 key={target.code}
                 type="button"
                 onClick={() => setToCurrency(target.code)}
-                className={`text-left rounded-xl p-3 border transition cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400 ${
+                className={`text-left rounded-xl p-3 border transition cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#003399] dark:focus-visible:ring-emerald-400 ${
                   isSelected
-                    ? 'bg-emerald-500/10 border-emerald-500/50'
-                    : 'bg-[#070d18] border-slate-800 hover:border-slate-700 hover:bg-slate-900/70'
+                    ? 'bg-[#E6EEFF] border-[#003399]/50 dark:bg-emerald-500/10 dark:border-emerald-500/50'
+                    : 'bg-[#F4F7F9] dark:bg-[#070d18] border-[#E2E8F0] dark:border-slate-800 hover:border-[#6699CC] dark:hover:border-slate-700 hover:bg-[#FFFFFF] dark:hover:bg-slate-900/70'
                 }`}
               >
                 <div className="flex items-center justify-between gap-1 mb-1">
-                  <span className="text-xs font-bold text-white flex items-center gap-1.5">
+                  <span className="text-xs font-bold text-[#0F172A] dark:text-white flex items-center gap-1.5">
                     <span>{target.flag}</span>
                     <span>{target.code}</span>
                   </span>
                   {target.code !== 'BRL' && q && (
                     <span
                       className={`text-[10px] font-mono-numbers font-semibold ${
-                        pct >= 0 ? 'text-emerald-400' : 'text-rose-400'
+                        pct >= 0 ? 'text-[#009B77] dark:text-emerald-400' : 'text-[#DC2626] dark:text-rose-400'
                       }`}
                     >
                       {pct >= 0 ? '+' : ''}
@@ -581,11 +583,11 @@ export const UniversalCurrencyCalculator: React.FC<UniversalCurrencyCalculatorPr
                   )}
                 </div>
 
-                <div className="text-xs sm:text-sm font-bold font-mono-numbers text-emerald-400 truncate">
+                <div className="text-xs sm:text-sm font-bold font-mono-numbers text-[#006B52] dark:text-emerald-400 truncate">
                   {formatConvertedAmount(targetConv.convertedAmount, target.code, numberLocale)}
                 </div>
 
-                <div className="text-[10px] text-slate-400 truncate mt-0.5">
+                <div className="text-[10px] text-[#475569] dark:text-slate-400 truncate mt-0.5">
                   {t.calculator.currencyNames[target.code] || target.name}
                 </div>
               </button>

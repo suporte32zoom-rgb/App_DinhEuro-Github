@@ -95,8 +95,8 @@ const AppShell: React.FC = () => {
   return (
     <div
       className={`min-h-screen ${
-        theme === 'dark' ? 'bg-[#0B1320] text-slate-100' : 'bg-[#f4f6fa] text-slate-900'
-      } flex flex-col font-sans selection:bg-emerald-500 selection:text-white transition-colors duration-150 ${
+        theme === 'dark' ? 'bg-[#0B1320] text-slate-100' : 'bg-[#F8FAFC] text-[#0F172A]'
+      } flex flex-col font-sans selection:bg-[#003399] selection:text-white transition-colors duration-150 ${
         isTerminalMode ? 'h-screen overflow-hidden' : ''
       }`}
     >

@@ -27,28 +27,28 @@ export const AssetDetailModal: React.FC = () => {
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 backdrop-blur-md p-2 sm:p-4 md:p-6 animate-in fade-in duration-200"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-[#0F172A]/65 dark:bg-black/85 backdrop-blur-md p-2 sm:p-4 md:p-6 animate-in fade-in duration-200"
       onClick={() => setSelectedAsset(null)}
       role="dialog"
       aria-modal="true"
       aria-label={`${tDetail.modalAriaPrefix} ${selectedAsset.symbol}`}
     >
       <div
-        className="w-full max-w-5xl rounded-3xl bg-[#070e1b] border border-slate-700/80 shadow-2xl text-slate-100 overflow-hidden flex flex-col max-h-[92vh]"
+        className="w-full max-w-5xl rounded-3xl bg-[#FFFFFF] dark:bg-[#070e1b] border border-[#E2E8F0] dark:border-slate-700/80 shadow-2xl text-[#0F172A] dark:text-slate-100 overflow-hidden flex flex-col max-h-[92vh]"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Modal Top Bar with Close Action */}
-        <div className="flex items-center justify-between px-5 py-3.5 border-b border-slate-800 bg-[#091120]">
+        <div className="flex items-center justify-between px-5 py-3.5 border-b border-[#E2E8F0] dark:border-slate-800 bg-[#F4F7F9] dark:bg-[#091120]">
           <div className="flex items-center gap-2">
             <span className="text-xl">{selectedAsset.flag || '📊'}</span>
-            <span className="text-xs font-bold uppercase tracking-wider text-slate-300">
+            <span className="text-xs font-bold uppercase tracking-wider text-[#003399] dark:text-slate-300">
               {tDetail.modalTopTitle}
             </span>
           </div>
 
           <button
             onClick={() => setSelectedAsset(null)}
-            className="p-1.5 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition cursor-pointer flex items-center gap-1.5 text-xs font-semibold"
+            className="p-1.5 rounded-xl text-[#475569] dark:text-slate-400 hover:text-[#003399] dark:hover:text-white hover:bg-[#E6EEFF] dark:hover:bg-slate-800 transition cursor-pointer flex items-center gap-1.5 text-xs font-semibold"
             title={tDetail.closeTitle}
           >
             <span className="hidden sm:inline">{tDetail.closeBtn}</span>

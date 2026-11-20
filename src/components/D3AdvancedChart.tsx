@@ -19,6 +19,7 @@ import { useI18n } from '../i18n/I18nContext';
 import { getNumberLocale } from '../i18n/translations';
 import { VIEWS_TRANSLATIONS } from '../i18n/viewsTranslations';
 import { getLocalizedAssetName } from '../i18n/marketDataTranslations';
+import { useMarket } from '../context/MarketContext';
 
 export type D3Timeframe = '1D' | '5D' | '1M' | '6M' | 'YTD' | '1A' | '5A';
 export type D3ChartStyle = 'area' | 'line' | 'candle';
@@ -134,6 +135,8 @@ export const D3AdvancedChart: React.FC<D3AdvancedChartProps> = ({
   height = 360,
 }) => {
   const { lang } = useI18n();
+  const { theme } = useMarket();
+  const isLight = theme === 'light';
   const locale = getNumberLocale(lang);
   const tD3 = VIEWS_TRANSLATIONS[lang].d3Chart;
 
@@ -341,26 +344,38 @@ export const D3AdvancedChart: React.FC<D3AdvancedChartProps> = ({
     setHoveredPoint(null);
   };
 
-  const strokeColor = isPositiveTrend ? '#10B981' : '#F43F5E';
+  const strokeColor = isPositiveTrend
+    ? isLight
+      ? '#009B77'
+      : '#10B981'
+    : isLight
+    ? '#DC2626'
+    : '#F43F5E';
+  const gridStroke = isLight ? '#E2E8F0' : '#141f33';
+  const tickFill = isLight ? '#475569' : '#64748b';
+  const crosshairStroke = isLight ? '#003399' : '#38bdf8';
+  const sma20Stroke = isLight ? '#D99B00' : '#F59E0B';
+  const sma50Stroke = isLight ? '#003399' : '#38BDF8';
   const gradientId = `d3-gradient-${asset.id || asset.symbol.replace(/[^a-zA-Z0-9]/g, '')}`;
 
   return (
     <div
       ref={containerRef}
-      className="w-full bg-[#08101e] border border-slate-800 rounded-2xl p-3 sm:p-5 shadow-2xl flex flex-col space-y-4"
+      className="w-full bg-[#FFFFFF] dark:bg-[#08101e] border border-[#E2E8F0] dark:border-slate-800 rounded-2xl p-3 sm:p-5 shadow-2xl flex flex-col space-y-4"
     >
       {/* Chart Top Controls & Tools Bar */}
-      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-800/80 pb-3">
+      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#E2E8F0] dark:border-slate-800/80 pb-3">
         {/* Timeframe Selector (1D, 5D, 1M, 6M, YTD, 1A, 5A) */}
-        <div className="flex items-center bg-[#050b14] border border-slate-800 rounded-xl p-0.5 text-xs">
+        <div className="flex items-center bg-[#F4F7F9] dark:bg-[#050b14] border border-[#E2E8F0] dark:border-slate-800 rounded-xl p-0.5 text-xs">
           {(['1D', '5D', '1M', '6M', 'YTD', '1A', '5A'] as const).map((tf) => (
             <button
               key={tf}
               onClick={() => setTimeframe(tf)}
+              data-on-dark={timeframe === tf ? 'true' : undefined}
               className={`px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-lg transition text-xs font-bold cursor-pointer ${
                 timeframe === tf
-                  ? 'bg-gradient-to-r from-emerald-500 to-teal-500 text-white shadow-md'
-                  : 'text-slate-400 hover:text-white'
+                  ? 'bg-[#003399] text-white dark:bg-gradient-to-r dark:from-emerald-500 dark:to-teal-500 shadow-md'
+                  : 'text-[#475569] dark:text-slate-400 hover:text-[#003399] dark:hover:text-white'
               }`}
             >
               {tf}
@@ -370,27 +385,36 @@ export const D3AdvancedChart: React.FC<D3AdvancedChartProps> = ({
 
         {/* View Mode Buttons (Área, Linha, Candlesticks) */}
         <div className="flex items-center gap-2 flex-wrap">
-          <div className="flex items-center bg-[#050b14] border border-slate-800 rounded-xl p-0.5 text-xs">
+          <div className="flex items-center bg-[#F4F7F9] dark:bg-[#050b14] border border-[#E2E8F0] dark:border-slate-800 rounded-xl p-0.5 text-xs">
             <button
               onClick={() => setChartStyle('area')}
+              data-on-dark={chartStyle === 'area' ? 'true' : undefined}
               className={`px-2.5 py-1 rounded-lg text-xs font-semibold cursor-pointer transition ${
-                chartStyle === 'area' ? 'bg-slate-700 text-white shadow-sm' : 'text-slate-400 hover:text-white'
+                chartStyle === 'area'
+                  ? 'bg-[#003399] text-white dark:bg-slate-700 shadow-sm'
+                  : 'text-[#475569] dark:text-slate-400 hover:text-[#003399] dark:hover:text-white'
               }`}
             >
               {tD3.styleArea}
             </button>
             <button
               onClick={() => setChartStyle('line')}
+              data-on-dark={chartStyle === 'line' ? 'true' : undefined}
               className={`px-2.5 py-1 rounded-lg text-xs font-semibold cursor-pointer transition ${
-                chartStyle === 'line' ? 'bg-slate-700 text-white shadow-sm' : 'text-slate-400 hover:text-white'
+                chartStyle === 'line'
+                  ? 'bg-[#003399] text-white dark:bg-slate-700 shadow-sm'
+                  : 'text-[#475569] dark:text-slate-400 hover:text-[#003399] dark:hover:text-white'
               }`}
             >
               {tD3.styleLine}
             </button>
             <button
               onClick={() => setChartStyle('candle')}
+              data-on-dark={chartStyle === 'candle' ? 'true' : undefined}
               className={`px-2.5 py-1 rounded-lg text-xs font-semibold cursor-pointer transition ${
-                chartStyle === 'candle' ? 'bg-slate-700 text-white shadow-sm' : 'text-slate-400 hover:text-white'
+                chartStyle === 'candle'
+                  ? 'bg-[#003399] text-white dark:bg-slate-700 shadow-sm'
+                  : 'text-[#475569] dark:text-slate-400 hover:text-[#003399] dark:hover:text-white'
               }`}
             >
               {tD3.styleCandle}
@@ -404,8 +428,8 @@ export const D3AdvancedChart: React.FC<D3AdvancedChartProps> = ({
               onClick={() => setShowSMA((prev) => !prev)}
               className={`flex items-center gap-1 px-2.5 py-1 rounded-lg border text-[11px] font-semibold cursor-pointer transition ${
                 showSMA
-                  ? 'bg-amber-500/10 text-amber-400 border-amber-500/30'
-                  : 'bg-slate-900 text-slate-400 border-slate-800 hover:text-slate-200'
+                  ? 'bg-[#FEF7E0] text-[#D99B00] border-[#E5A910]/40 dark:bg-amber-500/10 dark:text-amber-400 dark:border-amber-500/30'
+                  : 'bg-[#F4F7F9] dark:bg-slate-900 text-[#475569] dark:text-slate-400 border-[#E2E8F0] dark:border-slate-800 hover:text-[#0F172A] dark:hover:text-slate-200'
               }`}
               title={tD3.smaTitle}
             >
@@ -418,8 +442,8 @@ export const D3AdvancedChart: React.FC<D3AdvancedChartProps> = ({
               onClick={() => setShowVolume((prev) => !prev)}
               className={`flex items-center gap-1 px-2.5 py-1 rounded-lg border text-[11px] font-semibold cursor-pointer transition ${
                 showVolume
-                  ? 'bg-sky-500/10 text-sky-400 border-sky-500/30'
-                  : 'bg-slate-900 text-slate-400 border-slate-800 hover:text-slate-200'
+                  ? 'bg-[#E6EEFF] text-[#003399] border-[#6699CC]/40 dark:bg-sky-500/10 dark:text-sky-400 dark:border-sky-500/30'
+                  : 'bg-[#F4F7F9] dark:bg-slate-900 text-[#475569] dark:text-slate-400 border-[#E2E8F0] dark:border-slate-800 hover:text-[#0F172A] dark:hover:text-slate-200'
               }`}
               title={tD3.volumeTitle}
             >
@@ -434,8 +458,8 @@ export const D3AdvancedChart: React.FC<D3AdvancedChartProps> = ({
                   onClick={() => setShowBenchmark((prev) => !prev)}
                   className={`flex items-center gap-1 px-2.5 py-1 rounded-lg border text-[11px] font-semibold cursor-pointer transition ${
                     showBenchmark
-                      ? 'bg-purple-500/15 text-purple-300 border-purple-500/30'
-                      : 'bg-slate-900 text-slate-400 border-slate-800 hover:text-slate-200'
+                      ? 'bg-[#E3F7F2] text-[#006B52] border-[#009B77]/35 dark:bg-purple-500/15 dark:text-purple-300 dark:border-purple-500/30'
+                      : 'bg-[#F4F7F9] dark:bg-slate-900 text-[#475569] dark:text-slate-400 border-[#E2E8F0] dark:border-slate-800 hover:text-[#0F172A] dark:hover:text-slate-200'
                   }`}
                   title={tD3.compareTitle}
                 >
@@ -447,7 +471,7 @@ export const D3AdvancedChart: React.FC<D3AdvancedChartProps> = ({
                   <select
                     value={comparedSymbol}
                     onChange={(e) => setComparedSymbol(e.target.value)}
-                    className="ml-1.5 bg-slate-900 border border-slate-700 rounded-lg px-2 py-1 text-[11px] font-semibold text-purple-300 focus:outline-none cursor-pointer"
+                    className="ml-1.5 bg-[#FFFFFF] dark:bg-slate-900 border border-[#CBD5E1] dark:border-slate-700 rounded-lg px-2 py-1 text-[11px] font-semibold text-[#003399] dark:text-purple-300 focus:outline-none cursor-pointer"
                   >
                     <option value="">{tD3.selectOption}</option>
                     {comparisonAssets
@@ -467,19 +491,19 @@ export const D3AdvancedChart: React.FC<D3AdvancedChartProps> = ({
       </div>
 
       {/* Period High / Low Reference Banner */}
-      <div className="flex flex-wrap items-center justify-between text-xs px-1 text-slate-400 font-mono-numbers">
+      <div className="flex flex-wrap items-center justify-between text-xs px-1 text-[#475569] dark:text-slate-400 font-mono-numbers">
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-1.5">
-            <span className="text-[10px] uppercase font-bold text-slate-500">{tD3.periodLow}</span>
-            <span className="text-rose-400 font-bold">
+            <span className="text-[10px] uppercase font-bold text-[#475569] dark:text-slate-500">{tD3.periodLow}</span>
+            <span className="text-[#DC2626] dark:text-rose-400 font-bold">
               {isIndex
                 ? formatPointsValue(minPrice, locale)
                 : `${asset.currency === 'BRL' ? 'R$' : asset.currency === 'EUR' ? '€' : '$'} ${minPrice.toLocaleString(locale, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
             </span>
           </div>
           <div className="flex items-center gap-1.5">
-            <span className="text-[10px] uppercase font-bold text-slate-500">{tD3.periodHigh}</span>
-            <span className="text-emerald-400 font-bold">
+            <span className="text-[10px] uppercase font-bold text-[#475569] dark:text-slate-500">{tD3.periodHigh}</span>
+            <span className="text-[#006B52] dark:text-emerald-400 font-bold">
               {isIndex
                 ? formatPointsValue(maxPrice, locale)
                 : `${asset.currency === 'BRL' ? 'R$' : asset.currency === 'EUR' ? '€' : '$'} ${maxPrice.toLocaleString(locale, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
@@ -489,25 +513,25 @@ export const D3AdvancedChart: React.FC<D3AdvancedChartProps> = ({
 
         {/* Dynamic Hover Tooltip Info in header bar */}
         {hoveredPoint ? (
-          <div className="flex items-center gap-3 text-xs bg-slate-900/90 border border-slate-700/80 px-3 py-1 rounded-lg text-white">
-            <span className="text-slate-400">{hoveredPoint.time}</span>
+          <div className="flex items-center gap-3 text-xs bg-[#F4F7F9] dark:bg-slate-900/90 border border-[#E2E8F0] dark:border-slate-700/80 px-3 py-1 rounded-lg text-[#0F172A] dark:text-white">
+            <span className="text-[#475569] dark:text-slate-400">{hoveredPoint.time}</span>
             <span>{tD3.openShort} <strong>{isIndex ? `${hoveredPoint.open.toFixed(2)} pts` : hoveredPoint.open.toFixed(2)}</strong></span>
-            <span>{tD3.highShort} <strong className="text-emerald-400">{isIndex ? `${hoveredPoint.high.toFixed(2)} pts` : hoveredPoint.high.toFixed(2)}</strong></span>
-            <span>{tD3.lowShort} <strong className="text-rose-400">{isIndex ? `${hoveredPoint.low.toFixed(2)} pts` : hoveredPoint.low.toFixed(2)}</strong></span>
+            <span>{tD3.highShort} <strong className="text-[#006B52] dark:text-emerald-400">{isIndex ? `${hoveredPoint.high.toFixed(2)} pts` : hoveredPoint.high.toFixed(2)}</strong></span>
+            <span>{tD3.lowShort} <strong className="text-[#DC2626] dark:text-rose-400">{isIndex ? `${hoveredPoint.low.toFixed(2)} pts` : hoveredPoint.low.toFixed(2)}</strong></span>
             <span>{tD3.closeShort} <strong>{isIndex ? `${hoveredPoint.close.toFixed(2)} pts` : hoveredPoint.close.toFixed(2)}</strong></span>
-            {showVolume && <span className="text-slate-400">{tD3.volShort} {hoveredPoint.volume.toLocaleString(locale)}</span>}
+            {showVolume && <span className="text-[#475569] dark:text-slate-400">{tD3.volShort} {hoveredPoint.volume.toLocaleString(locale)}</span>}
           </div>
         ) : (
-          <div className="text-[11px] text-slate-500 flex items-center gap-2">
+          <div className="text-[11px] text-[#475569] dark:text-slate-500 flex items-center gap-2">
             <span>{tD3.engineLabel}</span>
             <span>•</span>
-            <span className="text-emerald-400">{tD3.precisionLabel}</span>
+            <span className="text-[#006B52] dark:text-emerald-400">{tD3.precisionLabel}</span>
           </div>
         )}
       </div>
 
       {/* Main Interactive D3 SVG Surface */}
-      <div className="relative bg-[#050b14] rounded-xl border border-slate-800/80 overflow-hidden">
+      <div className="relative bg-[#F8FAFC] dark:bg-[#050b14] rounded-xl border border-[#E2E8F0] dark:border-slate-800/80 overflow-hidden">
         <svg
           width={containerWidth}
           height={height}
@@ -545,14 +569,14 @@ export const D3AdvancedChart: React.FC<D3AdvancedChartProps> = ({
                     y1={y}
                     x2={innerWidth}
                     y2={y}
-                    stroke="#141f33"
+                    stroke={gridStroke}
                     strokeDasharray="3 3"
                     strokeWidth="1"
                   />
                   <text
                     x={innerWidth + 8}
                     y={y + 3}
-                    fill="#64748b"
+                    fill={tickFill}
                     fontSize="10"
                     fontFamily="monospace"
                   >
@@ -570,7 +594,7 @@ export const D3AdvancedChart: React.FC<D3AdvancedChartProps> = ({
               y1={yScale(maxPrice)}
               x2={innerWidth}
               y2={yScale(maxPrice)}
-              stroke="#10b981"
+              stroke={isLight ? '#009B77' : '#10b981'}
               strokeDasharray="4 4"
               strokeOpacity="0.4"
             />
@@ -579,7 +603,7 @@ export const D3AdvancedChart: React.FC<D3AdvancedChartProps> = ({
               y1={yScale(minPrice)}
               x2={innerWidth}
               y2={yScale(minPrice)}
-              stroke="#f43f5e"
+              stroke={isLight ? '#DC2626' : '#f43f5e'}
               strokeDasharray="4 4"
               strokeOpacity="0.4"
             />
@@ -625,7 +649,13 @@ export const D3AdvancedChart: React.FC<D3AdvancedChartProps> = ({
                   const wickTop = yScale(c.high);
                   const wickBottom = yScale(c.low);
                   const candleW = Math.max(3, innerWidth / data.length - 3);
-                  const color = isUp ? '#10B981' : '#F43F5E';
+                  const color = isUp
+                    ? isLight
+                      ? '#009B77'
+                      : '#10B981'
+                    : isLight
+                    ? '#DC2626'
+                    : '#F43F5E';
 
                   return (
                     <g key={idx}>
@@ -656,7 +686,7 @@ export const D3AdvancedChart: React.FC<D3AdvancedChartProps> = ({
               <path
                 d={sma20Path}
                 fill="none"
-                stroke="#F59E0B"
+                stroke={sma20Stroke}
                 strokeWidth="1.8"
                 strokeDasharray="3 2"
                 strokeOpacity="0.85"
@@ -668,7 +698,7 @@ export const D3AdvancedChart: React.FC<D3AdvancedChartProps> = ({
               <path
                 d={sma50Path}
                 fill="none"
-                stroke="#38BDF8"
+                stroke={sma50Stroke}
                 strokeWidth="1.8"
                 strokeOpacity="0.85"
               />
@@ -700,7 +730,7 @@ export const D3AdvancedChart: React.FC<D3AdvancedChartProps> = ({
             {/* Volume Sub-chart (Bottom) */}
             {showVolume && (
               <g transform={`translate(0, ${innerHeight + 15})`}>
-                <line x1={0} y1={0} x2={innerWidth} y2={0} stroke="#1b2a47" strokeWidth="1" />
+                <line x1={0} y1={0} x2={innerWidth} y2={0} stroke={gridStroke} strokeWidth="1" />
                 {data.map((c, idx) => {
                   const x = xScale(c.date);
                   const barH = volumeHeight - yVolumeScale(c.volume);
@@ -713,7 +743,15 @@ export const D3AdvancedChart: React.FC<D3AdvancedChartProps> = ({
                       y={volumeHeight - barH}
                       width={barW}
                       height={barH}
-                      fill={isUp ? 'rgba(16, 185, 129, 0.45)' : 'rgba(244, 63, 94, 0.45)'}
+                      fill={
+                        isUp
+                          ? isLight
+                            ? 'rgba(0, 155, 119, 0.35)'
+                            : 'rgba(16, 185, 129, 0.45)'
+                          : isLight
+                          ? 'rgba(220, 38, 38, 0.35)'
+                          : 'rgba(244, 63, 94, 0.45)'
+                      }
                       rx="1"
                     />
                   );
@@ -734,7 +772,7 @@ export const D3AdvancedChart: React.FC<D3AdvancedChartProps> = ({
                     key={i}
                     x={x}
                     y={0}
-                    fill="#64748b"
+                    fill={tickFill}
                     fontSize="10"
                     fontFamily="monospace"
                     textAnchor="middle"
@@ -754,7 +792,7 @@ export const D3AdvancedChart: React.FC<D3AdvancedChartProps> = ({
                   y1={0}
                   x2={hoveredPoint.x}
                   y2={innerHeight}
-                  stroke="#38bdf8"
+                  stroke={crosshairStroke}
                   strokeDasharray="3 3"
                   strokeWidth="1.2"
                 />
@@ -764,7 +802,7 @@ export const D3AdvancedChart: React.FC<D3AdvancedChartProps> = ({
                   y1={hoveredPoint.y}
                   x2={innerWidth}
                   y2={hoveredPoint.y}
-                  stroke="#38bdf8"
+                  stroke={crosshairStroke}
                   strokeDasharray="3 3"
                   strokeWidth="1.2"
                 />
@@ -784,33 +822,33 @@ export const D3AdvancedChart: React.FC<D3AdvancedChartProps> = ({
       </div>
 
       {/* Legend Footer */}
-      <div className="flex flex-wrap items-center justify-between text-[11px] text-slate-400 px-1 pt-1 border-t border-slate-800/80">
+      <div className="flex flex-wrap items-center justify-between text-[11px] text-[#475569] dark:text-slate-400 px-1 pt-1 border-t border-[#E2E8F0] dark:border-slate-800/80">
         <div className="flex items-center gap-4 flex-wrap">
           <div className="flex items-center gap-1.5">
             <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: strokeColor }}></span>
-            <span className="font-semibold text-white">{asset.symbol}</span>
+            <span className="font-semibold text-[#0F172A] dark:text-white">{asset.symbol}</span>
           </div>
           {showSMA && (
             <>
               <div className="flex items-center gap-1.5">
-                <span className="w-2.5 h-0.5 bg-amber-400 inline-block"></span>
+                <span className="w-2.5 h-0.5 bg-[#D99B00] dark:bg-amber-400 inline-block"></span>
                 <span>SMA 20</span>
               </div>
               <div className="flex items-center gap-1.5">
-                <span className="w-2.5 h-0.5 bg-sky-400 inline-block"></span>
+                <span className="w-2.5 h-0.5 bg-[#003399] dark:bg-sky-400 inline-block"></span>
                 <span>SMA 50</span>
               </div>
             </>
           )}
           {showBenchmark && comparisonAsset && (
-            <div className="flex items-center gap-1.5 text-purple-300">
+            <div className="flex items-center gap-1.5 text-[#003399] dark:text-purple-300">
               <span className="w-2.5 h-0.5 bg-purple-400 inline-block"></span>
               <span>{tD3.benchmarkPrefix} {comparisonAsset.symbol}</span>
             </div>
           )}
         </div>
 
-        <div className="text-slate-500 font-mono text-[10px]">
+        <div className="text-[#475569] dark:text-slate-500 font-mono text-[10px]">
           {tD3.timezoneFooter}
         </div>
       </div>

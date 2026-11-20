@@ -291,7 +291,8 @@ const FIXED_INCOME_ASSETS: FixedIncomeAsset[] = [
 ];
 
 export const FixedIncomeDerivativesView: React.FC = () => {
-  const { universalRates, assets } = useMarket();
+  const { universalRates, assets, theme } = useMarket();
+  const isLight = theme === 'light';
   const { lang } = useI18n();
   const locale = getNumberLocale(lang);
   const tFi = TRADING_TRANSLATIONS[lang].fixedIncome;
@@ -445,13 +446,14 @@ export const FixedIncomeDerivativesView: React.FC = () => {
           </div>
 
           {/* Sub Navigation Tabs */}
-          <div className="flex items-center gap-1.5 bg-slate-900/90 border border-slate-800 p-1 rounded-xl">
+          <div className="flex items-center gap-1.5 bg-[#F4F7F9] dark:bg-slate-900/90 border border-[#E2E8F0] dark:border-slate-800 p-1 rounded-xl">
             <button
               onClick={() => setActiveSubTab('options')}
+              data-on-dark={activeSubTab === 'options' ? 'true' : undefined}
               className={`px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1.5 cursor-pointer ${
                 activeSubTab === 'options'
-                  ? 'bg-emerald-600 text-white shadow-md'
-                  : 'text-slate-400 hover:text-white'
+                  ? 'bg-[#003399] dark:bg-emerald-600 text-white shadow-md'
+                  : 'text-[#475569] dark:text-slate-400 hover:text-[#003399] dark:hover:text-white'
               }`}
             >
               <Calculator className="w-3.5 h-3.5" />
@@ -459,10 +461,11 @@ export const FixedIncomeDerivativesView: React.FC = () => {
             </button>
             <button
               onClick={() => setActiveSubTab('futures')}
+              data-on-dark={activeSubTab === 'futures' ? 'true' : undefined}
               className={`px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1.5 cursor-pointer ${
                 activeSubTab === 'futures'
-                  ? 'bg-emerald-600 text-white shadow-md'
-                  : 'text-slate-400 hover:text-white'
+                  ? 'bg-[#003399] dark:bg-emerald-600 text-white shadow-md'
+                  : 'text-[#475569] dark:text-slate-400 hover:text-[#003399] dark:hover:text-white'
               }`}
             >
               <BarChart2 className="w-3.5 h-3.5" />
@@ -470,10 +473,11 @@ export const FixedIncomeDerivativesView: React.FC = () => {
             </button>
             <button
               onClick={() => setActiveSubTab('fixed_income')}
+              data-on-dark={activeSubTab === 'fixed_income' ? 'true' : undefined}
               className={`px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1.5 cursor-pointer ${
                 activeSubTab === 'fixed_income'
-                  ? 'bg-emerald-600 text-white shadow-md'
-                  : 'text-slate-400 hover:text-white'
+                  ? 'bg-[#003399] dark:bg-emerald-600 text-white shadow-md'
+                  : 'text-[#475569] dark:text-slate-400 hover:text-[#003399] dark:hover:text-white'
               }`}
             >
               <ShieldCheck className="w-3.5 h-3.5" />
@@ -762,10 +766,11 @@ export const FixedIncomeDerivativesView: React.FC = () => {
                       <button
                         key={st.id}
                         onClick={() => setStrategyType(st.id)}
+                        data-on-dark={strategyType === st.id ? 'true' : undefined}
                         className={`px-2.5 py-1 rounded-md text-[11px] font-bold transition cursor-pointer ${
                           strategyType === st.id
-                            ? 'bg-emerald-600 text-white'
-                            : 'text-slate-400 hover:text-white'
+                            ? 'bg-[#003399] dark:bg-emerald-600 text-white'
+                            : 'text-[#475569] dark:text-slate-400 hover:text-[#003399] dark:hover:text-white'
                         }`}
                       >
                         {st.label}
@@ -778,8 +783,8 @@ export const FixedIncomeDerivativesView: React.FC = () => {
                 <div className="h-48 w-full relative flex items-center justify-center">
                   <svg className="w-full h-full overflow-visible" viewBox="0 0 600 180" preserveAspectRatio="none">
                     {/* Zero PnL Reference Line */}
-                    <line x1="0" y1="90" x2="600" y2="90" stroke="#334155" strokeWidth="1.5" strokeDasharray="4 4" />
-                    <text x="10" y="85" fill="#64748b" fontSize="10" fontFamily="monospace">
+                    <line x1="0" y1="90" x2="600" y2="90" stroke={isLight ? '#CBD5E1' : '#334155'} strokeWidth="1.5" strokeDasharray="4 4" />
+                    <text x="10" y="85" fill={isLight ? '#475569' : '#64748b'} fontSize="10" fontFamily="monospace">
                       {tFi.breakevenText}
                     </text>
 
@@ -799,7 +804,7 @@ export const FixedIncomeDerivativesView: React.FC = () => {
                         <>
                           <polyline
                             fill="none"
-                            stroke="#10b981"
+                            stroke={isLight ? '#009B77' : '#10b981'}
                             strokeWidth="2.5"
                             points={pointsStr}
                             strokeLinecap="round"
