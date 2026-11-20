@@ -1,5 +1,4 @@
 import type { SupportedLanguage } from '../i18n/translations';
-import mercosulEuTradeImg from '../assets/images/mercosul_eu_trade_1794944856986.jpg';
 
 export interface DailyInsightLocalized {
   tag: string;
@@ -60,6 +59,130 @@ export const DAILY_INSIGHTS_UI_COPY: Record<
 };
 
 export const DAILY_INSIGHTS_ITEMS: DailyInsightItem[] = [
+  {
+    id: 'coinbase-deribit-aquisicao-infraestrutura-2026',
+    isoDate: '2026-11-20',
+    imageUrl: '/assets/aistudio/image_312cc483.png',
+    translations: {
+      pt: {
+        tag: 'Criptoativos & Mercado Institucional',
+        title:
+          'Coinbase e Deribit avançam na integração de infraestrutura após aquisição histórica de US$ 2,9 bilhões',
+        summary:
+          'Um ano depois da maior operação de fusão e aquisição do setor de criptoativos, empresas unificam suas plataformas em um motor de execução de baixa latência para atender à crescente demanda institucional no mercado global de derivativos.',
+        dateAuthor: '20 de novembro de 2026 • Redação DinhEuro',
+        source: 'Coinbase / Deribit • Mercado Global de Ativos Digitais',
+        readingTime: '4 min',
+        keywords: [
+          'coinbase deribit aquisição',
+          'opções de criptomoedas institucional',
+          'derivativos criptoativos nasdaq',
+          'baixa latência liquidez cripto',
+          'fusões e aquisições ativos digitais',
+        ],
+        imageAlt:
+          'Peças conectadas com os logotipos da Coinbase e da Deribit simbolizando a integração tecnológica das plataformas de ativos digitais',
+        fullContent: [
+          'O mercado de criptoativos registrou em 2025 a maior operação de fusão e aquisição de sua história. A Coinbase, plataforma de ativos digitais com ações negociadas na Nasdaq, pagou cerca de US$ 2,9 bilhões pela Deribit, líder mundial na negociação de opções de criptomoedas. Anunciado em maio e concluído em agosto, o negócio colocou as duas empresas sob o mesmo controle.',
+          'Um ano depois da conclusão da compra, Coinbase e Deribit avançam na integração de suas infraestruturas de negociação. O trabalho ocorre em um mercado que ganhou escala e ampliou a presença de investidores institucionais, aumentando as exigências sobre os sistemas que processam essas operações.',
+          'Com a Deribit, a Coinbase reforçou sua atuação no mercado internacional de opções, futuros e contratos perpétuos.',
+          '## Da especialização à aquisição',
+          'Antes da compra, a Deribit operava de forma independente e tinha forte presença entre investidores institucionais e operadores profissionais. A empresa concentrava a maior parte do volume global negociado em opções de criptomoedas, contratos cujo valor está relacionado ao preço de outro ativo.',
+          'A aquisição acrescentou esse segmento a uma estrutura que já reúne serviços de negociação, custódia, stablecoins e soluções voltadas a instituições. Para a Coinbase, a operação faz parte da estratégia de ampliar a variedade de ativos e serviços financeiros digitais disponíveis em sua plataforma global.',
+          'Concluída a compra, o trabalho chegou à infraestrutura tecnológica, com a integração de sistemas desenvolvidos separadamente.',
+          '## Integração chega à infraestrutura',
+          'As plataformas de negociação da Coinbase e da Deribit estão sendo unificadas em um único motor de execução, preparado para processar grandes volumes com baixa latência. O projeto prevê ainda ganhos de liquidez e eficiência.',
+          'Em mercados financeiros, velocidade e liquidez se tornam mais relevantes à medida que crescem os volumes negociados. Sistemas de baixa latência reduzem o tempo entre o recebimento e a execução das ordens, enquanto maior liquidez facilita operações de grande porte sem oscilações acentuadas nos preços.',
+          'Essas características ganham importância com o aumento da participação institucional no mercado de ativos digitais. A infraestrutura precisa combinar capacidade de processamento, segurança e eficiência para atender operações de maior porte.',
+          '## Mercado institucional ganha peso',
+          'Dados divulgados pela Coinbase mostram que o volume combinado de negociação de derivativos soma centenas de bilhões de dólares por trimestre. A receita institucional também cresceu com a contribuição da Deribit.',
+          'Ao mesmo tempo, diferentes países vêm estabelecendo regras para ativos e serviços financeiros digitais. As condições de oferta e negociação, porém, variam de acordo com cada jurisdição.',
+          'No Brasil, a Coinbase não oferece localmente serviços de derivativos a residentes no país. As referências a opções, futuros e contratos perpétuos nesta reportagem tratam do mercado internacional e da atuação global da companhia, não da oferta desses produtos ao público brasileiro.',
+          '## Consolidação muda a escala do setor',
+          'Fusões e aquisições tiveram papel importante na formação dos mercados financeiros tradicionais, reunindo operações, tecnologia e liquidez em estruturas de maior porte. Negócios bilionários como a compra da Deribit mostram que a consolidação também chegou ao mercado de ativos digitais.',
+          'A integração das plataformas é a etapa atual dessa consolidação e amplia a infraestrutura da Coinbase para operações no mercado global.',
+        ],
+      },
+      en: {
+        tag: 'Crypto Assets & Institutional Markets',
+        title:
+          'Coinbase and Deribit advance infrastructure integration following historic US$ 2.9 billion acquisition',
+        summary:
+          'One year after the largest M&A deal in digital asset history, the companies are unifying their trading platforms under a single low-latency matching engine to serve growing institutional derivatives demand globally.',
+        dateAuthor: 'Nov 20, 2026 • DinhEuro Editorial',
+        source: 'Coinbase / Deribit • Global Digital Assets Market',
+        readingTime: '4 min read',
+        keywords: [
+          'coinbase deribit acquisition',
+          'crypto options institutional market',
+          'digital asset derivatives nasdaq',
+          'low latency crypto liquidity',
+          'crypto m&a consolidation',
+        ],
+        imageAlt:
+          'Interlocking pieces featuring the Coinbase and Deribit logos symbolizing the integration of their digital asset and derivatives platforms',
+        fullContent: [
+          'The digital asset market recorded the largest merger and acquisition transaction in its history in 2025. Coinbase, the Nasdaq-listed digital asset platform, paid roughly US$ 2.9 billion for Deribit, the global leader in cryptocurrency options trading. Announced in May and completed in August, the deal brought both companies under unified ownership.',
+          'A year after closing the acquisition, Coinbase and Deribit are advancing the integration of their trading infrastructures. The effort comes as the market has scaled and broadened institutional investor participation, raising performance demands on the systems processing these transactions.',
+          'With Deribit, Coinbase strengthened its presence across international options, futures, and perpetual contracts markets.',
+          '## From specialization to acquisition',
+          'Prior to the buyout, Deribit operated independently with a strong footprint among institutional investors and professional traders. The firm accounted for the majority of global trading volume in crypto options—derivative contracts whose value is linked to the price of an underlying asset.',
+          'The acquisition added this segment to a platform already spanning spot trading, custody, stablecoins, and institutional solutions. For Coinbase, the transaction fits a broader strategy to expand the range of digital financial assets and services offered globally.',
+          'Once the purchase closed, work shifted to core technology infrastructure, integrating separately engineered systems.',
+          '## Integration reaches core infrastructure',
+          'Coinbase and Deribit trading venues are being unified onto a single execution engine designed to process large order volumes with low latency. The project also targets deeper liquidity and higher capital efficiency.',
+          'In financial markets, execution speed and order-book depth become increasingly critical as trading volumes expand. Low-latency systems cut the time between order submission and execution, while stronger liquidity supports institutional block trades without sharp price dislocations.',
+          'These capabilities grow in importance as institutional participation accelerates across digital assets, requiring infrastructure that combines throughput, security, and operational resilience.',
+          '## Institutional market gains weight',
+          'Figures disclosed by Coinbase show combined derivatives trading volume reaching hundreds of billions of dollars per quarter, while institutional revenue has also expanded on Deribit’s contribution.',
+          'At the same time, jurisdictions around the world continue rolling out regulatory frameworks for digital assets and financial services, with offering and trading conditions varying by country.',
+          'In Brazil, Coinbase does not locally offer derivatives services to domestic residents. References to options, futures, and perpetual contracts in this report pertain strictly to international markets and the company’s global operations rather than product offerings to Brazilian retail or local residents.',
+          '## Consolidation reshapes industry scale',
+          'Mergers and acquisitions played a decisive role in shaping traditional financial markets by bringing operations, technology, and liquidity together inside larger institutions. Billion-dollar deals like the Deribit acquisition show that consolidation has firmly arrived in digital assets.',
+          'Platform integration marks the current phase of that consolidation, expanding Coinbase’s infrastructure for global market operations.',
+        ],
+      },
+      es: {
+        tag: 'Criptoactivos y Mercado Institucional',
+        title:
+          'Coinbase y Deribit avanzan en la integración de infraestructura tras histórica adquisición de US$ 2.900 millones',
+        summary:
+          'Un año después de la mayor operación de fusiones y adquisiciones del sector cripto, ambas compañías unifican sus plataformas en un motor de ejecución de baja latencia para atender al creciente peso institucional en derivados globales.',
+        dateAuthor: '20 de noviembre de 2026 • Redacción DinhEuro',
+        source: 'Coinbase / Deribit • Mercado Global de Activos Digitales',
+        readingTime: '4 min',
+        keywords: [
+          'coinbase deribit adquisicion',
+          'opciones criptomonedas institucional',
+          'derivados activos digitales nasdaq',
+          'baja latencia liquidez cripto',
+          'fusiones y adquisiciones cripto',
+        ],
+        imageAlt:
+          'Piezas conectadas con los logotipos de Coinbase y Deribit simbolizando la integración tecnológica de sus plataformas globales',
+        fullContent: [
+          'El mercado de criptoactivos registró en 2025 la mayor operación de fusión y adquisición de su historia. Coinbase, plataforma de activos digitales que cotiza en el Nasdaq, pagó cerca de US$ 2.900 millones por Deribit, líder mundial en la negociación de opciones de criptomonedas. Anunciada en mayo y concluida en agosto, la operación colocó a ambas compañías bajo el mismo control.',
+          'Un año después de concretar la compra, Coinbase y Deribit avanzan en la integración de sus infraestructuras de negociación. El proceso se desarrolla en un mercado que ganó escala y amplió la presencia de inversores institucionales, elevando las exigencias sobre los sistemas que procesan estas operaciones.',
+          'Con Deribit, Coinbase reforzó su actuación en el mercado internacional de opciones, futuros y contratos perpetuos.',
+          '## De la especialización a la adquisición',
+          'Antes de la compra, Deribit operaba de manera independiente y contaba con una sólida presencia entre inversores institucionales y operadores profesionales. La firma concentraba la mayor parte del volumen global negociado en opciones de criptomonedas, contratos cuyo valor depende del precio de otro activo.',
+          'La adquisición incorporó este segmento a una estructura que ya reúne servicios de negociación, custodia, stablecoins y soluciones orientadas a instituciones. Para Coinbase, la operación forma parte de la estrategia de ampliar la variedad de activos y servicios financieros digitales en su plataforma global.',
+          'Concluida la compra, el trabajo avanzó hacia la infraestructura tecnológica, integrando sistemas desarrollados por separado.',
+          '## La integración llega a la infraestructura',
+          'Las plataformas de negociación de Coinbase y Deribit están siendo unificadas en un único motor de ejecución, preparado para procesar grandes volúmenes con baja latencia. El proyecto contempla además mejoras en liquidez y eficiencia.',
+          'En los mercados financieros, la velocidad y la liquidez adquieren mayor relevancia a medida que crecen los volúmenes operados. Los sistemas de baja latencia reducen el tiempo entre la recepción y la ejecución de las órdenes, mientras que una mayor liquidez facilita operaciones de gran tamaño sin oscilaciones bruscas en los precios.',
+          'Estas características cobran peso con el aumento de la participación institucional en el mercado de activos digitales, exigiendo una infraestructura que combine capacidad de procesamiento, seguridad y eficiencia.',
+          '## El mercado institucional gana protagonismo',
+          'Datos divulgados por Coinbase muestran que el volumen combinado de negociación de derivados asciende a cientos de miles de millones de dólares por trimestre. Los ingresos institucionales también crecieron impulsados por el aporte de Deribit.',
+          'Al mismo tiempo, distintos países avanzan en marcos regulatorios para activos y servicios financieros digitales, con condiciones de oferta y negociación que varían según cada jurisdicción.',
+          'En Brasil, Coinbase no ofrece localmente servicios de derivados a residentes en el país. Las referencias a opciones, futuros y contratos perpetuos en este informe aluden al mercado internacional y a la operación global de la compañía, no a la oferta de estos productos al público brasileño.',
+          '## La consolidación cambia la escala del sector',
+          'Las fusiones y adquisiciones desempeñaron un papel decisivo en la formación de los mercados financieros tradicionales al reunir operaciones, tecnología y liquidez en estructuras de mayor envergadura. Acuerdos multimillonarios como la compra de Deribit demuestran que la consolidación también llegó al ecosistema de activos digitales.',
+          'La integración de las plataformas constituye la etapa actual de esa consolidación y amplía la infraestructura de Coinbase para operar en el mercado global.',
+        ],
+      },
+    },
+  },
   {
     id: 'aladi-cosmeticos-exportacao-brasil-2026',
     isoDate: '2026-11-18',
@@ -771,69 +894,6 @@ export const DAILY_INSIGHTS_ITEMS: DailyInsightItem[] = [
           'Por otro lado, la inflación media de la UE se situaría en 3,3% este año y 3,2% en 2027 (frente al 2,4% previsto anteriormente), alcanzando un pico superior al 4% hacia el cambio de año y regresando al 2,3% recién en 2028, presionada por los costos energéticos derivados del conflicto con Irán y su traslado a las facturas domésticas de gas, electricidad y alimentos.',
           'Según el comisario europeo de Economía, Valdis Dombrovskis, los precios elevados presionan a familias y empresas. Aun así, la Comisión señala que una caída reciente cercana al 20% en el petróleo y el gas desde finales de octubre podría moderar la inflación del próximo año si se mantiene.',
           'En el ámbito fiscal y laboral, el déficit presupuestario agregado de la UE subiría del 3,1% al 3,6% del PIB, con la deuda pública alcanzando el 85,6% hacia 2028 y las tasas del BCE presionando el crédito. Entre las mayores economías de la eurozona, España lidera el crecimiento (2,6%), seguida por Alemania (1,3%), Italia (1,0%) y Francia (0,4%). El mercado laboral sigue resiliente con la creación estimada de 800 mil empleos y desempleo cercano al 6%, aunque los salarios reales crecen solo un 0,6%.',
-        ],
-      },
-    },
-  },
-  {
-    id: 'mdic-apex-webserie-mercosul-ue',
-    imageUrl: mercosulEuTradeImg,
-    translations: {
-      pt: {
-        tag: 'Comércio Exterior',
-        title:
-          'MDIC e ApexBrasil lançam websérie sobre oportunidades do Acordo Mercosul – União Europeia',
-        summary:
-          'Com 10 episódios exibidos às terças e quintas-feiras, a série "Do Acordo ao Mercado" orienta exportadores brasileiros sobre o espaço integrado de mais de 700 milhões de pessoas e PIB de US$ 22 trilhões.',
-        dateAuthor: '04/11/2026 • Por Fabiana Ceyhan',
-        source: 'Ministério do Desenvolvimento, Indústria, Comércio e Serviços (MDIC)',
-        imageAlt:
-          'Bandeiras do Brasil, Mercosul e União Europeia lado a lado simbolizando o acordo comercial internacional',
-        fullContent: [
-          'O Ministério do Desenvolvimento, Indústria, Comércio e Serviços (MDIC) e a Agência Brasileira de Promoção de Exportações e Investimentos (ApexBrasil) lançaram oficialmente a websérie educativa "Do Acordo ao Mercado", dedicada a detalhar as oportunidades comerciais, tarifárias e produtivas geradas pelo Acordo Mercosul – União Europeia.',
-          'Estruturada em 10 episódios, com estreias programadas às terças e quintas-feiras, a produção foi concebida para traduzir os capítulos técnicos do tratado em orientações práticas para empresários, associações setoriais, tradings e micro, pequenas e médias empresas interessadas em iniciar ou ampliar exportações para o mercado europeu.',
-          'Ao longo dos episódios, autoridades e técnicos diretamente ligados às negociações e à agenda de comércio exterior analisam os impactos setoriais e os caminhos de habilitação exportadora. Entre os participantes confirmados estão Márcio Elias Rosa, secretário-executivo do MDIC, Tatiana Prazeres, secretária de Comércio Exterior do MDIC, além dos especialistas Daniela Ferreira de Matos e Laudemir Müller.',
-          'Os conteúdos abordam temas estratégicos para a competitividade do setor produtivo nacional, incluindo cronogramas de desgravação tarifária, regras de origem, exigências sanitárias e fitossanitárias, sustentabilidade nas cadeias produtivas, compras governamentais, propriedade intelectual e acesso a mercados de alto valor agregado.',
-          'Segundo os dados apresentados na iniciativa, a integração entre o Mercosul e a União Europeia consolida uma das maiores áreas de livre comércio do mundo, conectando um mercado consumidor superior a 700 milhões de pessoas e um Produto Interno Bruto (PIB) combinado estimado em cerca de US$ 22 trilhões.',
-          'Para investidores e empresas brasileiras, o acordo amplia a previsibilidade jurídica e institucional no relacionamento econômico com os 27 países do bloco europeu, estimulando o adensamento industrial, a diversificação da pauta exportadora e novos fluxos de investimento produtivo bilateral.',
-        ],
-      },
-      en: {
-        tag: 'Foreign Trade',
-        title:
-          'MDIC and ApexBrasil launch web series on opportunities under the Mercosur–European Union Agreement',
-        summary:
-          'Spanning 10 episodes released on Tuesdays and Thursdays, "From Agreement to Market" guides Brazilian exporters through a combined bloc of over 700 million people and US$ 22 trillion in GDP.',
-        dateAuthor: 'Nov 04, 2026 • By Fabiana Ceyhan',
-        source: 'Ministry of Development, Industry, Trade and Services (MDIC)',
-        imageAlt:
-          'Flags of Brazil, Mercosur, and the European Union side by side symbolizing the bilateral trade accord',
-        fullContent: [
-          'Brazil’s Ministry of Development, Industry, Trade and Services (MDIC) and the Brazilian Trade and Investment Promotion Agency (ApexBrasil) have officially launched the educational web series "Do Acordo ao Mercado" ("From Agreement to Market"), designed to unpack the commercial, tariff, and industrial opportunities created by the Mercosur–European Union Agreement.',
-          'Comprising 10 episodes airing every Tuesday and Thursday, the series translates the technical chapters of the treaty into practical guidance for executives, industry associations, and micro, small, and medium-sized enterprises aiming to enter or scale exports across the European single market.',
-          'Throughout the program, senior policymakers and trade specialists involved in the negotiations and foreign-trade strategy break down sectoral impacts and export readiness steps. Featured contributors include Márcio Elias Rosa, Executive Secretary of MDIC, Tatiana Prazeres, Secretary of Foreign Trade at MDIC, alongside trade experts Daniela Ferreira de Matos and Laudemir Müller.',
-          'Episodes cover core pillars for export competitiveness, including tariff phase-out schedules, rules of origin, sanitary and phytosanitary standards, supply-chain sustainability requirements, public procurement, intellectual property, and market access for higher value-added goods.',
-          'As highlighted in the initiative, full implementation of the Mercosur–European Union framework establishes one of the largest free-trade areas in the world, encompassing more than 700 million consumers and a combined gross domestic product (GDP) of approximately US$ 22 trillion.',
-          'For Brazilian companies and international investors, the accord strengthens legal and regulatory predictability with all 27 EU member states, fostering industrial integration, export diversification, and sustained bilateral capital flows.',
-        ],
-      },
-      es: {
-        tag: 'Comercio Exterior',
-        title:
-          'MDIC y ApexBrasil lanzan serie web sobre oportunidades del Acuerdo Mercosur – Unión Europea',
-        summary:
-          'Con 10 episodios emitidos los martes y jueves, la serie "Del Acuerdo al Mercado" orienta a exportadores brasileños sobre un espacio integrado de más de 700 millones de personas y un PIB de US$ 22 billones.',
-        dateAuthor: '04/11/2026 • Por Fabiana Ceyhan',
-        source: 'Ministerio de Desarrollo, Industria, Comercio y Servicios (MDIC)',
-        imageAlt:
-          'Banderas de Brasil, Mercosur y la Unión Europea lado a lado simbolizando el acuerdo comercial internacional',
-        fullContent: [
-          'El Ministerio de Desarrollo, Industria, Comercio y Servicios (MDIC) y la Agencia Brasileña de Promoción de Exportaciones e Inversiones (ApexBrasil) lanzaron oficialmente la serie web educativa "Do Acordo ao Mercado" ("Del Acuerdo al Mercado"), dedicada a explicar las oportunidades comerciales, arancelarias y productivas derivadas del Acuerdo Mercosur – Unión Europea.',
-          'Estructurada en 10 episodios que se estrenan los martes y jueves, la producción busca traducir los capítulos técnicos del tratado en orientación práctica para empresas, cámaras sectoriales y micro, pequeñas y medianas firmas interesadas en iniciar o ampliar sus exportaciones hacia Europa.',
-          'A lo largo de la serie, autoridades y especialistas vinculados directamente con las negociaciones y la agenda de comercio exterior analizan el impacto sectorial y la preparación exportadora. Entre los participantes confirmados se encuentran Márcio Elias Rosa, secretario ejecutivo del MDIC, Tatiana Prazeres, secretaria de Comercio Exterior del MDIC, junto a los especialistas Daniela Ferreira de Matos y Laudemir Müller.',
-          'Los contenidos abordan ejes clave para la competitividad internacional, entre ellos cronogramas de desgravación arancelaria, reglas de origen, requisitos sanitarios y fitosanitarios, sostenibilidad en cadenas de suministro, compras públicas, propiedad intelectual y acceso para bienes de mayor valor agregado.',
-          'De acuerdo con las cifras presentadas en la iniciativa, la integración entre el Mercosur y la Unión Europea conforma una de las mayores zonas de libre comercio del planeta, reuniendo un mercado consumidor de más de 700 millones de personas y un Producto Interno Bruto (PIB) conjunto cercano a US$ 22 billones.',
-          'Para empresas e inversores, el tratado amplía la previsibilidad jurídica e institucional en la relación económica con los 27 países del bloque europeo, impulsando la modernización industrial, la diversificación exportadora y nuevos flujos de inversión productiva bilateral.',
         ],
       },
     },

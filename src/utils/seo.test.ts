@@ -154,8 +154,10 @@ test('APEC 2026 and ALADI 2026 editorial insights preserve prior items up to 12 
   assert.ok(source.includes('export const MAX_DAILY_INSIGHTS = 12;'));
   const idMatches = source.match(/^\s+id:\s*'[^']+',/gm) || [];
   assert.equal(idMatches.length, 12);
+  assert.ok(source.includes("id: 'coinbase-deribit-aquisicao-infraestrutura-2026'"));
   assert.ok(source.includes("id: 'apec-2026-trump-xi-putin-shenzhen'"));
   assert.ok(source.includes("id: 'aladi-cosmeticos-exportacao-brasil-2026'"));
+  assert.ok(source.includes("imageUrl: '/assets/aistudio/image_312cc483.png'"));
   assert.ok(source.includes("imageUrl: '/assets/aistudio/image_e7fa591e.png'"));
   assert.ok(source.includes("imageUrl: '/assets/aistudio/image_559daecb.png'"));
   assert.ok(
@@ -164,26 +166,30 @@ test('APEC 2026 and ALADI 2026 editorial insights preserve prior items up to 12 
     )
   );
 
+  const newsViewSource = fs.readFileSync(
+    path.resolve(process.cwd(), 'src/views/NewsView.tsx'),
+    'utf8'
+  );
+  assert.ok(newsViewSource.includes("'coinbase-deribit-aquisicao-infraestrutura-2026'"));
+
   const schema = buildEditorialArticlesSchema('pt', [], {
-    id: 'aladi-cosmeticos-exportacao-brasil-2026',
+    id: 'coinbase-deribit-aquisicao-infraestrutura-2026',
     schemaType: 'NewsArticle',
     headline:
-      'Comércio Exterior: Brasil Simplifica Exportação de Cosméticos para a América Latina via Acordo da Aladi',
+      'Coinbase e Deribit avançam na integração de infraestrutura após aquisição histórica de US$ 2,9 bilhões',
     description:
-      'Decreto federal internaliza acordo da Associação Latino-Americana de Integração (Aladi) que elimina barreiras técnicas e reduz custos regulatórios em um mercado regional estimado em US$ 55 bilhões.',
-    articleSection: 'Comércio Exterior & Economia Regional',
-    datePublished: '2026-11-18',
-    imageUrl: '/assets/aistudio/image_559daecb.png',
+      'Um ano depois da maior operação de fusão e aquisição do setor de criptoativos, empresas unificam suas plataformas em um motor de execução de baixa latência para atender à crescente demanda institucional no mercado global de derivativos.',
+    articleSection: 'Criptoativos & Mercado Institucional',
+    datePublished: '2026-11-20',
+    imageUrl: '/assets/aistudio/image_312cc483.png',
     keywords: [
-      'exportação cosméticos brasil',
-      'acordo aladi comércio exterior',
-      'balança comercial brasil 2026',
-      'comércio américa latina mdic',
-      'exportações brasileiras superávit',
+      'coinbase deribit aquisição',
+      'opções de criptomoedas institucional',
+      'derivativos criptoativos nasdaq',
     ],
   });
   assert.equal(schema['@type'], 'NewsArticle');
   assert.ok('image' in schema);
-  assert.deepEqual(schema.image, ['https://dinheuro.com/assets/aistudio/image_559daecb.png']);
-  assert.equal(schema.datePublished, '2026-11-18');
+  assert.deepEqual(schema.image, ['https://dinheuro.com/assets/aistudio/image_312cc483.png']);
+  assert.equal(schema.datePublished, '2026-11-20');
 });

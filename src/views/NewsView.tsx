@@ -28,6 +28,7 @@ import {
 } from '../utils/seo';
 
 const FEATURED_NEWS_EDITORIAL_IDS = new Set([
+  'coinbase-deribit-aquisicao-infraestrutura-2026',
   'aladi-cosmeticos-exportacao-brasil-2026',
   'apec-2026-trump-xi-putin-shenzhen',
 ]);
@@ -79,7 +80,10 @@ export const NewsView: React.FC = () => {
     const searchLower = newsSearch.trim().toLowerCase();
 
     return featured.filter((item) => {
-      const matchesCategory = filterCategory === 'all';
+      const matchesCategory =
+        filterCategory === 'all' ||
+        (item.id === 'coinbase-deribit-aquisicao-infraestrutura-2026' &&
+          filterCategory === 'Criptoativos');
       if (!matchesCategory) return false;
       if (!searchLower) return true;
 
