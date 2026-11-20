@@ -95,7 +95,7 @@ export const DashboardView: React.FC = () => {
               <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-white tracking-tight leading-tight">
                 {t.dashboard.heroTitlePrefix}{' '}
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-teal-300 to-amber-400">
-                  DinhEuro
+                  {t.dashboard.heroTitleHighlight}
                 </span>
               </h1>
               <p className="text-xs sm:text-sm text-slate-300 mt-2 max-w-xl leading-relaxed">
@@ -234,6 +234,7 @@ export const DashboardView: React.FC = () => {
                   type="number"
                   value={calcAmount}
                   onChange={(e) => setCalcAmount(Math.max(0, Number(e.target.value)))}
+                  aria-label={t.calculator.amountAria}
                   className="w-full bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs text-white font-mono-numbers focus:outline-none focus:border-emerald-500"
                 />
               </div>
@@ -241,6 +242,7 @@ export const DashboardView: React.FC = () => {
               <select
                 value={calcFrom}
                 onChange={(e) => setCalcFrom(e.target.value)}
+                aria-label={t.calculator.fromCurrencyAria}
                 className="bg-slate-900 border border-slate-700 rounded-lg px-2 py-1.5 text-xs text-white focus:outline-none"
               >
                 <option value="EUR">EUR (€)</option>
@@ -255,6 +257,7 @@ export const DashboardView: React.FC = () => {
                 onClick={swapCurrencies}
                 className="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition cursor-pointer"
                 title={t.dashboard.swapTooltip}
+                aria-label={t.dashboard.swapTooltip}
               >
                 <ArrowRightLeft className="w-3.5 h-3.5" />
               </button>
@@ -262,6 +265,7 @@ export const DashboardView: React.FC = () => {
               <select
                 value={calcTo}
                 onChange={(e) => setCalcTo(e.target.value)}
+                aria-label={t.calculator.toCurrencyAria}
                 className="bg-slate-900 border border-slate-700 rounded-lg px-2 py-1.5 text-xs text-white focus:outline-none"
               >
                 <option value="BRL">BRL (R$)</option>
@@ -284,7 +288,7 @@ export const DashboardView: React.FC = () => {
       </div>
 
       {/* World Indices Section (Carrossel / Grid) */}
-      <div className="space-y-3">
+      <section aria-label={t.dashboard.worldIndicesTitle} className="space-y-3">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Globe className="w-4 h-4 text-emerald-400" />
@@ -338,7 +342,7 @@ export const DashboardView: React.FC = () => {
             );
           })}
         </div>
-      </div>
+      </section>
 
       {/* Calculadora de Câmbio Universal (Tempo Real via AwesomeAPI) */}
       <UniversalCurrencyCalculator defaultFrom="EUR" defaultTo="BRL" defaultAmount={1} />
@@ -477,9 +481,9 @@ export const DashboardView: React.FC = () => {
             <div className="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-3 mb-3">
               <div className="flex items-center gap-2">
                 <Globe className="w-4 h-4 text-emerald-500 dark:text-emerald-400" />
-                <h3 className="text-xs sm:text-sm font-bold text-slate-900 dark:text-white uppercase tracking-wider">
+                <h2 className="text-xs sm:text-sm font-bold text-slate-900 dark:text-white uppercase tracking-wider">
                   {t.dashboard.currencyMatrixTitle}
-                </h3>
+                </h2>
               </div>
               <span className="text-[10px] font-semibold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
                 {t.dashboard.synchronized}
@@ -555,7 +559,7 @@ export const DashboardView: React.FC = () => {
       <AcademyHighlightSection />
 
       {/* Real-Time Financial News & External Analysis with mandatory "Ler matéria" */}
-      <div className="space-y-4 pt-2">
+      <section aria-label={t.dashboard.newsTitle} className="space-y-4 pt-2">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <h2 className="text-sm sm:text-base font-bold text-white">
@@ -613,6 +617,7 @@ export const DashboardView: React.FC = () => {
                     href={safeUrl}
                     target="_blank"
                     rel="noopener noreferrer"
+                    aria-label={`${t.dashboard.readArticle}: ${item.title}`}
                     className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-emerald-600/30 text-emerald-400 hover:text-emerald-300 text-xs font-medium border border-slate-700 hover:border-emerald-500/40 transition"
                     onClick={(e) => e.stopPropagation()}
                   >
@@ -624,7 +629,7 @@ export const DashboardView: React.FC = () => {
             );
           })}
         </div>
-      </div>
+      </section>
 
       {/* Long-Tail SEO Editorial Reference Summary above Footer */}
       <HomeSeoEditorialSection />

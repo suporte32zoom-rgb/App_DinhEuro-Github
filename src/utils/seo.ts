@@ -18,25 +18,28 @@ const OG_LOCALE_MAP: Record<SupportedLanguage, string> = {
 export const ROUTE_SEO_METADATA: Record<NavigationTab, Record<SupportedLanguage, RouteSeoEntry>> = {
   dashboard: {
     pt: {
-      title: 'DinhEuro — Cotação Dólar Hoje, Euro Hoje, Real, Cripto e Bolsas em Tempo Real',
+      title:
+        'DinhEuro | Inteligência Financeira Global, Câmbio EUR/BRL e Radar União Europeia – Mercosul',
       description:
-        'Acompanhe o DinhEuro: cotação em tempo real do Euro, Dólar comercial, Ibovespa, 168 ativos globais, simulador de câmbio, trilhas e notícias de economia.',
+        'Acompanhe em tempo real a cotação do Euro e Dólar, indicadores macroeconômicos (BCE, Selic, IPCA), comércio exterior e os impactos econômicos do acordo União Europeia – Mercosul. Acesso livre, sem cadastro.',
       keywords:
-        'cotação euro hoje real, converter euro para real, dólar comercial hoje em tempo real, como enviar remessa internacional mais barata, spread bancário e iof remessa, conta global internacional para viagens, EUR to BRL live rate, USD BRL exchange rate today, international money transfer fees, fechamento ibovespa hoje, ações da b3 com maior dividendo, ações americanas e europeias em tempo real, gráfico d3 v7 análise técnica, boletim focus banco central resumo, acordo mercosul união europeia impacto econômico, o que é o drex moeda digital do banco central, projeção taxa selic e inflação ipca, dinheuro',
+        'acordo união europeia mercosul economia, cotação euro comercial tempo real, câmbio euro real hoje, radar macroeconômico europa brasil, comércio exterior mercosul união europeia, indicadores financeiros bce selic',
     },
     en: {
-      title: 'DinhEuro — Live USD/BRL, EUR/BRL Exchange Rates, Global Markets & Financial Hub',
+      title:
+        'DinhEuro | Global Financial Intelligence, EUR/BRL FX & European Union – Mercosur Radar',
       description:
-        'Track live EUR to BRL live rate, USD BRL exchange rate today, international money transfer fees, 168 global assets, Ibovespa, US/European stocks, and macro insights on DinhEuro.',
+        'Track real-time Euro and Dollar exchange rates, macroeconomic indicators (ECB, Selic, IPCA), foreign trade, and economic impacts of the European Union – Mercosur agreement. Open access, no login required.',
       keywords:
-        'EUR to BRL live rate, USD BRL exchange rate today, international money transfer fees, live euro to real converter, global travel multi-currency account, brazil b3 dividend stocks, us and european stocks live, d3 v7 technical analysis chart, black scholes options calculator, brazil central bank focus report, mercosur eu trade agreement, drex digital currency brazil, selic rate and ipca inflation forecast, dinheuro',
+        'eu mercosur agreement economy, commercial euro live quote, eur brl exchange rate today, europe brazil macroeconomic radar, mercosur european union foreign trade, ecb selic financial indicators',
     },
     es: {
-      title: 'DinhEuro — Cotización Dólar Hoy, Euro Hoy, Real, Cripto y Bolsas en Tiempo Real',
+      title:
+        'DinhEuro | Inteligencia Financiera Global, Cambio EUR/BRL y Radar Unión Europea – Mercosur',
       description:
-        'Sigue la cotización del Euro hoy, Dólar comercial en tiempo real, Ibovespa, 168 activos globales, simulador de cambio, remesas internacionales y noticias económicas en DinhEuro.',
+        'Sigue en tiempo real la cotización del Euro y Dólar, indicadores macroeconómicos (BCE, Selic, IPCA), comercio exterior e impactos económicos del acuerdo Unión Europea – Mercosur. Acceso libre, sin registro.',
       keywords:
-        'cotizacion euro hoy real, convertir euro a real, dolar comercial hoy en tiempo real, enviar remesa internacional barata, spread bancario e iof remesa, cuenta global para viajes, EUR to BRL live rate, USD BRL exchange rate today, international money transfer fees, cierre ibovespa hoy, acciones b3 dividendos, acciones estadounidenses y europeas, boletin focus banco central, acuerdo mercosur union europea, drex moneda digital, tasa selic e inflacion ipca, dinheuro',
+        'acuerdo union europea mercosur economia, cotizacion euro comercial tiempo real, cambio euro real hoy, radar macroeconomico europa brasil, comercio exterior mercosur union europea, indicadores financieros bce selic',
     },
   },
   mercados: {
@@ -443,23 +446,52 @@ export function buildStructuredDataSchemas(lang: SupportedLanguage = 'pt') {
   const homeEntry = ROUTE_SEO_METADATA.dashboard[lang] || ROUTE_SEO_METADATA.dashboard.pt;
   const orgDescription =
     lang === 'en'
-      ? 'Global Finance and Currency Hub with real-time market quotes, currency converter, and macroeconomic research.'
+      ? 'Global portal for financial intelligence, foreign exchange, and macroeconomic monitoring focused on commercial and monetary integration between the European Union and Mercosur.'
       : lang === 'es'
-      ? 'Hub Global de Finanzas y Divisas con cotizaciones en tiempo real, conversor cambiario y análisis macroeconómico.'
-      : 'Hub Global de Finanças e Moedas com cotações em tempo real.';
+      ? 'Portal global de inteligencia financiera, divisas y seguimiento macroeconómico con foco en la integración comercial y monetaria entre la Unión Europea y Mercosur.'
+      : 'Portal global de inteligência financeira, câmbio e acompanhamento macroeconômico com foco na integração comercial e monetária entre União Europeia e Mercosul.';
+
+  const knowsAboutTopics =
+    lang === 'en'
+      ? [
+          'Global Financial Markets',
+          'European Union-Mercosur Agreement',
+          'EUR/BRL Exchange Rate',
+          'ECB and Central Bank Monetary Policy',
+          'Foreign Trade',
+          'Macroeconomics',
+        ]
+      : lang === 'es'
+      ? [
+          'Mercado Financiero Global',
+          'Acuerdo Unión Europea-Mercosur',
+          'Tipo de Cambio EUR/BRL',
+          'Política Monetaria BCE y Banco Central',
+          'Comercio Exterior',
+          'Macroeconomía',
+        ]
+      : [
+          'Mercado Financeiro Global',
+          'Acordo União Europeia-Mercosul',
+          'Câmbio EUR/BRL',
+          'Política Monetária BCE e Banco Central',
+          'Comércio Exterior',
+          'Macroeconomia',
+        ];
 
   const organizationSchema = {
     '@context': 'https://schema.org',
-    '@type': 'Organization',
+    '@type': 'NewsMediaOrganization',
     '@id': `${CANONICAL_ORIGIN}/#organization`,
     name: 'DinhEuro',
-    url: `${CANONICAL_ORIGIN}/`,
+    url: CANONICAL_ORIGIN,
     email: 'admin@dinheiro.com',
     logo: {
       '@type': 'ImageObject',
       url: `${CANONICAL_ORIGIN}/logo.png`,
     },
     description: orgDescription,
+    knowsAbout: knowsAboutTopics,
   };
 
   const websiteSchema = {
@@ -468,12 +500,13 @@ export function buildStructuredDataSchemas(lang: SupportedLanguage = 'pt') {
     '@id': `${CANONICAL_ORIGIN}/#website`,
     name: 'DinhEuro',
     alternateName: ['DinhEuro Global Financial Hub', 'DinhEuro Câmbio e Mercados'],
-    url: `${CANONICAL_ORIGIN}/`,
+    url: CANONICAL_ORIGIN,
     publisher: {
       '@id': `${CANONICAL_ORIGIN}/#organization`,
     },
     inLanguage: ['pt-BR', 'en', 'es'],
-    description: homeEntry.description,
+    description: orgDescription,
+    knowsAbout: knowsAboutTopics,
     potentialAction: {
       '@type': 'SearchAction',
       target: {
@@ -489,7 +522,7 @@ export function buildStructuredDataSchemas(lang: SupportedLanguage = 'pt') {
     '@type': ['FinancialService', 'WebApplication'],
     '@id': `${CANONICAL_ORIGIN}/#webapp`,
     name: 'DinhEuro',
-    url: `${CANONICAL_ORIGIN}/`,
+    url: CANONICAL_ORIGIN,
     logo: `${CANONICAL_ORIGIN}/logo.png`,
     image: `${CANONICAL_ORIGIN}/logo.png`,
     provider: {

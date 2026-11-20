@@ -47,7 +47,7 @@ export interface FocusRadarTranslations {
 export const FOCUS_RADAR_DATA: Record<SupportedLanguage, FocusRadarTranslations> = {
   pt: {
     heading: 'Radar Macroeconômico DinhEuro: Boletim Focus',
-    subheadingPrefix: 'Projeções e Gráficos de Tendência — Ref.:',
+    subheadingPrefix: 'Comparativo monetário: Política do Banco Central Europeu (BCE) vs. Taxa Selic e inflação no Mercosul — Ref.:',
     refDate: '06 de novembro de 2026',
     primarySourceLabel: 'Fonte primária:',
     primarySourceName: 'Banco Central do Brasil (BCB)',
@@ -115,7 +115,7 @@ export const FOCUS_RADAR_DATA: Record<SupportedLanguage, FocusRadarTranslations>
   },
   en: {
     heading: 'DinhEuro Macro Radar: Focus Market Readout',
-    subheadingPrefix: 'Consensus Forecasts & Trend Curves — Ref.:',
+    subheadingPrefix: 'Monetary comparison: European Central Bank (ECB) policy vs. Selic rate and Mercosur inflation — Ref.:',
     refDate: 'November 06, 2026',
     primarySourceLabel: 'Primary source:',
     primarySourceName: 'Central Bank of Brazil (BCB)',
@@ -183,7 +183,7 @@ export const FOCUS_RADAR_DATA: Record<SupportedLanguage, FocusRadarTranslations>
   },
   es: {
     heading: 'Radar Macroeconómico DinhEuro: Boletín Focus',
-    subheadingPrefix: 'Proyecciones y Curvas de Tendencia — Ref.:',
+    subheadingPrefix: 'Comparativa monetaria: Política del Banco Central Europeo (BCE) vs. Tasa Selic e inflación en el Mercosur — Ref.:',
     refDate: '06 de noviembre de 2026',
     primarySourceLabel: 'Fuente primaria:',
     primarySourceName: 'Banco Central de Brasil (BCB)',

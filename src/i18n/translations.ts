@@ -107,6 +107,7 @@ export interface AppTranslations {
   dashboard: {
     liveBadge: string;
     heroTitlePrefix: string;
+    heroTitleHighlight: string;
     heroSubtitle: string;
     chartAction: string;
     tooltips: {
@@ -552,10 +553,11 @@ export const TRANSLATIONS: Record<SupportedLanguage, AppTranslations> = {
       reload: 'Atualizar Página',
     },
     dashboard: {
-      liveBadge: 'Dados Globais em Tempo Real • Câmbio Interbancário, Bolsas Mundiais & Criptoativos',
-      heroTitlePrefix: 'Hub Financeiro Global',
+      liveBadge: 'Acesso Livre em Tempo Real • Câmbio EUR/BRL, Eixo Europa–Mercosul & Mercados Globais',
+      heroTitlePrefix: 'Inteligência Financeira Global e o Radar Econômico',
+      heroTitleHighlight: 'União Europeia – Mercosul',
       heroSubtitle:
-        'Monitore cotações internacionais e B3, câmbio universal com Euro e Dólar, índices mundiais, criptomoedas e análises no padrão institucional dos maiores terminais de finanças.',
+        'Cotações de câmbio (EUR/BRL e USD/BRL), taxas de juros do BCE e Banco Central, índices globais e análises em tempo real sobre o corredor comercial entre Europa e América do Sul — sem cadastro e sem coleta de dados.',
       chartAction: 'Gráfico ↗',
       tooltips: {
         eurBrl: 'Ver gráfico e cotação de EUR / BRL',
@@ -572,16 +574,16 @@ export const TRANSLATIONS: Record<SupportedLanguage, AppTranslations> = {
       quickSimulator: 'Simulador Instantâneo',
       swapTooltip: 'Inverter Moedas',
       convertedResult: 'Resultado Convertido:',
-      worldIndicesTitle: 'Índices Mundiais de Referência',
+      worldIndicesTitle: 'Índices Mundiais e Bolsas da Europa e Mercosul',
       updatedAt: 'Atualizado:',
-      marketHighlightsTitle: 'Destaques do Mercado (Ações Globais & B3)',
+      marketHighlightsTitle: 'Destaques do Mercado (Ações Globais, Europa & B3)',
       viewAllStocks: 'Ver todas as ações do mercado',
       topGainers: 'Maiores Altas (24h)',
       topLosers: 'Maiores Baixas (24h)',
       varPercent: 'Var %',
       currencyMatrixTitle: 'Matriz Cambial Global',
       synchronized: 'Sincronizada',
-      matrixSubtitle: 'Cotações universais unificadas entre a Home e o Simulador Interno:',
+      matrixSubtitle: 'Cotação Euro comercial e moedas globais em tempo real — taxas interbancárias unificadas sem cadastro:',
       openFullSimulator: 'Abrir Simulador Completo',
       newsTitle: 'Notícias & Análises em Tempo Real',
       verifiedFeed: 'Feed Verificado',
@@ -591,7 +593,7 @@ export const TRANSLATIONS: Record<SupportedLanguage, AppTranslations> = {
     calculator: {
       title: 'Calculadora de Câmbio Universal',
       sourceLabel: '',
-      sourceLive: 'Cotações Interbancárias Globais em Tempo Real',
+      sourceLive: 'Cotação Euro comercial e moedas globais em tempo real',
       sourceFallback: 'Taxas Interbancárias Sincronizadas em Contingência',
       cachedRatesBadge: 'Usando taxas em cache',
       currenciesListed: 'moedas listadas no DinhEuro',
@@ -852,7 +854,7 @@ export const TRANSLATIONS: Record<SupportedLanguage, AppTranslations> = {
       logoAlt: 'Logo Oficial DinhEuro',
       tagline: 'Hub Global de Finanças e Moedas',
       description:
-        'Plataforma digital de dados econômicos em tempo real, paridade universal Euro-Dólar-Real, cotações mundiais e ferramentas analíticas sem paywall.',
+        'Portal aberto de inteligência financeira, câmbio EUR/BRL em tempo real e monitoramento do eixo econômico União Europeia – Mercosul a partir de fontes públicas. Acesso 100% gratuito, anônimo, sem cadastro, sem login e sem coleta ou armazenamento de dados pessoais.',
       infraStatus: 'Operação Global • Infraestrutura em Nuvem de Alta Disponibilidade',
       lgpdCompliance: 'Em conformidade com a LGPD (Lei nº 13.709/2018) & SSL 256-bit',
       dpoLabel: 'Encarregado de Dados (DPO):',
@@ -886,22 +888,22 @@ export const TRANSLATIONS: Record<SupportedLanguage, AppTranslations> = {
       shortDisclaimer: 'Disclaimer',
     },
     seoBlock: {
-      eyebrow: 'Guia & Indexação Global de Cotações',
-      heading: 'Cotação do Euro Hoje, Dólar Comercial, Remessas Internacionais e B3 em Tempo Real',
+      eyebrow: 'Posicionamento Global • Corredor União Europeia – Mercosul & Acesso Aberto',
+      heading: 'Cotação Euro Comercial, Câmbio EUR/BRL e Radar Econômico União Europeia – Mercosul',
       lead:
-        'O DinhEuro reúne cotações em tempo real do Euro (EUR to BRL live rate), Dólar comercial (USD BRL exchange rate today), 168 ativos globais, simulações de spread bancário e IOF, gráficos D3 v7 e dossiês oficiais do Banco Central e MDIC.',
+        'O DinhEuro conecta investidores, exportadores, importadores e leitores a cotações de fontes públicas em tempo real (EUR/BRL e USD/BRL), comparativos BCE vs. Selic, bolsas europeias e B3 e análises sobre o acordo comercial União Europeia – Mercosul — 100% gratuito, anônimo, sem login e sem coleta de dados pessoais.',
       cards: [
         {
-          title: 'Cotação Euro Hoje Real, Converter Euro para Real & Remessas',
-          body: 'Converta Euro para Real (1 EUR → BRL) e acompanhe o dólar comercial hoje em tempo real (EUR to BRL live rate & USD BRL exchange rate today). Compare como enviar remessa internacional mais barata simulando spread bancário, IOF de remessa e conta global internacional para viagens (international money transfer fees).',
+          title: 'Cotação Euro Comercial Tempo Real, Câmbio EUR/BRL & Remessas',
+          body: 'Acompanhe o câmbio Euro Real hoje (EUR/BRL) e o dólar comercial em tempo real para decisões de câmbio, importação e exportação no corredor Europa–América do Sul. Simule remessa internacional, spread bancário e IOF sem exigir cadastro ou dados pessoais.',
         },
         {
-          title: 'Fechamento Ibovespa Hoje, Ações B3, EUA, Europa & D3 v7',
-          body: 'Monitore o fechamento Ibovespa hoje, ações da B3 com maior dividendo e ações americanas e europeias em tempo real. Explore o gráfico D3 v7 para análise técnica e descubra como funciona o modelo Black-Scholes para opções na aba de derivativos.',
+          title: 'Comércio Exterior Mercosul–União Europeia, Bolsas Europeias & B3',
+          body: 'Monitore o fechamento do Ibovespa, ações da B3 com dividendos e os principais índices da Europa (DAX, Euro Stoxx, FTSE) em tempo real, com gráficos técnicos D3 v7 e acompanhamento setorial de exportação entre Mercosul e União Europeia.',
         },
         {
-          title: 'Boletim Focus Banco Central, Drex, Selic/IPCA & Mercosul-UE',
-          body: 'Acesse o resumo do Boletim Focus do Banco Central com projeção da Taxa Selic e inflação IPCA, entenda o que é o Drex (moeda digital do Banco Central) e acompanhe o impacto econômico do Acordo Mercosul–União Europeia.',
+          title: 'Indicadores Financeiros BCE vs. Selic, Boletim Focus & Acesso Livre',
+          body: 'Compare a política monetária do Banco Central Europeu (BCE) com a Taxa Selic e a inflação IPCA no Boletim Focus, consulte o dossiê do Drex e navegue de forma 100% anônima, sem cadastro, login ou paywall.',
         },
       ],
     },
@@ -1039,10 +1041,11 @@ export const TRANSLATIONS: Record<SupportedLanguage, AppTranslations> = {
       reload: 'Reload Page',
     },
     dashboard: {
-      liveBadge: 'Real-Time Global Data • Interbank FX, World Equities & Digital Assets',
-      heroTitlePrefix: 'Global Financial Hub',
+      liveBadge: 'Open Real-Time Access • EUR/BRL FX, Europe–Mercosur Corridor & Global Markets',
+      heroTitlePrefix: 'Global Financial Intelligence &',
+      heroTitleHighlight: 'European Union – Mercosur Economic Radar',
       heroSubtitle:
-        'Track live USD/BRL, EUR/BRL exchange rates, global equity markets, Brazilian B3 equities, crypto assets, and macro intelligence in one institutional terminal.',
+        'Live FX quotes (EUR/BRL & USD/BRL), ECB and Central Bank policy rates, global equity indices, and real-time trade corridor intelligence between Europe and South America — no registration and zero personal data collection.',
       chartAction: 'Chart ↗',
       tooltips: {
         eurBrl: 'View EUR / BRL chart and quote',
@@ -1059,16 +1062,16 @@ export const TRANSLATIONS: Record<SupportedLanguage, AppTranslations> = {
       quickSimulator: 'Instant Converter',
       swapTooltip: 'Swap Currencies',
       convertedResult: 'Converted Result:',
-      worldIndicesTitle: 'Benchmark World Indices',
+      worldIndicesTitle: 'Benchmark World, European & Mercosur Indices',
       updatedAt: 'Updated:',
-      marketHighlightsTitle: 'Market Movers (Global & B3 Equities)',
+      marketHighlightsTitle: 'Market Movers (Global, European & B3 Equities)',
       viewAllStocks: 'View all market equities',
       topGainers: 'Top Gainers (24h)',
       topLosers: 'Top Losers (24h)',
       varPercent: 'Chg %',
       currencyMatrixTitle: 'Global FX Matrix',
       synchronized: 'Synchronized',
-      matrixSubtitle: 'Unified live currency rates across Home and FX Tools:',
+      matrixSubtitle: 'Live commercial Euro and global currencies — unified interbank rates with zero sign-up:',
       openFullSimulator: 'Open Full FX Converter',
       newsTitle: 'Real-Time Financial News & Macro',
       verifiedFeed: 'Verified Feed',
@@ -1078,7 +1081,7 @@ export const TRANSLATIONS: Record<SupportedLanguage, AppTranslations> = {
     calculator: {
       title: 'Universal Currency Calculator',
       sourceLabel: '',
-      sourceLive: 'Global Interbank Quotes in Real Time',
+      sourceLive: 'Live commercial Euro and global currencies in real time',
       sourceFallback: 'Synced Interbank Contingency Rates',
       cachedRatesBadge: 'Using cached rates',
       currenciesListed: 'currencies listed on DinhEuro',
@@ -1339,7 +1342,7 @@ export const TRANSLATIONS: Record<SupportedLanguage, AppTranslations> = {
       logoAlt: 'DinhEuro Official Logo',
       tagline: 'Global Finance & Currency Hub',
       description:
-        'Real-time financial data terminal, universal Euro-Dollar-Real parity, global stock quotes, and institutional calculators without paywalls.',
+        'Open financial intelligence portal tracking live EUR/BRL exchange rates and the European Union – Mercosur economic corridor from public sources. 100% free, anonymous access with no login, no registration, and no personal data collection.',
       infraStatus: 'Global Operation • High-Availability Cloud Infrastructure',
       lgpdCompliance: 'Compliant with LGPD (Law No. 13.709/2018) & 256-bit SSL',
       dpoLabel: 'Data Protection Officer (DPO):',
@@ -1373,22 +1376,22 @@ export const TRANSLATIONS: Record<SupportedLanguage, AppTranslations> = {
       shortDisclaimer: 'Disclaimer',
     },
     seoBlock: {
-      eyebrow: 'Global Market Reference',
-      heading: 'EUR to BRL Live Rate, USD/BRL Exchange Rate & International Transfer Fees',
+      eyebrow: 'Global Positioning • European Union – Mercosur Corridor & Open Access',
+      heading: 'Commercial Euro Quote, EUR/BRL FX & European Union – Mercosur Economic Radar',
       lead:
-        'DinhEuro unifies EUR to BRL live rate, USD BRL exchange rate today, 168 global equities and FX pairs, international money transfer fees modeling, D3 v7 technical charts, and macroeconomic dossiers.',
+        'DinhEuro connects investors, exporters, importers, and readers to public-source live quotes (EUR/BRL and USD/BRL), ECB vs. Selic rate comparisons, European and B3 equities, and analysis on the European Union – Mercosur trade agreement — 100% free, anonymous, with no login and zero personal data collection.',
       cards: [
         {
-          title: 'EUR to BRL Live Rate, USD/BRL & International Transfer Fees',
-          body: 'Convert Euro to Brazilian Real (1 EUR → BRL) and monitor USD BRL exchange rate today in real time. Model international money transfer fees, bank spread, IOF taxes, and multi-currency global travel accounts.',
+          title: 'Live Commercial Euro Quote, EUR/BRL FX & International Transfers',
+          body: 'Track EUR to BRL live rate and USD/BRL exchange rates in real time across the Europe–South America trade corridor. Model international money transfer fees, bank spread, and IOF taxes with zero sign-up or personal data collection.',
         },
         {
-          title: 'Ibovespa Close, B3 Dividend Stocks, US/EU Equities & D3 v7',
-          body: 'Track Ibovespa close, high-dividend Brazilian B3 shares, and US and European stocks in real time alongside D3 v7 technical analysis candlestick charts and Black-Scholes options pricing with Greeks.',
+          title: 'Mercosur–European Union Trade, European Equities & B3 Markets',
+          body: 'Monitor Ibovespa close, B3 dividend stocks, and European benchmark indices (DAX, Euro Stoxx, FTSE) in real time alongside D3 v7 technical charts and Mercosur–EU foreign trade sector coverage.',
         },
         {
-          title: 'Central Bank Focus Report, Drex CBDC & Mercosur–EU Accord',
-          body: 'Read the Central Bank of Brazil Focus Report summary with Selic rate and IPCA inflation forecasts, our Drex digital currency technical dossier, and the Mercosur–European Union trade impact analysis.',
+          title: 'ECB vs. Selic Financial Indicators, Focus Report & Open Access',
+          body: 'Compare European Central Bank (ECB) monetary policy against Brazil’s Selic rate and IPCA inflation in the Focus Report, read the Drex CBDC dossier, and browse 100% anonymously with no registration, login, or paywall.',
         },
       ],
     },
@@ -1526,10 +1529,11 @@ export const TRANSLATIONS: Record<SupportedLanguage, AppTranslations> = {
       reload: 'Recargar Página',
     },
     dashboard: {
-      liveBadge: 'Datos Globales en Tiempo Real • Divisas Interbancarias, Bolsas Mundiales & Cripto',
-      heroTitlePrefix: 'Hub Financiero Global',
+      liveBadge: 'Acceso Libre en Tiempo Real • Divisas EUR/BRL, Eje Europa–Mercosur & Mercados Globales',
+      heroTitlePrefix: 'Inteligencia Financiera Global y el Radar Económico',
+      heroTitleHighlight: 'Unión Europea – Mercosur',
       heroSubtitle:
-        'Monitorea cotizaciones internacionales y B3, cambio universal Euro-Dólar-Real, índices mundiales, criptomonedas y análisis en estándar institucional.',
+        'Cotizaciones de divisas (EUR/BRL y USD/BRL), tasas del BCE y Banco Central, índices globales y análisis en tiempo real del corredor comercial entre Europa y Sudamérica — sin registro y sin recopilación de datos personales.',
       chartAction: 'Gráfico ↗',
       tooltips: {
         eurBrl: 'Ver gráfico y cotización de EUR / BRL',
@@ -1546,16 +1550,16 @@ export const TRANSLATIONS: Record<SupportedLanguage, AppTranslations> = {
       quickSimulator: 'Simulador Instantáneo',
       swapTooltip: 'Invertir Divisas',
       convertedResult: 'Resultado Convertido:',
-      worldIndicesTitle: 'Índices Mundiales de Referencia',
+      worldIndicesTitle: 'Índices Mundiales y Bolsas de Europa y Mercosur',
       updatedAt: 'Actualizado:',
-      marketHighlightsTitle: 'Destacados del Mercado (Acciones Globales & B3)',
+      marketHighlightsTitle: 'Destacados del Mercado (Acciones Globales, Europa & B3)',
       viewAllStocks: 'Ver todas las acciones del mercado',
       topGainers: 'Mayores Alzas (24h)',
       topLosers: 'Mayores Bajas (24h)',
       varPercent: 'Var %',
       currencyMatrixTitle: 'Matriz Cambiaria Global',
       synchronized: 'Sincronizada',
-      matrixSubtitle: 'Cotizaciones universales unificadas entre Inicio y Simulador:',
+      matrixSubtitle: 'Cotización del Euro comercial y divisas globales en tiempo real — tasas interbancarias unificadas sin registro:',
       openFullSimulator: 'Abrir Simulador Completo',
       newsTitle: 'Noticias & Análisis en Tiempo Real',
       verifiedFeed: 'Feed Verificado',
@@ -1565,7 +1569,7 @@ export const TRANSLATIONS: Record<SupportedLanguage, AppTranslations> = {
     calculator: {
       title: 'Calculadora de Cambio Universal',
       sourceLabel: '',
-      sourceLive: 'Cotizaciones Interbancarias Globales en Tiempo Real',
+      sourceLive: 'Cotización del Euro comercial y divisas globales en tiempo real',
       sourceFallback: 'Tasas Interbancarias Sincronizadas de Respaldo',
       cachedRatesBadge: 'Usando tasas en caché',
       currenciesListed: 'divisas listadas en DinhEuro',
@@ -1826,7 +1830,7 @@ export const TRANSLATIONS: Record<SupportedLanguage, AppTranslations> = {
       logoAlt: 'Logotipo Oficial DinhEuro',
       tagline: 'Hub Global de Finanzas y Divisas',
       description:
-        'Plataforma digital de datos económicos en tiempo real, paridad universal Euro-Dólar-Real, cotizaciones mundiales y herramientas analíticas sin muro de pago.',
+        'Portal abierto de inteligencia financiera, cambio EUR/BRL en tiempo real y monitoreo del eje económico Unión Europea – Mercosur con fuentes públicas. Acceso 100% gratuito, anónimo, sin login, sin registro y sin recopilación ni almacenamiento de datos personales.',
       infraStatus: 'Operación Global • Infraestructura Cloud de Alta Disponibilidad',
       lgpdCompliance: 'En conformidad con la LGPD (Ley nº 13.709/2018) & SSL 256-bit',
       dpoLabel: 'Delegado de Protección de Datos (DPO):',
@@ -1860,22 +1864,22 @@ export const TRANSLATIONS: Record<SupportedLanguage, AppTranslations> = {
       shortDisclaimer: 'Aviso Legal',
     },
     seoBlock: {
-      eyebrow: 'Referencia Global de Cotizaciones',
-      heading: 'Cotización del Euro Hoy, Dólar Comercial, Remesas Internacionales y B3',
+      eyebrow: 'Posicionamiento Global • Corredor Unión Europea – Mercosur & Acceso Abierto',
+      heading: 'Cotización Euro Comercial, Cambio EUR/BRL y Radar Económico Unión Europea – Mercosur',
       lead:
-        'DinhEuro reúne cotizaciones en tiempo real del Euro (EUR to BRL live rate), Dólar comercial (USD BRL exchange rate today), 168 activos globales, simulación de spread bancario e IOF, gráficos D3 v7 y dossiers macroeconómicos.',
+        'DinhEuro conecta a inversores, exportadores, importadores y lectores con cotizaciones de fuentes públicas en tiempo real (EUR/BRL y USD/BRL), comparativas BCE vs. Selic, bolsas europeas y B3 y análisis sobre el acuerdo comercial Unión Europea – Mercosur — 100% gratuito, anónimo, sin login y sin recopilación de datos personales.',
       cards: [
         {
-          title: 'Euro a Real (EUR/BRL), Dólar Comercial y Remesas Baratas',
-          body: 'Convierte Euro a Real (1 EUR → BRL) y sigue el dólar comercial hoy en tiempo real. Calcula cómo enviar remesa internacional más barata comparando spread bancario, IOF y cuenta global internacional para viajes.',
+          title: 'Cotización Euro Comercial en Tiempo Real, Cambio EUR/BRL & Remesas',
+          body: 'Sigue el cambio Euro a Real hoy (EUR/BRL) y el dólar comercial en tiempo real para operaciones de divisas y comercio exterior entre Europa y Sudamérica. Simula remesas, spread bancario e IOF sin exigir registro ni datos personales.',
         },
         {
-          title: 'Cierre Ibovespa, Acciones B3, EE. UU., Europa & D3 v7',
-          body: 'Sigue el cierre del Ibovespa hoy, acciones de B3 con mayores dividendos y acciones americanas y europeas en tiempo real junto con gráficos D3 v7 de análisis técnico y el modelo Black-Scholes de opciones.',
+          title: 'Comercio Exterior Mercosur–Unión Europea, Bolsas Europeas & B3',
+          body: 'Monitorea el cierre del Ibovespa, acciones de B3 con dividendos y los principales índices europeos (DAX, Euro Stoxx, FTSE) en tiempo real con gráficos técnicos D3 v7 y seguimiento sectorial de exportación Mercosur–UE.',
         },
         {
-          title: 'Boletín Focus, Drex Moneda Digital, Selic/IPCA & Mercosur-UE',
-          body: 'Consulta el resumen del Boletín Focus del Banco Central con proyección de tasa Selic e inflación IPCA, qué es el Drex moneda digital y el impacto económico del Acuerdo Mercosur–Unión Europea.',
+          title: 'Indicadores Financieros BCE vs. Selic, Boletín Focus & Acceso Libre',
+          body: 'Compara la política monetaria del Banco Central Europeo (BCE) con la tasa Selic y la inflación IPCA en el Boletín Focus, consulta el dossier del Drex y navega de forma 100% anónima, sin registro, login ni muro de pago.',
         },
       ],
     },

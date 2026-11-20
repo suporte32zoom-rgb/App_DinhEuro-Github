@@ -80,12 +80,15 @@ test('ROUTE_SEO_METADATA provides unique long-tail SEO titles and descriptions f
   }
 });
 
-test('buildStructuredDataSchemas produces valid Organization, WebSite SearchAction, and FinancialService/WebApplication JSON-LD', () => {
+test('buildStructuredDataSchemas produces valid NewsMediaOrganization, WebSite SearchAction, and FinancialService/WebApplication JSON-LD', () => {
   const { organizationSchema, websiteSchema, financialServiceSchema } =
     buildStructuredDataSchemas('pt');
-  assert.equal(organizationSchema['@type'], 'Organization');
-  assert.equal(organizationSchema.url, 'https://dinheuro.com/');
+  assert.equal(organizationSchema['@type'], 'NewsMediaOrganization');
+  assert.equal(organizationSchema.name, 'DinhEuro');
+  assert.equal(organizationSchema.url, 'https://dinheuro.com');
   assert.equal(organizationSchema.logo.url, 'https://dinheuro.com/logo.png');
+  assert.ok(organizationSchema.knowsAbout.includes('Acordo União Europeia-Mercosul'));
+  assert.ok(organizationSchema.knowsAbout.includes('Câmbio EUR/BRL'));
   assert.equal(websiteSchema['@type'], 'WebSite');
   assert.equal(websiteSchema.potentialAction['@type'], 'SearchAction');
   assert.equal(
@@ -98,9 +101,10 @@ test('buildStructuredDataSchemas produces valid Organization, WebSite SearchActi
   assert.equal(financialServiceSchema.offers.price, '0');
 });
 
-test('ROUTE_SEO_METADATA injects high-RPM FX, global equity, and E-E-A-T macro keywords across target routes', () => {
-  assert.ok(ROUTE_SEO_METADATA.dashboard.pt.description.includes('168 ativos globais'));
-  assert.ok(ROUTE_SEO_METADATA.dashboard.pt.keywords.includes('EUR to BRL live rate'));
+test('ROUTE_SEO_METADATA injects EU-Mercosur, FX, global equity, and E-E-A-T macro keywords across target routes', () => {
+  assert.ok(ROUTE_SEO_METADATA.dashboard.pt.title.includes('União Europeia – Mercosul'));
+  assert.ok(ROUTE_SEO_METADATA.dashboard.pt.description.includes('Acesso livre, sem cadastro'));
+  assert.ok(ROUTE_SEO_METADATA.dashboard.pt.keywords.includes('acordo união europeia mercosul economia'));
   assert.ok(ROUTE_SEO_METADATA.ferramentas.pt.keywords.includes('spread bancário e iof remessa'));
   assert.ok(ROUTE_SEO_METADATA.mercados.pt.keywords.includes('fechamento ibovespa hoje'));
   assert.ok(ROUTE_SEO_METADATA.graficos.pt.keywords.includes('gráfico d3 v7 análise técnica'));

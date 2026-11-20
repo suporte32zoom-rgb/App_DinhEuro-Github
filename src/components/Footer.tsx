@@ -33,7 +33,10 @@ export const Footer: React.FC = () => {
   };
 
   return (
-    <footer className="bg-[#050a14] border-t border-slate-800/90 text-slate-400 text-xs mt-16 pt-12 pb-8">
+    <footer
+      aria-label="Rodapé institucional DinhEuro"
+      className="bg-[#050a14] border-t border-slate-800/90 text-slate-400 text-xs mt-16 pt-12 pb-8"
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 space-y-8">
         {/* Main Footer Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
@@ -77,6 +80,7 @@ export const Footer: React.FC = () => {
               <span>{t.footer.dpoLabel}</span>
               <a
                 href="mailto:admin@dinheiro.com"
+                aria-label="Enviar e-mail institucional para admin@dinheiro.com"
                 className="text-emerald-400 hover:underline font-mono font-medium"
               >
                 admin@dinheiro.com

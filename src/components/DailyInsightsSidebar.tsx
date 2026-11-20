@@ -95,12 +95,12 @@ export const DailyInsightsSidebar: React.FC = () => {
         <div className="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-3">
           <div className="flex items-center gap-2">
             <Newspaper className="w-4 h-4 text-emerald-500 dark:text-emerald-400" />
-            <h3
+            <h2
               id="daily-insights-heading"
               className="text-xs sm:text-sm font-bold text-slate-900 dark:text-white uppercase tracking-wider"
             >
               {copy.sectionTitle}
-            </h3>
+            </h2>
           </div>
           <span className="text-[10px] font-semibold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
             {copy.sectionBadge}
@@ -116,6 +116,7 @@ export const DailyInsightsSidebar: React.FC = () => {
               <button
                 key={item.id}
                 type="button"
+                aria-label={`${copy.sectionTitle}: ${loc.title}`}
                 onClick={() => setSelectedInsight(item)}
                 className="w-full text-left flex items-start gap-3 p-3 rounded-xl bg-slate-900/60 hover:bg-slate-800/90 border border-slate-800/70 hover:border-emerald-500/40 transition cursor-pointer group"
               >
@@ -141,9 +142,9 @@ export const DailyInsightsSidebar: React.FC = () => {
                   <span className="inline-block text-[10px] font-semibold uppercase tracking-wider text-emerald-400 bg-emerald-500/10 px-1.5 py-0.5 rounded border border-emerald-500/20">
                     {loc.tag}
                   </span>
-                  <h4 className="text-xs font-bold text-slate-100 group-hover:text-white leading-snug line-clamp-2">
+                  <h3 className="text-xs font-bold text-slate-100 group-hover:text-white leading-snug line-clamp-2">
                     {loc.title}
-                  </h4>
+                  </h3>
                   <div className="flex items-center justify-between gap-2 pt-0.5 text-[10px] text-slate-400">
                     <span className="truncate">{loc.dateAuthor}</span>
                     <ChevronRight className="w-3.5 h-3.5 text-emerald-400 shrink-0 group-hover:translate-x-0.5 transition-transform" />
