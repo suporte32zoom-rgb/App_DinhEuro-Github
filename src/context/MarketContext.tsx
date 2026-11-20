@@ -215,9 +215,9 @@ export const MarketProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     assetsRef.current = assets;
   }, [assets]);
 
-  // Theme State: persisted in localStorage ('light' default or 'dark')
+  // Theme State: persisted in localStorage ('dark' default on opening, user can switch to 'light')
   const [theme, setThemeState] = useState<ThemeMode>(() => {
-    if (typeof window === 'undefined') return 'light';
+    if (typeof window === 'undefined') return 'dark';
     try {
       const stored = localStorage.getItem(THEME_STORAGE_KEY);
       if (stored === 'light' || stored === 'dark') {
@@ -226,7 +226,7 @@ export const MarketProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     } catch {
       // ignore
     }
-    return 'light';
+    return 'dark';
   });
 
   const setTheme = useCallback((newTheme: ThemeMode) => {
@@ -257,6 +257,8 @@ export const MarketProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     root.classList.remove('dark', 'light');
     root.classList.add(theme);
     root.setAttribute('data-theme', theme);
+    root.style.backgroundColor = theme === 'dark' ? '#0B1320' : '#F8FAFC';
+    root.style.color = theme === 'dark' ? '#F8FAFC' : '#0F172A';
 
     // Update meta theme-color for mobile chrome / safari address bar
     const metaThemeColor = document.querySelector('meta[name="theme-color"]');
