@@ -154,9 +154,11 @@ test('APEC 2026 and ALADI 2026 editorial insights preserve prior items up to 12 
   assert.ok(source.includes('export const MAX_DAILY_INSIGHTS = 12;'));
   const idMatches = source.match(/^\s+id:\s*'[^']+',/gm) || [];
   assert.equal(idMatches.length, 12);
+  assert.ok(source.includes("id: 'greves-jovens-europa-custo-vida-2026'"));
   assert.ok(source.includes("id: 'coinbase-deribit-aquisicao-infraestrutura-2026'"));
   assert.ok(source.includes("id: 'apec-2026-trump-xi-putin-shenzhen'"));
   assert.ok(source.includes("id: 'aladi-cosmeticos-exportacao-brasil-2026'"));
+  assert.ok(source.includes("imageUrl: '/assets/aistudio/image_9efbf558.png'"));
   assert.ok(source.includes("imageUrl: '/assets/aistudio/image_312cc483.png'"));
   assert.ok(source.includes("imageUrl: '/assets/aistudio/image_e7fa591e.png'"));
   assert.ok(source.includes("imageUrl: '/assets/aistudio/image_559daecb.png'"));
@@ -170,26 +172,26 @@ test('APEC 2026 and ALADI 2026 editorial insights preserve prior items up to 12 
     path.resolve(process.cwd(), 'src/views/NewsView.tsx'),
     'utf8'
   );
+  assert.ok(newsViewSource.includes("'greves-jovens-europa-custo-vida-2026'"));
   assert.ok(newsViewSource.includes("'coinbase-deribit-aquisicao-infraestrutura-2026'"));
 
   const schema = buildEditorialArticlesSchema('pt', [], {
-    id: 'coinbase-deribit-aquisicao-infraestrutura-2026',
+    id: 'greves-jovens-europa-custo-vida-2026',
     schemaType: 'NewsArticle',
-    headline:
-      'Coinbase e Deribit avançam na integração de infraestrutura após aquisição histórica de US$ 2,9 bilhões',
+    headline: 'Greves lideradas por jovens se espalham pela Europa',
     description:
-      'Um ano depois da maior operação de fusão e aquisição do setor de criptoativos, empresas unificam suas plataformas em um motor de execução de baixa latência para atender à crescente demanda institucional no mercado global de derivativos.',
-    articleSection: 'Criptoativos & Mercado Institucional',
+      'Manifestações organizadas por estudantes em mais de 25 nações abordam o alto custo de vida e criticam cortes na educação e gastos com guerras.',
+    articleSection: 'Europa & Custo de Vida',
     datePublished: '2026-11-20',
-    imageUrl: '/assets/aistudio/image_312cc483.png',
+    imageUrl: '/assets/aistudio/image_9efbf558.png',
     keywords: [
-      'coinbase deribit aquisição',
-      'opções de criptomoedas institucional',
-      'derivativos criptoativos nasdaq',
+      'greves jovens europa',
+      'custo de vida europa 2026',
+      'protestos estudantes roma',
     ],
   });
   assert.equal(schema['@type'], 'NewsArticle');
   assert.ok('image' in schema);
-  assert.deepEqual(schema.image, ['https://dinheuro.com/assets/aistudio/image_312cc483.png']);
+  assert.deepEqual(schema.image, ['https://dinheuro.com/assets/aistudio/image_9efbf558.png']);
   assert.equal(schema.datePublished, '2026-11-20');
 });

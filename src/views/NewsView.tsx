@@ -28,6 +28,7 @@ import {
 } from '../utils/seo';
 
 const FEATURED_NEWS_EDITORIAL_IDS = new Set([
+  'greves-jovens-europa-custo-vida-2026',
   'coinbase-deribit-aquisicao-infraestrutura-2026',
   'aladi-cosmeticos-exportacao-brasil-2026',
   'apec-2026-trump-xi-putin-shenzhen',
@@ -83,7 +84,9 @@ export const NewsView: React.FC = () => {
       const matchesCategory =
         filterCategory === 'all' ||
         (item.id === 'coinbase-deribit-aquisicao-infraestrutura-2026' &&
-          filterCategory === 'Criptoativos');
+          filterCategory === 'Criptoativos') ||
+        (item.id === 'greves-jovens-europa-custo-vida-2026' &&
+          filterCategory === 'Política & Fiscal');
       if (!matchesCategory) return false;
       if (!searchLower) return true;
 

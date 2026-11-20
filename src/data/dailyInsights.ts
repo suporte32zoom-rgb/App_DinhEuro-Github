@@ -60,6 +60,103 @@ export const DAILY_INSIGHTS_UI_COPY: Record<
 
 export const DAILY_INSIGHTS_ITEMS: DailyInsightItem[] = [
   {
+    id: 'greves-jovens-europa-custo-vida-2026',
+    isoDate: '2026-11-20',
+    imageUrl: '/assets/aistudio/image_9efbf558.png',
+    translations: {
+      pt: {
+        tag: 'Europa & Custo de Vida',
+        title: 'Greves lideradas por jovens se espalham pela Europa',
+        summary:
+          'Manifestações organizadas por estudantes em mais de 25 nações abordam o alto custo de vida e criticam cortes na educação e gastos com guerras.',
+        dateAuthor: '20/11/2026 • Por Sana Noor Haq',
+        source: 'CNN / Reuters / Sky TG24',
+        readingTime: '3 min',
+        keywords: [
+          'greves jovens europa',
+          'custo de vida europa 2026',
+          'protestos estudantes roma',
+          'cortes educação gastos guerra',
+          'geração z desemprego clima ia',
+        ],
+        imageAlt:
+          'Estudantes italianos reúnem-se em Roma para protestar contra a guerra e a disparada do custo de vida, exibindo faixa com os dizeres "I muri crollano, noi no" ("Os muros caem, nós não")',
+        fullContent: [
+          'Dezenas de milhares de jovens devem ocupar as ruas da Europa nesta sexta-feira (20), em um dia de mobilização internacional organizado por estudantes, que ocorrerá em mais de 25 nações.',
+          'Grupos estudantis no Reino Unido, França, Espanha, Itália e outros países realizarão paralisações e protestos contra o custo de vida exorbitante, o aumento das mensalidades escolares, a falta de financiamento nos sistemas educacionais e o que consideram ser a cumplicidade de seus líderes na guerra de Israel em Gaza.',
+          'No início deste outono, protestos da "Geração Z" eclodiram, impulsionados por uma crescente frustração com o fato de os governos não estarem preparando o futuro diante de desafios como a inteligência artificial sem regulamentação, o alto desemprego e a crise climática.',
+          '## Mobilização em Alemanha, Itália e Reino Unido',
+          'Segundo a RTL Germany, afiliada da CNN, espera-se que até 10 mil estudantes participem de manifestações em Colônia, no oeste da Alemanha.',
+          'Na Itália, milhares de pessoas já começaram a marchar em diversas cidades; em Roma, Gênova, Bolonha e Milão, os estudantes pedem o fim do rearmamento. Na capital italiana, faixas exibidas pelos manifestantes traziam mensagens como "I muri crollano, noi no" ("Os muros caem, nós não").',
+          'Somente no Reino Unido, alunos de mais de 350 escolas, faculdades e universidades participarão das paralisações, de acordo com o grupo "Socialist Students" (Estudantes Socialistas), uma das organizações envolvidas.',
+          '## Reivindicações sobre orçamento e futuro econômico',
+          '“Os jovens não ficarão de braços cruzados enquanto nossas escolas, faculdades e universidades sofrem cortes, ao passo que bilhões são destinados à guerra”, afirmou Adam Powell-Davies, presidente nacional da organização Socialist Students, em comunicado. “Lutem pelo nosso futuro, não pelas guerras deles.”',
+          'Na capital da Itália, Roma, manifestantes também entoaram palavras de ordem e exibiram cartazes com frases como “Dinheiro para as escolas, não para a guerra” e “Queremos viver sem o peso do alto custo de vida”, segundo a emissora Sky TG24.',
+        ],
+      },
+      en: {
+        tag: 'Europe & Cost of Living',
+        title: 'Youth-led strikes spread across Europe',
+        summary:
+          'Student-organized demonstrations across more than 25 nations target the soaring cost of living while criticizing education budget cuts and military spending.',
+        dateAuthor: 'Nov 20, 2026 • By Sana Noor Haq',
+        source: 'CNN / Reuters / Sky TG24',
+        readingTime: '3 min read',
+        keywords: [
+          'europe youth strikes',
+          'europe cost of living 2026',
+          'student protests rome uk germany',
+          'education cuts war spending',
+          'gen z economy inflation',
+        ],
+        imageAlt:
+          'Italian students gather in Rome to protest against war and the soaring cost of living, holding a banner reading "I muri crollano, noi no" ("Walls crumble, we do not")',
+        fullContent: [
+          'Tens of thousands of young people are expected to take to the streets across Europe this Friday (20) in an international day of youth-led mobilization spanning more than 25 countries.',
+          'Student groups in the United Kingdom, France, Spain, Italy, and other nations are staging walkouts and rallies against the soaring cost of living, rising tuition fees, underfunding across education systems, and what they describe as their leaders’ complicity in Israel’s war in Gaza.',
+          'Earlier this autumn, "Generation Z" protests erupted, driven by growing frustration that governments are failing to prepare for the future amid challenges such as unregulated artificial intelligence, high youth unemployment, and the climate crisis.',
+          '## Mobilizations in Germany, Italy, and the United Kingdom',
+          'According to CNN affiliate RTL Germany, up to 10,000 students are expected to join demonstrations in Cologne, western Germany.',
+          'In Italy, thousands have already begun marching in multiple cities; across Rome, Genoa, Bologna, and Milan, students are calling for an end to rearmament. In the Italian capital, banners carried by protesters included phrases such as "I muri crollano, noi no" ("Walls crumble, we do not").',
+          'In the United Kingdom alone, students from more than 350 schools, colleges, and universities are set to join the walkouts, according to "Socialist Students," one of the organizing groups.',
+          '## Demands over budgets and economic future',
+          '“Young people will not sit idly by while our schools, colleges, and universities face cuts while billions are poured into war,” said Adam Powell-Davies, national chair of Socialist Students, in a statement. “Fight for our future, not their wars.”',
+          'In Rome, demonstrators also chanted slogans and carried signs reading “Money for schools, not for war” and “We want to live without the burden of the high cost of living,” according to broadcaster Sky TG24.',
+        ],
+      },
+      es: {
+        tag: 'Europa y Costo de Vida',
+        title: 'Huelgas lideradas por jóvenes se extienden por Europa',
+        summary:
+          'Manifestaciones organizadas por estudiantes en más de 25 países denuncian el alto costo de vida y critican los recortes en educación y el gasto en guerras.',
+        dateAuthor: '20/11/2026 • Por Sana Noor Haq',
+        source: 'CNN / Reuters / Sky TG24',
+        readingTime: '3 min',
+        keywords: [
+          'huelgas jovenes europa',
+          'costo de vida europa 2026',
+          'protestas estudiantes roma',
+          'recortes educacion gasto militar',
+          'generacion z economia europea',
+        ],
+        imageAlt:
+          'Estudiantes italianos se reúnen en Roma para protestar contra la guerra y el alza del costo de vida, con una pancarta que dice "I muri crollano, noi no" ("Los muros caen, nosotros no")',
+        fullContent: [
+          'Decenas de miles de jóvenes ocuparán las calles de Europa este viernes (20) en una jornada internacional de movilización organizada por estudiantes que se desarrollará en más de 25 naciones.',
+          'Colectivos estudiantiles en el Reino Unido, Francia, España, Italia y otros países realizarán paros y protestas contra el costo de vida desorbitado, el aumento de las matrículas escolares, la falta de financiación en los sistemas educativos y lo que consideran la complicidad de sus dirigentes en la guerra de Israel en Gaza.',
+          'A comienzos de este otoño estallaron protestas de la "Generación Z", impulsadas por una creciente frustración ante el hecho de que los gobiernos no están preparando el futuro frente a desafíos como la inteligencia artificial sin regulación, el alto desempleo y la crisis climática.',
+          '## Movilizaciones en Alemania, Italia y Reino Unido',
+          'Según RTL Germany, afiliada de CNN, se espera que hasta 10.000 estudiantes participen en las manifestaciones de Colonia, en el oeste de Alemania.',
+          'En Italia, miles de personas ya comenzaron a marchar en distintas ciudades; en Roma, Génova, Bolonia y Milán, los estudiantes exigen el fin del rearme. En la capital italiana, las pancartas exhibidas incluían mensajes como "I muri crollano, noi no" ("Los muros caen, nosotros no").',
+          'Solo en el Reino Unido, alumnos de más de 350 escuelas, institutos y universidades participarán en los paros, según el grupo "Socialist Students" (Estudiantes Socialistas), una de las organizaciones convocantes.',
+          '## Reclamos sobre presupuesto y futuro económico',
+          '“Los jóvenes no se quedarán de brazos cruzados mientras nuestras escuelas, institutos y universidades sufren recortes al mismo tiempo que se destinan miles de millones a la guerra”, afirmó Adam Powell-Davies, presidente nacional de Socialist Students, en un comunicado. “Luchen por nuestro futuro, no por sus guerras”.',
+          'En la capital de Italia, Roma, los manifestantes también corearon consignas y portaron carteles con frases como “Dinero para las escuelas, no para la guerra” y “Queremos vivir sin el peso del alto costo de vida”, según informó Sky TG24.',
+        ],
+      },
+    },
+  },
+  {
     id: 'coinbase-deribit-aquisicao-infraestrutura-2026',
     isoDate: '2026-11-20',
     imageUrl: '/assets/aistudio/image_312cc483.png',
@@ -840,60 +937,6 @@ export const DAILY_INSIGHTS_ITEMS: DailyInsightItem[] = [
           'Los sistemas avanzados de IA, como los grandes modelos de lenguaje, se entrenan con miles de millones de datos extraídos de la internet abierta, muchas veces sin autorización. Mientras las industrias creativas y culturales denuncian el uso no remunerado de sus obras, sectores tecnológicos y ministerios de Economía advierten que restricciones rígidas podrían dejar a Europa por detrás de Estados Unidos y China en la carrera de la IA.',
           'Los países firmantes defienden un equilibrio entre la protección del trabajo creativo humano y el impulso a la innovación, exigiendo competencia leal e igualdad de condiciones frente a desarrolladores no europeos, con independencia de dónde hayan sido entrenados los modelos.',
           'Aunque la UE ya cuenta con una directiva que permite a los creadores rechazar el uso de sus obras en sistemas de IA, el bloque pide mecanismos más eficaces para hacer cumplir esa exclusión. La Comisión Europea cerró recientemente una consulta pública sobre el tema y prevé presentar un nuevo paquete legislativo digital en el segundo trimestre de 2027.',
-        ],
-      },
-    },
-  },
-  {
-    id: 'ue-crescimento-energia-inflacao-2026',
-    imageUrl: '/assets/aistudio/Capturar-1_94d673b9.webp',
-    translations: {
-      pt: {
-        tag: 'MACROECONOMIA & EUROPA',
-        title: 'União Europeia cresce acima do previsto mas energia mantém inflação elevada',
-        summary:
-          'A Comissão Europeia elevou a projeção de crescimento da UE para 1,4% este ano impulsionada por exportações de tecnologia e energia, mas alerta que a inflação seguirá acima de 3% até 2027 devido aos altos custos energéticos.',
-        dateAuthor: '17/11/2026 • Por Quirino Mealha',
-        source: 'Euronews / Comissão Europeia',
-        imageAlt:
-          'Comissário europeu da Economia Valdis Dombrovskis durante apresentação das projeções econômicas na Comissão Europeia',
-        fullContent: [
-          'A Comissão Europeia prevê que a economia da UE cresça 1,4% este ano (acima dos 1,1% estimados em maio), enquanto a zona euro deve avançar 1,2% em 2026 e 2027. O crescimento foi impulsionado pelas exportações de equipamentos de geração de energia, arrefecimento e fabricação de chips para centros de dados de IA e redes elétricas globais.',
-          'Por outro lado, a inflação média da UE deve ficar em 3,3% este ano e 3,2% em 2027 (ante 2,4% previstos anteriormente), atingindo pico acima de 4% na virada do ano e retornando a 2,3% apenas em 2028, pressionada pelos custos energéticos decorrentes do conflito com o Irã e pelo repasse nas faturas domésticas de gás, eletricidade e alimentos.',
-          'Segundo o comissário europeu da Economia, Valdis Dombrovskis, os preços elevados pressionam famílias e empresas. Ainda assim, a Comissão observa que uma queda recente de cerca de 20% no petróleo e gás desde o fim de outubro pode aliviar a inflação do próximo ano caso se mantenha.',
-          'No campo fiscal e trabalhista, o défice orçamental agregado da UE deve subir de 3,1% para 3,6% do PIB, com a dívida pública alcançando 85,6% até 2028 e os juros do BCE pressionando o crédito. Entre as maiores economias da zona euro, a Espanha lidera o crescimento (2,6%), seguida por Alemanha (1,3%), Itália (1,0%) e França (0,4%). O mercado de trabalho segue resiliente com a criação estimada de 800 mil empregos e desemprego próximo de 6%, embora os salários reais cresçam apenas 0,6%.',
-        ],
-      },
-      en: {
-        tag: 'MACROECONOMICS & EUROPE',
-        title: 'European Union grows faster than expected, but energy keeps inflation elevated',
-        summary:
-          'The European Commission raised its EU growth forecast to 1.4% this year driven by technology and power-equipment exports, but warns inflation will remain above 3% through 2027 on high energy costs.',
-        dateAuthor: 'Nov 17, 2026 • By Quirino Mealha',
-        source: 'Euronews / European Commission',
-        imageAlt:
-          'European Commissioner for Economy Valdis Dombrovskis presenting economic forecasts at the European Commission',
-        fullContent: [
-          'The European Commission expects the EU economy to grow 1.4% this year (up from the 1.1% projected in May), while the eurozone is forecast to expand 1.2% in both 2026 and 2027. Growth has been propelled by exports of power generation, cooling, and semiconductor manufacturing equipment for AI data centers and global electricity grids.',
-          'On the other hand, average EU inflation is projected at 3.3% this year and 3.2% in 2027 (compared with 2.4% previously estimated), peaking above 4% around the turn of the year before easing toward 2.3% only in 2028, pressured by energy costs stemming from the conflict with Iran and pass-through into household gas, electricity, and food bills.',
-          'According to European Commissioner for Economy Valdis Dombrovskis, elevated prices are squeezing households and businesses. Even so, the Commission notes that a recent drop of roughly 20% in oil and gas prices since late October could temper next year’s inflation if sustained.',
-          'On the fiscal and labor front, the EU’s aggregate budget deficit is projected to widen from 3.1% to 3.6% of GDP, with public debt reaching 85.6% by 2028 and ECB interest rates weighing on credit. Among major eurozone economies, Spain leads growth (2.6%), followed by Germany (1.3%), Italy (1.0%), and France (0.4%). The labor market remains resilient with an estimated 800,000 jobs created and unemployment near 6%, though real wages grow just 0.6%.',
-        ],
-      },
-      es: {
-        tag: 'MACROECONOMÍA & EUROPA',
-        title: 'La Unión Europea crece por encima de lo previsto, pero la energía mantiene la inflación elevada',
-        summary:
-          'La Comisión Europea elevó su previsión de crecimiento de la UE al 1,4% este año impulsada por exportaciones de tecnología y energía, pero advierte que la inflación seguirá por encima del 3% hasta 2027 debido a los altos costos energéticos.',
-        dateAuthor: '17/11/2026 • Por Quirino Mealha',
-        source: 'Euronews / Comisión Europea',
-        imageAlt:
-          'El comisario europeo de Economía Valdis Dombrovskis durante la presentación de previsiones económicas en la Comisión Europea',
-        fullContent: [
-          'La Comisión Europea prevé que la economía de la UE crezca un 1,4% este año (por encima del 1,1% estimado en mayo), mientras que la eurozona avanzaría un 1,2% en 2026 y 2027. El crecimiento estuvo impulsado por las exportaciones de equipos de generación eléctrica, refrigeración y fabricación de chips para centros de datos de IA y redes eléctricas globales.',
-          'Por otro lado, la inflación media de la UE se situaría en 3,3% este año y 3,2% en 2027 (frente al 2,4% previsto anteriormente), alcanzando un pico superior al 4% hacia el cambio de año y regresando al 2,3% recién en 2028, presionada por los costos energéticos derivados del conflicto con Irán y su traslado a las facturas domésticas de gas, electricidad y alimentos.',
-          'Según el comisario europeo de Economía, Valdis Dombrovskis, los precios elevados presionan a familias y empresas. Aun así, la Comisión señala que una caída reciente cercana al 20% en el petróleo y el gas desde finales de octubre podría moderar la inflación del próximo año si se mantiene.',
-          'En el ámbito fiscal y laboral, el déficit presupuestario agregado de la UE subiría del 3,1% al 3,6% del PIB, con la deuda pública alcanzando el 85,6% hacia 2028 y las tasas del BCE presionando el crédito. Entre las mayores economías de la eurozona, España lidera el crecimiento (2,6%), seguida por Alemania (1,3%), Italia (1,0%) y Francia (0,4%). El mercado laboral sigue resiliente con la creación estimada de 800 mil empleos y desempleo cercano al 6%, aunque los salarios reales crecen solo un 0,6%.',
         ],
       },
     },
