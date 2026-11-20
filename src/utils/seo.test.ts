@@ -154,10 +154,12 @@ test('APEC 2026 and ALADI 2026 editorial insights preserve prior items up to 12 
   assert.ok(source.includes('export const MAX_DAILY_INSIGHTS = 12;'));
   const idMatches = source.match(/^\s+id:\s*'[^']+',/gm) || [];
   assert.equal(idMatches.length, 12);
+  assert.ok(source.includes("id: 'terras-raras-disparidade-precos-brasil-china-2026'"));
   assert.ok(source.includes("id: 'greves-jovens-europa-custo-vida-2026'"));
   assert.ok(source.includes("id: 'coinbase-deribit-aquisicao-infraestrutura-2026'"));
   assert.ok(source.includes("id: 'apec-2026-trump-xi-putin-shenzhen'"));
   assert.ok(source.includes("id: 'aladi-cosmeticos-exportacao-brasil-2026'"));
+  assert.ok(source.includes("imageUrl: '/assets/aistudio/image_c7f7f8fe.png'"));
   assert.ok(source.includes("imageUrl: '/assets/aistudio/image_9efbf558.png'"));
   assert.ok(source.includes("imageUrl: '/assets/aistudio/image_312cc483.png'"));
   assert.ok(source.includes("imageUrl: '/assets/aistudio/image_e7fa591e.png'"));
@@ -172,26 +174,28 @@ test('APEC 2026 and ALADI 2026 editorial insights preserve prior items up to 12 
     path.resolve(process.cwd(), 'src/views/NewsView.tsx'),
     'utf8'
   );
+  assert.ok(newsViewSource.includes("'terras-raras-disparidade-precos-brasil-china-2026'"));
   assert.ok(newsViewSource.includes("'greves-jovens-europa-custo-vida-2026'"));
   assert.ok(newsViewSource.includes("'coinbase-deribit-aquisicao-infraestrutura-2026'"));
 
   const schema = buildEditorialArticlesSchema('pt', [], {
-    id: 'greves-jovens-europa-custo-vida-2026',
+    id: 'terras-raras-disparidade-precos-brasil-china-2026',
     schemaType: 'NewsArticle',
-    headline: 'Greves lideradas por jovens se espalham pela Europa',
+    headline:
+      'Preço de terras raras chega a ser quase 11 vezes maior na América do Norte do que na China e impulsiona projetos no Brasil',
     description:
-      'Manifestações organizadas por estudantes em mais de 25 nações abordam o alto custo de vida e criticam cortes na educação e gastos com guerras.',
-    articleSection: 'Europa & Custo de Vida',
+      'Relatório da S&P Global Energy aponta óxido de disprósio a US$ 2.300/kg na América do Norte contra US$ 215/kg na China, ampliando o interesse global por projetos brasileiros como Serra Verde, Caldeira, Colossus e Carina.',
+    articleSection: 'Minerais Críticos & Commodities',
     datePublished: '2026-11-20',
-    imageUrl: '/assets/aistudio/image_9efbf558.png',
+    imageUrl: '/assets/aistudio/image_c7f7f8fe.png',
     keywords: [
-      'greves jovens europa',
-      'custo de vida europa 2026',
-      'protestos estudantes roma',
+      'terras raras brasil',
+      'disprósio térbio preço',
+      'serra verde usa rare earth',
     ],
   });
   assert.equal(schema['@type'], 'NewsArticle');
   assert.ok('image' in schema);
-  assert.deepEqual(schema.image, ['https://dinheuro.com/assets/aistudio/image_9efbf558.png']);
+  assert.deepEqual(schema.image, ['https://dinheuro.com/assets/aistudio/image_c7f7f8fe.png']);
   assert.equal(schema.datePublished, '2026-11-20');
 });

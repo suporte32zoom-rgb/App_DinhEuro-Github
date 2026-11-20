@@ -60,6 +60,127 @@ export const DAILY_INSIGHTS_UI_COPY: Record<
 
 export const DAILY_INSIGHTS_ITEMS: DailyInsightItem[] = [
   {
+    id: 'terras-raras-disparidade-precos-brasil-china-2026',
+    isoDate: '2026-11-20',
+    imageUrl: '/assets/aistudio/image_c7f7f8fe.png',
+    translations: {
+      pt: {
+        tag: 'Minerais Críticos & Commodities',
+        title:
+          'Preço de terras raras chega a ser quase 11 vezes maior na América do Norte do que na China e impulsiona projetos no Brasil',
+        summary:
+          'Relatório da S&P Global Energy aponta óxido de disprósio a US$ 2.300/kg na América do Norte contra US$ 215/kg na China, ampliando o interesse global por projetos brasileiros como Serra Verde, Caldeira, Colossus e Carina.',
+        dateAuthor: '20/11/2026 • Redação DinhEuro',
+        source: 'S&P Global Energy • Minerais Críticos',
+        readingTime: '5 min',
+        keywords: [
+          'terras raras brasil',
+          'disprósio térbio preço',
+          'serra verde usa rare earth',
+          'caldeira colossus carina',
+          'minerais críticos china ocidente',
+        ],
+        imageAlt:
+          'Tabela periódica iluminada com os elementos de terras raras — incluindo térbio (Tb) e disprósio (Dy) — essenciais para ímãs permanentes e indústria de alta tecnologia',
+        fullContent: [
+          'O preço de uma das terras raras mais estratégicas para a fabricação de ímãs permanentes chegou a ser quase 11 vezes maior na América do Norte do que na China, segundo relatório da S&P Global Energy divulgado em outubro.',
+          'A disparidade evidencia a escassez desses minerais nos mercados ocidentais e amplia as oportunidades para projetos brasileiros que buscam fornecer matérias-primas alternativas à cadeia dominada pelos chineses.',
+          'O levantamento mostra que, em julho de 2026, o óxido de disprósio era cotado a US$ 2.300 por quilo na América do Norte, ante US$ 215 na China. A diferença equivale a aproximadamente 10,7 vezes.',
+          'No caso do térbio, outra terra rara pesada considerada fundamental para a indústria de alta tecnologia, o preço alcançava US$ 4.900 por quilo no mercado norte-americano, contra US$ 1.005 no chinês, uma diferença de quase cinco vezes.',
+          'Os valores representam referências de mercado de julho, e não cotações atuais. A comparação considera preços com entrega na América do Norte e preços de exportação da China, calculados em condições comerciais diferentes. Na América do Norte, os valores incluem frete e seguro até o porto de destino, enquanto os preços chineses não incluem esses custos internacionais.',
+          'A S&P atribui a disparidade à concentração da cadeia produtiva e às restrições chinesas à exportação de terras raras, intensificadas a partir de abril de 2025.',
+          'Atualmente, a China responde por aproximadamente 98% do refino mundial de disprósio e térbio. Na mineração, China, Mianmar e Laos concentram cerca de 91% da produção global.',
+          '“A concentração da cadeia produtiva torna-se ainda mais acentuada nas etapas industriais posteriores à mineração, nas quais a China representa aproximadamente 98% da capacidade global de separação e refino”, diz o relatório.',
+          'Os dois minerais são utilizados principalmente na produção de ímãs permanentes de alto desempenho, empregados em motores de veículos elétricos, turbinas eólicas, equipamentos eletrônicos e aplicações de defesa. Sua principal função é aumentar a resistência dos ímãs à desmagnetização, permitindo que mantenham o desempenho mesmo quando submetidos a temperaturas elevadas.',
+          '## Brasil ganha espaço na oferta internacional',
+          'Nesse cenário, o Brasil aparece no levantamento da S&P Global como uma das fontes potenciais para diversificar o fornecimento mundial de terras raras pesadas.',
+          'Segundo a consultoria, a Serra Verde é atualmente a única operação comercial em escala de produção de matéria-prima contendo terras raras pesadas provenientes de argilas iônicas fora da China. A companhia opera o projeto Pela Ema, em Minaçu (GO), e produz carbonato misto de terras raras, material que contém disprósio e térbio, além de outros elementos.',
+          'Em setembro, a norte-americana USA Rare Earth concluiu a aquisição da Serra Verde. A operação passou a integrar uma estratégia de formação de uma cadeia internacional de fornecimento, processamento e fabricação de ímãs fora da China. Em outubro, a companhia iniciou embarques comerciais do produto brasileiro para seu comprador contratado, com as primeiras vendas registradas em novembro.',
+          'Um dos efeitos concretos desse movimento aparece no contrato de fornecimento firmado pela Serra Verde com a US SIIE, empresa constituída para adquirir a produção brasileira com respaldo financeiro do governo norte-americano.',
+          'Segundo documentos apresentados pela USA Rare Earth à Comissão de Valores Mobiliários dos Estados Unidos, o acordo prevê preços mínimos de referência de US$ 575 por quilo de óxido equivalente de disprósio e US$ 2.050 por quilo de óxido equivalente de térbio, além de permitir que a companhia participe de eventuais valorizações das cotações internacionais.',
+          'O acordo abrange, com exceções previstas contratualmente, toda a produção da primeira fase de Pela Ema, sob um modelo de compra garantida, com duração estimada de aproximadamente 15 anos.',
+          '## Outros projetos',
+          'Além da operação já existente da Serra Verde, o relatório identifica outros três projetos brasileiros com potencial para ampliar a oferta internacional de terras raras pesadas nos próximos anos: Caldeira, Colossus e Carina. Os empreendimentos ainda não entraram em produção comercial e atravessam diferentes etapas de desenvolvimento, incluindo estudos técnicos, licenciamento ambiental, testes de processamento e estruturação financeira, mas já atraem o interesse de grandes empresas internacionais.',
+          'Em Minas Gerais, o projeto Caldeira, desenvolvido pela australiana Meteoric Resources, ganhou nova dimensão em outubro, quando a Lynas Rare Earths anunciou um acordo para adquirir a companhia por aproximadamente US$ 672 milhões. A transação, ainda sujeita a aprovações, poderá incorporar o empreendimento brasileiro às operações da Lynas, uma das principais produtoras de óxidos separados de terras raras fora da China. O projeto possui estudo definitivo de viabilidade concluído, prevê investimento inicial de aproximadamente US$ 498 milhões e produção projetada de cerca de 122 toneladas anuais de disprósio e térbio, com início previsto para 2028.',
+          'Outro empreendimento destacado é o Colossus, da também australiana Viridis Mining and Minerals, localizado em Poços de Caldas (MG). O projeto concluiu seu estudo definitivo de viabilidade em agosto e prevê investimentos iniciais de aproximadamente US$ 449 milhões, com produção projetada para 2028.',
+          'No início de novembro, a Viridis anunciou um contrato vinculante de fornecimento de terras raras com a química belga Solvay, uma das principais companhias de processamento desses minerais fora da China. O acordo prevê o envio de carbonato misto produzido em Minas Gerais para a unidade industrial da Solvay em La Rochelle, na França, para separação e purificação de disprósio e térbio, com duração inicial até 2034, volumes mínimos equivalentes a cerca de 70% da produção projetada e receita contratual mínima estimada em US$ 915 milhões. As empresas discutem ainda um acordo de licenciamento tecnológico para aprimorar o processamento no Brasil.',
+          'Em Goiás, a Aclara Resources desenvolve o projeto Carina, no município de Nova Roma. A companhia concluiu estudo de viabilidade em abril e projeta iniciar a produção comercial em 2029, ainda condicionada ao licenciamento e à construção das instalações. O empreendimento integra uma estratégia sul-americana e norte-americana que prevê abastecer uma futura planta de separação na Louisiana (EUA), além de etapas de metalização e ligas metálicas — com produção experimental de metal de neodímio e praseodímio anunciada em novembro em planta de demonstração.',
+          'Com diferentes estágios de desenvolvimento, os empreendimentos reforçam o potencial brasileiro de participação na diversificação mundial do fornecimento de terras raras pesadas, cuja concretização dependerá da obtenção de licenças, da conclusão dos investimentos e da entrada efetiva em operação das instalações projetadas.',
+        ],
+      },
+      en: {
+        tag: 'Critical Minerals & Commodities',
+        title:
+          'Rare earth prices reach nearly 11x China levels in North America, boosting outlook for Brazilian projects',
+        summary:
+          'An S&P Global Energy report shows dysprosium oxide priced at US$ 2,300/kg in North America versus US$ 215/kg in China, highlighting Western supply shortages and accelerating interest in Brazil’s Serra Verde, Caldeira, Colossus, and Carina projects.',
+        dateAuthor: 'Nov 20, 2026 • DinhEuro Editorial',
+        source: 'S&P Global Energy • Critical Minerals',
+        readingTime: '5 min read',
+        keywords: [
+          'brazil rare earths',
+          'dysprosium terbium prices',
+          'serra verde usa rare earth',
+          'caldeira colossus carina',
+          'critical minerals supply chain',
+        ],
+        imageAlt:
+          'Illuminated periodic table highlighting rare earth elements—including terbium (Tb) and dysprosium (Dy)—crucial for permanent magnets and high-tech industries',
+        fullContent: [
+          'The price of one of the most strategic rare earth elements used in manufacturing permanent magnets reached nearly 11 times higher in North America than in China, according to an S&P Global Energy report released in October.',
+          'The price gap underscores acute shortages of these minerals in Western markets and expands opportunities for Brazilian projects seeking to supply alternative raw materials outside China’s dominant chain.',
+          'The study shows that in July 2026, dysprosium oxide traded at US$ 2,300 per kilogram in North America compared with US$ 215 in China—roughly a 10.7x spread.',
+          'For terbium, another heavy rare earth essential to high-tech manufacturing, North American prices hit US$ 4,900 per kilogram versus US$ 1,005 in China, a nearly fivefold gap. S&P notes the figures reflect July benchmarks calculated on different commercial terms, with North American quotes including freight and insurance to destination ports.',
+          'S&P attributes the divergence to supply-chain concentration and Chinese rare earth export restrictions tightened since April 2025. China currently controls roughly 98% of global dysprosium and terbium refining, while China, Myanmar, and Laos account for about 91% of global mining output.',
+          '“Supply-chain concentration becomes even sharper in downstream industrial stages after mining, where China represents approximately 98% of global separation and refining capacity,” the report states.',
+          'Both elements are vital to high-performance permanent magnets used in electric-vehicle motors, wind turbines, electronics, and defense systems, enhancing resistance to demagnetization at elevated operating temperatures.',
+          '## Brazil gains ground in global supply',
+          'In this landscape, S&P Global highlights Brazil as a key potential source to diversify global heavy rare earth supply. Serra Verde is currently the only commercial-scale operation producing ionic-clay heavy rare earth feedstock outside China, operating the Pela Ema project in Minaçu (GO).',
+          'In September, U.S.-based USA Rare Earth completed the acquisition of Serra Verde, integrating Brazilian output into an international non-Chinese supply, processing, and magnet-manufacturing chain. Commercial shipments began in October, with first sales booked in November.',
+          'Under a roughly 15-year guaranteed-offtake contract with US SIIE—backed by U.S. government financing—disclosed to the U.S. SEC, floor benchmark prices are set at US$ 575/kg for dysprosium oxide equivalent and US$ 2,050/kg for terbium oxide equivalent, while preserving upside participation.',
+          '## Emerging Brazilian pipeline',
+          'Beyond Serra Verde, the report identifies three additional Brazilian projects poised to expand heavy rare earth supply over coming years: Caldeira, Colossus, and Carina.',
+          'In Minas Gerais, Australia’s Meteoric Resources advanced the Caldeira project, receiving a roughly US$ 672 million acquisition offer from Lynas Rare Earths in October. With a completed feasibility study and US$ 498 million initial capex plan, Caldeira targets about 122 metric tons per year of dysprosium and terbium starting in 2028.',
+          'Also in Poços de Caldas (MG), Viridis Mining and Minerals completed a feasibility study for its Colossus project (US$ 449 million initial capex, 2028 target) and signed a binding supply agreement in November with Belgian chemical group Solvay to ship mixed rare earth carbonate to La Rochelle, France, through 2034, representing minimum revenue of roughly US$ 915 million across ~70% of projected output.',
+          'In Nova Roma (GO), Aclara Resources is developing the Carina project (feasibility study completed in April, commercial startup targeted for 2029) to feed a planned separation plant in Louisiana alongside downstream metallization, having demonstrated experimental neodymium-praseodymium metal production in November. Actual delivery across all pipeline assets remains subject to permitting, financing, and construction execution.',
+        ],
+      },
+      es: {
+        tag: 'Minerales Críticos y Commodities',
+        title:
+          'El precio de las tierras raras supera casi 11 veces al de China en Norteamérica e impulsa proyectos en Brasil',
+        summary:
+          'Un informe de S&P Global Energy ubica el óxido de disprosio en US$ 2.300/kg en América del Norte frente a US$ 215/kg en China, reforzando el atractivo de proyectos brasileños como Serra Verde, Caldeira, Colossus y Carina.',
+        dateAuthor: '20/11/2026 • Redacción DinhEuro',
+        source: 'S&P Global Energy • Minerales Críticos',
+        readingTime: '5 min',
+        keywords: [
+          'tierras raras brasil',
+          'disprosio terbio precio',
+          'serra verde usa rare earth',
+          'caldeira colossus carina',
+          'minerales criticos china occidente',
+        ],
+        imageAlt:
+          'Tabla periódica iluminada con los elementos de tierras raras —incluidos terbio (Tb) y disprosio (Dy)— esenciales para imanes permanentes y alta tecnología',
+        fullContent: [
+          'El precio de una de las tierras raras más estratégicas para la fabricación de imanes permanentes llegó a ser casi 11 veces mayor en América del Norte que en China, según un informe de S&P Global Energy divulgado en octubre.',
+          'La disparidad refleja la escasez de estos minerales en los mercados occidentales y amplía las oportunidades para proyectos brasileños que buscan suministrar materias primas alternativas a la cadena dominada por China.',
+          'El relevamiento indica que, en julio de 2026, el óxido de disprosio cotizaba a US$ 2.300 por kilo en América del Norte frente a US$ 215 en China, una diferencia aproximada de 10,7 veces. En el caso del terbio, alcanzó US$ 4.900 por kilo en el mercado norteamericano frente a US$ 1.005 en el chino, casi cinco veces más.',
+          'S&P atribuye esta brecha a la fuerte concentración productiva y a las restricciones chinas a la exportación intensificadas desde abril de 2025. China concentra alrededor del 98% de la capacidad mundial de separación y refinación de disprosio y terbio, utilizados en motores de vehículos eléctricos, turbinas eólicas, electrónica y defensa.',
+          '## Brasil gana espacio en la oferta internacional',
+          'En este escenario, Brasil figura como una de las fuentes clave para diversificar el suministro global de tierras raras pesadas. Serra Verde opera en Minaçu (GO) el proyecto Pela Ema, actualmente la única operación comercial a escala fuera de China proveniente de arcillas iónicas.',
+          'En septiembre, la estadounidense USA Rare Earth completó la adquisición de Serra Verde e inició embarques comerciales en octubre, con primeras ventas registradas en noviembre. Un contrato garantizado a 15 años con US SIIE fija precios mínimos de referencia de US$ 575/kg para óxido equivalente de disprosio y US$ 2.050/kg para terbio.',
+          '## Otros proyectos brasileños en desarrollo',
+          'El informe destaca además tres proyectos con potencial de ampliar la oferta en los próximos años: Caldeira, Colossus y Carina.',
+          'En Minas Gerais, el proyecto Caldeira (Meteoric Resources) recibió en octubre una propuesta de adquisición de Lynas Rare Earths por US$ 672 millones, con inversión inicial estimada en US$ 498 millones y proyección de 122 toneladas anuales de disprosio y terbio a partir de 2028.',
+          'También en Poços de Caldas (MG), Viridis Mining and Minerals (proyecto Colossus, US$ 449 millones de inversión inicial y arranque previsto para 2028) anunció en noviembre un contrato vinculante hasta 2034 con la belga Solvay para enviar carbonato mixto a Francia, con ingresos mínimos estimados en US$ 915 millones.',
+          'Por su parte, en Nova Roma (GO), Aclara Resources avanza con el proyecto Carina (arranque previsto para 2029) para abastecer una futura planta de separación en Luisiana (EE. UU.) y etapas de metalización. La concreción de todos estos planes dependerá de licencias ambientales, financiamiento y ejecución industrial.',
+        ],
+      },
+    },
+  },
+  {
     id: 'greves-jovens-europa-custo-vida-2026',
     isoDate: '2026-11-20',
     imageUrl: '/assets/aistudio/image_9efbf558.png',
@@ -883,60 +1004,6 @@ export const DAILY_INSIGHTS_ITEMS: DailyInsightItem[] = [
           'En una reunión especial con los líderes de la Asean, Trump deberá abordar comercio, seguridad, la violencia en Myanmar y las disputas en el Mar de China Meridional. Los países del bloque negocian un pacto de no agresión con Pekín, que reclama casi toda esa zona marítima, mientras Washington rechaza las reivindicaciones chinas y reafirma su obligación de defender a Filipinas, aliada por tratado, en caso de ataque armado.',
           'La llegada de Trump estuvo precedida por una protesta de cerca de 1.500 manifestantes de izquierda en Manila, que criticaron la influencia de EE. UU. sobre la política exterior filipina. El miércoles (18), Trump será recibido por el presidente Ferdinand Marcos Jr. con honores militares y banquete de Estado en el Palacio de Malacañán, además de una posible visita a la exprimera dama Imelda Marcos, de 97 años.',
           'El mandatario estadounidense también anunciará acuerdos e inversiones en aviación, defensa, energía y tecnología antes de trasladarse a Shenzhen, China, para la cumbre de Cooperación Económica Asia-Pacífico (Apec).',
-        ],
-      },
-    },
-  },
-  {
-    id: 'ue-direitos-autor-ia-2026',
-    imageUrl: '/assets/aistudio/image_05dbcb78.png',
-    translations: {
-      pt: {
-        tag: 'TECNOLOGIA & REGULAÇÃO',
-        title: 'Alemanha e 10 países da UE pedem novas regras de direitos de autor para era da IA',
-        summary:
-          'Grupo de 11 Estados-membros da União Europeia pressiona a Comissão Europeia por legislação urgente que proteja obras criativas contra a coleta automatizada de dados no treinamento de modelos de inteligência artificial.',
-        dateAuthor: '17/11/2026 • Por Luca Bertuzzi',
-        source: 'Euronews / Conselho da União Europeia',
-        imageAlt:
-          'Wolfram Weimer, Ministro de Estado e Comissário do Governo Federal para a Cultura e os Media da Alemanha, discursando sobre direitos autorais na era da IA',
-        fullContent: [
-          'A Alemanha e outros dez Estados-membros da União Europeia — Espanha, Polónia, Áustria, Chipre, Croácia, Dinamarca, Estónia, Portugal, Eslováquia e Eslovénia — solicitaram formalmente que a Comissão Europeia apresente com urgência uma nova proposta legislativa para proteger obras protegidas por direitos de autor na era da inteligência artificial, antes da reunião de ministros da Cultura.',
-          'Sistemas avançados de IA, como grandes modelos de linguagem, são treinados com bilhões de dados extraídos da internet aberta muitas vezes sem autorização. Enquanto as indústrias criativas e culturais denunciam o uso não remunerado de suas obras, setores tecnológicos e ministérios da Economia alertam que restrições rígidas podem deixar a Europa atrás dos Estados Unidos e da China na corrida da IA.',
-          'Os países signatários defendem um equilíbrio entre a proteção do trabalho criativo humano e o fomento à inovação, exigindo concorrência leal e condições de igualdade com desenvolvedores não europeus, independentemente de onde os modelos foram treinados.',
-          'Embora a UE já conte com uma diretiva que permite aos criadores recusar o uso de suas obras em sistemas de IA, o bloco pede mecanismos mais eficazes para fazer cumprir essa exclusão. A Comissão Europeia encerrou recentemente uma consulta pública sobre o tema e prevê apresentar um novo pacote legislativo digital no segundo trimestre de 2027.',
-        ],
-      },
-      en: {
-        tag: 'TECHNOLOGY & REGULATION',
-        title: 'Germany and 10 EU countries call for new copyright rules for the AI era',
-        summary:
-          'A coalition of 11 European Union member states is urging the European Commission for urgent legislation protecting creative works against automated data scraping for training artificial intelligence models.',
-        dateAuthor: 'Nov 17, 2026 • By Luca Bertuzzi',
-        source: 'Euronews / Council of the European Union',
-        imageAlt:
-          'Wolfram Weimer, German Minister of State and Federal Government Commissioner for Culture and the Media, speaking on copyright in the AI era',
-        fullContent: [
-          'Germany and ten other European Union member states — Spain, Poland, Austria, Cyprus, Croatia, Denmark, Estonia, Portugal, Slovakia, and Slovenia — have formally urged the European Commission to urgently bring forward a new legislative proposal safeguarding copyrighted works in the age of artificial intelligence ahead of the EU Culture Ministers meeting.',
-          'Advanced AI systems such as large language models are trained on billions of data points scraped from the open web, frequently without prior authorization. While creative and cultural industries denounce the unremunerated use of their works, technology groups and economy ministries warn that overly strict curbs could leave Europe trailing the United States and China in the global AI race.',
-          'The signatory nations advocate striking a balance between protecting human creative labor and fostering technological innovation, calling for fair competition and a level playing field with non-European developers regardless of where the models were trained.',
-          'Although the EU already has a directive allowing rightsholders to opt out of having their works used in AI training, the coalition seeks stronger enforcement mechanisms to make those opt-outs effective. The European Commission recently closed a public consultation on the issue and plans to unveil a new digital legislative package in the second quarter of 2027.',
-        ],
-      },
-      es: {
-        tag: 'TECNOLOGÍA & REGULACIÓN',
-        title: 'Alemania y 10 países de la UE piden nuevas normas de derechos de autor para la era de la IA',
-        summary:
-          'Un grupo de 11 Estados miembros de la Unión Europea presiona a la Comisión Europea por una legislación urgente que proteja las obras creativas frente a la extracción automatizada de datos para entrenar modelos de inteligencia artificial.',
-        dateAuthor: '17/11/2026 • Por Luca Bertuzzi',
-        source: 'Euronews / Consejo de la Unión Europea',
-        imageAlt:
-          'Wolfram Weimer, ministro de Estado y comisionado federal de Cultura y Medios de Alemania, interviniendo sobre derechos de autor en la era de la IA',
-        fullContent: [
-          'Alemania y otros diez Estados miembros de la Unión Europea — España, Polonia, Austria, Chipre, Croacia, Dinamarca, Estonia, Portugal, Eslovaquia y Eslovenia — solicitaron formalmente a la Comisión Europea que presente con urgencia una nueva propuesta legislativa para proteger las obras con derechos de autor en la era de la inteligencia artificial, antes de la reunión de ministros de Cultura.',
-          'Los sistemas avanzados de IA, como los grandes modelos de lenguaje, se entrenan con miles de millones de datos extraídos de la internet abierta, muchas veces sin autorización. Mientras las industrias creativas y culturales denuncian el uso no remunerado de sus obras, sectores tecnológicos y ministerios de Economía advierten que restricciones rígidas podrían dejar a Europa por detrás de Estados Unidos y China en la carrera de la IA.',
-          'Los países firmantes defienden un equilibrio entre la protección del trabajo creativo humano y el impulso a la innovación, exigiendo competencia leal e igualdad de condiciones frente a desarrolladores no europeos, con independencia de dónde hayan sido entrenados los modelos.',
-          'Aunque la UE ya cuenta con una directiva que permite a los creadores rechazar el uso de sus obras en sistemas de IA, el bloque pide mecanismos más eficaces para hacer cumplir esa exclusión. La Comisión Europea cerró recientemente una consulta pública sobre el tema y prevé presentar un nuevo paquete legislativo digital en el segundo trimestre de 2027.',
         ],
       },
     },
