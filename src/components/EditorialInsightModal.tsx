@@ -122,25 +122,50 @@ export const EditorialInsightModal: React.FC<EditorialInsightModalProps> = ({
             {activeContent.summary}
           </p>
 
-          {/* Texto completo formatado em parágrafos e subtítulos legíveis */}
+          {/* Texto completo formatado em parágrafos, subtítulos e gráficos inline legíveis */}
           <div className="space-y-4">
-            {activeContent.fullContent.map((block, idx) =>
-              block.startsWith('## ') ? (
-                <h3
-                  key={idx}
-                  className="text-base font-bold text-[#003399] dark:text-white pt-1 tracking-tight"
-                >
-                  {block.slice(3)}
-                </h3>
-              ) : (
+            {activeContent.fullContent.map((block, idx) => {
+              if (block.startsWith('## ')) {
+                return (
+                  <h3
+                    key={idx}
+                    className="text-base font-bold text-[#003399] dark:text-white pt-1 tracking-tight"
+                  >
+                    {block.slice(3)}
+                  </h3>
+                );
+              }
+              const imgMatch = block.match(/^!\[([^\]]*)\]\(([^)]+)\)$/);
+              if (imgMatch) {
+                const [, altText, imgSrc] = imgMatch;
+                return (
+                  <figure
+                    key={idx}
+                    className="my-2 rounded-xl overflow-hidden border border-[#E2E8F0] dark:border-slate-800 bg-white dark:bg-[#0d1627] shadow-sm"
+                  >
+                    <img
+                      src={imgSrc}
+                      alt={altText}
+                      referrerPolicy="no-referrer"
+                      className="w-full h-auto object-contain bg-white"
+                    />
+                    {altText && (
+                      <figcaption className="px-3.5 py-2 text-[11px] text-[#475569] dark:text-slate-400 border-t border-[#E2E8F0] dark:border-slate-800 bg-[#F8FAFC] dark:bg-[#080f1e]">
+                        {altText}
+                      </figcaption>
+                    )}
+                  </figure>
+                );
+              }
+              return (
                 <p
                   key={idx}
                   className="text-sm text-[#1E293B] dark:text-slate-300 leading-relaxed"
                 >
                   {block}
                 </p>
-              )
-            )}
+              );
+            })}
           </div>
         </div>
 

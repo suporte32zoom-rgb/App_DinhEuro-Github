@@ -58,6 +58,7 @@ export function toInsightSchemaInput(
     imageUrl: item.imageUrl,
     url: `${CANONICAL_ORIGIN}${basePath}${item.id}`,
     articleBody: loc.fullContent
+      .filter((line) => !/^!\[[^\]]*\]\([^)]+\)$/.test(line))
       .map((line) => (line.startsWith('## ') ? line.slice(3) : line))
       .join('\n\n'),
     keywords:

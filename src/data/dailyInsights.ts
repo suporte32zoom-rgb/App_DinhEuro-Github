@@ -60,6 +60,212 @@ export const DAILY_INSIGHTS_UI_COPY: Record<
 
 export const DAILY_INSIGHTS_ITEMS: DailyInsightItem[] = [
   {
+    id: 'acordo-comercial-ue-mercosul-2026',
+    isoDate: '2026-11-21',
+    imageUrl: '/assets/aistudio/image_0205078f.png',
+    translations: {
+      pt: {
+        tag: 'Comércio Exterior & Acordo UE–Mercosul',
+        title:
+          'Acordo comercial UE–Mercosul: por que é importante e quais os impactos econômicos projetados até 2040',
+        summary:
+          'Com entrada em vigor provisória em 1º de maio de 2026, o acordo cria uma zona comercial de 700 milhões de pessoas e projeta aumento de mais de € 77,6 bilhões no PIB europeu, avanço de 39% nas exportações anuais da UE e até 600 mil empregos apoiados até 2040.',
+        dateAuthor: '21/11/2026 • Redação DinhEuro',
+        source: 'Comissão Europeia • Acordo Comercial UE–Mercosul',
+        readingTime: '6 min',
+        keywords: [
+          'acordo comercial ue mercosul 2026',
+          'exportações agroalimentares ue 2040',
+          'matérias-primas críticas nióbio mercosul',
+          'indicações geográficas segurança alimentar ue',
+          'tarifas automóveis máquinas compras públicas',
+        ],
+        imageAlt:
+          'Navio porta-contêineres cruzando ponte simbólica com as bandeiras de Argentina, Brasil, Paraguai, Uruguai e União Europeia representando o acordo comercial UE–Mercosul',
+        fullContent: [
+          'O acordo comercial UE–Mercosul, que entra em vigor provisoriamente em 1º de maio de 2026, cria uma zona de comércio que abrange um total de 700 milhões de pessoas. O acordo foi firmado entre a União Europeia e o bloco comercial sul-americano, que inclui Argentina, Brasil, Paraguai e Uruguai, impulsionando a economia europeia e as parcerias globais ao mesmo tempo que protege os agricultores, os consumidores e os padrões ambientais da UE.',
+          'Entre seus pilares centrais, o tratado remove barreiras comerciais, cria empregos e oportunidades de negócios e garante fortes salvaguardas para as regras da UE e a concorrência leal. Até 2040, projeta-se um aumento superior a € 77,6 bilhões no PIB da UE, crescimento de 39% nas exportações anuais europeias (até € 50 bilhões) e até 600.000 empregos apoiados na Europa.',
+          '## Oportunidades para empresas: bens industriais, matérias-primas críticas e compras públicas',
+          'No setor de bens industriais, o acordo reduz tarifas sobre automóveis (anteriormente de até 35%), máquinas (entre 14% e 20%), produtos farmacêuticos (até 14%) e diversos outros itens, permitindo que empresas europeias economizem mais de € 4 bilhões por ano.',
+          'Em matérias-primas críticas, o Mercosul atua como fornecedor estratégico para as transições verde e digital — por exemplo, a UE importa 82% do nióbio utilizado na fabricação de ímãs supercondutores para aparelhos de ressonância magnética e tratamentos médicos a partir do Mercosul. Na área de contratação pública, empresas europeias passam a concorrer a licitações governamentais no bloco; apenas o mercado de compras públicas do governo federal brasileiro movimenta mais de € 8 bilhões por ano.',
+          '## Benefícios para agricultores, indicações geográficas e ganhos até 2040',
+          'O acordo comercial UE–Mercosul reduz tarifas historicamente elevadas sobre produtos agroalimentares da UE, como vinho e bebidas espirituosas (até 35%), chocolate (20%) e azeite (até 31,5%), projetando aumento de quase 50% nas exportações agrícolas europeias.',
+          'Ganhos esperados com a redução das tarifas até 2040 - Prevê-se que a maioria dos setores agrícolas da UE aumente as suas exportações',
+          '![Ganhos esperados com a redução das tarifas até 2040 - Prevê-se que a maioria dos setores agrícolas da UE aumente as suas exportações](/assets/aistudio/expected-gains-from-redu_9daa9c58.png)',
+          'As projeções por categoria para 2040 frente ao nível atual indicam forte expansão: Bebidas (+54%, de 395 para 605), Frutas e vegetais (+37%, de 135 para 185), Óleos vegetais (+21%, de 152 para 185) e Laticínios (+102%, de 42 para 85).',
+          'O tratado também protege produtos autênticos europeus por meio de Indicações Geográficas contra imitações no Mercosul e estabelece cotas limitadas para importações preferenciais sensíveis — restringindo carne bovina e de aves a apenas 1,5% e 1,3% da produção anual total da UE, respectivamente, além de proteção adicional para arroz, mel e etanol. Uma rede de segurança de € 6,3 bilhões respaldará os produtores europeus em caso de perturbações de mercado, acompanhada de cláusulas de salvaguarda.',
+          '## Padrões de saúde, segurança alimentar e desenvolvimento sustentável',
+          'Somente são permitidas importações que cumpram integralmente as rigorosas normas de segurança alimentar e saúde da UE, com reforço de inspeções e auditorias tanto nos países exportadores quanto nas fronteiras europeias ao longo dos próximos dois anos.',
+          'Além da pauta tarifária, o acordo estabelece estrutura de cooperação em direitos humanos, implementação efetiva do Acordo de Paris sobre o Clima, metas concretas contra o desmatamento e preservação da biodiversidade, fortalecimento dos direitos trabalhistas, conduta empresarial responsável e proteção aos direitos de propriedade intelectual (DPI) — setor responsável por mais de 47% do PIB e mais de 80% das exportações da União Europeia.',
+        ],
+      },
+      en: {
+        tag: 'International Trade & EU–Mercosur',
+        title:
+          'The EU–Mercosur trade agreement: why it matters and projected economic gains by 2040',
+        summary:
+          'Entering into provisional force on May 1, 2026, the EU–Mercosur accord creates a 700-million-consumer trade zone and is projected by 2040 to add over €77.6 billion to EU GDP, lift annual EU exports by 39% (up to €50 billion), and support up to 600,000 European jobs.',
+        dateAuthor: 'Nov 21, 2026 • DinhEuro Editorial',
+        source: 'European Commission • EU–Mercosur Trade Agreement',
+        readingTime: '6 min read',
+        keywords: [
+          'eu mercosur trade agreement 2026',
+          'eu agricultural exports 2040',
+          'critical raw materials niobium mercosur',
+          'geographical indications food safety eu',
+          'tariffs cars machinery public procurement',
+        ],
+        imageAlt:
+          'Container vessel passing beneath an illustrated bridge displaying the flags of Argentina, Brazil, Paraguay, Uruguay, and the European Union symbolizing the EU–Mercosur trade accord',
+        fullContent: [
+          'The EU–Mercosur trade agreement, entering into provisional application on May 1, 2026, establishes a trade area encompassing 700 million people across the European Union and Argentina, Brazil, Paraguay, and Uruguay—boosting economic growth and global partnerships while upholding EU farmers, consumer protections, and environmental standards.',
+          'By 2040, the agreement is projected to deliver over €77.6 billion in additional EU GDP, a 39% increase in annual EU exports (up to €50 billion), and support up to 600,000 jobs across Europe.',
+          '## Business opportunities: industrial goods, critical raw materials, and procurement',
+          'Tariff cuts on cars (previously up to 35%), machinery (14%–20%), pharmaceuticals (up to 14%), and other industrial goods are estimated to save EU businesses more than €4 billion annually. Mercosur also supplies vital materials for the green and digital transitions—including 82% of the niobium the EU uses for MRI superconducting magnets and cancer-treatment equipment—while opening Mercosur public procurement markets, including Brazil’s federal procurement market worth over €8 billion a year.',
+          '## Gains for agri-food producers, GIs, and 2040 export outlook',
+          'High Mercosur duties on key EU agri-food products such as wine and spirits (up to 35%), chocolate (20%), and olive oil (up to 31.5%) will fall significantly, supporting a projected near-50% rise in EU agricultural exports.',
+          'Expected gains from reduced tariffs by 2040 – Most EU agricultural sectors are projected to increase their exports',
+          '![Expected gains from reduced tariffs by 2040 – Most EU agricultural sectors are projected to increase their exports](/assets/aistudio/expected-gains-from-redu_9daa9c58.png)',
+          'Projected category gains compare 2040 levels against current baselines: Beverages (+54%, from 395 to 605), Fruit and vegetables (+37%, from 135 to 185), Vegetable oils (+21%, from 152 to 185), and Dairy products (+102%, from 42 to 85).',
+          'The accord protects EU Geographical Indications from imitation, caps preferential sensitive imports—limiting beef and poultry quotas to just 1.5% and 1.3% of total annual EU production, alongside extra safeguards for rice, honey, and ethanol—and pairs close market monitoring with a €6.3 billion safety net for EU farmers.',
+          '## Food safety standards and sustainable development',
+          'All imports must continue meeting strict EU food-safety and health requirements, backed by reinforced inspections and border audits over the next two years. The agreement also commits parties to effective implementation of the Paris Climate Agreement, measurable anti-deforestation and biodiversity commitments, labor rights, responsible business conduct, and strong enforcement of intellectual property rights (IPR).',
+        ],
+      },
+      es: {
+        tag: 'Comercio Exterior y Acuerdo UE–Mercosur',
+        title:
+          'El acuerdo comercial UE–Mercosur: por qué es importante y proyecciones económicas al 2040',
+        summary:
+          'Con entrada en vigor provisional el 1 de mayo de 2026, el tratado crea una zona comercial de 700 millones de personas y proyecta al 2040 un aumento superior a € 77,6 mil millones en el PIB de la UE, un alza del 39% en exportaciones y hasta 600.000 empleos.',
+        dateAuthor: '21/11/2026 • Redacción DinhEuro',
+        source: 'Comisión Europea • Acuerdo Comercial UE–Mercosur',
+        readingTime: '6 min',
+        keywords: [
+          'acuerdo comercial ue mercosur 2026',
+          'exportaciones agroalimentarias ue 2040',
+          'materias primas criticas niobio mercosur',
+          'indicaciones geograficas seguridad alimentaria ue',
+          'aranceles automoviles maquinaria compras publicas',
+        ],
+        imageAlt:
+          'Buque portacontenedores cruzando bajo un puente ilustrado con las banderas de Argentina, Brasil, Paraguay, Uruguay y la Unión Europea en alusión al acuerdo comercial UE–Mercosur',
+        fullContent: [
+          'El acuerdo comercial UE–Mercosur, que entra en vigor de forma provisional el 1 de mayo de 2026, configura una zona de libre comercio de 700 millones de habitantes entre la Unión Europea y Argentina, Brasil, Paraguay y Uruguay, impulsando la economía europea y protegiendo a agricultores, consumidores y estándares ambientales.',
+          'Para 2040 se proyecta un incremento superior a € 77,6 mil millones en el PIB de la UE, un alza del 39% en las exportaciones anuales europeas (hasta € 50 mil millones) y el respaldo a hasta 600.000 empleos en Europa.',
+          '## Oportunidades industriales, materias primas críticas y compras públicas',
+          'El pacto recorta aranceles en bienes industriales como automóviles (antes hasta 35%), maquinaria (14% a 20%) y productos farmacéuticos (hasta 14%), generando ahorros anuales superiores a € 4 mil millones para empresas europeas. Además, asegura acceso sostenible a insumos estratégicos —el 82% del niobio usado por la UE en imanes superconductores proviene del Mercosur— y abre licitaciones públicas, incluido el mercado federal brasileño de más de € 8 mil millones anuales.',
+          '## Beneficios agroalimentarios y ganancias proyectadas al 2040',
+          'La reducción de aranceles en vinos y bebidas espirituosas (hasta 35%), chocolate (20%) y aceite de oliva (hasta 31,5%) impulsará las exportaciones agrícolas europeas en casi un 50%.',
+          'Ganancias esperadas con la reducción de aranceles hasta 2040 – Se prevé que la mayoría de los sectores agrícolas de la UE aumenten sus exportaciones',
+          '![Ganancias esperadas con la reducción de aranceles hasta 2040 – Se prevé que la mayoría de los sectores agrícolas de la UE aumenten sus exportaciones](/assets/aistudio/expected-gains-from-redu_9daa9c58.png)',
+          'Por categoría hacia 2040 frente al nivel actual destacan Bebidas (+54%, de 395 a 605), Frutas y hortalizas (+37%, de 135 a 185), Aceites vegetales (+21%, de 152 a 185) y Lácteos (+102%, de 42 a 85).',
+          'Asimismo, se protegen las Indicaciones Geográficas europeas, se limitan las cuotas preferenciales sensibles (1,5% en carne bovina y 1,3% en aves sobre la producción anual de la UE, junto a resguardos adicionales para arroz, miel y etanol) y se dispone una red de seguridad de € 6,3 mil millones ante eventuales perturbaciones.',
+          '## Seguridad alimentaria y desarrollo sostenible',
+          'Todas las importaciones deberán cumplir las estrictas normas sanitarias y de seguridad alimentaria europeas, con refuerzo de inspecciones y auditorías en origen y frontera durante los próximos dos años, junto con compromisos efectivos bajo el Acuerdo de París, preservación forestal, derechos laborales y propiedad intelectual.',
+        ],
+      },
+    },
+  },
+  {
+    id: 'mdic-consulta-publica-salvaguardas-bilaterais-2026',
+    isoDate: '2026-11-20',
+    imageUrl: '/assets/aistudio/image_74407743.png',
+    translations: {
+      pt: {
+        tag: 'Comércio Exterior & Defesa Comercial',
+        title:
+          'MDIC abre consulta pública sobre regulamentação de salvaguardas bilaterais',
+        summary:
+          'Minuta de Portaria da SECEX detalha procedimentos para investigação e revisão de medidas de defesa comercial sob o Decreto nº 12.866/2026, com aplicação prevista ao acordo Mercosul–União Europeia e futuros tratados, com prazo de 15 dias para contribuições.',
+        dateAuthor: '20/11/2026 • Redação DinhEuro',
+        source: 'Ministério do Desenvolvimento, Indústria, Comércio e Serviços (MDIC / SECEX)',
+        readingTime: '4 min',
+        keywords: [
+          'mdic consulta pública salvaguardas bilaterais',
+          'portaria secex defesa comercial 2026',
+          'decreto 12866 salvaguardas bilaterais',
+          'acordo mercosul união europeia decom camex',
+          'comércio exterior proteção indústria nacional',
+        ],
+        imageAlt:
+          'Fachada institucional do Ministério do Desenvolvimento, Indústria, Comércio e Serviços (MDIC) em Brasília com as bandeiras do Brasil e do ministério',
+        fullContent: [
+          'O Ministério do Desenvolvimento, Indústria, Comércio e Serviços (MDIC), por meio da Secretaria de Comércio Exterior (SECEX), abriu consulta pública sobre a minuta de Portaria que regulamenta os procedimentos administrativos relativos às investigações de salvaguardas bilaterais no Brasil. Os interessados terão 15 dias para encaminhar comentários e sugestões ao texto proposto, cujo ato normativo deve ser publicado ainda em 2026.',
+          'A iniciativa dá continuidade à regulamentação iniciada com a publicação do Decreto nº 12.866, de 4 de março de 2026, que estabeleceu as regras gerais para investigação e aplicação de medidas de salvaguardas bilaterais previstas em acordos de livre comércio ou em outros acordos comerciais que contemplem preferências tarifárias.',
+          'A salvaguarda bilateral é um mecanismo que permite ao Brasil adotar medidas temporárias para proteger setores da indústria nacional diante de aumentos expressivos das importações beneficiadas por reduções tarifárias previstas em acordos comerciais, quando esses aumentos causarem ou ameaçarem causar prejuízos à produção brasileira. A aplicação dessas medidas deve observar as condições estabelecidas em cada acordo comercial.',
+          '## Regulamentação dos procedimentos',
+          'A minuta de Portaria detalha as regras aplicáveis à apresentação e à análise de petições, à participação das partes interessadas, aos procedimentos de investigação, à produção de provas e à avaliação dos requisitos para aplicação das medidas.',
+          'O texto também disciplina o tratamento de informações confidenciais, os prazos processuais, as medidas provisórias e definitivas e os procedimentos de revisão para fins de prorrogação, quando admitidos pelo acordo comercial pertinente. As novas regras serão aplicáveis tanto aos acordos comerciais em vigor, como o Mercosul–União Europeia, quanto para acordos futuros.',
+          'A proposta busca estabelecer procedimentos administrativos uniformes, preservando as particularidades dos diferentes acordos comerciais, bem como as competências dos órgãos atuantes no tema, como o Departamento de Defesa Comercial (DECOM) da Secretaria de Comércio Exterior (SECEX) e a Câmara de Comércio Exterior (CAMEX).',
+          '## Consulta pública sucede tomada de subsídios',
+          'A abertura da consulta pública representa uma nova etapa do processo de elaboração da norma. Entre março e abril de 2026, a SECEX realizou uma tomada de subsídios para colher contribuições da sociedade sobre os principais aspectos a serem considerados na regulamentação das salvaguardas bilaterais — elementos incorporados à proposta agora submetida ao público.',
+          'Durante os 15 dias de consulta pública, representantes da indústria doméstica, importadores, exportadores, entidades de classe, especialistas e demais interessados poderão examinar a minuta e enviar sugestões de aperfeiçoamento. As contribuições recebidas serão avaliadas pela equipe técnica da SECEX na elaboração da versão final da Portaria.',
+          '## Como participar',
+          'A minuta de Portaria, a apresentação explicativa sintetizando a estrutura, os fluxos de investigação e revisão e os prazos processuais, além das orientações para envio de contribuições, estão disponíveis nos canais oficiais do MDIC e da SECEX para facilitar a participação dos setores produtivos.',
+        ],
+      },
+      en: {
+        tag: 'Foreign Trade & Trade Defense',
+        title:
+          'MDIC opens public consultation on regulation of bilateral safeguards',
+        summary:
+          'A draft SECEX ordinance sets out investigation and review procedures for trade-defense measures under Decree No. 12,866/2026—covering agreements such as Mercosur–EU—with a 15-day window for stakeholder comments and publication expected in 2026.',
+        dateAuthor: 'Nov 20, 2026 • DinhEuro Editorial',
+        source: 'Ministry of Development, Industry, Trade and Services (MDIC / SECEX)',
+        readingTime: '4 min read',
+        keywords: [
+          'mdic bilateral safeguards public consultation',
+          'secex trade defense ordinance 2026',
+          'brazil decree 12866 bilateral safeguards',
+          'mercosur eu trade agreement decom camex',
+          'brazilian industry import surge protection',
+        ],
+        imageAlt:
+          'Institutional facade of Brazil’s Ministry of Development, Industry, Trade and Services (MDIC) in Brasília with Brazilian and ministry flags',
+        fullContent: [
+          'Brazil’s Ministry of Development, Industry, Trade and Services (MDIC), through its Foreign Trade Secretariat (SECEX), has opened a 15-day public consultation on a draft ordinance regulating administrative procedures for bilateral safeguard investigations, with final publication expected later in 2026.',
+          'The proposal builds on Decree No. 12,866 of March 4, 2026, which established general rules for investigating and applying bilateral safeguard measures under free trade agreements and preferential tariff accords.',
+          'Bilateral safeguards allow Brazil to adopt temporary measures protecting domestic industrial sectors when sharp surges in imports benefiting from tariff preferences cause or threaten injury to Brazilian production, strictly observing the terms of each trade agreement.',
+          '## Procedural framework and scope',
+          'The draft ordinance details standards for filing and reviewing petitions, participation of interested parties, evidentiary production, handling of confidential information, statutory deadlines, provisional and definitive measures, and extension reviews.',
+          'The rules will apply both to agreements already in force—including Mercosur–European Union—and to future accords, harmonizing administrative procedures while preserving institutional mandates of the Department of Trade Defense (DECOM/SECEX) and the Foreign Trade Chamber (CAMEX).',
+          '## Following earlier stakeholder input',
+          'Between March and April 2026, SECEX conducted an initial call for inputs that informed the draft now open for 15 days of review by domestic manufacturers, importers, exporters, trade associations, and specialists. All submissions and explanatory materials—including a summary presentation detailing procedural timelines—are available through MDIC’s consultation portal.',
+        ],
+      },
+      es: {
+        tag: 'Comercio Exterior y Defensa Comercial',
+        title:
+          'El MDIC abre consulta pública sobre la reglamentación de salvaguardias bilaterales',
+        summary:
+          'Un proyecto de ordenanza de la SECEX establece procedimientos de investigación y revisión de medidas de defensa comercial bajo el Decreto nº 12.866/2026, aplicable al acuerdo Mercosur–UE y futuros tratados, con plazo de 15 días para aportes.',
+        dateAuthor: '20/11/2026 • Redacción DinhEuro',
+        source: 'Ministerio de Desarrollo, Industria, Comercio y Servicios (MDIC / SECEX)',
+        readingTime: '4 min',
+        keywords: [
+          'mdic consulta publica salvaguardias bilaterales',
+          'ordenanza secex defensa comercial 2026',
+          'decreto 12866 brasil salvaguardias',
+          'acuerdo mercosur union europea decom camex',
+          'comercio exterior industria brasilena',
+        ],
+        imageAlt:
+          'Fachada institucional del Ministerio de Desarrollo, Industria, Comercio y Servicios (MDIC) en Brasilia con las banderas de Brasil y del ministerio',
+        fullContent: [
+          'El Ministerio de Desarrollo, Industria, Comercio y Servicios (MDIC), a través de la Secretaría de Comercio Exterior (SECEX), abrió una consulta pública de 15 días sobre el proyecto de ordenanza que reglamenta los procedimientos administrativos para investigaciones de salvaguardias bilaterales en Brasil, cuya publicación definitiva está prevista aún en 2026.',
+          'La iniciativa da continuidad al Decreto nº 12.866, del 4 de marzo de 2026, que fijó las normas generales para investigar y aplicar salvaguardias bilaterales contempladas en acuerdos de libre comercio y tratados con preferencias arancelarias.',
+          'Este mecanismo habilita medidas temporales para resguardar sectores de la industria nacional frente a aumentos significativos de importaciones beneficiadas por rebajas arancelarias cuando causen o amenacen causar daño a la producción brasileña.',
+          '## Reglamentación de los procedimientos',
+          'El texto detalla las reglas para la presentación y análisis de peticiones, participación de partes interesadas, producción de pruebas, resguardo de datos confidenciales, plazos procesales, medidas provisionales o definitivas y revisiones de prórroga.',
+          'Las disposiciones regirán tanto para acuerdos vigentes, como Mercosur–Unión Europea, como para tratados futuros, unificando procedimientos y preservando las competencias del Departamento de Defensa Comercial (DECOM/SECEX) y de la Cámara de Comercio Exterior (CAMEX).',
+          '## Continuidad de la toma de aportes',
+          'Tras una consulta preliminar realizada entre marzo y abril de 2026, la SECEX abre ahora el texto durante 15 días a la industria nacional, importadores, exportadores, cámaras sectoriales y especialistas, junto con documentos orientativos y una presentación explicativa sobre la estructura y los plazos de la norma.',
+        ],
+      },
+    },
+  },
+  {
     id: 'anthropic-ipo-turbulencia-wall-street-2026',
     isoDate: '2026-11-20',
     imageUrl: '/assets/aistudio/image_31f7e667.png',
@@ -1061,114 +1267,6 @@ export const DAILY_INSIGHTS_ITEMS: DailyInsightItem[] = [
           'El rumbo de la tasa de interés de referencia de Estados Unidos volvió al centro de la atención de los mercados globales este martes (17) tras declaraciones de directivos de la Reserva Federal (Fed) sobre la persistencia de las presiones inflacionarias.',
           'Durante un evento por la tarde, el presidente de la Fed de Nueva York, John Williams, destacó que la actividad económica estadounidense se mantiene sólida, pero evaluó que la inflación aún no avanza en la dirección necesaria para converger hacia la meta oficial, indicando que el banco central tiene tarea pendiente.',
           'De acuerdo con datos de LSEG, los contratos futuros reflejan una probabilidad del 96% de un nuevo incremento de 0,25 puntos porcentuales en la reunión de diciembre de la Fed, manteniendo presionados los rendimientos de los bonos del Tesoro estadounidense y exigiendo cautela a los mercados emergentes.',
-        ],
-      },
-    },
-  },
-  {
-    id: 'eua-restricoes-chips-ia-brasil-2026',
-    imageUrl: '/assets/aistudio/image_72477e45.png',
-    translations: {
-      pt: {
-        tag: 'TECNOLOGIA & COMÉRCIO GLOBAL',
-        title:
-          'EUA impõem novas restrições à exportação de chips avançados de IA para Brasil e mais 11 países',
-        summary:
-          'O Departamento de Comércio dos Estados Unidos anunciou exigência de licenças para envio e acesso remoto a semicondutores de inteligência artificial em 12 países — incluindo o Brasil —, pressionando ações de tecnologia antes do balanço da Nvidia.',
-        dateAuthor: '17/11/2026 • Redação DinhEuro',
-        source: 'Bloomberg / Al Jazeera',
-        imageAlt:
-          'Sala limpa de fabricação de semicondutores e wafers de silício usados em chips avançados de inteligência artificial',
-        fullContent: [
-          'O governo dos Estados Unidos anunciou novas regras de controle de exportação que exigem autorização prévia do Departamento de Comércio para a venda, reexportação ou acesso remoto em nuvem de chips avançados de inteligência artificial destinados a 12 países, entre eles Brasil, Singapura, Malásia, Tailândia, Indonésia e Índia.',
-          'Segundo autoridades americanas, a medida busca impedir que empresas chinesas contornem as sanções vigentes utilizando centros de dados instalados em terceiros países para treinar modelos avançados de IA. O anúncio ocorre em meio à crise corporativa na Nvidia após a saída do CEO Jensen Huang e à véspera da divulgação do balanço trimestral da fabricante.',
-          'A notícia provocou queda nas ações de semicondutores nos Estados Unidos e na Ásia, derrubando índices em Tóquio, Seul e Hong Kong, enquanto investidores reavaliam os impactos regulatórios sobre a cadeia global de infraestrutura de IA.',
-        ],
-      },
-      en: {
-        tag: 'TECHNOLOGY & GLOBAL TRADE',
-        title:
-          'US imposes new export curbs on advanced AI chips for Brazil and 11 other countries',
-        summary:
-          'The U.S. Department of Commerce announced licensing requirements for shipping and remote cloud access to artificial intelligence semiconductors across 12 countries—including Brazil—pressuring tech stocks ahead of Nvidia’s earnings report.',
-        dateAuthor: 'Nov 17, 2026 • DinhEuro Editorial',
-        source: 'Bloomberg / Al Jazeera',
-        imageAlt:
-          'Semiconductor cleanroom manufacturing silicon wafers used in advanced artificial intelligence chips',
-        fullContent: [
-          'The United States government announced new export-control rules requiring prior authorization from the Department of Commerce for the sale, re-export, or remote cloud access of advanced artificial intelligence chips destined for 12 countries, including Brazil, Singapore, Malaysia, Thailand, Indonesia, and India.',
-          'According to U.S. officials, the measure aims to prevent Chinese companies from circumventing existing sanctions by using data centers located in third countries to train advanced AI models. The announcement comes amid corporate turmoil at Nvidia following the departure of CEO Jensen Huang and on the eve of the chipmaker’s quarterly earnings release.',
-          'The news triggered declines in semiconductor shares across the United States and Asia, dragging down equity indexes in Tokyo, Seoul, and Hong Kong as investors reassess regulatory headwinds facing the global AI infrastructure supply chain.',
-        ],
-      },
-      es: {
-        tag: 'TECNOLOGÍA Y COMERCIO GLOBAL',
-        title:
-          'EE. UU. impone nuevas restricciones a la exportación de chips avanzados de IA para Brasil y otros 11 países',
-        summary:
-          'El Departamento de Comercio de Estados Unidos anunció la exigencia de licencias para el envío y acceso remoto a semiconductores de inteligencia artificial en 12 países —incluido Brasil—, presionando a las acciones tecnológicas antes del balance de Nvidia.',
-        dateAuthor: '17/11/2026 • Redacción DinhEuro',
-        source: 'Bloomberg / Al Jazeera',
-        imageAlt:
-          'Sala limpia de fabricación de semiconductores y obleas de silicio utilizadas en chips avanzados de inteligencia artificial',
-        fullContent: [
-          'El gobierno de Estados Unidos anunció nuevas normas de control de exportaciones que exigen autorización previa del Departamento de Comercio para la venta, reexportación o acceso remoto en la nube a chips avanzados de inteligencia artificial destinados a 12 países, entre ellos Brasil, Singapur, Malasia, Tailandia, Indonesia e India.',
-          'Según autoridades estadounidenses, la medida busca impedir que empresas chinas eludan las sanciones vigentes utilizando centros de datos instalados en terceros países para entrenar modelos avanzados de IA. El anuncio se produce en medio de la crisis corporativa en Nvidia tras la salida del CEO Jensen Huang y en la víspera de la publicación de los resultados trimestrales del fabricante.',
-          'La noticia provocó caídas en las acciones de semiconductores en Estados Unidos y Asia, arrastrando a los índices en Tokio, Seúl y Hong Kong mientras los inversores reevalúan el impacto regulatorio sobre la cadena global de infraestructura de IA.',
-        ],
-      },
-    },
-  },
-  {
-    id: 'senado-plp-299-pacote-ajuste-fiscal-2027',
-    imageUrl: '/assets/aistudio/image_459c4fc4.png',
-    translations: {
-      pt: {
-        tag: 'POLÍTICA ECONÔMICA & FISCAL',
-        title:
-          'Senado vota destaques finais do pacote de ajuste fiscal de até R$ 56,1 bilhões para 2027',
-        summary:
-          'Após aprovar o texto-base do PLP 299/2026, o Senado analisa os destaques pendentes do pacote fiscal do governo antes de enviá-lo à Câmara, mirando uma economia estimada entre R$ 45,1 bilhões e R$ 56,1 bilhões no próximo ano.',
-        dateAuthor: '17/11/2026 • Redação DinhEuro',
-        source: 'Agência Senado / Veja',
-        imageAlt:
-          'Plenário do Senado Federal em sessão durante a votação dos destaques do pacote de ajuste fiscal',
-        fullContent: [
-          'O Plenário do Senado Federal retomou nesta terça-feira (17) a análise dos destaques ao Projeto de Lei Complementar (PLP 299/2026), peça central do pacote de ajuste fiscal articulado pela equipe econômica para conter o avanço da dívida pública.',
-          'O projeto promove alterações nas regras do arcabouço fiscal, autorizando bloqueios adicionais de despesas para o cumprimento da meta primária e reduzindo de 2,5% para 2% o teto de crescimento real dos gastos a partir de 2027 nos exercícios em que houver gatilhos de contenção.',
-          'O texto também restringe o uso de créditos tributários para abatimento de impostos federais, ajusta regras de repasses da Lei Kandir e estabelece prazos para a regulamentação dos chamados supersalários no funcionalismo. A expectativa do Executivo é concluir a tramitação no Senado e acelerar a votação na Câmara dos Deputados ainda nesta semana.',
-        ],
-      },
-      en: {
-        tag: 'ECONOMIC & FISCAL POLICY',
-        title:
-          'Senate votes on final amendments to fiscal adjustment package of up to BRL 56.1 billion for 2027',
-        summary:
-          'After approving the core text of PLP 299/2026, the Brazilian Senate reviews pending amendments to the government’s fiscal package before sending it to the Lower House, targeting estimated savings of BRL 45.1 billion to BRL 56.1 billion next year.',
-        dateAuthor: 'Nov 17, 2026 • DinhEuro Editorial',
-        source: 'Agência Senado / Veja',
-        imageAlt:
-          'Brazilian Federal Senate plenary in session during voting on the fiscal adjustment package',
-        fullContent: [
-          'The Brazilian Federal Senate plenary resumed on Tuesday (17) its review of proposed amendments to Complementary Bill (PLP 299/2026), the centerpiece of the fiscal adjustment package crafted by the economic team to curb the rise of public debt.',
-          'The bill revises Brazil’s fiscal framework rules, authorizing additional spending freezes to meet the primary budget target and lowering the real spending growth ceiling from 2.5% to 2% starting in 2027 during fiscal years when containment triggers apply.',
-          'The legislation also curbs the use of tax credits to offset federal taxes, adjusts Kandir Law revenue-transfer rules, and sets deadlines to regulate top-tier public-sector compensation above the constitutional cap. The Executive branch aims to wrap up Senate deliberations and fast-track a vote in the Chamber of Deputies later this week.',
-        ],
-      },
-      es: {
-        tag: 'POLÍTICA ECONÓMICA Y FISCAL',
-        title:
-          'El Senado vota los puntos finales del paquete de ajuste fiscal de hasta R$ 56,1 mil millones para 2027',
-        summary:
-          'Tras aprobar el texto base del PLP 299/2026, el Senado brasileño analiza las enmiendas pendientes del paquete fiscal del gobierno antes de enviarlo a la Cámara de Diputados, apuntando a un ahorro estimado de entre R$ 45,1 mil millones y R$ 56,1 mil millones el próximo año.',
-        dateAuthor: '17/11/2026 • Redacción DinhEuro',
-        source: 'Agência Senado / Veja',
-        imageAlt:
-          'Pleno del Senado Federal de Brasil en sesión durante la votación del paquete de ajuste fiscal',
-        fullContent: [
-          'El Pleno del Senado Federal retomó este martes (17) el análisis de las enmiendas al Proyecto de Ley Complementaria (PLP 299/2026), pieza central del paquete de ajuste fiscal articulado por el equipo económico para contener el avance de la deuda pública.',
-          'El proyecto introduce cambios en las reglas del marco fiscal, autorizando bloqueos adicionales de gastos para cumplir la meta primaria y reduciendo del 2,5% al 2% el techo de crecimiento real del gasto a partir de 2027 en los ejercicios en que se activen gatillos de contención.',
-          'El texto también restringe el uso de créditos tributarios para compensar impuestos federales, ajusta las reglas de transferencias de la Ley Kandir y fija plazos para reglamentar los llamados sobresueldos en el sector público. La expectativa del Ejecutivo es concluir la tramitación en el Senado y acelerar la votación en la Cámara de Diputados esta misma semana.',
         ],
       },
     },
