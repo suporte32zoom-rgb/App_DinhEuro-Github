@@ -60,106 +60,6 @@ export const DAILY_INSIGHTS_UI_COPY: Record<
 
 export const DAILY_INSIGHTS_ITEMS: DailyInsightItem[] = [
   {
-    id: 'anthropic-ipo-turbulencia-wall-street-2026',
-    isoDate: '2026-11-20',
-    imageUrl: '/assets/aistudio/image_31f7e667.png',
-    translations: {
-      pt: {
-        tag: 'Empresas & Wall Street',
-        title:
-          'A busca por culpados começou após a turbulenta estreia da Anthropic no mercado de ações',
-        summary:
-          'Após o maior IPO da história com valuation de US$ 1,8 trilhão, ações da gigante de IA caíram até 15% no segundo pregão — a apenas 5 centavos do preço de estreia — e fecharam em -8,5% (US$ 88,91), eliminando cerca de US$ 109 bilhões em valor de mercado.',
-        dateAuthor: '20/11/2026 • Por Corrie Driebusch, Kate Clark, Peter Rudegeair e Ben Dummett',
-        source: 'The Wall Street Journal (WSJ) • Nasdaq MarketSite',
-        readingTime: '6 min',
-        keywords: [
-          'ipo anthropic nasdaq 2026',
-          'ações anthropic queda wall street',
-          'claude ia mercado financeiro',
-          'blackrock citadel altimeter ipo',
-          'bolsa americana inteligência artificial',
-        ],
-        imageAlt:
-          'Pessoas observam anúncios da oferta pública inicial (IPO) da Anthropic na fachada do Nasdaq MarketSite em Nova York',
-        fullContent: [
-          'As ações da gigante de inteligência artificial Anthropic despencaram no segundo dia de negociação na Nasdaq, chegando a cair até 15% na sexta-feira — apenas 5 centavos acima do preço do IPO — antes de recuperarem parte das perdas e fecharem em queda de 8,5%, cotadas a US$ 88,91. Ainda assim, os papéis permanecem 7% acima do preço da oferta inicial.',
-          'A companhia e seus consultores sabiam que corriam risco ao realizar a oferta pública inicial durante a turbulência mais intensa no mercado de inteligência artificial até então, mas não previram a tempestade perfeita. Agora, Wall Street tenta entender por que o maior IPO da história tropeçou em seu segundo dia de negociação, com a Anthropic perdendo cerca de US$ 109 bilhões em valor de mercado — desencadeando uma busca por culpados que vai de gestores de fundos irritados por terem ficado de fora da oferta até questionamentos sobre o planejamento dos bancos.',
-          '## Pressão no setor de IA e perda de US$ 4 trilhões na Nasdaq',
-          'A queda após o pico da estreia — quando a companhia atingiu valuation de US$ 1,8 trilhão apesar de ainda não gerar lucros reais — evidencia um período turbulento para o setor. Após semanas de ansiedade entre investidores com a alta dos custos de empréstimos para empresas de computação em nuvem e os desdobramentos do escândalo de espionagem envolvendo a Nvidia, havia expectativa de que o IPO da Anthropic pudesse estabilizar o mercado. Isso não ocorreu.',
-          'Na sexta-feira, outros pilares do setor de IA também recuaram fortemente ao lado da Anthropic, da Nvidia à Meta e à Oracle, selando uma perda combinada de US$ 4 trilhões em valor de mercado na Nasdaq. A volatilidade também coloca em xeque os planos da principal concorrente, a OpenAI, que pretende estrear na bolsa no próximo ano e conduz uma nova rodada de financiamento que a avalia em US$ 1,25 trilhão.',
-          'Mesmo assim, pessoas próximas à Anthropic e aos principais subscritores defendem que o IPO foi bem-sucedido, destacando que a operação levantou mais de US$ 100 bilhões somando o IPO e a venda simultânea de ações, e que a cotação segue acima do preço inicial apesar de uma das piores sessões recentes do mercado.',
-          '## Distribuição dos US$ 81 bilhões em ações e exclusão de fundos',
-          'A reversão começou já na abertura de quinta-feira: os papéis abriram pouco antes do meio-dia com valorização superior a 30%, mas perderam fôlego ao longo do dia e fecharam em alta de 17%.',
-          'Investidores questionam como a Anthropic e seus banqueiros distribuíram os US$ 81 bilhões em ações no IPO. Mais da metade foi alocada para acionistas que já detinham participações na empresa — entre eles Altimeter Capital (liderada por Brad Gerstner), Lightspeed Venture Partners e Menlo Ventures —, uma fatia incomum para recompensar investidores iniciais cujas participações antigas estavam bloqueadas para venda.',
-          'A companhia também destinou parcelas relevantes a grandes casas como a Citadel, levando parte do mercado a especular que grandes usuários do modelo Claude foram priorizados. Segundo pessoas familiarizadas com o processo, cerca de 60% dos fundos de hedge e grandes fundos mútuos que solicitaram ações ao preço do IPO não receberam nada, enquanto a BlackRock obteve apenas cerca de metade dos aproximadamente US$ 10 bilhões solicitados.',
-          '## Cláusula de funcionários, "green shoe" e novo destravamento em dezembro',
-          'Gestores também questionaram se os bancos exageraram na definição do preço de abertura, criando margem para uma tendência de baixa difícil de reverter. Além disso, o prospecto trouxe uma cláusula incomum permitindo que funcionários atuais e antigos vendessem imediatamente cerca de 300 milhões de ações — equivalentes a aproximadamente US$ 26 bilhões ao preço do IPO — sem o período tradicional de lock-up, ampliando a pressão vendedora.',
-          'Em São Francisco, vários funcionários minimizaram a queda na bolsa, comentando com mais atenção a declaração feita na sexta-feira por um matemático da Anthropic de que o modelo Claude teria resolvido um Problema do Milênio que desafiava a matemática há 167 anos. Mesmo após o recuo, as participações de muitos colaboradores ainda valem milhões de dólares a mais do que no início da semana.',
-          'Para os bancos coordenadores, a oferta segue defendida enquanto o papel não cair abaixo do preço do IPO — limite crítico porque a empresa informou na sexta-feira que a opção de lote suplementar ("green shoe", de 15% adicionais) já foi exercida, reduzindo ferramentas disponíveis de estabilização caso o ativo rompa o piso da estreia. Em 15 de dezembro, cerca de 300 milhões de ações adicionais serão liberadas para negociação, o que pode adicionar nova pressão sobre os papéis.',
-        ],
-      },
-      en: {
-        tag: 'Companies & Wall Street',
-        title:
-          'Finger-pointing begins after Anthropic’s turbulent stock market debut',
-        summary:
-          'Following the largest IPO in history at a US$ 1.8T valuation, Anthropic shares plunged as much as 15% on day two—coming within 5 cents of the IPO price—before closing down 8.5% at US$ 88.91 and erasing roughly US$ 109 billion in market value.',
-        dateAuthor: 'Nov 20, 2026 • By Corrie Driebusch, Kate Clark, Peter Rudegeair & Ben Dummett',
-        source: 'The Wall Street Journal (WSJ) • Nasdaq MarketSite',
-        readingTime: '6 min read',
-        keywords: [
-          'anthropic ipo nasdaq 2026',
-          'anthropic stock drop wall street',
-          'claude ai financial markets',
-          'blackrock citadel altimeter ipo',
-          'ai stocks selloff nasdaq',
-        ],
-        imageAlt:
-          'Pedestrians looking up at Anthropic initial public offering banners outside the Nasdaq MarketSite in New York',
-        fullContent: [
-          'Shares of artificial intelligence giant Anthropic tumbled in their second day of trading on the Nasdaq, dropping as much as 15% on Friday—to within just 5 cents of their IPO price—before paring losses to close down 8.5% at US$ 88.91. Even after the slide, the stock remains 7% above its offering price.',
-          'Anthropic and its advisers knew launching an initial public offering amid the sharpest AI market turbulence to date carried major risks, yet they did not anticipate a perfect storm. Wall Street is now dissecting why the largest IPO in history stumbled in session two, wiping out roughly US$ 109 billion in market value and triggering blame ranging from sidelined fund managers to bank allocation and pricing decisions.',
-          '## AI sector selloff wipes US$ 4 trillion off Nasdaq',
-          'The pullback from day-one highs—following a debut valuing the still-unprofitable AI developer at US$ 1.8 trillion—highlights mounting investor anxiety over rising cloud-computing borrowing costs and fallout from the Nvidia espionage scandal. Rather than resetting sentiment, Anthropic fell alongside Nvidia, Meta, and Oracle in a broader Friday rout that erased US$ 4 trillion in Nasdaq market value and clouded rival OpenAI’s planned 2027 listing alongside a US$ 1.25 trillion funding round.',
-          'Supporters close to the underwriting syndicate note that Anthropic still raised more than US$ 100 billion across the IPO and concurrent share sale while holding above its issue price.',
-          '## Allocation of US$ 81 billion in IPO stock and lock-up exceptions',
-          'Momentum faded quickly after Thursday’s debut opened more than 30% higher before closing up 17%. Over half of the US$ 81 billion IPO share pool went to existing backers—including Altimeter Capital, Lightspeed Venture Partners, and Menlo Ventures—whose pre-IPO stakes remained locked up, while major allocations also went to firms such as Citadel. Roughly 60% of hedge funds and mutual funds requesting IPO stock received zero shares, and BlackRock received only about half of its roughly US$ 10 billion order.',
-          'An unusual clause also permitted current and former employees to sell roughly 300 million shares immediately—worth around US$ 26 billion at the IPO price—adding supply pressure. With the 15% green-shoe overallotment option already exercised, underwriters would lose a key stabilization buffer if shares slip below the IPO floor ahead of another ~300 million shares unlocking on December 15.',
-        ],
-      },
-      es: {
-        tag: 'Empresas y Wall Street',
-        title:
-          'Comienza la búsqueda de culpables tras el turbulento debut bursátil de Anthropic',
-        summary:
-          'Tras la mayor OPV de la historia con una valoración de US$ 1,8 billones, las acciones de Anthropic cayeron hasta un 15% en su segunda sesión —a solo 5 centavos del precio de salida— y cerraron con un descenso del 8,5% en US$ 88,91.',
-        dateAuthor: '20/11/2026 • Por Corrie Driebusch, Kate Clark, Peter Rudegeair y Ben Dummett',
-        source: 'The Wall Street Journal (WSJ) • Nasdaq MarketSite',
-        readingTime: '6 min',
-        keywords: [
-          'opv anthropic nasdaq 2026',
-          'acciones anthropic caida wall street',
-          'claude ia mercado financiero',
-          'blackrock citadel altimeter ipo',
-          'bolsa estadounidense inteligencia artificial',
-        ],
-        imageAlt:
-          'Personas observando los anuncios de la oferta pública inicial de Anthropic frente al Nasdaq MarketSite en Nueva York',
-        fullContent: [
-          'Las acciones del gigante de inteligencia artificial Anthropic se desplomaron en su segundo día de cotización en el Nasdaq, llegando a caer hasta un 15% el viernes —a apenas 5 centavos de su precio de OPV— antes de moderar pérdidas y cerrar con un retroceso del 8,5%, en US$ 88,91. Aun así, se mantienen un 7% por encima del precio de colocación.',
-          'La empresa y sus asesores sabían que salir a bolsa durante la mayor turbulencia vivida por el sector de IA entrañaba riesgos, pero no previeron una tormenta perfecta. Wall Street analiza ahora por qué la mayor OPV de la historia tropezó en su segunda jornada con una pérdida de unos US$ 109 mil millones en valor de mercado.',
-          '## Desplome del sector de IA y pérdida de US$ 4 billones en el Nasdaq',
-          'Tras debutar con una valoración de US$ 1,8 billones sin generar aún beneficios reales, Anthropic cayó junto a Nvidia, Meta y Oracle en una jornada que borró US$ 4 billones de capitalización en el Nasdaq y complica las ambiciones bursátiles de OpenAI rumbo a su próxima ronda valorada en US$ 1,25 billones.',
-          'Pese a ello, fuentes cercanas a los colocadores destacan que la operación recaudó más de US$ 100 mil millones sumando la OPV y la venta simultánea de títulos.',
-          '## Reparto de US$ 81 mil millones en acciones y desbloqueo de empleados',
-          'Más de la mitad de los US$ 81 mil millones colocados fue asignada a inversores previos como Altimeter Capital, Lightspeed Venture Partners y Menlo Ventures, mientras grandes firmas como Citadel recibieron tramos relevantes y cerca del 60% de los fondos solicitantes quedó fuera —con BlackRock obteniendo solo la mitad de su pedido de unos US$ 10 mil millones—.',
-          'Además, una cláusula poco habitual permitió a empleados actuales y antiguos vender de inmediato alrededor de 300 millones de acciones (unos US$ 26 mil millones al precio de salida). Con la opción de lote suplementario ("green shoe") del 15% ya ejercida, el mercado vigila el próximo desbloqueo de otros 300 millones de títulos el 15 de diciembre.',
-        ],
-      },
-    },
-  },
-  {
     id: 'mdic-acordo-mercosul-ue-exportacoes-21-por-cento-2026',
     isoDate: '2026-11-21',
     imageUrl: '/assets/aistudio/image_fae53297.png',
@@ -1169,6 +1069,60 @@ export const DAILY_INSIGHTS_ITEMS: DailyInsightItem[] = [
           'El Pleno del Senado Federal retomó este martes (17) el análisis de las enmiendas al Proyecto de Ley Complementaria (PLP 299/2026), pieza central del paquete de ajuste fiscal articulado por el equipo económico para contener el avance de la deuda pública.',
           'El proyecto introduce cambios en las reglas del marco fiscal, autorizando bloqueos adicionales de gastos para cumplir la meta primaria y reduciendo del 2,5% al 2% el techo de crecimiento real del gasto a partir de 2027 en los ejercicios en que se activen gatillos de contención.',
           'El texto también restringe el uso de créditos tributarios para compensar impuestos federales, ajusta las reglas de transferencias de la Ley Kandir y fija plazos para reglamentar los llamados sobresueldos en el sector público. La expectativa del Ejecutivo es concluir la tramitación en el Senado y acelerar la votación en la Cámara de Diputados esta misma semana.',
+        ],
+      },
+    },
+  },
+  {
+    id: 'dolar-ibovespa-cautela-fiscal-wall-street-2026',
+    imageUrl: '/assets/aistudio/image_24999f1b.png',
+    translations: {
+      pt: {
+        tag: 'MERCADO FINANCEIRO & CÂMBIO',
+        title:
+          'Dólar encosta em R$ 5,81 e fecha próximo a R$ 5,78 com cautela fiscal no Brasil e queda em Wall Street',
+        summary:
+          'Após atingir máxima intradiária de R$ 5,81, o dólar comercial fechou cotado em torno de R$ 5,78, enquanto o Ibovespa oscilou perto dos 169,5 mil pontos diante das incertezas fiscais e do recuo das bolsas de Nova York.',
+        dateAuthor: '17/11/2026 • Redação DinhEuro',
+        source: 'UOL Economia / CNN Brasil',
+        imageAlt:
+          'Painel de cotações do Ibovespa e do dólar comercial no pregão da B3',
+        fullContent: [
+          'O mercado financeiro brasileiro encerrou esta terça-feira (17) marcado por forte volatilidade nos ativos domésticos. O dólar comercial chegou a bater R$ 5,81 durante a manhã — maior patamar intradiário desde abril de 2025 — antes de reduzir o ritmo e fechar na casa de R$ 5,78.',
+          'No mercado acionário, o Ibovespa tentou ensaiar uma recuperação após a queda de 1,83% registrada na véspera, chegando a superar os 171 mil pontos, mas perdeu fôlego ao longo da tarde e encerrou próximo da estabilidade, na faixa de 169.527 pontos.',
+          'A cautela dos investidores reflete a saída contínua de capital estrangeiro da B3 — que acumula saldo negativo de R$ 15,5 bilhões desde o segundo turno eleitoral — somada à pressão nos juros futuros de longo prazo, com contratos acima de 15% ao ano, e ao recuo generalizado dos índices Dow Jones, S&P 500 e Nasdaq em Nova York.',
+        ],
+      },
+      en: {
+        tag: 'FINANCIAL MARKETS & FX',
+        title:
+          'US dollar nears BRL 5.81 and closes around BRL 5.78 amid fiscal caution in Brazil and Wall Street slide',
+        summary:
+          'After hitting an intraday high of BRL 5.81, the commercial dollar closed near BRL 5.78, while the Ibovespa hovered around 169,500 points amid fiscal uncertainty and losses across New York equities.',
+        dateAuthor: 'Nov 17, 2026 • DinhEuro Editorial',
+        source: 'UOL Economia / CNN Brasil',
+        imageAlt:
+          'Ibovespa and US dollar exchange rate display board at the B3 trading floor',
+        fullContent: [
+          'Brazil’s financial market ended Tuesday (17) marked by sharp volatility across domestic assets. The commercial US dollar reached BRL 5.81 in morning trading—its highest intraday level since April 2025—before paring gains to settle around BRL 5.78.',
+          'In equities, the benchmark Ibovespa attempted an early rebound after dropping 1.83% in the prior session, briefly climbing past 171,000 points before losing momentum in the afternoon to finish nearly flat around 169,527 points.',
+          'Investor caution reflects ongoing foreign capital outflows from B3—now totaling a net negative BRL 15.5 billion since the presidential runoff election—alongside upward pressure on long-term interest-rate futures, with contracts trading above 15% a year, and broad declines across the Dow Jones, S&P 500, and Nasdaq in New York.',
+        ],
+      },
+      es: {
+        tag: 'MERCADO FINANCIERO Y DIVISAS',
+        title:
+          'El dólar roza R$ 5,81 y cierra cerca de R$ 5,78 por cautela fiscal en Brasil y caída en Wall Street',
+        summary:
+          'Tras alcanzar un máximo intradiario de R$ 5,81, el dólar comercial cerró en torno a R$ 5,78, mientras el Ibovespa osciló cerca de los 169,5 mil puntos ante la incertidumbre fiscal y el retroceso de las bolsas de Nueva York.',
+        dateAuthor: '17/11/2026 • Redacción DinhEuro',
+        source: 'UOL Economia / CNN Brasil',
+        imageAlt:
+          'Panel de cotizaciones del Ibovespa y del dólar comercial en la bolsa brasileña B3',
+        fullContent: [
+          'El mercado financiero brasileño cerró este martes (17) marcado por una fuerte volatilidad en los activos locales. El dólar comercial llegó a alcanzar R$ 5,81 durante la mañana —su mayor nivel intradiario desde abril de 2025— antes de moderar el avance y cerrar en torno a R$ 5,78.',
+          'En el mercado bursátil, el índice Ibovespa intentó ensayar una recuperación tras la caída del 1,83% registrada en la jornada previa, llegando a superar los 171 mil puntos, pero perdió impulso durante la tarde y terminó cerca de la estabilidad, en el rango de los 169.527 puntos.',
+          'La cautela de los inversores refleja la salida continua de capital extranjero de B3 —que acumula un saldo negativo de R$ 15,5 mil millones desde la segunda vuelta electoral—, sumada a la presión en las tasas de interés futuras de largo plazo, con contratos por encima del 15% anual, y al retroceso generalizado de los índices Dow Jones, S&P 500 y Nasdaq en Nueva York.',
         ],
       },
     },
