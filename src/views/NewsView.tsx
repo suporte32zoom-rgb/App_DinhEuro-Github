@@ -286,7 +286,8 @@ export const NewsView: React.FC = () => {
                   className="w-full h-full object-cover object-[50%_20%] group-hover:scale-105 transition duration-300"
                 />
                 <div
-                  className="absolute inset-0 bg-gradient-to-t from-[#002266]/85 via-transparent to-transparent dark:from-[#0d1627]/80"
+                  data-overlay-dark="true"
+                  className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#002266]/85 via-transparent to-transparent dark:from-[#0d1627]/80"
                   aria-hidden="true"
                 />
                 <span className="absolute top-3 left-3 text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-md bg-[#002266]/90 dark:bg-[#070d18]/85 text-[#E3F7F2] dark:text-emerald-400 border border-[#009B77]/50 dark:border-emerald-500/30 backdrop-blur-sm">

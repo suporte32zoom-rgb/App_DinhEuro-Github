@@ -143,8 +143,8 @@ html.light body {
   color: var(--de-text-primary) !important;
 }
 
-/* Clear legacy dark gradients in light theme, preserving explicit gradient text, brand CTAs, and overlays */
-html.light [class*="bg-gradient-to-"]:not([class*="bg-clip-text"]):not([data-on-dark]):not([data-overlay-dark]):not([data-brand-gradient]):not(button):not(a) {
+/* Clear legacy dark gradients in light theme, preserving explicit gradient text, brand CTAs, and image overlays */
+html.light [class*="bg-gradient-to-"]:not([class*="bg-clip-text"]):not([data-on-dark]):not([data-on-dark] *):not([data-overlay-dark]):not([data-overlay-dark] *):not([data-brand-gradient]):not(button):not(a) {
   background-image: none !important;
   background-color: var(--de-bg-card) !important;
 }
@@ -161,43 +161,47 @@ html.light a[class*="bg-gradient-to-"][class*="from-emerald-500"] {
   color: #FFFFFF !important;
 }
 
-/* Card and Container Backgrounds in Light Theme */
-html.light div[class*="0d1627"],
-html.light div[class*="0e192c"],
-html.light div[class*="0b1322"],
-html.light div[class*="09101d"],
-html.light div[class*="091120"],
-html.light div[class*="09111e"],
-html.light div[class*="091122"],
-html.light div[class*="0a1120"],
-html.light div[class*="0a1220"],
-html.light div[class*="0a1221"],
-html.light div[class*="0c1a30"],
-html.light div[class*="0c1626"],
-html.light div[class*="0c1527"],
-html.light div[class*="121626"],
-html.light div[class*="0b1424"],
-html.light article,
-html.light .finance-card,
-html.light [class*="0d1627"]:not([data-overlay-dark]),
-html.light [class*="0b1322"]:not([data-overlay-dark]),
-html.light [class*="0b1320"]:not([data-on-dark]) {
+/* Card and Container Backgrounds in Light Theme (strictly preserving [data-overlay-dark] & image scrims) */
+html.light :is(
+  div[class*="0d1627"],
+  div[class*="0e192c"],
+  div[class*="0b1322"],
+  div[class*="09101d"],
+  div[class*="091120"],
+  div[class*="09111e"],
+  div[class*="091122"],
+  div[class*="0a1120"],
+  div[class*="0a1220"],
+  div[class*="0a1221"],
+  div[class*="0c1a30"],
+  div[class*="0c1626"],
+  div[class*="0c1527"],
+  div[class*="121626"],
+  div[class*="0b1424"],
+  article,
+  .finance-card,
+  [class*="0d1627"],
+  [class*="0b1322"],
+  [class*="0b1320"]
+):not([data-overlay-dark]):not([data-overlay-dark] *):not([data-on-dark]):not([data-on-dark] *) {
   background-color: var(--de-bg-card) !important;
   background-image: none !important;
   box-shadow: 0 1px 3px 0 rgba(15, 23, 42, 0.06), 0 1px 2px -1px rgba(15, 23, 42, 0.04) !important;
   border-color: var(--de-border) !important;
 }
 
-html.light div[class*="070d18"]:not([data-overlay-dark]),
-html.light div[class*="070e1b"]:not([data-overlay-dark]),
-html.light div[class*="070e1a"]:not([data-overlay-dark]),
-html.light div[class*="080f1e"]:not([data-overlay-dark]),
-html.light div[class*="050b14"]:not([data-overlay-dark]),
-html.light div[class*="060c18"]:not([data-overlay-dark]),
-html.light [class*="070d18"]:not([data-overlay-dark]),
-html.light [class*="070e1b"]:not([data-overlay-dark]),
-html.light [class*="070e1a"]:not([data-overlay-dark]),
-html.light [class*="050a14"] {
+html.light :is(
+  div[class*="070d18"],
+  div[class*="070e1b"],
+  div[class*="070e1a"],
+  div[class*="080f1e"],
+  div[class*="050b14"],
+  div[class*="060c18"],
+  [class*="070d18"],
+  [class*="070e1b"],
+  [class*="070e1a"],
+  [class*="050a14"]
+):not([data-overlay-dark]):not([data-overlay-dark] *):not([data-on-dark]):not([data-on-dark] *) {
   background-color: var(--de-bg-surface) !important;
   border-color: var(--de-border) !important;
 }

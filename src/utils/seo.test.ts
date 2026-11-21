@@ -220,4 +220,13 @@ test('APEC 2026 and ALADI 2026 editorial insights preserve prior items up to 12 
   assert.ok('image' in schema);
   assert.deepEqual(schema.image, ['https://dinheuro.com/assets/aistudio/image_0205078f.png']);
   assert.equal(schema.datePublished, '2026-11-21');
+
+  const cssSource = fs.readFileSync(path.resolve(process.cwd(), 'src/index.css'), 'utf8');
+  assert.ok(cssSource.includes(':not([data-overlay-dark] *)'));
+  const modalSource = fs.readFileSync(
+    path.resolve(process.cwd(), 'src/components/EditorialInsightModal.tsx'),
+    'utf8'
+  );
+  assert.ok(newsViewSource.includes('data-overlay-dark="true"\n                  className="pointer-events-none absolute inset-0'));
+  assert.ok(modalSource.includes('data-overlay-dark="true"\n            className="pointer-events-none absolute inset-0'));
 });

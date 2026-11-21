@@ -53,7 +53,8 @@ export const DrexDossierPanel: React.FC = () => {
           </div>
         )}
         <div
-          className="absolute inset-0 bg-gradient-to-t from-[#002266]/95 via-[#002266]/65 to-transparent dark:from-[#0d1627] dark:via-[#0d1627]/65 dark:to-transparent"
+          data-overlay-dark="true"
+          className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#002266]/95 via-[#002266]/65 to-transparent dark:from-[#0d1627] dark:via-[#0d1627]/65 dark:to-transparent"
           aria-hidden="true"
         />
         <div className="absolute bottom-3.5 left-4 right-4 sm:bottom-4 sm:left-5 sm:right-5 flex flex-col gap-1">

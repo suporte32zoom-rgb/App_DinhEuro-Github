@@ -66,7 +66,8 @@ export const EditorialInsightModal: React.FC<EditorialInsightModalProps> = ({
           )}
 
           <div
-            className="absolute inset-0 bg-gradient-to-t from-[#002266]/85 via-[#002266]/35 to-transparent dark:from-[#0b1322] dark:via-[#0b1322]/45 dark:to-transparent"
+            data-overlay-dark="true"
+            className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#002266]/85 via-[#002266]/35 to-transparent dark:from-[#0b1322] dark:via-[#0b1322]/45 dark:to-transparent"
             aria-hidden="true"
           />
 
