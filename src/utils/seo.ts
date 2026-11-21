@@ -2,6 +2,8 @@ import { TAB_ROUTE_MAP, type NavigationTab } from '../context/MarketContext';
 import type { SupportedLanguage } from '../i18n/translations';
 
 export const CANONICAL_ORIGIN = 'https://dinheuro.com';
+export const GA_MEASUREMENT_ID = 'G-XS3S97LWQC';
+export const GLOBAL_HREFLANG_TARGETS = ['pt-BR', 'en', 'es', 'x-default'] as const;
 
 export interface RouteSeoEntry {
   title: string;
@@ -424,6 +426,80 @@ export function syncCanonicalLink(
   return canonicalHref;
 }
 
+/**
+ * Garante as tags globais <link rel="alternate" hreflang="..."> (pt-BR, en, es, x-default)
+ * no <head>, removendo eventuais duplicatas e apontando para a URL canônica da rota atual.
+ */
+export function syncHreflangLinks(
+  routePath: string,
+  doc: Document | undefined = typeof document !== 'undefined' ? document : undefined
+): Array<{ hreflang: string; href: string }> {
+  const canonicalHref = buildCanonicalUrl(routePath);
+  const targets = GLOBAL_HREFLANG_TARGETS.map((hreflang) => ({
+    hreflang,
+    href: canonicalHref,
+  }));
+
+  if (!doc || !doc.head) return targets;
+
+  const existingAlternates = Array.from(
+    doc.head.querySelectorAll('link[rel="alternate"][hreflang]')
+  ) as HTMLLinkElement[];
+
+  const byLang = new Map<string, HTMLLinkElement>();
+  for (const el of existingAlternates) {
+    const code = el.getAttribute('hreflang');
+    if (code && GLOBAL_HREFLANG_TARGETS.includes(code as (typeof GLOBAL_HREFLANG_TARGETS)[number]) && !byLang.has(code)) {
+      byLang.set(code, el);
+    } else {
+      el.parentNode?.removeChild(el);
+    }
+  }
+
+  for (const { hreflang, href } of targets) {
+    const existing = byLang.get(hreflang);
+    if (existing) {
+      if (existing.getAttribute('href') !== href) {
+        existing.setAttribute('href', href);
+      }
+    } else {
+      const link = doc.createElement('link');
+      link.setAttribute('rel', 'alternate');
+      link.setAttribute('hreflang', hreflang);
+      link.setAttribute('href', href);
+      doc.head.appendChild(link);
+    }
+  }
+
+  return targets;
+}
+
+/**
+ * Dispara o evento page_view do Google Analytics (gtag.js) de forma não bloqueante
+ * nas transições de rota do PWA para capturar origem geográfica e navegação global.
+ */
+export function trackAnalyticsPageView(
+  routePath: string,
+  pageTitle: string,
+  canonicalUrl?: string,
+  win: (Window & { gtag?: (...args: unknown[]) => void }) | undefined =
+    typeof window !== 'undefined' ? (window as Window & { gtag?: (...args: unknown[]) => void }) : undefined
+): boolean {
+  if (!win || typeof win.gtag !== 'function') return false;
+  const pageLocation = canonicalUrl || buildCanonicalUrl(routePath);
+  try {
+    win.gtag('event', 'page_view', {
+      send_to: GA_MEASUREMENT_ID,
+      page_title: pageTitle,
+      page_location: pageLocation,
+      page_path: normalizeRoutePath(routePath),
+    });
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 function upsertMetaTag(
   doc: Document,
   attrName: 'name' | 'property',
@@ -490,6 +566,8 @@ export function buildStructuredDataSchemas(lang: SupportedLanguage = 'pt') {
       '@type': 'ImageObject',
       url: `${CANONICAL_ORIGIN}/logo.png`,
     },
+    areaServed: 'Worldwide',
+    inLanguage: ['pt-BR', 'en', 'es'],
     description: orgDescription,
     knowsAbout: knowsAboutTopics,
   };
@@ -808,6 +886,7 @@ export function syncRouteHeadMetadata(
 ): RouteSeoEntry & { canonicalUrl: string } {
   const routePath = TAB_ROUTE_MAP[tab] || '/';
   const canonicalUrl = syncCanonicalLink(routePath, doc);
+  syncHreflangLinks(routePath, doc);
   const tabMap = ROUTE_SEO_METADATA[tab] || ROUTE_SEO_METADATA.dashboard;
   const entry = tabMap[lang] || tabMap.pt;
 

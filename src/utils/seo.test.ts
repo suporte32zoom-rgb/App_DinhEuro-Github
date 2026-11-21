@@ -3,9 +3,12 @@ import assert from 'node:assert/strict';
 import {
   buildCanonicalUrl,
   buildStructuredDataSchemas,
+  GA_MEASUREMENT_ID,
   normalizeRoutePath,
   ROUTE_SEO_METADATA,
   syncCanonicalLink,
+  syncHreflangLinks,
+  trackAnalyticsPageView,
 } from './seo.ts';
 import { TAB_ROUTE_MAP, type NavigationTab } from '../context/MarketContext.tsx';
 
@@ -87,6 +90,7 @@ test('buildStructuredDataSchemas produces valid NewsMediaOrganization, WebSite S
   assert.equal(organizationSchema.name, 'DinhEuro');
   assert.equal(organizationSchema.url, 'https://dinheuro.com');
   assert.equal(organizationSchema.logo.url, 'https://dinheuro.com/logo.png');
+  assert.equal(organizationSchema.areaServed, 'Worldwide');
   assert.ok(organizationSchema.knowsAbout.includes('Acordo União Europeia-Mercosul'));
   assert.ok(organizationSchema.knowsAbout.includes('Câmbio EUR/BRL'));
   assert.equal(websiteSchema['@type'], 'WebSite');
@@ -97,6 +101,7 @@ test('buildStructuredDataSchemas produces valid NewsMediaOrganization, WebSite S
   );
   assert.deepEqual(financialServiceSchema['@type'], ['FinancialService', 'WebApplication']);
   assert.equal(financialServiceSchema.logo, 'https://dinheuro.com/logo.png');
+  assert.equal(financialServiceSchema.areaServed, 'Worldwide');
   assert.equal(financialServiceSchema.isAccessibleForFree, true);
   assert.equal(financialServiceSchema.offers.price, '0');
 });
@@ -229,4 +234,82 @@ test('APEC 2026 and ALADI 2026 editorial insights preserve prior items up to 12 
   );
   assert.ok(newsViewSource.includes('data-overlay-dark="true"\n                  className="pointer-events-none absolute inset-0'));
   assert.ok(modalSource.includes('data-overlay-dark="true"\n            className="pointer-events-none absolute inset-0'));
+});
+
+test('syncHreflangLinks maintains global pt-BR, en, es, and x-default alternate links without duplicates and index.html includes GA4 + hreflang', async () => {
+  const fs = await import('node:fs');
+  const path = await import('node:path');
+
+  const createdLinks: Array<{ attrs: Record<string, string>; removed?: boolean }> = [];
+  const fakeHead = {
+    querySelectorAll: () =>
+      createdLinks
+        .filter((n) => !n.removed)
+        .map((n) => ({
+          getAttribute: (k: string) => n.attrs[k] ?? null,
+          setAttribute: (k: string, v: string) => {
+            n.attrs[k] = v;
+          },
+          parentNode: {
+            removeChild: () => {
+              n.removed = true;
+            },
+          },
+        })),
+    appendChild: (node: { attrs: Record<string, string> }) => {
+      createdLinks.push(node);
+    },
+  };
+  const fakeDoc = {
+    head: fakeHead,
+    createElement: () => ({
+      attrs: {} as Record<string, string>,
+      setAttribute(k: string, v: string) {
+        this.attrs[k] = v;
+      },
+      getAttribute(k: string) {
+        return this.attrs[k] ?? null;
+      },
+    }),
+  } as unknown as Document;
+
+  const homeTargets = syncHreflangLinks('/', fakeDoc);
+  assert.deepEqual(homeTargets, [
+    { hreflang: 'pt-BR', href: 'https://dinheuro.com/' },
+    { hreflang: 'en', href: 'https://dinheuro.com/' },
+    { hreflang: 'es', href: 'https://dinheuro.com/' },
+    { hreflang: 'x-default', href: 'https://dinheuro.com/' },
+  ]);
+  assert.equal(createdLinks.filter((n) => !n.removed).length, 4);
+
+  const marketsTargets = syncHreflangLinks('/mercados/', fakeDoc);
+  assert.equal(createdLinks.filter((n) => !n.removed).length, 4);
+  assert.ok(marketsTargets.every((t) => t.href === 'https://dinheuro.com/mercados'));
+
+  const events: unknown[][] = [];
+  const fakeWin = {
+    gtag: (...args: unknown[]) => {
+      events.push(args);
+    },
+  } as unknown as Window & { gtag?: (...args: unknown[]) => void };
+
+  const sent = trackAnalyticsPageView('/mercados', 'Mercados | DinhEuro', 'https://dinheuro.com/mercados', fakeWin);
+  assert.equal(sent, true);
+  assert.equal(events.length, 1);
+  assert.equal(events[0][0], 'event');
+  assert.equal(events[0][1], 'page_view');
+  assert.deepEqual(events[0][2], {
+    send_to: GA_MEASUREMENT_ID,
+    page_title: 'Mercados | DinhEuro',
+    page_location: 'https://dinheuro.com/mercados',
+    page_path: '/mercados',
+  });
+
+  const indexHtml = fs.readFileSync(path.resolve(process.cwd(), 'index.html'), 'utf8');
+  assert.ok(indexHtml.includes('<link rel="alternate" hreflang="pt-BR" href="https://dinheuro.com/" />'));
+  assert.ok(indexHtml.includes('<link rel="alternate" hreflang="en" href="https://dinheuro.com/" />'));
+  assert.ok(indexHtml.includes('<link rel="alternate" hreflang="es" href="https://dinheuro.com/" />'));
+  assert.ok(indexHtml.includes('<link rel="alternate" hreflang="x-default" href="https://dinheuro.com/" />'));
+  assert.ok(indexHtml.includes('G-XS3S97LWQC'));
+  assert.ok(indexHtml.includes('"areaServed":"Worldwide"'));
 });

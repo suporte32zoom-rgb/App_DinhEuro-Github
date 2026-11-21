@@ -3,10 +3,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useEffect } from 'react';
-import { MarketProvider, useMarket } from './context/MarketContext';
+import React, { useEffect, useRef } from 'react';
+import { MarketProvider, TAB_ROUTE_MAP, useMarket } from './context/MarketContext';
 import { I18nProvider, useI18n } from './i18n/I18nContext';
-import { syncRouteHeadMetadata } from './utils/seo';
+import { syncRouteHeadMetadata, trackAnalyticsPageView } from './utils/seo';
 import { Header } from './components/Header';
 import { TickerTape } from './components/TickerTape';
 import { Footer } from './components/Footer';
@@ -73,8 +73,19 @@ const AppShell: React.FC = () => {
   const { lang } = useI18n();
   const isTerminalMode = activeTab === 'daytrade' || activeTab === 'tape_reading';
 
+  const lastTrackedRouteRef = useRef<string | null>(null);
+
   useEffect(() => {
-    syncRouteHeadMetadata(activeTab, lang);
+    const seoMeta = syncRouteHeadMetadata(activeTab, lang);
+    const routePath = TAB_ROUTE_MAP[activeTab] || '/';
+    if (lastTrackedRouteRef.current === null) {
+      lastTrackedRouteRef.current = routePath;
+      return;
+    }
+    if (lastTrackedRouteRef.current !== routePath) {
+      lastTrackedRouteRef.current = routePath;
+      trackAnalyticsPageView(routePath, seoMeta.title, seoMeta.canonicalUrl);
+    }
   }, [activeTab, lang]);
 
   // Quando o React montar a interface no DOM com sucesso, dissolve o splash screen suavemente
