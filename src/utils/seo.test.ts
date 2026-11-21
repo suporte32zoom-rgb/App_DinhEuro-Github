@@ -154,6 +154,7 @@ test('APEC 2026 and ALADI 2026 editorial insights preserve prior items up to 12 
   assert.ok(source.includes('export const MAX_DAILY_INSIGHTS = 12;'));
   const idMatches = source.match(/^\s+id:\s*'[^']+',/gm) || [];
   assert.equal(idMatches.length, 12);
+  assert.ok(source.includes("id: 'anthropic-ipo-turbulencia-wall-street-2026'"));
   assert.ok(source.includes("id: 'mdic-acordo-mercosul-ue-exportacoes-21-por-cento-2026'"));
   assert.ok(source.includes("id: 'trump-inteligencia-jensen-huang-nvidia-2026'"));
   assert.ok(source.includes("id: 'terras-raras-disparidade-precos-brasil-china-2026'"));
@@ -161,6 +162,7 @@ test('APEC 2026 and ALADI 2026 editorial insights preserve prior items up to 12 
   assert.ok(source.includes("id: 'coinbase-deribit-aquisicao-infraestrutura-2026'"));
   assert.ok(source.includes("id: 'apec-2026-trump-xi-putin-shenzhen'"));
   assert.ok(source.includes("id: 'aladi-cosmeticos-exportacao-brasil-2026'"));
+  assert.ok(source.includes("imageUrl: '/assets/aistudio/image_31f7e667.png'"));
   assert.ok(source.includes("imageUrl: '/assets/aistudio/image_fae53297.png'"));
   assert.ok(source.includes("imageUrl: '/assets/aistudio/image_47a5c2bb.png'"));
   assert.ok(source.includes("imageUrl: '/assets/aistudio/image_c7f7f8fe.png'"));
@@ -179,6 +181,9 @@ test('APEC 2026 and ALADI 2026 editorial insights preserve prior items up to 12 
     'utf8'
   );
   assert.ok(
+    newsViewSource.includes("'anthropic-ipo-turbulencia-wall-street-2026'")
+  );
+  assert.ok(
     newsViewSource.includes("'mdic-acordo-mercosul-ue-exportacoes-21-por-cento-2026'")
   );
   assert.ok(newsViewSource.includes("'trump-inteligencia-jensen-huang-nvidia-2026'"));
@@ -187,23 +192,23 @@ test('APEC 2026 and ALADI 2026 editorial insights preserve prior items up to 12 
   assert.ok(newsViewSource.includes("'coinbase-deribit-aquisicao-infraestrutura-2026'"));
 
   const schema = buildEditorialArticlesSchema('pt', [], {
-    id: 'mdic-acordo-mercosul-ue-exportacoes-21-por-cento-2026',
+    id: 'anthropic-ipo-turbulencia-wall-street-2026',
     schemaType: 'NewsArticle',
     headline:
-      'Acordo Mercosul–União Europeia impulsiona em 21% exportações brasileiras beneficiadas ao mercado europeu',
+      'A busca por culpados começou após a turbulenta estreia da Anthropic no mercado de ações',
     description:
-      'Balanço do MDIC mostra que vendas de produtos beneficiados cresceram 21% entre maio e setembro de 2026 ante igual período de 2025, lideradas por abacates frescos (+421%), mel (+367%), óleo de milho (+266%) e transformadores elétricos (US$ 39 milhões).',
-    articleSection: 'Empresa, Indústria e Comércio',
-    datePublished: '2026-11-21',
-    imageUrl: '/assets/aistudio/image_fae53297.png',
+      'Após o maior IPO da história com valuation de US$ 1,8 trilhão, ações da gigante de IA caíram até 15% no segundo pregão e fecharam em -8,5% (US$ 88,91), eliminando US$ 109 bilhões em valor de mercado.',
+    articleSection: 'Empresas & Wall Street',
+    datePublished: '2026-11-20',
+    imageUrl: '/assets/aistudio/image_31f7e667.png',
     keywords: [
-      'acordo mercosul união europeia exportações',
-      'mdic exportações brasil europa 2026',
-      'portal siscomex regras de origem',
+      'ipo anthropic nasdaq 2026',
+      'ações anthropic queda wall street',
+      'claude ia mercado financeiro',
     ],
   });
   assert.equal(schema['@type'], 'NewsArticle');
   assert.ok('image' in schema);
-  assert.deepEqual(schema.image, ['https://dinheuro.com/assets/aistudio/image_fae53297.png']);
-  assert.equal(schema.datePublished, '2026-11-21');
+  assert.deepEqual(schema.image, ['https://dinheuro.com/assets/aistudio/image_31f7e667.png']);
+  assert.equal(schema.datePublished, '2026-11-20');
 });
