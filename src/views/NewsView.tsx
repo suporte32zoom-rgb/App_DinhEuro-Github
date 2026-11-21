@@ -28,6 +28,7 @@ import {
 } from '../utils/seo';
 
 const FEATURED_NEWS_EDITORIAL_IDS = new Set([
+  'anthropic-ipo-turbulencia-wall-street-2026',
   'mdic-acordo-mercosul-ue-exportacoes-21-por-cento-2026',
   'trump-inteligencia-jensen-huang-nvidia-2026',
   'terras-raras-disparidade-precos-brasil-china-2026',
@@ -95,7 +96,9 @@ export const NewsView: React.FC = () => {
         (item.id === 'trump-inteligencia-jensen-huang-nvidia-2026' &&
           filterCategory === 'Empresas & Wall St') ||
         (item.id === 'mdic-acordo-mercosul-ue-exportacoes-21-por-cento-2026' &&
-          filterCategory === 'Macro & Câmbio');
+          filterCategory === 'Macro & Câmbio') ||
+        (item.id === 'anthropic-ipo-turbulencia-wall-street-2026' &&
+          filterCategory === 'Empresas & Wall St');
       if (!matchesCategory) return false;
       if (!searchLower) return true;
 
