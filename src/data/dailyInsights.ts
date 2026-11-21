@@ -60,6 +60,142 @@ export const DAILY_INSIGHTS_UI_COPY: Record<
 
 export const DAILY_INSIGHTS_ITEMS: DailyInsightItem[] = [
   {
+    id: 'mdic-acordo-mercosul-ue-exportacoes-21-por-cento-2026',
+    isoDate: '2026-11-21',
+    imageUrl: '/assets/aistudio/image_fae53297.png',
+    translations: {
+      pt: {
+        tag: 'Empresa, Indústria e Comércio',
+        title:
+          'Acordo Mercosul–União Europeia impulsiona em 21% exportações brasileiras beneficiadas ao mercado europeu',
+        summary:
+          'Balanço do MDIC mostra que vendas de produtos beneficiados cresceram 21% entre maio e setembro de 2026 ante igual período de 2025, lideradas por abacates frescos (+421%), mel (+367%), óleo de milho (+266%) e transformadores elétricos (US$ 39 milhões).',
+        dateAuthor: '21/11/2026 • Redação DinhEuro',
+        source: 'Ministério do Desenvolvimento, Indústria, Comércio e Serviços (MDIC)',
+        readingTime: '4 min',
+        keywords: [
+          'acordo mercosul união europeia exportações',
+          'mdic exportações brasil europa 2026',
+          'comércio exterior mercosul ue',
+          'portal siscomex regras de origem',
+          'desgravação tarifária brasil europa',
+        ],
+        imageAlt:
+          'Bandeiras do Mercosul e da União Europeia hasteadas diante de terminal portuário de contêineres simbolizando o avanço das exportações brasileiras',
+        fullContent: [
+          'O Ministério do Desenvolvimento, Indústria, Comércio e Serviços (MDIC) destaca os primeiros resultados do Acordo Mercosul-União Europeia para as exportações brasileiras. Entre maio, quando o acordo entrou em vigor, e setembro de 2026, as vendas de produtos brasileiros beneficiados pelo acordo ao mercado europeu cresceram 21%, na comparação com o mesmo período de 2025. Mel, abacates frescos e óleo de milho estão entre os produtos com maior crescimento nas exportações nos primeiros cinco meses de aplicação provisória do acordo, iniciada em 1º de maio.',
+          'A redução ou eliminação de tarifas amplia a competitividade dos produtos brasileiros e cria oportunidades para as empresas nacionais expandirem suas vendas ao mercado europeu.',
+          '“O acordo entre o Mercosul e a União Europeia é uma conquista da política comercial brasileira e um passo importante para o desenvolvimento do país. Fortalecer nossas relações econômicas com parceiros estratégicos, ampliar as oportunidades para os setores produtivos e gerar empregos de qualidade são objetivos que orientam a atuação do governo. O Brasil ganha novas condições para agregar valor à sua produção e ampliar sua participação no comércio mundial”, afirma o ministro do Desenvolvimento, Indústria, Comércio e Serviços (MDIC), Márcio Elias Rosa.',
+          '## Produtos brasileiros ampliam vendas à União Europeia',
+          'Entre os destaques do período, as exportações de abacates frescos cresceram 421%, enquanto as de mel avançaram 367% e as de óleo de milho, 266%. Também registraram crescimento expressivo:',
+          '- Ferrossilício-manganês: +173%',
+          '- Alumínio em bruto: +107%',
+          '- Óleos combustíveis: +102%',
+          '- Etanol: +95,2%',
+          '- Óleo essencial de laranja: +75,8%',
+          '- Maçãs frescas: +29%',
+          'Outro destaque foram os transformadores elétricos, cujas exportações passaram de zero, entre maio e setembro de 2025, para US$ 39 milhões no mesmo período de 2026. As variações abrangem diferentes segmentos da pauta exportadora brasileira, incluindo produtos agropecuários e bens industriais, em um período marcado pelo início da aplicação das preferências tarifárias do acordo.',
+          '“Os primeiros resultados são positivos e mostram que o acordo já começa a abrir oportunidades para os produtos brasileiros no mercado europeu. Nosso objetivo é fazer com que seus benefícios cheguem efetivamente a mais empresas brasileiras. Para isso, estamos trabalhando na divulgação das oportunidades e no apoio aos exportadores. Há um potencial importante a ser explorado, tanto para ampliar as vendas de quem já exporta quanto para permitir que novas empresas conquistem espaço no comércio internacional”, afirma a secretária de Comércio Exterior, Tatiana Prazeres.',
+          '## Orientação às empresas',
+          'Para apoiar os exportadores no aproveitamento das oportunidades comerciais, o MDIC disponibiliza informações e materiais técnicos sobre o acordo no Portal Siscomex. A página reúne orientações sobre preferências tarifárias, regras de origem e requisitos para que os produtos brasileiros possam usufruir dos benefícios negociados.',
+          'Entre os materiais disponíveis estão:',
+          '1. Manual de regras de origem: apresenta os critérios que os produtos precisam cumprir para ter acesso às preferências tarifárias;',
+          '2. Manual de desgravação tarifária: orienta sobre a redução e a eliminação das tarifas previstas no acordo;',
+          '3. Manual de indicações geográficas: reúne informações sobre a proteção de produtos associados a determinadas regiões;',
+          '4. Tabelas de preferências tarifárias: permitem consultar as condições negociadas para os produtos comercializados entre os dois blocos.',
+          '## Da negociação aos resultados concretos',
+          'As negociações entre o Mercosul e a União Europeia começaram em 1999 e se estenderam por mais de 25 anos. Os instrumentos do acordo foram assinados em janeiro de 2026, e a aplicação provisória de suas disposições comerciais começou em 1º de maio do mesmo ano.',
+          'O acordo prevê a redução ou eliminação gradual de tarifas e estabelece regras para ampliar o comércio entre os dois blocos, permitindo que empresas brasileiras utilizem as preferências negociadas desde que cumpram as condições previstas para cada produto.',
+          'Conectando dois grandes mercados — com aproximadamente 720 milhões de pessoas e um Produto Interno Bruto combinado superior a US$ 22 trilhões —, a ampliação do acesso ao mercado europeu representa uma oportunidade para aumentar as exportações, diversificar os destinos dos produtos nacionais e fortalecer a competitividade das empresas brasileiras.',
+        ],
+      },
+      en: {
+        tag: 'Business, Industry & Trade',
+        title:
+          'Mercosur–EU Agreement lifts tariff-benefited Brazilian exports to Europe by 21%',
+        summary:
+          'MDIC data show eligible exports grew 21% between May and September 2026 compared with the same period in 2025, led by fresh avocados (+421%), honey (+367%), corn oil (+266%), and electrical transformers (US$ 39 million).',
+        dateAuthor: 'Nov 21, 2026 • DinhEuro Editorial',
+        source: 'Ministry of Development, Industry, Trade and Services (MDIC)',
+        readingTime: '4 min read',
+        keywords: [
+          'mercosur eu trade agreement exports',
+          'brazil exports to europe 2026',
+          'mdic siscomex rules of origin',
+          'tariff elimination mercosur eu',
+          'brazilian foreign trade',
+        ],
+        imageAlt:
+          'Mercosur and European Union flags raised in front of a container port terminal symbolizing expanding Brazilian exports to Europe',
+        fullContent: [
+          'Brazil’s Ministry of Development, Industry, Trade and Services (MDIC) has highlighted the first trade results of the Mercosur–European Union Agreement for Brazilian exports. Between May—when provisional application took effect—and September 2026, European sales of Brazilian products benefiting from the accord rose 21% compared with the same period in 2025, led by honey, fresh avocados, and corn oil.',
+          'Lower or eliminated customs duties strengthen the competitiveness of Brazilian goods and open new expansion opportunities across European markets.',
+          '“The agreement between Mercosur and the European Union is an achievement of Brazilian trade policy and an important step for national development. Strengthening economic ties with strategic partners, expanding opportunities for productive sectors, and generating quality jobs guide our government’s work,” said MDIC Minister Márcio Elias Rosa.',
+          '## Brazilian goods expand EU sales',
+          'Standout performers during the five-month window included fresh avocados (+421%), honey (+367%), and corn oil (+266%), alongside strong industrial and agribusiness gains:',
+          '- Ferrosilicon-manganese: +173%',
+          '- Unwrought aluminum: +107%',
+          '- Fuel oils: +102%',
+          '- Ethanol: +95.2%',
+          '- Orange essential oil: +75.8%',
+          '- Fresh apples: +29%',
+          'Electrical transformers also surged from zero exports between May and September 2025 to US$ 39 million in the same period of 2026, underscoring broad-based momentum across both agricultural goods and manufactured equipment.',
+          '“The initial results are positive and show the agreement is already opening opportunities for Brazilian products in Europe,” noted Foreign Trade Secretary Tatiana Prazeres, emphasizing ongoing outreach to help both established and first-time exporters leverage the new rules.',
+          '## Guidance for exporters',
+          'To assist businesses in capturing tariff preferences, MDIC provides dedicated technical resources on the Siscomex Portal:',
+          '1. Rules of Origin Manual: outlines eligibility criteria products must satisfy to qualify for preferential tariffs;',
+          '2. Tariff Phase-Out Manual: details schedules for duty reductions and eliminations;',
+          '3. Geographical Indications Manual: covers protection for regionally designated products;',
+          '4. Tariff Preference Tables: allow exporters to look up negotiated terms between both blocs.',
+          '## From negotiations to concrete results',
+          'Launched in 1999, Mercosur–EU talks spanned over 25 years before instruments were signed in January 2026 and provisional trade provisions began on May 1, 2026. The accord links roughly 720 million consumers and a combined GDP exceeding US$ 22 trillion, strengthening export diversification and competitiveness for Brazilian companies.',
+        ],
+      },
+      es: {
+        tag: 'Empresa, Industria y Comercio',
+        title:
+          'El Acuerdo Mercosur–Unión Europea impulsa en 21% las exportaciones brasileñas beneficiadas hacia Europa',
+        summary:
+          'Cifras del MDIC muestran un alza del 21% entre mayo y septiembre de 2026 frente al mismo período de 2025, liderada por aguacates frescos (+421%), miel (+367%), aceite de maíz (+266%) y transformadores eléctricos (US$ 39 millones).',
+        dateAuthor: '21/11/2026 • Redacción DinhEuro',
+        source: 'Ministerio de Desarrollo, Industria, Comercio y Servicios (MDIC)',
+        readingTime: '4 min',
+        keywords: [
+          'acuerdo mercosur union europea exportaciones',
+          'mdic exportaciones brasil europa 2026',
+          'comercio exterior mercosur ue',
+          'portal siscomex reglas de origen',
+          'desgravacion arancelaria brasil europa',
+        ],
+        imageAlt:
+          'Banderas del Mercosur y la Unión Europea izadas frente a una terminal portuaria de contenedores simbolizando el crecimiento exportador hacia Europa',
+        fullContent: [
+          'El Ministerio de Desarrollo, Industria, Comercio y Servicios (MDIC) destacó los primeros resultados del Acuerdo Mercosur–Unión Europea para las exportaciones brasileñas. Entre mayo, cuando entró en vigor la aplicación provisional, y septiembre de 2026, las ventas al mercado europeo de productos brasileños beneficiados crecieron un 21% respecto al mismo período de 2025, con fuerte impulso de la miel, aguacates frescos y aceite de maíz.',
+          'La reducción o eliminación de aranceles refuerza la competitividad de la oferta brasileña y abre espacio para que más empresas amplíen sus envíos hacia Europa.',
+          '“El acuerdo entre el Mercosur y la Unión Europea es un logro de la política comercial brasileña y un paso relevante para el desarrollo del país, agregando valor a la producción y ampliando nuestra participación en el comercio mundial”, destacó el ministro Márcio Elias Rosa.',
+          '## Productos brasileños amplían ventas a la Unión Europea',
+          'Entre los principales avances del período sobresalen aguacates frescos (+421%), miel (+367%) y aceite de maíz (+266%), junto con fuertes subas en insumos industriales y energía:',
+          '- Ferrosilicio-manganeso: +173%',
+          '- Aluminio en bruto: +107%',
+          '- Aceites combustibles: +102%',
+          '- Etanol: +95,2%',
+          '- Aceite esencial de naranja: +75,8%',
+          '- Manzanas frescas: +29%',
+          'Asimismo, las exportaciones de transformadores eléctricos pasaron de cero entre mayo y septiembre de 2025 a US$ 39 millones en igual tramo de 2026, abarcando tanto bienes agropecuarios como manufacturas.',
+          'La secretaria de Comercio Exterior, Tatiana Prazeres, subrayó que el objetivo es acercar estas preferencias arancelarias a más empresas exportadoras y a nuevas firmas interesadas en ingresar al mercado internacional.',
+          '## Orientación a las empresas en el Portal Siscomex',
+          'Para facilitar el aprovechamiento del tratado, el MDIC reúne guías técnicas en el Portal Siscomex:',
+          '1. Manual de reglas de origen: criterios exigidos para acceder a las preferencias arancelarias;',
+          '2. Manual de desgravación arancelaria: cronogramas de reducción y eliminación de tarifas;',
+          '3. Manual de indicaciones geográficas: normas de protección para productos regionales;',
+          '4. Tablas de preferencias arancelarias: consulta directa de condiciones negociadas entre ambos bloques.',
+          '## De la negociación a los resultados concretos',
+          'Iniciadas en 1999 y firmadas en enero de 2026, las disposiciones comerciales entraron en aplicación provisional el 1º de mayo de 2026, conectando un mercado de aproximadamente 720 millones de habitantes y un PIB combinado superior a US$ 22 billones.',
+        ],
+      },
+    },
+  },
+  {
     id: 'trump-inteligencia-jensen-huang-nvidia-2026',
     isoDate: '2026-11-20',
     imageUrl: '/assets/aistudio/image_47a5c2bb.png',
@@ -987,66 +1123,6 @@ export const DAILY_INSIGHTS_ITEMS: DailyInsightItem[] = [
           'El mercado financiero brasileño cerró este martes (17) marcado por una fuerte volatilidad en los activos locales. El dólar comercial llegó a alcanzar R$ 5,81 durante la mañana —su mayor nivel intradiario desde abril de 2025— antes de moderar el avance y cerrar en torno a R$ 5,78.',
           'En el mercado bursátil, el índice Ibovespa intentó ensayar una recuperación tras la caída del 1,83% registrada en la jornada previa, llegando a superar los 171 mil puntos, pero perdió impulso durante la tarde y terminó cerca de la estabilidad, en el rango de los 169.527 puntos.',
           'La cautela de los inversores refleja la salida continua de capital extranjero de B3 —que acumula un saldo negativo de R$ 15,5 mil millones desde la segunda vuelta electoral—, sumada a la presión en las tasas de interés futuras de largo plazo, con contratos por encima del 15% anual, y al retroceso generalizado de los índices Dow Jones, S&P 500 y Nasdaq en Nueva York.',
-        ],
-      },
-    },
-  },
-  {
-    id: 'lula-trump-xi-putin-ucrania-canada-2026',
-    imageUrl: '/assets/aistudio/image_f609767d.png',
-    translations: {
-      pt: {
-        tag: 'GEOPOLÍTICA & DIPLOMACIA',
-        title:
-          'Lula sugeriu encontro entre Trump, Xi e Putin para discutir Ucrânia, diz Canadá',
-        summary:
-          'O primeiro-ministro canadense Mark Carney atribuiu ao presidente Lula a ideia da reunião inédita entre os líderes dos EUA, China e Rússia, marcada para quinta-feira (19) durante a cúpula da Apec em Shenzhen.',
-        dateAuthor: '17/11/2026 • Por Marina Verenicz',
-        source: 'CBN / SBT News',
-        imageAlt:
-          'Presidente brasileiro Luiz Inácio Lula da Silva em reunião com o primeiro-ministro canadense Mark Carney durante a cúpula da Asean nas Filipinas',
-        fullContent: [
-          'O presidente Luiz Inácio Lula da Silva teria sido o responsável por sugerir a reunião entre Donald Trump, Vladimir Putin e Xi Jinping, marcada para quinta-feira (19), na China. A informação foi revelada pelo primeiro-ministro canadense, Mark Carney, após um encontro com Lula nas Filipinas, durante a cúpula da Associação das Nações do Sudeste Asiático (Asean).',
-          'Segundo Carney, o brasileiro apresentou a iniciativa como uma tentativa de contribuir para o fim da guerra entre Rússia e Ucrânia. O premiê classificou a proposta como interessante e atribuiu diretamente a Lula a articulação, versão que foi confirmada por integrantes do governo brasileiro.',
-          'A reunião será realizada em Shenzhen, durante a cúpula da Cooperação Econômica Ásia-Pacífico (Apec), e reunirá pela primeira vez nesse formato os presidentes das três principais potências nucleares. O Ministério das Relações Exteriores da China classificou o encontro como um acontecimento de importância histórica voltado à segurança internacional e estabilidade estratégica.',
-          'Apesar da intenção atribuída a Lula, ainda não há consenso sobre a inclusão da guerra na Ucrânia entre os principais assuntos da reunião. Segundo a imprensa americana, a Casa Branca pretende concentrar as discussões no controle de armamentos nucleares — após o vencimento do tratado New START em fevereiro de 2026 — e em questões relacionadas ao Irã, enquanto autoridades russas veem oportunidade para tratar do conflito ucraniano.',
-          'O presidente ucraniano, Volodymyr Zelensky, manifestou preocupação com a possibilidade de as grandes potências discutirem o conflito sem a participação de Kiev. Embora a cúpula entre Trump, Putin e Xi esteja confirmada para quinta-feira (19), o alcance das negociações e a possibilidade de avanços concretos permanecem indefinidos.',
-        ],
-      },
-      en: {
-        tag: 'GEOPOLITICS & DIPLOMACY',
-        title:
-          'Lula suggested meeting between Trump, Xi, and Putin to discuss Ukraine, says Canada',
-        summary:
-          'Canadian Prime Minister Mark Carney credited President Lula with proposing the unprecedented meeting among the leaders of the U.S., China, and Russia, scheduled for Thursday (19) during the APEC summit in Shenzhen.',
-        dateAuthor: 'Nov 17, 2026 • By Marina Verenicz',
-        source: 'CBN / SBT News',
-        imageAlt:
-          'Brazilian President Luiz Inácio Lula da Silva meeting with Canadian Prime Minister Mark Carney during the ASEAN summit in the Philippines',
-        fullContent: [
-          'Brazilian President Luiz Inácio Lula da Silva reportedly proposed the meeting among Donald Trump, Vladimir Putin, and Xi Jinping scheduled for Thursday (19) in China. The disclosure was made by Canadian Prime Minister Mark Carney following a bilateral meeting with Lula in the Philippines during the Association of Southeast Asian Nations (ASEAN) summit.',
-          'According to Carney, the Brazilian leader framed the initiative as an effort to help bring the war between Russia and Ukraine to an end. The Canadian prime minister described the proposal as interesting and directly credited Lula with brokering the idea, an account confirmed by members of the Brazilian government.',
-          'The meeting will take place in Shenzhen during the Asia-Pacific Economic Cooperation (APEC) summit and will bring together the presidents of the three leading nuclear powers in this format for the first time. China’s Ministry of Foreign Affairs described the gathering as an event of historic significance aimed at international security and strategic stability.',
-          'Despite the objective attributed to Lula, there is still no consensus on placing the war in Ukraine among the summit’s primary agenda items. According to U.S. media, the White House intends to focus talks on nuclear arms control—following the expiration of the New START treaty in February 2026—and matters concerning Iran, whereas Russian officials see an opening to address the Ukrainian conflict.',
-          'Ukrainian President Volodymyr Zelensky voiced concern that major powers might discuss the conflict without Kyiv at the table. Although the summit among Trump, Putin, and Xi is confirmed for Thursday (19), the scope of negotiations and the prospects for concrete breakthroughs remain uncertain.',
-        ],
-      },
-      es: {
-        tag: 'GEOPOLÍTICA & DIPLOMACIA',
-        title:
-          'Lula sugirió reunión entre Trump, Xi y Putin para debatir sobre Ucrania, dice Canadá',
-        summary:
-          'El primer ministro canadiense Mark Carney atribuyó al presidente Lula la idea del encuentro inédito entre los líderes de EE. UU., China y Rusia, previsto para el jueves (19) durante la cumbre de la Apec en Shenzhen.',
-        dateAuthor: '17/11/2026 • Por Marina Verenicz',
-        source: 'CBN / SBT News',
-        imageAlt:
-          'El presidente brasileño Luiz Inácio Lula da Silva reunido con el primer ministro canadiense Mark Carney durante la cumbre de la Asean en Filipinas',
-        fullContent: [
-          'El presidente Luiz Inácio Lula da Silva habría sido el responsable de sugerir la reunión entre Donald Trump, Vladímir Putin y Xi Jinping, prevista para el jueves (19) en China. La información fue revelada por el primer ministro canadiense, Mark Carney, tras un encuentro con Lula en Filipinas durante la cumbre de la Asociación de Naciones del Sudeste Asiático (Asean).',
-          'Según Carney, el mandatario brasileño presentó la iniciativa como un intento de contribuir al fin de la guerra entre Rusia y Ucrania. El jefe de gobierno canadiense calificó la propuesta de interesante y atribuyó directamente a Lula la articulación, versión que fue confirmada por integrantes del gobierno brasileño.',
-          'La reunión se celebrará en Shenzhen durante la cumbre de Cooperación Económica Asia-Pacífico (Apec) y reunirá por primera vez en este formato a los presidentes de las tres principales potencias nucleares. El Ministerio de Relaciones Exteriores de China calificó el encuentro como un acontecimiento de importancia histórica orientado a la seguridad internacional y la estabilidad estratégica.',
-          'Pese a la intención atribuida a Lula, aún no existe consenso sobre la inclusión de la guerra en Ucrania entre los asuntos centrales de la cita. Según la prensa estadounidense, la Casa Blanca pretende centrar las conversaciones en el control de armas nucleares —tras el vencimiento del tratado New START en febrero de 2026— y en cuestiones vinculadas a Irán, mientras que autoridades rusas ven una oportunidad para abordar el conflicto ucraniano.',
-          'El presidente ucraniano, Volodímir Zelenski, expresó preocupación ante la posibilidad de que las grandes potencias debatan el conflicto sin la participación de Kiev. Aunque la cumbre entre Trump, Putin y Xi está confirmada para el jueves (19), el alcance de las negociaciones y la posibilidad de avances concretos permanecen indefinidos.',
         ],
       },
     },

@@ -28,6 +28,7 @@ import {
 } from '../utils/seo';
 
 const FEATURED_NEWS_EDITORIAL_IDS = new Set([
+  'mdic-acordo-mercosul-ue-exportacoes-21-por-cento-2026',
   'trump-inteligencia-jensen-huang-nvidia-2026',
   'terras-raras-disparidade-precos-brasil-china-2026',
   'greves-jovens-europa-custo-vida-2026',
@@ -92,7 +93,9 @@ export const NewsView: React.FC = () => {
         (item.id === 'terras-raras-disparidade-precos-brasil-china-2026' &&
           filterCategory === 'Mercados & B3') ||
         (item.id === 'trump-inteligencia-jensen-huang-nvidia-2026' &&
-          filterCategory === 'Empresas & Wall St');
+          filterCategory === 'Empresas & Wall St') ||
+        (item.id === 'mdic-acordo-mercosul-ue-exportacoes-21-por-cento-2026' &&
+          filterCategory === 'Macro & Câmbio');
       if (!matchesCategory) return false;
       if (!searchLower) return true;
 

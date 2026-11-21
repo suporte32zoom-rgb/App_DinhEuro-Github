@@ -154,12 +154,14 @@ test('APEC 2026 and ALADI 2026 editorial insights preserve prior items up to 12 
   assert.ok(source.includes('export const MAX_DAILY_INSIGHTS = 12;'));
   const idMatches = source.match(/^\s+id:\s*'[^']+',/gm) || [];
   assert.equal(idMatches.length, 12);
+  assert.ok(source.includes("id: 'mdic-acordo-mercosul-ue-exportacoes-21-por-cento-2026'"));
   assert.ok(source.includes("id: 'trump-inteligencia-jensen-huang-nvidia-2026'"));
   assert.ok(source.includes("id: 'terras-raras-disparidade-precos-brasil-china-2026'"));
   assert.ok(source.includes("id: 'greves-jovens-europa-custo-vida-2026'"));
   assert.ok(source.includes("id: 'coinbase-deribit-aquisicao-infraestrutura-2026'"));
   assert.ok(source.includes("id: 'apec-2026-trump-xi-putin-shenzhen'"));
   assert.ok(source.includes("id: 'aladi-cosmeticos-exportacao-brasil-2026'"));
+  assert.ok(source.includes("imageUrl: '/assets/aistudio/image_fae53297.png'"));
   assert.ok(source.includes("imageUrl: '/assets/aistudio/image_47a5c2bb.png'"));
   assert.ok(source.includes("imageUrl: '/assets/aistudio/image_c7f7f8fe.png'"));
   assert.ok(source.includes("imageUrl: '/assets/aistudio/image_9efbf558.png'"));
@@ -176,29 +178,32 @@ test('APEC 2026 and ALADI 2026 editorial insights preserve prior items up to 12 
     path.resolve(process.cwd(), 'src/views/NewsView.tsx'),
     'utf8'
   );
+  assert.ok(
+    newsViewSource.includes("'mdic-acordo-mercosul-ue-exportacoes-21-por-cento-2026'")
+  );
   assert.ok(newsViewSource.includes("'trump-inteligencia-jensen-huang-nvidia-2026'"));
   assert.ok(newsViewSource.includes("'terras-raras-disparidade-precos-brasil-china-2026'"));
   assert.ok(newsViewSource.includes("'greves-jovens-europa-custo-vida-2026'"));
   assert.ok(newsViewSource.includes("'coinbase-deribit-aquisicao-infraestrutura-2026'"));
 
   const schema = buildEditorialArticlesSchema('pt', [], {
-    id: 'trump-inteligencia-jensen-huang-nvidia-2026',
+    id: 'mdic-acordo-mercosul-ue-exportacoes-21-por-cento-2026',
     schemaType: 'NewsArticle',
     headline:
-      'Por que Trump não tomou nenhuma providência em relação ao escândalo de manipulação de Jensen Huang?',
+      'Acordo Mercosul–União Europeia impulsiona em 21% exportações brasileiras beneficiadas ao mercado europeu',
     description:
-      'Em artigo de opinião, Tevi Troy analisa como presidentes eficazes lidam com alertas obscuros de agências de inteligência e contextualiza o ceticismo histórico da Casa Branca diante da CIA no caso envolvendo o ex-CEO da Nvidia.',
-    articleSection: 'Geopolítica & Tecnologia',
-    datePublished: '2026-11-20',
-    imageUrl: '/assets/aistudio/image_47a5c2bb.png',
+      'Balanço do MDIC mostra que vendas de produtos beneficiados cresceram 21% entre maio e setembro de 2026 ante igual período de 2025, lideradas por abacates frescos (+421%), mel (+367%), óleo de milho (+266%) e transformadores elétricos (US$ 39 milhões).',
+    articleSection: 'Empresa, Indústria e Comércio',
+    datePublished: '2026-11-21',
+    imageUrl: '/assets/aistudio/image_fae53297.png',
     keywords: [
-      'trump jensen huang nvidia',
-      'cia inteligência estados unidos',
-      'tevi troy expressão livre',
+      'acordo mercosul união europeia exportações',
+      'mdic exportações brasil europa 2026',
+      'portal siscomex regras de origem',
     ],
   });
   assert.equal(schema['@type'], 'NewsArticle');
   assert.ok('image' in schema);
-  assert.deepEqual(schema.image, ['https://dinheuro.com/assets/aistudio/image_47a5c2bb.png']);
-  assert.equal(schema.datePublished, '2026-11-20');
+  assert.deepEqual(schema.image, ['https://dinheuro.com/assets/aistudio/image_fae53297.png']);
+  assert.equal(schema.datePublished, '2026-11-21');
 });
