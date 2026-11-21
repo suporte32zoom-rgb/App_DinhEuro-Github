@@ -60,6 +60,115 @@ export const DAILY_INSIGHTS_UI_COPY: Record<
 
 export const DAILY_INSIGHTS_ITEMS: DailyInsightItem[] = [
   {
+    id: 'trump-inteligencia-jensen-huang-nvidia-2026',
+    isoDate: '2026-11-20',
+    imageUrl: '/assets/aistudio/image_47a5c2bb.png',
+    translations: {
+      pt: {
+        tag: 'Geopolítica & Tecnologia',
+        title:
+          'Por que Trump não tomou nenhuma providência em relação ao escândalo de manipulação de Jensen Huang?',
+        summary:
+          'Em artigo de opinião, Tevi Troy analisa como presidentes eficazes lidam com alertas obscuros de agências de inteligência e contextualiza o ceticismo histórico da Casa Branca diante da CIA no caso envolvendo o ex-CEO da Nvidia.',
+        dateAuthor: '20/11/2026 • Por Tevi Troy',
+        source: 'Expressão Livre / Foto: Carolyn Kaster (Associated Press)',
+        readingTime: '5 min',
+        keywords: [
+          'trump jensen huang nvidia',
+          'cia inteligência estados unidos',
+          'howard lutnick comércio china',
+          'histórico cia presidentes eua',
+          'tevi troy expressão livre',
+        ],
+        imageAlt:
+          'Selo oficial da Agência Central de Inteligência dos Estados Unidos (CIA) ao lado da bandeira americana (Foto: Carolyn Kaster / Associated Press)',
+        fullContent: [
+          'Segundo notícias, o governo Trump demorou a agir em relação aos alertas da comunidade de inteligência sobre um relacionamento entre o então CEO da Nvidia, Jensen Huang, e uma mulher suspeita de espionagem para a China. A questão é: por quê?',
+          'Com o presidente Trump, é claro que sempre existe a possibilidade de ele ter minimizado a importância das informações devido à sua relação pessoal com o Sr. Huang. O secretário de Comércio, Howard Lutnick, também pareceu ser um obstáculo à ação nas deliberações internas do governo. É possível ainda que o governo tenha agido com base nas informações, mas de maneiras que desconhecemos.',
+          'Outro fator a ser considerado nas decisões de inteligência é o infeliz e crescente ceticismo com que os presidentes passaram a encarar o mundo da inteligência ao longo do tempo.',
+          '## De Eisenhower a Nixon: expectativas e rupturas com a CIA',
+          'Nos primórdios da Agência Central de Inteligência (CIA), os presidentes tinham uma visão inflada das capacidades da agência. Um exemplo disso foi a autorização dada por Dwight Eisenhower ao golpe de Estado de 1953 no Irã, que restaurou o Xá ao poder. Os historiadores ainda debatem o quanto os esforços da CIA influenciaram o resultado, mas os EUA certamente foram culpados — ou creditados — pelo golpe durante décadas.',
+          'Os relatos de sucessos da CIA alimentaram grandes expectativas. No último ano de mandato de Eisenhower, a CIA desenvolveu um plano para derrubar o governo cubano usando um exército de exilados. Eisenhower nunca o executou, mas John F. Kennedy tentou. A operação fracassou na Baía dos Porcos e prejudicou o novo governo. Kennedy reclamou furiosamente com Richard Nixon, seu rival na corrida presidencial de 1960. Segundo Nixon, Kennedy disse "merda" seis vezes ao se queixar do fracasso da CIA. A partir de então, Kennedy passou a desconfiar mais da agência.',
+          'As décadas seguintes deram aos presidentes ainda mais motivos para ceticismo. Em 1970, os EUA foram pegos de surpresa quando Lon Nol derrubou o governo de Sihanouk no Camboja. Nixon resmungou para o Secretário de Estado William Rogers: "Que diabos aqueles palhaços fazem lá em Langley?". Nixon ficou chocado novamente em outubro de 1973, quando a inteligência americana falhou em prever a Guerra do Yom Kippur. Como escreveu em suas memórias: "A notícia do iminente ataque a Israel nos pegou completamente de surpresa. Até o dia anterior, a CIA havia relatado que uma guerra no Oriente Médio era improvável...".',
+          'Nixon também tinha o problema de estar muito envolvido com as agências de inteligência. O escândalo de Watergate saiu do controle quando se descobriu que E. Howard Hunt, um dos ladrões, era um ex-agente da CIA com ligações com a Casa Branca. Nixon forneceu a "prova cabal" por meio de uma conversa gravada na qual pedia a seus assessores que o vice-diretor da CIA, Vernon Walters, convencesse o FBI a desistir da investigação. A CIA, por sua vez, recusou. E, claro, o alto funcionário do FBI, Mark Felt, era secretamente Garganta Profunda, a fonte que forneceu ao repórter do Washington Post, Bob Woodward, as informações que mantiveram o escândalo vivo e, eventualmente, forçaram a renúncia de Nixon.',
+          '## De Ford a George W. Bush: desgaste institucional',
+          'A situação piorou durante o governo Ford, com as audiências do Comitê Church de 1975-76 expondo as irregularidades da CIA. O Secretário de Estado Henry Kissinger vociferou que "toda vez que [o Diretor da CIA] Bill Colby se aproxima do Capitólio, aquele maldito sente um desejo irresistível de confessar algum crime horrível". A reputação da agência sofreu ainda mais.',
+          'Jimmy Carter aprendeu da pior maneira que a CIA sequer cogitava a possibilidade da queda do regime do Xá no Irã. A CIA possuía gravações dos discursos radicais do Aiatolá Khomeini, mas não as reproduziu nem as traduziu. Com o colapso do regime, o vice-presidente Walter Mondale perguntou ao diretor da CIA, Stansfield Turner: "Afinal, o que diabos é um \'Aiatolá\'?" A resposta de Turner foi reveladora: "Não tenho certeza se sei."',
+          'Durante o governo de George W. Bush, as agências de inteligência falharam em reunir as peças do quebra-cabeça dos ataques de 11 de setembro, mas também forneceram garantias excessivamente confiantes de que Saddam Hussein, do Iraque, possuía armas de destruição em massa. O diretor da CIA, George Tenet, teria considerado o caso "uma vitória garantida". Embora Hussein tivesse, em determinado momento, buscado obter armas de destruição em massa, nenhuma foi encontrada no Iraque.',
+          '## Política, ceticismo e o caso Nvidia',
+          'Essa história mostra por que é difícil prever como uma administração reagirá a informações de inteligência problemáticas. O Sr. Trump já demonstrava dúvidas em relação às agências de inteligência devido ao escândalo Russiagate que assolou seu primeiro mandato. Além disso, a cultura popular, o jornalismo e a academia têm uma visão persistentemente negativa de nossas agências de inteligência. Calder Walton escreve em seu livro "Espiões" que "é difícil pensar em uma única ação secreta dos EUA que tenha proporcionado um sucesso estratégico de longo prazo". No caso da Nvidia, é possível que essa negatividade constante em relação à inteligência americana tenha contribuído para obscurecer a situação.',
+          'O mundo da inteligência é obscuro e imperfeito. Cometeu erros, mas também fornece informações valiosíssimas, essenciais para a tomada de decisões presidenciais. Presidentes eficazes saberão ignorar a negatividade e utilizar as informações de suas agências de espionagem para promover os interesses americanos. Em última análise, esta é uma questão de política, não de inteligência.',
+        ],
+      },
+      en: {
+        tag: 'Geopolitics & Technology',
+        title:
+          'Why did Trump take no action on the Jensen Huang handling scandal?',
+        summary:
+          'In an opinion analysis, Tevi Troy examines how effective presidents handle murky intelligence warnings and traces decades of White House skepticism toward the CIA in light of the case involving former Nvidia CEO Jensen Huang.',
+        dateAuthor: 'Nov 20, 2026 • By Tevi Troy',
+        source: 'Free Expression / Photo: Carolyn Kaster (Associated Press)',
+        readingTime: '5 min read',
+        keywords: [
+          'trump jensen huang nvidia',
+          'cia us intelligence community',
+          'howard lutnick commerce china',
+          'white house cia history',
+          'tevi troy analysis',
+        ],
+        imageAlt:
+          'Official seal of the United States Central Intelligence Agency (CIA) beside the American flag (Photo: Carolyn Kaster / Associated Press)',
+        fullContent: [
+          'According to reports, the Trump administration was slow to act on intelligence community warnings regarding a relationship between then-Nvidia CEO Jensen Huang and a woman suspected of spying for China. The question is: why?',
+          'With President Trump, there is always the possibility that he downplayed the intelligence because of his personal relationship with Mr. Huang. Commerce Secretary Howard Lutnick also appeared to be an obstacle to action in internal administration deliberations. It is also possible that the administration acted on the intelligence in ways we do not know about.',
+          'Another factor to consider in intelligence decisions is the unfortunate and growing skepticism with which presidents have come to view the intelligence world over time.',
+          '## From Eisenhower to Nixon: high expectations and early rifts',
+          'In the early days of the Central Intelligence Agency (CIA), presidents held an inflated view of the agency’s capabilities, as seen in Dwight Eisenhower’s authorization of the 1953 Iranian coup that restored the Shah to power. Historians still debate how decisive CIA efforts were, yet the United States was widely blamed—or credited—for decades.',
+          'In Eisenhower’s final year, the CIA drafted a plan to overthrow the Cuban government using an exile force; John F. Kennedy went ahead with the operation, which failed catastrophically at the Bay of Pigs and damaged the new administration. Kennedy later vented furiously to Richard Nixon, his 1960 rival, growing far more distrustful of the agency.',
+          'Subsequent decades offered further causes for presidential skepticism. In 1970, Washington was caught off guard when Lon Nol toppled Sihanouk’s government in Cambodia, and in October 1973 U.S. intelligence failed to anticipate the Yom Kippur War. Meanwhile, Nixon’s entanglement with CIA veterans during Watergate—culminating in recordings asking aides to press the FBI to back off and the agency’s refusal—deepened the rift.',
+          '## From Ford to George W. Bush: institutional strain',
+          'Tensions worsened under Gerald Ford during the 1975–76 Church Committee hearings exposing CIA abuses, prompting Secretary of State Henry Kissinger to fume over congressional disclosures. Under Jimmy Carter, the CIA failed to foresee the collapse of the Shah’s regime in Iran, having left radical speeches by Ayatollah Khomeini untranslated.',
+          'During George W. Bush’s presidency, intelligence agencies failed to connect the dots ahead of the September 11 attacks and later expressed excessive confidence—famously termed a "slam dunk" by CIA Director George Tenet—that Saddam Hussein possessed weapons of mass destruction in Iraq, none of which were found.',
+          '## Politics, skepticism, and the Nvidia case',
+          'That history explains why predicting how an administration will respond to troubling intelligence is difficult. President Trump already harbored skepticism toward intelligence agencies after the Russiagate controversy of his first term, reinforced by persistent criticism across popular culture, media, and academia—as scholar Calder Walton notes in his book "Spies." In the Nvidia episode, such persistent negativity toward U.S. intelligence may have helped cloud the picture.',
+          'The intelligence world is murky and imperfect. It has made serious mistakes, yet it also supplies indispensable insights for presidential decision-making. Effective presidents cut through the skepticism and put intelligence to work for American national interests—making this ultimately a question of policy and politics, not intelligence.',
+        ],
+      },
+      es: {
+        tag: 'Geopolítica y Tecnología',
+        title:
+          '¿Por qué Trump no tomó ninguna medida ante el escándalo de captación de Jensen Huang?',
+        summary:
+          'En un artículo de opinión, Tevi Troy analiza cómo los presidentes eficaces gestionan informes complejos de inteligencia y repasa el escepticismo histórico de la Casa Blanca hacia la CIA en torno al caso del ex-CEO de Nvidia.',
+        dateAuthor: '20/11/2026 • Por Tevi Troy',
+        source: 'Expressão Livre / Foto: Carolyn Kaster (Associated Press)',
+        readingTime: '5 min',
+        keywords: [
+          'trump jensen huang nvidia',
+          'cia inteligencia estados unidos',
+          'howard lutnick comercio china',
+          'historia cia presidentes eeuu',
+          'tevi troy analisis',
+        ],
+        imageAlt:
+          'Sello oficial de la Agencia Central de Inteligencia de Estados Unidos (CIA) junto a la bandera estadounidense (Foto: Carolyn Kaster / Associated Press)',
+        fullContent: [
+          'Según informaciones publicadas, el gobierno de Trump tardó en reaccionar ante las alertas de la comunidad de inteligencia sobre una relación entre el entonces CEO de Nvidia, Jensen Huang, y una mujer sospechosa de espionaje para China. La pregunta es: ¿por qué?',
+          'En el caso del presidente Trump, siempre existe la posibilidad de que minimizara la relevancia de los datos por su vínculo personal con el Sr. Huang. El secretario de Comercio, Howard Lutnick, también pareció actuar como freno dentro de las deliberaciones internas, aunque tampoco se descarta que el gobierno haya actuado de formas que no han trascendido.',
+          'Otro factor relevante en estas decisiones es el creciente escepticismo con el que los presidentes estadounidenses han terminado mirando a las agencias de inteligencia a lo largo de las décadas.',
+          '## De Eisenhower a Nixon: expectativas y decepciones con la CIA',
+          'En los primeros años de la CIA, los presidentes sobrestimaron su capacidad tras episodios como el golpe de 1953 en Irán. Sin embargo, el fracaso de Bahía de Cochinos bajo John F. Kennedy sembró una profunda desconfianza en la Casa Blanca.',
+          'Bajo Richard Nixon se sumaron sorpresas estratégicas como el golpe en Camboya en 1970 y la guerra de Yom Kippur en octubre de 1973, además de las fricciones internas desatadas durante el escándalo Watergate.',
+          '## De Ford a George W. Bush: desgaste institucional',
+          'Las audiencias del Comité Church entre 1975 y 1976 dañaron la reputación de la CIA durante la presidencia de Gerald Ford. Más tarde, bajo Jimmy Carter, la agencia no anticipó la caída del Sha en Irán, y durante el mandato de George W. Bush falló en conectar los indicios previos al 11-S y aseguró con exceso de confianza la existencia de armas de destrucción masiva en Irak.',
+          '## Política, escepticismo y el caso Nvidia',
+          'Esta trayectoria explica por qué resulta difícil predecir cómo responderá una administración ante alertas delicadas. Trump ya arrastraba reservas frente a las agencias tras la polémica del Russiagate en su primer mandato, en un clima cultural e intelectual habitualmente crítico hacia la inteligencia estadounidense, como documenta Calder Walton en "Espías".',
+          'Aunque el mundo de la inteligencia es complejo e imperfecto, aporta información vital para las decisiones presidenciales. Los presidentes eficaces logran sortear ese escepticismo y utilizar esos insumos en defensa de los intereses nacionales; en última instancia, concluye el autor, se trata de una cuestión política más que de inteligencia.',
+        ],
+      },
+    },
+  },
+  {
     id: 'terras-raras-disparidade-precos-brasil-china-2026',
     isoDate: '2026-11-20',
     imageUrl: '/assets/aistudio/image_c7f7f8fe.png',
@@ -938,72 +1047,6 @@ export const DAILY_INSIGHTS_ITEMS: DailyInsightItem[] = [
           'La reunión se celebrará en Shenzhen durante la cumbre de Cooperación Económica Asia-Pacífico (Apec) y reunirá por primera vez en este formato a los presidentes de las tres principales potencias nucleares. El Ministerio de Relaciones Exteriores de China calificó el encuentro como un acontecimiento de importancia histórica orientado a la seguridad internacional y la estabilidad estratégica.',
           'Pese a la intención atribuida a Lula, aún no existe consenso sobre la inclusión de la guerra en Ucrania entre los asuntos centrales de la cita. Según la prensa estadounidense, la Casa Blanca pretende centrar las conversaciones en el control de armas nucleares —tras el vencimiento del tratado New START en febrero de 2026— y en cuestiones vinculadas a Irán, mientras que autoridades rusas ven una oportunidad para abordar el conflicto ucraniano.',
           'El presidente ucraniano, Volodímir Zelenski, expresó preocupación ante la posibilidad de que las grandes potencias debatan el conflicto sin la participación de Kiev. Aunque la cumbre entre Trump, Putin y Xi está confirmada para el jueves (19), el alcance de las negociaciones y la posibilidad de avances concretos permanecen indefinidos.',
-        ],
-      },
-    },
-  },
-  {
-    id: 'trump-filipinas-asia-comercio-seguranca-2026',
-    imageUrl: '/assets/aistudio/image_e9f58b10.png',
-    translations: {
-      pt: {
-        tag: 'GEOPOLÍTICA E COMÉRCIO',
-        title:
-          'Trump chega às Filipinas para viagem à Ásia com foco em comércio e segurança regional',
-        summary:
-          'Em sua primeira viagem internacional após as eleições de meio de mandato, Donald Trump desembarca em Manila para a cúpula da Asean, reunião do Quad e negociações comerciais na Ásia antes de seguir para a China.',
-        dateAuthor: '17/11/2026 • Por Estadão Conteúdo',
-        source: 'Associated Press / Estadão Conteúdo',
-        imageAlt:
-          'Presidente dos Estados Unidos Donald Trump desembarcando em Manila, nas Filipinas, para a cúpula da Asean e reuniões comerciais na Ásia',
-        fullContent: [
-          'O presidente dos Estados Unidos, Donald Trump, chegou nesta terça-feira (17) às Filipinas, primeira parada de uma viagem de três dias à Ásia marcada por negociações comerciais e encontros com aliados regionais. A agenda inclui reuniões com líderes do Sudeste Asiático, um acordo com a Tailândia e uma visita à China, onde estão previstas conversas sobre armas nucleares com Xi Jinping e Vladimir Putin. Trump também mencionou a possibilidade de se reunir com o líder norte-coreano Kim Jong Un.',
-          'É a primeira viagem internacional do republicano desde as derrotas de seu partido nas eleições de meio de mandato. O presidente deixa os EUA em meio a problemas no setor aéreo e à repercussão da saída de Jensen Huang da Nvidia, após o executivo admitir um caso com uma suposta agente do governo chinês. Pequim negou envolvimento.',
-          'Em Manila, Trump participará da cúpula da Associação das Nações do Sudeste Asiático (Asean) como convidado de honra, com recepção e jantar de gala. Antes, deverá se reunir com os líderes do Quad, formado por EUA, Austrália, Índia e Japão, que busca conter a influência chinesa na Ásia-Pacífico. Será o primeiro encontro do grupo desde o retorno de Trump à Casa Branca.',
-          'O presidente também deve assinar um acordo comercial com a Tailândia. Em outubro de 2025, os países anunciaram um entendimento preliminar pelo qual Bangkok eliminaria tarifas sobre a maioria dos produtos americanos e barreiras a importações de automóveis, alimentos e medicamentos. O governo Trump afirmou ainda que a Tailândia compraria mais de US$ 18 bilhões em aeronaves dos EUA, além de produtos agrícolas e gás natural liquefeito (GNL). Em fevereiro, a Suprema Corte americana derrubou a tarifa de 19% imposta por Trump sobre produtos tailandeses, levando o governo a estabelecer uma taxa substituta de 12,5% em julho.',
-          'Em uma reunião especial com os líderes da Asean, Trump deverá abordar comércio, segurança, a violência em Mianmar e as disputas no Mar do Sul da China. Os países do bloco negociam um pacto de não agressão com Pequim, que reivindica quase toda a região marítima, enquanto Washington rejeita as reivindicações chinesas e reafirma sua obrigação de defender as Filipinas, aliadas por tratado, em caso de ataque armado.',
-          'A chegada de Trump foi precedida por um protesto de cerca de 1.500 manifestantes de esquerda em Manila, que criticaram a influência dos EUA sobre a política externa filipina. Na quarta-feira (18), Trump será recebido pelo presidente Ferdinand Marcos Jr. com honras militares e banquete de Estado no Palácio de Malacañang, além de uma possível visita à ex-primeira-dama Imelda Marcos, de 97 anos.',
-          'O presidente americano também deverá anunciar acordos e investimentos em aviação, defesa, energia e tecnologia antes de seguir a Shenzhen, na China, para a cúpula da Cooperação Econômica Ásia-Pacífico (Apec).',
-        ],
-      },
-      en: {
-        tag: 'GEOPOLITICS & TRADE',
-        title:
-          'Trump arrives in the Philippines for Asia trip focused on trade and regional security',
-        summary:
-          'On his first international trip since the midterm elections, Donald Trump lands in Manila for the ASEAN summit, a Quad meeting, and trade talks in Asia before heading to China.',
-        dateAuthor: 'Nov 17, 2026 • By Estadão Conteúdo',
-        source: 'Associated Press / Estadão Conteúdo',
-        imageAlt:
-          'U.S. President Donald Trump arriving in Manila, Philippines, for the ASEAN summit and regional trade meetings',
-        fullContent: [
-          'U.S. President Donald Trump arrived on Tuesday (17) in the Philippines, the first stop on a three-day trip to Asia marked by trade negotiations and meetings with regional allies. The itinerary includes sessions with Southeast Asian leaders, an agreement with Thailand, and a visit to China, where talks on nuclear weapons with Xi Jinping and Vladimir Putin are expected. Trump also raised the possibility of meeting North Korean leader Kim Jong Un.',
-          'It is the Republican president’s first international trip since his party’s losses in the midterm elections. He leaves the United States amid aviation-sector disruptions and fallout from Jensen Huang’s departure from Nvidia after the executive admitted an affair with an alleged Chinese government agent. Beijing denied any involvement.',
-          'In Manila, Trump will attend the Association of Southeast Asian Nations (ASEAN) summit as guest of honor, including a reception and gala dinner. Earlier, he is set to meet with leaders of the Quad—comprising the United States, Australia, India, and Japan—aimed at countering Chinese influence in the Indo-Pacific, marking the group’s first summit since Trump returned to the White House.',
-          'The president is also expected to sign a trade agreement with Thailand. In October 2025, the two countries announced a preliminary framework under which Bangkok would eliminate tariffs on most U.S. goods and remove import barriers on automobiles, food, and pharmaceuticals. The Trump administration also stated that Thailand would purchase more than US$ 18 billion in U.S. aircraft, alongside agricultural goods and liquefied natural gas (LNG). In February, the U.S. Supreme Court struck down Trump’s 19% tariff on Thai products, prompting the administration to introduce a replacement 12.5% duty in July.',
-          'In a special session with ASEAN leaders, Trump is expected to address trade, security, violence in Myanmar, and disputes in the South China Sea. Bloc members are negotiating a non-aggression pact with Beijing, which claims nearly the entire maritime corridor, while Washington rejects China’s claims and reaffirms its treaty obligation to defend the Philippines in the event of an armed attack.',
-          'Trump’s arrival was preceded by a protest of roughly 1,500 left-wing demonstrators in Manila criticizing U.S. influence over Philippine foreign policy. On Wednesday (18), Trump will be welcomed by President Ferdinand Marcos Jr. with military honors and a state banquet at Malacañang Palace, along with a possible visit to 97-year-old former first lady Imelda Marcos.',
-          'The U.S. president is also slated to announce deals and investments in aviation, defense, energy, and technology before traveling to Shenzhen, China, for the Asia-Pacific Economic Cooperation (APEC) summit.',
-        ],
-      },
-      es: {
-        tag: 'GEOPOLÍTICA Y COMERCIO',
-        title:
-          'Trump llega a Filipinas en viaje por Asia con foco en comercio y seguridad regional',
-        summary:
-          'En su primer viaje internacional tras las elecciones de medio término, Donald Trump aterriza en Manila para la cumbre de la Asean, reunión del Quad y negociaciones comerciales en Asia antes de seguir rumbo a China.',
-        dateAuthor: '17/11/2026 • Por Estadão Conteúdo',
-        source: 'Associated Press / Estadão Conteúdo',
-        imageAlt:
-          'El presidente de Estados Unidos Donald Trump llegando a Manila, Filipinas, para la cumbre de la Asean y reuniones comerciales en Asia',
-        fullContent: [
-          'El presidente de Estados Unidos, Donald Trump, llegó este martes (17) a Filipinas, primera escala de una gira de tres días por Asia marcada por negociaciones comerciales y encuentros con aliados regionales. La agenda incluye reuniones con líderes del Sudeste Asiático, un acuerdo con Tailandia y una visita a China, donde están previstas conversaciones sobre armas nucleares con Xi Jinping y Vladímir Putin. Trump también mencionó la posibilidad de reunirse con el líder norcoreano Kim Jong Un.',
-          'Es el primer viaje internacional del republicano desde las derrotas de su partido en las elecciones de medio término. El mandatario deja EE. UU. en medio de problemas en el sector aéreo y la repercusión por la salida de Jensen Huang de Nvidia, luego de que el ejecutivo admitiera una relación con una supuesta agente del gobierno chino. Pekín negó cualquier implicación.',
-          'En Manila, Trump participará en la cumbre de la Asociación de Naciones del Sudeste Asiático (Asean) como invitado de honor, con recepción y cena de gala. Previamente, deberá reunirse con los líderes del Quad —integrado por EE. UU., Australia, India y Japón—, que busca contener la influencia china en Asia-Pacífico, en el primer encuentro del grupo desde el regreso de Trump a la Casa Blanca.',
-          'El presidente también prevé firmar un acuerdo comercial con Tailandia. En octubre de 2025, ambos países anunciaron un entendimiento preliminar por el cual Bangkok eliminaría aranceles sobre la mayoría de los productos estadounidenses y barreras a importaciones de automóviles, alimentos y medicamentos. El gobierno de Trump afirmó además que Tailandia compraría más de US$ 18 mil millones en aeronaves estadounidenses, además de productos agrícolas y gas natural licuado (GNL). En febrero, la Corte Suprema de EE. UU. anuló el arancel del 19% impuesto por Trump a productos tailandeses, lo que llevó a la administración a fijar una tasa sustitutiva del 12,5% en julio.',
-          'En una reunión especial con los líderes de la Asean, Trump deberá abordar comercio, seguridad, la violencia en Myanmar y las disputas en el Mar de China Meridional. Los países del bloque negocian un pacto de no agresión con Pekín, que reclama casi toda esa zona marítima, mientras Washington rechaza las reivindicaciones chinas y reafirma su obligación de defender a Filipinas, aliada por tratado, en caso de ataque armado.',
-          'La llegada de Trump estuvo precedida por una protesta de cerca de 1.500 manifestantes de izquierda en Manila, que criticaron la influencia de EE. UU. sobre la política exterior filipina. El miércoles (18), Trump será recibido por el presidente Ferdinand Marcos Jr. con honores militares y banquete de Estado en el Palacio de Malacañán, además de una posible visita a la exprimera dama Imelda Marcos, de 97 años.',
-          'El mandatario estadounidense también anunciará acuerdos e inversiones en aviación, defensa, energía y tecnología antes de trasladarse a Shenzhen, China, para la cumbre de Cooperación Económica Asia-Pacífico (Apec).',
         ],
       },
     },

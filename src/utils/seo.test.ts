@@ -154,11 +154,13 @@ test('APEC 2026 and ALADI 2026 editorial insights preserve prior items up to 12 
   assert.ok(source.includes('export const MAX_DAILY_INSIGHTS = 12;'));
   const idMatches = source.match(/^\s+id:\s*'[^']+',/gm) || [];
   assert.equal(idMatches.length, 12);
+  assert.ok(source.includes("id: 'trump-inteligencia-jensen-huang-nvidia-2026'"));
   assert.ok(source.includes("id: 'terras-raras-disparidade-precos-brasil-china-2026'"));
   assert.ok(source.includes("id: 'greves-jovens-europa-custo-vida-2026'"));
   assert.ok(source.includes("id: 'coinbase-deribit-aquisicao-infraestrutura-2026'"));
   assert.ok(source.includes("id: 'apec-2026-trump-xi-putin-shenzhen'"));
   assert.ok(source.includes("id: 'aladi-cosmeticos-exportacao-brasil-2026'"));
+  assert.ok(source.includes("imageUrl: '/assets/aistudio/image_47a5c2bb.png'"));
   assert.ok(source.includes("imageUrl: '/assets/aistudio/image_c7f7f8fe.png'"));
   assert.ok(source.includes("imageUrl: '/assets/aistudio/image_9efbf558.png'"));
   assert.ok(source.includes("imageUrl: '/assets/aistudio/image_312cc483.png'"));
@@ -174,28 +176,29 @@ test('APEC 2026 and ALADI 2026 editorial insights preserve prior items up to 12 
     path.resolve(process.cwd(), 'src/views/NewsView.tsx'),
     'utf8'
   );
+  assert.ok(newsViewSource.includes("'trump-inteligencia-jensen-huang-nvidia-2026'"));
   assert.ok(newsViewSource.includes("'terras-raras-disparidade-precos-brasil-china-2026'"));
   assert.ok(newsViewSource.includes("'greves-jovens-europa-custo-vida-2026'"));
   assert.ok(newsViewSource.includes("'coinbase-deribit-aquisicao-infraestrutura-2026'"));
 
   const schema = buildEditorialArticlesSchema('pt', [], {
-    id: 'terras-raras-disparidade-precos-brasil-china-2026',
+    id: 'trump-inteligencia-jensen-huang-nvidia-2026',
     schemaType: 'NewsArticle',
     headline:
-      'Preço de terras raras chega a ser quase 11 vezes maior na América do Norte do que na China e impulsiona projetos no Brasil',
+      'Por que Trump não tomou nenhuma providência em relação ao escândalo de manipulação de Jensen Huang?',
     description:
-      'Relatório da S&P Global Energy aponta óxido de disprósio a US$ 2.300/kg na América do Norte contra US$ 215/kg na China, ampliando o interesse global por projetos brasileiros como Serra Verde, Caldeira, Colossus e Carina.',
-    articleSection: 'Minerais Críticos & Commodities',
+      'Em artigo de opinião, Tevi Troy analisa como presidentes eficazes lidam com alertas obscuros de agências de inteligência e contextualiza o ceticismo histórico da Casa Branca diante da CIA no caso envolvendo o ex-CEO da Nvidia.',
+    articleSection: 'Geopolítica & Tecnologia',
     datePublished: '2026-11-20',
-    imageUrl: '/assets/aistudio/image_c7f7f8fe.png',
+    imageUrl: '/assets/aistudio/image_47a5c2bb.png',
     keywords: [
-      'terras raras brasil',
-      'disprósio térbio preço',
-      'serra verde usa rare earth',
+      'trump jensen huang nvidia',
+      'cia inteligência estados unidos',
+      'tevi troy expressão livre',
     ],
   });
   assert.equal(schema['@type'], 'NewsArticle');
   assert.ok('image' in schema);
-  assert.deepEqual(schema.image, ['https://dinheuro.com/assets/aistudio/image_c7f7f8fe.png']);
+  assert.deepEqual(schema.image, ['https://dinheuro.com/assets/aistudio/image_47a5c2bb.png']);
   assert.equal(schema.datePublished, '2026-11-20');
 });

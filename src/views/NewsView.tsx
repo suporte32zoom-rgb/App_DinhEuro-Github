@@ -28,6 +28,7 @@ import {
 } from '../utils/seo';
 
 const FEATURED_NEWS_EDITORIAL_IDS = new Set([
+  'trump-inteligencia-jensen-huang-nvidia-2026',
   'terras-raras-disparidade-precos-brasil-china-2026',
   'greves-jovens-europa-custo-vida-2026',
   'coinbase-deribit-aquisicao-infraestrutura-2026',
@@ -89,7 +90,9 @@ export const NewsView: React.FC = () => {
         (item.id === 'greves-jovens-europa-custo-vida-2026' &&
           filterCategory === 'Política & Fiscal') ||
         (item.id === 'terras-raras-disparidade-precos-brasil-china-2026' &&
-          filterCategory === 'Mercados & B3');
+          filterCategory === 'Mercados & B3') ||
+        (item.id === 'trump-inteligencia-jensen-huang-nvidia-2026' &&
+          filterCategory === 'Empresas & Wall St');
       if (!matchesCategory) return false;
       if (!searchLower) return true;
 
