@@ -21,14 +21,7 @@ import {
 } from 'lucide-react';
 import { MarketAsset } from '../services/marketData';
 import { useMarket } from '../context/MarketContext';
-import {
-  getDualCurrencyDisplay,
-  formatPointsValue,
-  formatCurrencyValue,
-  getAssetPriceDecimals,
-  formatSignedCurrencyChange,
-  formatSignedPercentChange,
-} from '../utils/finance';
+import { getDualCurrencyDisplay, formatPointsValue, formatCurrencyValue } from '../utils/finance';
 import { getAssetMetadata } from '../utils/assetProfiles';
 import { D3AdvancedChart } from './D3AdvancedChart';
 import { useI18n } from '../i18n/I18nContext';
@@ -61,34 +54,25 @@ export const UnifiedAssetDetailView: React.FC<UnifiedAssetDetailViewProps> = ({
 
   const meta = getAssetMetadata(asset, lang);
   const localizedName = getLocalizedAssetName(asset, lang);
-  const isIndex = asset.category === 'indices' || asset.currency === 'PTS' || asset.currency === 'PONTOS';
-  const priceDecimals = getAssetPriceDecimals(asset.price, asset.currency, asset.category);
-  const pctInfo = formatSignedPercentChange(asset.change24h, 2, locale);
-  const isPositive = !pctInfo.isNegative;
+  const isPositive = asset.change24h >= 0;
+  const isIndex = asset.category === 'indices' || asset.currency === 'PTS';
 
   // Dual Currency calculations
-  const dual = getDualCurrencyDisplay(asset.price, asset.currency, universalRates, isIndex, locale, asset.category);
+  const dual = getDualCurrencyDisplay(asset.price, asset.currency, universalRates, isIndex, locale);
   const usdBrlFormatted = universalRates.BRL.toLocaleString(locale, {
     minimumFractionDigits: 4,
     maximumFractionDigits: 4,
   });
-  const eurBrlFormatted = (universalRates.BRL / (universalRates.EUR || 0.8958)).toLocaleString(locale, {
+  const eurBrlFormatted = (universalRates.BRL / (universalRates.EUR || 0.895)).toLocaleString(locale, {
     minimumFractionDigits: 4,
     maximumFractionDigits: 4,
   });
-  const normAssetCur = (asset.currency || 'USD').toUpperCase();
-  const curRate = universalRates[normAssetCur];
   const refRate = isIndex
     ? tDetail.indexParityNote
-    : normAssetCur === 'USD' || normAssetCur === 'BRL'
+    : asset.currency === 'USD'
     ? `1 USD = R$ ${usdBrlFormatted}`
-    : normAssetCur === 'EUR'
+    : asset.currency === 'EUR'
     ? `1 EUR = R$ ${eurBrlFormatted}`
-    : curRate && curRate > 0
-    ? `1 ${normAssetCur} = R$ ${(universalRates.BRL / curRate).toLocaleString(locale, {
-        minimumFractionDigits: 4,
-        maximumFractionDigits: 4,
-      })}`
     : `1 USD = R$ ${usdBrlFormatted}`;
 
   const nowFormatted = new Date().toLocaleTimeString(locale, {
@@ -99,13 +83,15 @@ export const UnifiedAssetDetailView: React.FC<UnifiedAssetDetailViewProps> = ({
 
   const formatStatPrice = (val: number) => {
     if (isIndex) return formatPointsValue(val, locale);
-    const dec = getAssetPriceDecimals(val, asset.currency, asset.category);
-    return formatCurrencyValue(val, asset.currency, dec, locale);
+    const cur = asset.currency === 'BRL' ? 'BRL' : asset.currency === 'EUR' ? 'EUR' : 'USD';
+    return formatCurrencyValue(val, cur, 2, locale);
   };
 
   const formatSecondaryStatPrice = (val: number) => {
-    const statDual = getDualCurrencyDisplay(val, asset.currency, universalRates, isIndex, locale, asset.category);
-    return statDual.secondaryFormatted ? `≈ ${statDual.secondaryFormatted}` : '';
+    if (asset.currency === 'BRL') {
+      return `≈ ${formatCurrencyValue(val / universalRates.BRL, 'USD', 2, locale)}`;
+    }
+    return `≈ ${formatCurrencyValue(val * universalRates.BRL, 'BRL', 2, locale)}`;
   };
 
   const handleAddPortfolio = () => {
@@ -304,10 +290,20 @@ export const UnifiedAssetDetailView: React.FC<UnifiedAssetDetailViewProps> = ({
                 : 'bg-rose-500/15 text-rose-400 border-rose-500/30'
             }`}
           >
-            {pctInfo.isNegative ? <TrendingDown className="w-5 h-5" /> : <TrendingUp className="w-5 h-5" />}
+            {isPositive ? <TrendingUp className="w-5 h-5" /> : <TrendingDown className="w-5 h-5" />}
             <span>
-              {formatSignedCurrencyChange(asset.changeValue, asset.currency, priceDecimals, locale)}{' '}
-              ({pctInfo.text})
+              {isPositive ? '+' : ''}
+              {isIndex
+                ? formatPointsValue(asset.changeValue, locale)
+                : asset.changeValue.toLocaleString(locale, {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  })}{' '}
+              ({isPositive ? '+' : ''}
+              {asset.change24h.toLocaleString(locale, {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              })}%)
             </span>
           </div>
 
@@ -399,7 +395,7 @@ export const UnifiedAssetDetailView: React.FC<UnifiedAssetDetailViewProps> = ({
           <div className="bg-[#0b1322] border border-slate-800 rounded-xl p-3 sm:p-4 space-y-1">
             <span className="text-[11px] uppercase font-bold text-slate-400">{tDetail.statVolume}</span>
             <p className="text-base sm:text-lg font-bold font-mono-numbers text-white">
-              {asset.category === 'forex' ? '--' : asset.volume}
+              {asset.volume}
             </p>
             <span className="text-[10px] text-slate-500 font-medium">
               {isIndex ? tDetail.statVolumeIndexDesc : tDetail.statVolumeAssetDesc}

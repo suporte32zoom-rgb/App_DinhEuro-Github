@@ -22,7 +22,6 @@ import {
   formatConvertedAmount,
   formatUnitRate,
 } from '../utils/awesomeCalculator';
-import { formatSignedPercentChange } from '../utils/finance';
 
 interface UniversalCurrencyCalculatorProps {
   showRemittanceFeesDefault?: boolean;
@@ -441,23 +440,19 @@ export const UniversalCurrencyCalculator: React.FC<UniversalCurrencyCalculatorPr
               : t.calculator.change24h}
           </span>
           {activePairForRange && activePairForRange.code !== 'BRL' ? (
-            (() => {
-              const pctInfo = formatSignedPercentChange(activePairForRange.pctChange, 2);
-              return (
-                <span
-                  className={`inline-flex items-center gap-1 text-sm font-bold font-mono-numbers ${
-                    !pctInfo.isNegative ? 'text-[#009B77] dark:text-emerald-400' : 'text-[#DC2626] dark:text-rose-400'
-                  }`}
-                >
-                  {pctInfo.isPositive ? (
-                    <TrendingUp className="w-3.5 h-3.5" />
-                  ) : pctInfo.isNegative ? (
-                    <TrendingDown className="w-3.5 h-3.5" />
-                  ) : null}
-                  {pctInfo.text}
-                </span>
-              );
-            })()
+            <span
+              className={`inline-flex items-center gap-1 text-sm font-bold font-mono-numbers ${
+                activePairForRange.pctChange >= 0 ? 'text-[#009B77] dark:text-emerald-400' : 'text-[#DC2626] dark:text-rose-400'
+              }`}
+            >
+              {activePairForRange.pctChange >= 0 ? (
+                <TrendingUp className="w-3.5 h-3.5" />
+              ) : (
+                <TrendingDown className="w-3.5 h-3.5" />
+              )}
+              {activePairForRange.pctChange >= 0 ? '+' : ''}
+              {activePairForRange.pctChange.toFixed(2)}%
+            </span>
           ) : (
             <span className="text-sm font-bold font-mono-numbers text-[#475569] dark:text-slate-400">
               {(0).toLocaleString(numberLocale, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}%
@@ -577,18 +572,14 @@ export const UniversalCurrencyCalculator: React.FC<UniversalCurrencyCalculatorPr
                     <span>{target.code}</span>
                   </span>
                   {target.code !== 'BRL' && q && (
-                    (() => {
-                      const pctInfo = formatSignedPercentChange(pct, 2);
-                      return (
-                        <span
-                          className={`text-[10px] font-mono-numbers font-semibold ${
-                            !pctInfo.isNegative ? 'text-[#009B77] dark:text-emerald-400' : 'text-[#DC2626] dark:text-rose-400'
-                          }`}
-                        >
-                          {pctInfo.text}
-                        </span>
-                      );
-                    })()
+                    <span
+                      className={`text-[10px] font-mono-numbers font-semibold ${
+                        pct >= 0 ? 'text-[#009B77] dark:text-emerald-400' : 'text-[#DC2626] dark:text-rose-400'
+                      }`}
+                    >
+                      {pct >= 0 ? '+' : ''}
+                      {pct.toFixed(2)}%
+                    </span>
                   )}
                 </div>
 

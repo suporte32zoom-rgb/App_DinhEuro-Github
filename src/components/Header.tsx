@@ -39,7 +39,6 @@ import {
   getLocalizedCategoryLabel,
 } from '../i18n/marketDataTranslations';
 import { DualPrice } from './DualPrice';
-import { formatSignedPercentChange } from '../utils/finance';
 
 export const Header: React.FC = () => {
   const {
@@ -894,7 +893,7 @@ export const Header: React.FC = () => {
                 </div>
               ) : (
                 filteredAssets.map((asset) => {
-                  const pctInfo = formatSignedPercentChange(asset.change24h, 2);
+                  const isPositive = asset.change24h >= 0;
                   const isIndex = asset.category === 'indices' || asset.currency === 'PTS';
                   return (
                     <div
@@ -926,17 +925,17 @@ export const Header: React.FC = () => {
                           currency={asset.currency}
                           rates={universalRates}
                           isIndex={isIndex}
-                          category={asset.category}
                           layout="compact"
                           primaryClassName="font-mono-numbers text-xs font-semibold text-[#0F172A] dark:text-white"
                           secondaryClassName="text-[10px] font-mono-numbers text-[#006B52] dark:text-emerald-400"
                         />
                         <div
                           className={`text-[11px] font-semibold font-mono-numbers ${
-                            !pctInfo.isNegative ? 'text-[#009B77] dark:text-emerald-400' : 'text-[#DC2626] dark:text-rose-400'
+                            isPositive ? 'text-[#009B77] dark:text-emerald-400' : 'text-[#DC2626] dark:text-rose-400'
                           }`}
                         >
-                          {pctInfo.text}
+                          {isPositive ? '+' : ''}
+                          {asset.change24h.toFixed(2)}%
                         </div>
                       </div>
                     </div>

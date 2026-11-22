@@ -20,7 +20,7 @@ import {
   getLocalizedAssetSymbol,
   localizeNewsItem,
 } from '../i18n/marketDataTranslations';
-import { formatCurrencyValue, convertCurrency, formatSignedPercentChange } from '../utils/finance';
+import { formatCurrencyValue, convertCurrency } from '../utils/finance';
 import { DualPrice } from '../components/DualPrice';
 import { FocusRadarPanel } from '../components/FocusRadarPanel';
 import { MercosulEuDossierPanel } from '../components/MercosulEuDossierPanel';
@@ -152,14 +152,9 @@ export const DashboardView: React.FC = () => {
               >
                 <div className="flex items-center justify-between">
                   <span className="text-[10px] text-[#475569] dark:text-slate-400 uppercase font-medium">S&P 500</span>
-                  {(() => {
-                    const spPct = formatSignedPercentChange(sp500Asset?.change24h || 0, 2);
-                    return (
-                      <span className={`text-[9px] font-semibold ${!spPct.isNegative ? 'text-[#009B77] dark:text-emerald-400' : 'text-[#DC2626] dark:text-rose-400'}`}>
-                        {spPct.text}
-                      </span>
-                    );
-                  })()}
+                  <span className={`text-[9px] font-semibold ${(sp500Asset?.change24h || 0) >= 0 ? 'text-[#009B77] dark:text-emerald-400' : 'text-[#DC2626] dark:text-rose-400'}`}>
+                    {(sp500Asset?.change24h || 0) >= 0 ? '+' : ''}{(sp500Asset?.change24h || 0).toFixed(2)}%
+                  </span>
                 </div>
                 <p className="text-sm font-bold font-mono-numbers text-[#0F172A] dark:text-slate-200">
                   {sp500Asset?.price ? `${sp500Asset.price.toLocaleString(getNumberLocale(lang), { minimumFractionDigits: 2, maximumFractionDigits: 2 })} pts` : '-- pts'}
@@ -177,14 +172,9 @@ export const DashboardView: React.FC = () => {
               >
                 <div className="flex items-center justify-between">
                   <span className="text-[10px] text-[#475569] dark:text-slate-400 uppercase font-medium">IBOVESPA</span>
-                  {(() => {
-                    const ibovPct = formatSignedPercentChange(ibovAsset?.change24h || 0, 2);
-                    return (
-                      <span className={`text-[9px] font-semibold ${!ibovPct.isNegative ? 'text-[#009B77] dark:text-emerald-400' : 'text-[#DC2626] dark:text-rose-400'}`}>
-                        {ibovPct.text}
-                      </span>
-                    );
-                  })()}
+                  <span className={`text-[9px] font-semibold ${(ibovAsset?.change24h || 0) >= 0 ? 'text-[#009B77] dark:text-emerald-400' : 'text-[#DC2626] dark:text-rose-400'}`}>
+                    {(ibovAsset?.change24h || 0) >= 0 ? '+' : ''}{(ibovAsset?.change24h || 0).toFixed(2)}%
+                  </span>
                 </div>
                 <p className="text-sm font-bold font-mono-numbers text-[#003399] dark:text-emerald-400">
                   {ibovAsset?.price ? `${Math.round(ibovAsset.price).toLocaleString(getNumberLocale(lang))} pts` : '-- pts'}
@@ -313,7 +303,7 @@ export const DashboardView: React.FC = () => {
 
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
           {worldIndices.slice(0, 6).map((index) => {
-            const pctInfo = formatSignedPercentChange(index.change24h, 2);
+            const isPositive = index.change24h >= 0;
             return (
               <div
                 key={index.id}
@@ -331,22 +321,22 @@ export const DashboardView: React.FC = () => {
                   currency={index.currency}
                   rates={universalRates}
                   isIndex={true}
-                  category={index.category}
                   layout="stacked"
                   primaryClassName="font-mono-numbers text-sm font-extrabold text-[#0F172A] dark:text-slate-100"
                   secondaryClassName="text-[11px] font-mono-numbers text-[#006B52] dark:text-emerald-500/90 font-medium"
                 />
                 <div
                   className={`flex items-center text-xs font-semibold font-mono-numbers mt-1 ${
-                    !pctInfo.isNegative ? 'text-[#009B77] dark:text-emerald-400' : 'text-[#DC2626] dark:text-rose-400'
+                    isPositive ? 'text-[#009B77] dark:text-emerald-400' : 'text-[#DC2626] dark:text-rose-400'
                   }`}
                 >
-                  {pctInfo.isPositive ? (
+                  {isPositive ? (
                     <TrendingUp className="w-3 h-3 mr-0.5 inline" />
-                  ) : pctInfo.isNegative ? (
+                  ) : (
                     <TrendingDown className="w-3 h-3 mr-0.5 inline" />
-                  ) : null}
-                  {pctInfo.text}
+                  )}
+                  {isPositive ? '+' : ''}
+                  {index.change24h.toFixed(2)}%
                 </div>
               </div>
             );
@@ -396,40 +386,36 @@ export const DashboardView: React.FC = () => {
               </div>
 
               <div className="space-y-2">
-                {topGainers.map((stock) => {
-                  const pctInfo = formatSignedPercentChange(stock.change24h, 2);
-                  return (
-                    <div
-                      key={stock.id}
-                      onClick={() => setSelectedAsset(stock)}
-                      className="flex items-center justify-between p-2 rounded-lg hover:bg-[#F4F7F9] dark:hover:bg-slate-800/60 transition cursor-pointer"
-                    >
-                      <div className="flex items-center gap-2.5">
-                        <span className="text-base">{stock.flag}</span>
-                        <div>
-                          <div className="text-xs font-bold text-[#0F172A] dark:text-white">{getLocalizedAssetSymbol(stock, lang)}</div>
-                          <div className="text-[10px] text-[#475569] dark:text-slate-400 truncate max-w-[120px]">
-                            {getLocalizedAssetName(stock, lang)}
-                          </div>
-                        </div>
-                      </div>
-                      <div className="text-right">
-                        <DualPrice
-                          price={stock.price}
-                          currency={stock.currency}
-                          rates={universalRates}
-                          category={stock.category}
-                          layout="compact"
-                          primaryClassName="text-xs font-mono-numbers font-semibold text-[#0F172A] dark:text-white"
-                          secondaryClassName="text-[10px] font-mono-numbers text-[#006B52] dark:text-emerald-500/90"
-                        />
-                        <div className={`text-xs font-mono-numbers font-bold ${pctInfo.isNegative ? 'text-[#DC2626] dark:text-rose-400' : 'text-[#009B77] dark:text-emerald-400'}`}>
-                          {pctInfo.text}
+                {topGainers.map((stock) => (
+                  <div
+                    key={stock.id}
+                    onClick={() => setSelectedAsset(stock)}
+                    className="flex items-center justify-between p-2 rounded-lg hover:bg-[#F4F7F9] dark:hover:bg-slate-800/60 transition cursor-pointer"
+                  >
+                    <div className="flex items-center gap-2.5">
+                      <span className="text-base">{stock.flag}</span>
+                      <div>
+                        <div className="text-xs font-bold text-[#0F172A] dark:text-white">{getLocalizedAssetSymbol(stock, lang)}</div>
+                        <div className="text-[10px] text-[#475569] dark:text-slate-400 truncate max-w-[120px]">
+                          {getLocalizedAssetName(stock, lang)}
                         </div>
                       </div>
                     </div>
-                  );
-                })}
+                    <div className="text-right">
+                      <DualPrice
+                        price={stock.price}
+                        currency={stock.currency}
+                        rates={universalRates}
+                        layout="compact"
+                        primaryClassName="text-xs font-mono-numbers font-semibold text-[#0F172A] dark:text-white"
+                        secondaryClassName="text-[10px] font-mono-numbers text-[#006B52] dark:text-emerald-500/90"
+                      />
+                      <div className="text-xs font-mono-numbers font-bold text-[#009B77] dark:text-emerald-400">
+                        +{stock.change24h.toFixed(2)}%
+                      </div>
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
 
@@ -444,40 +430,36 @@ export const DashboardView: React.FC = () => {
               </div>
 
               <div className="space-y-2">
-                {topLosers.map((stock) => {
-                  const pctInfo = formatSignedPercentChange(stock.change24h, 2);
-                  return (
-                    <div
-                      key={stock.id}
-                      onClick={() => setSelectedAsset(stock)}
-                      className="flex items-center justify-between p-2 rounded-lg hover:bg-[#F4F7F9] dark:hover:bg-slate-800/60 transition cursor-pointer"
-                    >
-                      <div className="flex items-center gap-2.5">
-                        <span className="text-base">{stock.flag}</span>
-                        <div>
-                          <div className="text-xs font-bold text-[#0F172A] dark:text-white">{getLocalizedAssetSymbol(stock, lang)}</div>
-                          <div className="text-[10px] text-[#475569] dark:text-slate-400 truncate max-w-[120px]">
-                            {getLocalizedAssetName(stock, lang)}
-                          </div>
-                        </div>
-                      </div>
-                      <div className="text-right">
-                        <DualPrice
-                          price={stock.price}
-                          currency={stock.currency}
-                          rates={universalRates}
-                          category={stock.category}
-                          layout="compact"
-                          primaryClassName="text-xs font-mono-numbers font-semibold text-[#0F172A] dark:text-white"
-                          secondaryClassName="text-[10px] font-mono-numbers text-[#006B52] dark:text-emerald-500/90"
-                        />
-                        <div className={`text-xs font-mono-numbers font-bold ${pctInfo.isNegative ? 'text-[#DC2626] dark:text-rose-400' : 'text-[#009B77] dark:text-emerald-400'}`}>
-                          {pctInfo.text}
+                {topLosers.map((stock) => (
+                  <div
+                    key={stock.id}
+                    onClick={() => setSelectedAsset(stock)}
+                    className="flex items-center justify-between p-2 rounded-lg hover:bg-[#F4F7F9] dark:hover:bg-slate-800/60 transition cursor-pointer"
+                  >
+                    <div className="flex items-center gap-2.5">
+                      <span className="text-base">{stock.flag}</span>
+                      <div>
+                        <div className="text-xs font-bold text-[#0F172A] dark:text-white">{getLocalizedAssetSymbol(stock, lang)}</div>
+                        <div className="text-[10px] text-[#475569] dark:text-slate-400 truncate max-w-[120px]">
+                          {getLocalizedAssetName(stock, lang)}
                         </div>
                       </div>
                     </div>
-                  );
-                })}
+                    <div className="text-right">
+                      <DualPrice
+                        price={stock.price}
+                        currency={stock.currency}
+                        rates={universalRates}
+                        layout="compact"
+                        primaryClassName="text-xs font-mono-numbers font-semibold text-[#0F172A] dark:text-white"
+                        secondaryClassName="text-[10px] font-mono-numbers text-[#006B52] dark:text-emerald-500/90"
+                      />
+                      <div className="text-xs font-mono-numbers font-bold text-[#DC2626] dark:text-rose-400">
+                        {stock.change24h.toFixed(2)}%
+                      </div>
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
@@ -514,7 +496,7 @@ export const DashboardView: React.FC = () => {
 
             <div className="space-y-2">
               {forexPairs.map((pair) => {
-                const pctInfo = formatSignedPercentChange(pair.change24h, 2);
+                const isPos = pair.change24h >= 0;
                 return (
                   <div
                     key={pair.id}
@@ -535,17 +517,17 @@ export const DashboardView: React.FC = () => {
                         price={pair.price}
                         currency={pair.currency}
                         rates={universalRates}
-                        category={pair.category}
                         layout="compact"
                         primaryClassName="text-xs font-mono-numbers font-bold text-[#0F172A] dark:text-white"
                         secondaryClassName="text-[10px] font-mono-numbers text-[#006B52] dark:text-emerald-400/80"
                       />
                       <div
                         className={`text-[10px] font-mono-numbers font-semibold mt-0.5 ${
-                          !pctInfo.isNegative ? 'text-[#009B77] dark:text-emerald-400' : 'text-[#DC2626] dark:text-rose-400'
+                          isPos ? 'text-[#009B77] dark:text-emerald-400' : 'text-[#DC2626] dark:text-rose-400'
                         }`}
                       >
-                        {pctInfo.text}
+                        {isPos ? '+' : ''}
+                        {pair.change24h.toFixed(2)}%
                       </div>
                     </div>
                   </div>

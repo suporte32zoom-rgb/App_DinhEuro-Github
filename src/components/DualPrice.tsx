@@ -15,7 +15,6 @@ interface DualPriceProps {
   className?: string;
   showSecondaryBadge?: boolean;
   showEur?: boolean;
-  category?: string;
 }
 
 export const DualPrice: React.FC<DualPriceProps> = ({
@@ -30,13 +29,12 @@ export const DualPrice: React.FC<DualPriceProps> = ({
   className = '',
   showSecondaryBadge = false,
   showEur = false,
-  category,
 }) => {
   const { lang } = useI18n();
   const locale = getNumberLocale(lang);
   const normCur = (currency || 'USD').toUpperCase();
-  const isPointAsset = isIndex || normCur === 'PTS' || normCur === 'PONTOS' || category === 'indices';
-  const dual = getDualCurrencyDisplay(price, currency, rates, isPointAsset, locale, category);
+  const isPointAsset = isIndex || normCur === 'PTS' || normCur === 'PONTOS';
+  const dual = getDualCurrencyDisplay(price, currency, rates, isPointAsset, locale);
 
   // Índices mundiais (IBOVESPA, S&P 500, etc.) são obrigatoriamente exibidos apenas em PONTOS (pts)
   if (isPointAsset) {

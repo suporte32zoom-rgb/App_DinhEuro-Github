@@ -29,13 +29,7 @@ import {
   getExtendedMarketsInitialAssets,
   fetchExtendedMarketsAssets,
 } from '../services/marketData';
-import {
-  formatCurrencyValue,
-  getAssetPriceDecimals,
-  formatSignedCurrencyChange,
-  formatSignedPercentChange,
-} from '../utils/finance';
-import { normalizePriceBounds } from '../utils/marketParsing';
+import { formatCurrencyValue } from '../utils/finance';
 import { DualPrice } from '../components/DualPrice';
 
 export const MarketsView: React.FC = () => {
@@ -350,10 +344,7 @@ export const MarketsView: React.FC = () => {
             </thead>
             <tbody className="divide-y divide-slate-800/60 text-xs">
               {displayedAssets.map((asset) => {
-                const dec = getAssetPriceDecimals(asset.price, asset.currency, asset.category);
-                const pctInfo = formatSignedPercentChange(asset.change24h, 2);
-                const bounds = normalizePriceBounds(asset.price, asset.high24h, asset.low24h, dec);
-                const displayVolume = asset.category === 'forex' ? '--' : asset.volume;
+                const isPositive = asset.change24h >= 0;
                 return (
                   <tr
                     key={asset.id}
@@ -384,8 +375,6 @@ export const MarketsView: React.FC = () => {
                         price={asset.price}
                         currency={asset.currency}
                         rates={effectiveRates}
-                        isIndex={asset.category === 'indices'}
-                        category={asset.category}
                         layout="compact"
                         primaryClassName="font-mono-numbers font-bold text-white text-xs sm:text-sm"
                         secondaryClassName="text-[11px] font-mono-numbers text-emerald-400 font-medium"
@@ -396,32 +385,62 @@ export const MarketsView: React.FC = () => {
                       <div className="flex flex-col items-end">
                         <span
                           className={`inline-flex items-center gap-1 font-mono-numbers font-bold text-xs px-2 py-0.5 rounded ${
-                            pctInfo.isNegative
-                              ? 'text-rose-400 bg-rose-500/10'
-                              : pctInfo.isPositive
+                            isPositive
                               ? 'text-emerald-400 bg-emerald-500/10'
-                              : 'text-slate-300 bg-slate-800/70'
+                              : 'text-rose-400 bg-rose-500/10'
                           }`}
                         >
-                          {pctInfo.isPositive && <TrendingUp className="w-3 h-3" />}
-                          {pctInfo.isNegative && <TrendingDown className="w-3 h-3" />}
-                          {pctInfo.text}
+                          {isPositive ? <TrendingUp className="w-3 h-3" /> : <TrendingDown className="w-3 h-3" />}
+                          {isPositive ? '+' : ''}
+                          {asset.change24h.toFixed(2)}%
                         </span>
                         <span className="text-[10px] font-mono-numbers text-slate-400 mt-0.5">
-                          {formatSignedCurrencyChange(asset.changeValue, asset.currency, dec)}
+                          {asset.changeValue >= 0 ? '+' : ''}
+                          {formatCurrencyValue(
+                            asset.changeValue,
+                            asset.currency,
+                            asset.currency === 'JPY' || asset.currency === 'KRW'
+                              ? 0
+                              : asset.price > 0 && asset.price < 0.02
+                              ? 5
+                              : asset.price < 5
+                              ? 4
+                              : 2
+                          )}
                         </span>
                       </div>
                     </td>
 
                     <td className="py-3.5 px-4 text-right hidden md:table-cell font-mono-numbers text-[11px] text-slate-400">
                       <div>
-                        {formatCurrencyValue(bounds.high, asset.currency, dec)} /{' '}
-                        {formatCurrencyValue(bounds.low, asset.currency, dec)}
+                        {formatCurrencyValue(
+                          asset.high24h,
+                          asset.currency,
+                          asset.currency === 'JPY' || asset.currency === 'KRW'
+                            ? 0
+                            : asset.price > 0 && asset.price < 0.02
+                            ? 5
+                            : asset.price < 5
+                            ? 4
+                            : 2
+                        )}{' '}
+                        /{' '}
+                        {formatCurrencyValue(
+                          asset.low24h,
+                          asset.currency,
+                          asset.currency === 'JPY' || asset.currency === 'KRW'
+                            ? 0
+                            : asset.price > 0 && asset.price < 0.02
+                            ? 5
+                            : asset.price < 5
+                            ? 4
+                            : 2
+                        )}
                       </div>
                     </td>
 
                     <td className="py-3.5 px-4 text-right hidden sm:table-cell font-mono-numbers text-xs text-slate-300">
-                      {displayVolume}
+                      {asset.volume}
                     </td>
 
                     <td className="py-3.5 px-4 text-center">

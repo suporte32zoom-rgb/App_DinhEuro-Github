@@ -14,7 +14,6 @@ import {
   reconcileSilverSpotParity,
   auditSplitAndFractionSanity,
   formatCompactVolume,
-  normalizePriceBounds,
 } from '../utils/marketParsing';
 
 export interface LiveRatePair {
@@ -304,9 +303,8 @@ async function fetchRealTimeMarketData(customFinnhubKey?: string): Promise<LiveM
             if (item && item.bid) {
               const bid = parseFloat(item.bid);
               const ask = parseFloat(item.ask) || bid;
-              const rawHigh = parseFloat(item.high) || bid;
-              const rawLow = parseFloat(item.low) || bid;
-              const bounds = normalizePriceBounds(bid, rawHigh, rawLow, 4);
+              const high = parseFloat(item.high) || bid;
+              const low = parseFloat(item.low) || bid;
               const varBid = parseFloat(item.varBid) || 0;
               const pct = parseFloat(item.pctChange) || 0;
 
@@ -314,9 +312,9 @@ async function fetchRealTimeMarketData(customFinnhubKey?: string): Promise<LiveM
                 code,
                 codein: 'BRL',
                 name,
-                high: bounds.high,
-                low: bounds.low,
-                bid: bounds.price,
+                high,
+                low,
+                bid,
                 ask,
                 varBid,
                 pctChange: pct,
@@ -325,14 +323,14 @@ async function fetchRealTimeMarketData(customFinnhubKey?: string): Promise<LiveM
 
               quotes[dinhSym] = {
                 symbol: dinhSym,
-                price: bounds.price,
+                price: bid,
                 change: varBid,
                 changePercent: pct,
-                high: bounds.high,
-                low: bounds.low,
-                open: Number((bounds.price - varBid).toFixed(4)),
-                previousClose: Number((bounds.price - varBid).toFixed(4)),
-                volume: '--',
+                high,
+                low,
+                open: Number((bid - varBid).toFixed(4)),
+                previousClose: Number((bid - varBid).toFixed(4)),
+                volume: `${Math.abs(pct)}%`,
                 currency: 'BRL',
                 source: 'awesome_api_live',
               };
@@ -386,14 +384,14 @@ async function fetchRealTimeMarketData(customFinnhubKey?: string): Promise<LiveM
         if (cbData?.data?.rates) {
           sourcesStatus.coinbase = true;
           const r = cbData.data.rates;
-          if (!sourcesStatus.awesomeApi && r.BRL) rates.BRL = parseFloat(r.BRL) || rates.BRL;
-          if (!sourcesStatus.ecb && r.EUR) rates.EUR = parseFloat(r.EUR) || rates.EUR;
-          if (!sourcesStatus.ecb && r.GBP) rates.GBP = parseFloat(r.GBP) || rates.GBP;
-          if (!sourcesStatus.ecb && r.JPY) rates.JPY = parseFloat(r.JPY) || rates.JPY;
-          if (!sourcesStatus.ecb && r.CHF) rates.CHF = parseFloat(r.CHF) || rates.CHF;
-          if (!sourcesStatus.ecb && r.CAD) rates.CAD = parseFloat(r.CAD) || rates.CAD;
-          if (!sourcesStatus.ecb && r.AUD) rates.AUD = parseFloat(r.AUD) || rates.AUD;
-          if (!sourcesStatus.ecb && r.CNY) rates.CNY = parseFloat(r.CNY) || rates.CNY;
+          if (r.BRL) rates.BRL = parseFloat(r.BRL) || rates.BRL;
+          if (r.EUR) rates.EUR = parseFloat(r.EUR) || rates.EUR;
+          if (r.GBP) rates.GBP = parseFloat(r.GBP) || rates.GBP;
+          if (r.JPY) rates.JPY = parseFloat(r.JPY) || rates.JPY;
+          if (r.CHF) rates.CHF = parseFloat(r.CHF) || rates.CHF;
+          if (r.CAD) rates.CAD = parseFloat(r.CAD) || rates.CAD;
+          if (r.AUD) rates.AUD = parseFloat(r.AUD) || rates.AUD;
+          if (r.CNY) rates.CNY = parseFloat(r.CNY) || rates.CNY;
           if (r.BTC) rates.BTC = parseFloat(r.BTC) || rates.BTC;
           if (r.ETH) rates.ETH = parseFloat(r.ETH) || rates.ETH;
           if (r.SOL) rates.SOL = parseFloat(r.SOL) || rates.SOL;
@@ -500,9 +498,7 @@ async function fetchRealTimeMarketData(customFinnhubKey?: string): Promise<LiveM
       await Promise.all(
         chunk.map(async ([dinhSymbol, meta]) => {
           try {
-            const isB3OrIndex = meta.category === 'stocks_br' || meta.category === 'indices';
-            const rangeQuery = isB3OrIndex ? 'range=5d&interval=1d' : 'interval=1d';
-            const yRes = await fetch(`https://query1.finance.yahoo.com/v8/finance/chart/${meta.yahoo}?${rangeQuery}&events=div,split`, {
+            const yRes = await fetch(`https://query1.finance.yahoo.com/v8/finance/chart/${meta.yahoo}?interval=1d&events=div,split`, {
               headers: {
                 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
                 'Accept': 'application/json',
@@ -510,16 +506,41 @@ async function fetchRealTimeMarketData(customFinnhubKey?: string): Promise<LiveM
             });
 
             if (yRes.ok) {
-              const yData = await yRes.json();
-              const decimals =
-                dinhSymbol === 'USD/JPY'
-                  ? 2
-                  : dinhSymbol.includes('/')
-                  ? dinhSymbol.startsWith('ARS')
-                    ? 5
-                    : 4
-                  : 2;
-              const parsed = extractYahooChartOHLCV(yData, decimals);
+              let yData = await yRes.json();
+              const decimals = meta.currency === 'BRL' && dinhSymbol.includes('/') ? 4 : 2;
+              let parsed = extractYahooChartOHLCV(yData, decimals);
+
+              // Fallback to 5d daily bars if B3/index session returned identical/missing intraday High/Low
+              if (
+                parsed &&
+                (meta.category === 'stocks_br' || meta.category === 'indices') &&
+                parsed.high === parsed.price &&
+                parsed.low === parsed.price
+              ) {
+                try {
+                  const yRes5d = await fetch(`https://query1.finance.yahoo.com/v8/finance/chart/${meta.yahoo}?range=5d&interval=1d`, {
+                    headers: {
+                      'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+                      'Accept': 'application/json',
+                    },
+                  });
+                  if (yRes5d.ok) {
+                    const yData5d = await yRes5d.json();
+                    const parsed5d = extractYahooChartOHLCV(yData5d, decimals);
+                    if (parsed5d && parsed5d.high > parsed5d.low) {
+                      parsed = {
+                        ...parsed,
+                        high: parsed5d.high,
+                        low: parsed5d.low,
+                        open: parsed5d.open > 0 ? parsed5d.open : parsed.open,
+                        volumeFormatted: parsed.volumeFormatted || parsed5d.volumeFormatted,
+                      };
+                    }
+                  }
+                } catch {
+                  // Keep parsed 1d values
+                }
+              }
 
               if (parsed) {
                 sourcesStatus.yahooFinance = true;
@@ -530,7 +551,7 @@ async function fetchRealTimeMarketData(customFinnhubKey?: string): Promise<LiveM
                 const highVal = parsed.high;
                 const lowVal = parsed.low;
                 const openVal = parsed.open;
-                const volStr = meta.category === 'forex' ? '--' : (parsed.volumeFormatted || '--');
+                const volStr = parsed.volumeFormatted || 'N/A';
 
                 quotes[dinhSymbol] = {
                   symbol: dinhSymbol,
@@ -947,27 +968,22 @@ async function fetchRealTimeMarketData(customFinnhubKey?: string): Promise<LiveM
       if (override && override.price > 0) {
         const existing = quotes[sym];
         const prevClose = existing?.previousClose || override.price;
-        const isFxPair = ['USD/BRL', 'EUR/BRL', 'EUR/USD', 'GBP/USD', 'USD/JPY', 'USD/CHF', 'AUD/USD', 'USD/CAD'].includes(sym);
-        const dec = isFxPair ? (sym === 'USD/JPY' ? 2 : 4) : 2;
-        const changeVal = Number((override.price - prevClose).toFixed(dec));
+        const isBrlPair = sym.includes('/') && (existing?.currency === 'BRL' || sym.endsWith('/BRL'));
+        const changeVal = Number((override.price - prevClose).toFixed(isBrlPair ? 4 : 2));
         const changePct = prevClose > 0 ? Number(((changeVal / prevClose) * 100).toFixed(2)) : 0;
-        const bounds = normalizePriceBounds(
-          override.price,
-          existing?.high ?? override.price * 1.01,
-          existing?.low ?? override.price * 0.99,
-          dec
-        );
+        const high = existing ? Math.max(existing.high, override.price) : Number((override.price * 1.01).toFixed(2));
+        const low = existing ? Math.min(existing.low, override.price) : Number((override.price * 0.99).toFixed(2));
 
         quotes[sym] = {
           symbol: sym,
-          price: bounds.price,
+          price: override.price,
           change: changeVal,
           changePercent: changePct,
-          high: bounds.high,
-          low: bounds.low,
+          high,
+          low,
           open: existing?.open || prevClose,
           previousClose: prevClose,
-          volume: isFxPair ? '--' : override.volume ? `${override.volume}` : existing?.volume || '--',
+          volume: override.volume ? `${override.volume}` : existing?.volume || 'N/A',
           currency: existing?.currency || (sym.includes('BRL') ? 'BRL' : 'USD'),
           source: 'finnhub_webhook_live',
         };
@@ -992,7 +1008,7 @@ async function fetchRealTimeMarketData(customFinnhubKey?: string): Promise<LiveM
         low: 5.51,
         open: 5.514,
         previousClose: 5.514,
-        volume: '--',
+        volume: 'R$ 5,5840',
         currency: 'BRL',
         source: 'b3_official_close',
       };
@@ -1007,7 +1023,7 @@ async function fetchRealTimeMarketData(customFinnhubKey?: string): Promise<LiveM
         low: 6.17,
         open: 6.1765,
         previousClose: 6.1765,
-        volume: '--',
+        volume: 'R$ 6,2335',
         currency: 'BRL',
         source: 'b3_official_close',
       };
@@ -1080,33 +1096,22 @@ export function updateQuoteFromWebhook(
   if (cachedData) {
     const existing = cachedData.quotes[symbol];
     const prevClose = existing?.previousClose || price;
-    const isFxPair = ['USD/BRL', 'EUR/BRL', 'EUR/USD', 'GBP/USD', 'USD/JPY', 'USD/CHF', 'AUD/USD', 'USD/CAD'].includes(symbol);
-    const dec = isFxPair ? (symbol === 'USD/JPY' ? 2 : 4) : 2;
-    const changeVal = Number((price - prevClose).toFixed(dec));
+    const isBrlPair = symbol.includes('/') && (existing?.currency === 'BRL' || symbol.endsWith('/BRL'));
+    const changeVal = Number((price - prevClose).toFixed(isBrlPair ? 4 : 2));
     const changePct = prevClose > 0 ? Number(((changeVal / prevClose) * 100).toFixed(2)) : 0;
-    const bounds = normalizePriceBounds(
-      price,
-      existing?.high ?? price * 1.01,
-      existing?.low ?? price * 0.99,
-      dec
-    );
+    const high = existing ? Math.max(existing.high, price) : Number((price * 1.01).toFixed(2));
+    const low = existing ? Math.min(existing.low, price) : Number((price * 0.99).toFixed(2));
 
     cachedData.quotes[symbol] = {
       symbol,
-      price: bounds.price,
+      price,
       change: changeVal,
       changePercent: changePct,
-      high: bounds.high,
-      low: bounds.low,
+      high,
+      low,
       open: existing?.open || prevClose,
       previousClose: prevClose,
-      volume: isFxPair
-        ? '--'
-        : volume
-        ? volume >= 1e6
-          ? `${(volume / 1e6).toFixed(1)}M`
-          : `${Math.round(volume)}`
-        : existing?.volume || '--',
+      volume: volume ? (volume >= 1e6 ? `${(volume / 1e6).toFixed(1)}M` : `${Math.round(volume)}`) : existing?.volume || 'N/A',
       currency: existing?.currency || (symbol.includes('BRL') ? 'BRL' : 'USD'),
       source: 'finnhub_webhook_live',
     };

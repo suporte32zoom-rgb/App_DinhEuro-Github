@@ -13,8 +13,6 @@ import {
   obterCotacaoFinnhub,
 } from '../services/marketData';
 import { normalizeRoutePath, syncCanonicalLink } from '../utils/seo';
-import { getAssetPriceDecimals, roundToDecimals } from '../utils/finance';
-import { normalizePriceBounds } from '../utils/marketParsing';
 
 export interface PortfolioPosition {
   id: string;
@@ -151,25 +149,15 @@ export const MarketProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       if (cached) {
         const parsed = JSON.parse(cached);
         if (Array.isArray(parsed) && parsed.length > 0 && parsed.some((a) => a.price > 0)) {
-          // Sanitização ativa: substitui dados corrompidos, volume inválido em FX e garante Mín <= Preço <= Máx
+          // Sanitização ativa: substitui dados corrompidos ou obsoletos salvos no navegador do usuário
           return parsed.map((item: MarketAsset) => {
             if ((item.id === 'usd_brl' || item.symbol === 'USD/BRL') && (item.price < 5.55 || Math.abs(item.price - 5.5122) < 0.01)) {
-              return { ...item, price: 5.5840, high24h: Math.max(item.high24h || 0, 5.61), low24h: Math.min(item.low24h || 5.58, 5.51), volume: '--' };
+              return { ...item, price: 5.5840, high24h: Math.max(item.high24h || 0, 5.61), low24h: Math.min(item.low24h || 5.58, 5.51), volume: 'R$ 5,5840' };
             }
             if ((item.id === 'eur_brl' || item.symbol === 'EUR/BRL') && (item.price < 6.20 || Math.abs(item.price - 6.1765) < 0.01)) {
-              return { ...item, price: 6.2335, high24h: Math.max(item.high24h || 0, 6.26), low24h: Math.min(item.low24h || 6.23, 6.17), volume: '--' };
+              return { ...item, price: 6.2335, high24h: Math.max(item.high24h || 0, 6.26), low24h: Math.min(item.low24h || 6.23, 6.17), volume: 'R$ 6,2335' };
             }
-            const dec = getAssetPriceDecimals(item.price, item.currency, item.category);
-            const bounds = normalizePriceBounds(item.price, item.high24h, item.low24h, dec);
-            return {
-              ...item,
-              price: bounds.price > 0 ? bounds.price : item.price,
-              high24h: bounds.high > 0 ? bounds.high : item.high24h,
-              low24h: bounds.low > 0 ? bounds.low : item.low24h,
-              changeValue: roundToDecimals(item.changeValue || 0, dec),
-              change24h: roundToDecimals(item.change24h || 0, 2),
-              volume: item.category === 'forex' ? '--' : (item.volume && item.volume !== 'N/A' ? item.volume : '--'),
-            };
+            return item;
           });
         }
       }

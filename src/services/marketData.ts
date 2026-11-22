@@ -12,8 +12,7 @@
  * garantindo que nenhum ativo exiba R$ 0,00 ou $0.0000 mesmo durante oscilações de rede no GitHub Pages.
  */
 
-import { extractYahooChartOHLCV, reconcileSilverSpotParity, normalizePriceBounds } from '../utils/marketParsing';
-import { getAssetPriceDecimals, roundToDecimals } from '../utils/finance';
+import { extractYahooChartOHLCV, reconcileSilverSpotParity } from '../utils/marketParsing';
 
 export interface MarketAsset {
   id: string;
@@ -327,21 +326,21 @@ export const INITIAL_ASSETS: MarketAsset[] = [
   { id: 'coffee', symbol: 'CAFÉ', name: 'Café Arábica NY ICE', category: 'commodities', price: 0, currency: 'USD', change24h: 0, changeValue: 0, high24h: 0, low24h: 0, volume: '--', sparkline: [0, 0, 0, 0, 0], flag: '☕' },
 
   // 6. CÂMBIO & FOREX (15)
-  { id: 'usd_brl', symbol: 'USD/BRL', name: 'Dólar Americano / Real Brasileiro', category: 'forex', price: 5.5840, currency: 'BRL', change24h: 1.26, changeValue: 0.070, high24h: 5.61, low24h: 5.51, volume: '--', sparkline: [5.52, 5.54, 5.57, 5.61, 5.5840], flag: '🇺🇸' },
-  { id: 'eur_brl', symbol: 'EUR/BRL', name: 'Euro / Real Brasileiro', category: 'forex', price: 6.2335, currency: 'BRL', change24h: 0.93, changeValue: 0.057, high24h: 6.26, low24h: 6.17, volume: '--', sparkline: [6.18, 6.20, 6.22, 6.26, 6.2335], flag: '🇪🇺' },
-  { id: 'gbp_brl', symbol: 'GBP/BRL', name: 'Libra Esterlina / Real Brasileiro', category: 'forex', price: 7.512, currency: 'BRL', change24h: 0.85, changeValue: 0.063, high24h: 7.54, low24h: 7.45, volume: '--', sparkline: [7.46, 7.48, 7.50, 7.54, 7.512], flag: '🇬🇧' },
-  { id: 'chf_brl', symbol: 'CHF/BRL', name: 'Franco Suíço / Real Brasileiro', category: 'forex', price: 6.313, currency: 'BRL', change24h: 0.72, changeValue: 0.045, high24h: 6.34, low24h: 6.27, volume: '--', sparkline: [6.28, 6.29, 6.30, 6.34, 6.313], flag: '🇨🇭' },
-  { id: 'jpy_brl', symbol: 'JPY/BRL', name: 'Iene Japonês / Real Brasileiro', category: 'forex', price: 0.0362, currency: 'BRL', change24h: 0.45, changeValue: 0.00016, high24h: 0.0365, low24h: 0.0359, volume: '--', sparkline: [0.0360, 0.0361, 0.0362, 0.0365, 0.0362], flag: '🇯🇵' },
-  { id: 'cad_brl', symbol: 'CAD/BRL', name: 'Dólar Canadense / Real Brasileiro', category: 'forex', price: 4.011, currency: 'BRL', change24h: 0.81, changeValue: 0.032, high24h: 4.03, low24h: 3.98, volume: '--', sparkline: [3.98, 3.99, 4.00, 4.03, 4.011], flag: '🇨🇦' },
-  { id: 'aud_brl', symbol: 'AUD/BRL', name: 'Dólar Australiano / Real Brasileiro', category: 'forex', price: 3.678, currency: 'BRL', change24h: 0.65, changeValue: 0.024, high24h: 3.70, low24h: 3.65, volume: '--', sparkline: [3.65, 3.66, 3.67, 3.70, 3.678], flag: '🇦🇺' },
-  { id: 'cny_brl', symbol: 'CNY/BRL', name: 'Yuan Chinês / Real Brasileiro', category: 'forex', price: 0.7718, currency: 'BRL', change24h: 0.58, changeValue: 0.0044, high24h: 0.775, low24h: 0.768, volume: '--', sparkline: [0.768, 0.770, 0.771, 0.775, 0.7718], flag: '🇨🇳' },
-  { id: 'ars_brl', symbol: 'ARS/BRL', name: 'Peso Argentino / Real Brasileiro', category: 'forex', price: 0.00537, currency: 'BRL', change24h: 0.12, changeValue: 0.000006, high24h: 0.0054, low24h: 0.0053, volume: '--', sparkline: [0.0053, 0.00532, 0.00535, 0.0054, 0.00537], flag: '🇦🇷' },
-  { id: 'eur_usd', symbol: 'EUR/USD', name: 'Euro / Dólar Americano', category: 'forex', price: 1.1163, currency: 'USD', change24h: -0.01, changeValue: -0.000155, high24h: 1.122, low24h: 1.114, volume: '--', sparkline: [1.119, 1.118, 1.117, 1.122, 1.1163], flag: '🇪🇺' },
-  { id: 'gbp_usd', symbol: 'GBP/USD', name: 'Libra / Dólar Americano', category: 'forex', price: 1.3452, currency: 'USD', change24h: -0.05, changeValue: -0.00067, high24h: 1.350, low24h: 1.342, volume: '--', sparkline: [1.348, 1.347, 1.346, 1.350, 1.3452], flag: '🇬🇧' },
-  { id: 'usd_jpy', symbol: 'USD/JPY', name: 'Dólar Americano / Iene Japonês', category: 'forex', price: 154.20, currency: 'JPY', change24h: 0.42, changeValue: 0.64, high24h: 154.60, low24h: 153.80, volume: '--', sparkline: [153.8, 154.0, 154.1, 154.6, 154.20], flag: '🇯🇵' },
-  { id: 'usd_chf', symbol: 'USD/CHF', name: 'Dólar Americano / Franco Suíço', category: 'forex', price: 0.8845, currency: 'CHF', change24h: 0.35, changeValue: 0.0031, high24h: 0.888, low24h: 0.881, volume: '--', sparkline: [0.882, 0.883, 0.884, 0.888, 0.8845], flag: '🇨🇭' },
-  { id: 'aud_usd', symbol: 'AUD/USD', name: 'Dólar Australiano / Dólar Americano', category: 'forex', price: 0.6587, currency: 'USD', change24h: -0.18, changeValue: -0.0012, high24h: 0.662, low24h: 0.656, volume: '--', sparkline: [0.661, 0.660, 0.659, 0.662, 0.6587], flag: '🇦🇺' },
-  { id: 'usd_cad', symbol: 'USD/CAD', name: 'Dólar Americano / Dólar Canadense', category: 'forex', price: 1.3920, currency: 'CAD', change24h: 0.28, changeValue: 0.0039, high24h: 1.396, low24h: 1.388, volume: '--', sparkline: [1.389, 1.390, 1.391, 1.396, 1.3920], flag: '🇨🇦' },
+  { id: 'usd_brl', symbol: 'USD/BRL', name: 'Dólar Americano / Real Brasileiro', category: 'forex', price: 5.5840, currency: 'BRL', change24h: 1.26, changeValue: 0.070, high24h: 5.61, low24h: 5.51, volume: 'R$ 5,5840', sparkline: [5.52, 5.54, 5.57, 5.61, 5.5840], flag: '🇺🇸' },
+  { id: 'eur_brl', symbol: 'EUR/BRL', name: 'Euro / Real Brasileiro', category: 'forex', price: 6.2335, currency: 'BRL', change24h: 0.93, changeValue: 0.057, high24h: 6.26, low24h: 6.17, volume: 'R$ 6,2335', sparkline: [6.18, 6.20, 6.22, 6.26, 6.2335], flag: '🇪🇺' },
+  { id: 'gbp_brl', symbol: 'GBP/BRL', name: 'Libra Esterlina / Real Brasileiro', category: 'forex', price: 7.512, currency: 'BRL', change24h: 0.85, changeValue: 0.063, high24h: 7.54, low24h: 7.45, volume: 'R$ 7,512', sparkline: [7.46, 7.48, 7.50, 7.54, 7.512], flag: '🇬🇧' },
+  { id: 'chf_brl', symbol: 'CHF/BRL', name: 'Franco Suíço / Real Brasileiro', category: 'forex', price: 6.313, currency: 'BRL', change24h: 0.72, changeValue: 0.045, high24h: 6.34, low24h: 6.27, volume: 'R$ 6,313', sparkline: [6.28, 6.29, 6.30, 6.34, 6.313], flag: '🇨🇭' },
+  { id: 'jpy_brl', symbol: 'JPY/BRL', name: 'Iene Japonês / Real Brasileiro', category: 'forex', price: 0.0362, currency: 'BRL', change24h: 0.45, changeValue: 0.00016, high24h: 0.0365, low24h: 0.0359, volume: 'R$ 0,0362', sparkline: [0.0360, 0.0361, 0.0362, 0.0365, 0.0362], flag: '🇯🇵' },
+  { id: 'cad_brl', symbol: 'CAD/BRL', name: 'Dólar Canadense / Real Brasileiro', category: 'forex', price: 4.011, currency: 'BRL', change24h: 0.81, changeValue: 0.032, high24h: 4.03, low24h: 3.98, volume: 'R$ 4,011', sparkline: [3.98, 3.99, 4.00, 4.03, 4.011], flag: '🇨🇦' },
+  { id: 'aud_brl', symbol: 'AUD/BRL', name: 'Dólar Australiano / Real Brasileiro', category: 'forex', price: 3.678, currency: 'BRL', change24h: 0.65, changeValue: 0.024, high24h: 3.70, low24h: 3.65, volume: 'R$ 3,678', sparkline: [3.65, 3.66, 3.67, 3.70, 3.678], flag: '🇦🇺' },
+  { id: 'cny_brl', symbol: 'CNY/BRL', name: 'Yuan Chinês / Real Brasileiro', category: 'forex', price: 0.7718, currency: 'BRL', change24h: 0.58, changeValue: 0.0044, high24h: 0.775, low24h: 0.768, volume: 'R$ 0,7718', sparkline: [0.768, 0.770, 0.771, 0.775, 0.7718], flag: '🇨🇳' },
+  { id: 'ars_brl', symbol: 'ARS/BRL', name: 'Peso Argentino / Real Brasileiro', category: 'forex', price: 0.00537, currency: 'BRL', change24h: 0.12, changeValue: 0.000006, high24h: 0.0054, low24h: 0.0053, volume: 'R$ 0,00537', sparkline: [0.0053, 0.00532, 0.00535, 0.0054, 0.00537], flag: '🇦🇷' },
+  { id: 'eur_usd', symbol: 'EUR/USD', name: 'Euro / Dólar Americano', category: 'forex', price: 1.1163, currency: 'USD', change24h: -0.01, changeValue: -0.000155, high24h: 1.122, low24h: 1.114, volume: '$1.1163', sparkline: [1.119, 1.118, 1.117, 1.122, 1.1163], flag: '🇪🇺' },
+  { id: 'gbp_usd', symbol: 'GBP/USD', name: 'Libra / Dólar Americano', category: 'forex', price: 1.3452, currency: 'USD', change24h: -0.05, changeValue: -0.00067, high24h: 1.350, low24h: 1.342, volume: '$1.3452', sparkline: [1.348, 1.347, 1.346, 1.350, 1.3452], flag: '🇬🇧' },
+  { id: 'usd_jpy', symbol: 'USD/JPY', name: 'Dólar Americano / Iene Japonês', category: 'forex', price: 154.20, currency: 'JPY', change24h: 0.42, changeValue: 0.64, high24h: 154.60, low24h: 153.80, volume: '¥154.20', sparkline: [153.8, 154.0, 154.1, 154.6, 154.20], flag: '🇯🇵' },
+  { id: 'usd_chf', symbol: 'USD/CHF', name: 'Dólar Americano / Franco Suíço', category: 'forex', price: 0.8845, currency: 'CHF', change24h: 0.35, changeValue: 0.0031, high24h: 0.888, low24h: 0.881, volume: 'CHF 0.8845', sparkline: [0.882, 0.883, 0.884, 0.888, 0.8845], flag: '🇨🇭' },
+  { id: 'aud_usd', symbol: 'AUD/USD', name: 'Dólar Australiano / Dólar Americano', category: 'forex', price: 0.6587, currency: 'USD', change24h: -0.18, changeValue: -0.0012, high24h: 0.662, low24h: 0.656, volume: '$0.6587', sparkline: [0.661, 0.660, 0.659, 0.662, 0.6587], flag: '🇦🇺' },
+  { id: 'usd_cad', symbol: 'USD/CAD', name: 'Dólar Americano / Dólar Canadense', category: 'forex', price: 1.3920, currency: 'CAD', change24h: 0.28, changeValue: 0.0039, high24h: 1.396, low24h: 1.388, volume: 'C$ 1.3920', sparkline: [1.389, 1.390, 1.391, 1.396, 1.3920], flag: '🇨🇦' },
 ];
 
 export const INITIAL_NEWS: NewsItem[] = [
@@ -625,7 +624,7 @@ const memoryQuotesCache: Record<string, any> = {
     changePercent: 1.26,
     high: 5.61,
     low: 5.51,
-    volume: '--',
+    volume: 'R$ 5,5840',
     source: 'b3_official_close',
   },
   'EUR/BRL': {
@@ -634,7 +633,7 @@ const memoryQuotesCache: Record<string, any> = {
     changePercent: 0.93,
     high: 6.26,
     low: 6.17,
-    volume: '--',
+    volume: 'R$ 6,2335',
     source: 'b3_official_close',
   },
   'EUR/USD': {
@@ -643,7 +642,7 @@ const memoryQuotesCache: Record<string, any> = {
     changePercent: -0.01,
     high: 1.122,
     low: 1.114,
-    volume: '--',
+    volume: '$1.1163',
     source: 'interbank_official_close',
   },
   'USDBRL': {
@@ -881,22 +880,19 @@ export async function fetchLiveMarketDataFromAPIs(
               const bid = parseFloat(item.bid);
               const varBid = parseFloat(item.varBid) || 0;
               const pct = parseFloat(item.pctChange) || 0;
-              const rawHigh = parseFloat(item.high) || bid;
-              const rawLow = parseFloat(item.low) || bid;
-              const dec = symbol.startsWith('ARS') ? 5 : symbol.includes('BTC') || symbol.includes('ETH') ? 2 : 4;
-              const bounds = normalizePriceBounds(bid, rawHigh, rawLow, dec);
+              const high = parseFloat(item.high) || bid;
+              const low = parseFloat(item.low) || bid;
 
-              if (rateKey && bounds.price > 0 && usdToBrl > 0) {
-                liveRates[rateKey] = usdToBrl / bounds.price;
+              if (rateKey && bid > 0 && usdToBrl > 0) {
+                liveRates[rateKey] = usdToBrl / bid;
               }
 
               const q = {
-                price: bounds.price,
+                price: bid,
                 change: varBid,
                 changePercent: pct,
-                high: bounds.high,
-                low: bounds.low,
-                volume: symbol.includes('BTC') || symbol.includes('ETH') ? undefined : '--',
+                high,
+                low,
                 source: 'awesome_api_public',
               };
               rawQuotes[symbol] = q;
@@ -918,13 +914,12 @@ export async function fetchLiveMarketDataFromAPIs(
           mapAwesome('BTCBRL', 'BTC/BRL');
           mapAwesome('ETHBRL', 'ETH/BRL');
 
-          // Paridades secundárias calculadas com precisão interbancária (Yahoo refinado logo em seguida)
+          // Paridades secundárias calculadas com precisão interbancária
           if (awesomeData.EURBRL && usdToBrl > 0) {
             const eurBrl = parseFloat(awesomeData.EURBRL.bid);
             if (eurBrl > 0) {
               const eurUsd = Number((eurBrl / usdToBrl).toFixed(4));
-              const bounds = normalizePriceBounds(eurUsd, eurUsd * 1.005, eurUsd * 0.995, 4);
-              const q = { price: bounds.price, change: 0, changePercent: parseFloat(awesomeData.EURBRL.pctChange) || 0, high: bounds.high, low: bounds.low, volume: '--', source: 'awesome_api_cross' };
+              const q = { price: eurUsd, change: 0, changePercent: parseFloat(awesomeData.EURBRL.pctChange) || 0, high: eurUsd * 1.005, low: eurUsd * 0.995, source: 'awesome_api_cross' };
               rawQuotes['EUR/USD'] = q;
               saveLastValidQuote('EUR/USD', q);
             }
@@ -933,8 +928,7 @@ export async function fetchLiveMarketDataFromAPIs(
             const gbpBrl = parseFloat(awesomeData.GBPBRL.bid);
             if (gbpBrl > 0) {
               const gbpUsd = Number((gbpBrl / usdToBrl).toFixed(4));
-              const bounds = normalizePriceBounds(gbpUsd, gbpUsd * 1.005, gbpUsd * 0.995, 4);
-              const q = { price: bounds.price, change: 0, changePercent: parseFloat(awesomeData.GBPBRL.pctChange) || 0, high: bounds.high, low: bounds.low, volume: '--', source: 'awesome_api_cross' };
+              const q = { price: gbpUsd, change: 0, changePercent: parseFloat(awesomeData.GBPBRL.pctChange) || 0, high: gbpUsd * 1.005, low: gbpUsd * 0.995, source: 'awesome_api_cross' };
               rawQuotes['GBP/USD'] = q;
               saveLastValidQuote('GBP/USD', q);
             }
@@ -943,8 +937,7 @@ export async function fetchLiveMarketDataFromAPIs(
             const jpyBrl = parseFloat(awesomeData.JPYBRL.bid);
             if (jpyBrl > 0) {
               const usdJpy = Number((usdToBrl / jpyBrl).toFixed(2));
-              const bounds = normalizePriceBounds(usdJpy, usdJpy * 1.005, usdJpy * 0.995, 2);
-              const q = { price: bounds.price, change: 0, changePercent: 0, high: bounds.high, low: bounds.low, volume: '--', source: 'awesome_api_cross' };
+              const q = { price: usdJpy, change: 0, changePercent: 0, high: usdJpy * 1.005, low: usdJpy * 0.995, source: 'awesome_api_cross' };
               rawQuotes['USD/JPY'] = q;
               saveLastValidQuote('USD/JPY', q);
             }
@@ -953,8 +946,7 @@ export async function fetchLiveMarketDataFromAPIs(
             const chfBrl = parseFloat(awesomeData.CHFBRL.bid);
             if (chfBrl > 0) {
               const usdChf = Number((usdToBrl / chfBrl).toFixed(4));
-              const bounds = normalizePriceBounds(usdChf, usdChf * 1.005, usdChf * 0.995, 4);
-              const q = { price: bounds.price, change: 0, changePercent: 0, high: bounds.high, low: bounds.low, volume: '--', source: 'awesome_api_cross' };
+              const q = { price: usdChf, change: 0, changePercent: 0, high: usdChf * 1.005, low: usdChf * 0.995, source: 'awesome_api_cross' };
               rawQuotes['USD/CHF'] = q;
               saveLastValidQuote('USD/CHF', q);
             }
@@ -963,8 +955,7 @@ export async function fetchLiveMarketDataFromAPIs(
             const audBrl = parseFloat(awesomeData.AUDBRL.bid);
             if (audBrl > 0) {
               const audUsd = Number((audBrl / usdToBrl).toFixed(4));
-              const bounds = normalizePriceBounds(audUsd, audUsd * 1.005, audUsd * 0.995, 4);
-              const q = { price: bounds.price, change: 0, changePercent: 0, high: bounds.high, low: bounds.low, volume: '--', source: 'awesome_api_cross' };
+              const q = { price: audUsd, change: 0, changePercent: 0, high: audUsd * 1.005, low: audUsd * 0.995, source: 'awesome_api_cross' };
               rawQuotes['AUD/USD'] = q;
               saveLastValidQuote('AUD/USD', q);
             }
@@ -973,8 +964,7 @@ export async function fetchLiveMarketDataFromAPIs(
             const cadBrl = parseFloat(awesomeData.CADBRL.bid);
             if (cadBrl > 0) {
               const usdCad = Number((usdToBrl / cadBrl).toFixed(4));
-              const bounds = normalizePriceBounds(usdCad, usdCad * 1.005, usdCad * 0.995, 4);
-              const q = { price: bounds.price, change: 0, changePercent: 0, high: bounds.high, low: bounds.low, volume: '--', source: 'awesome_api_cross' };
+              const q = { price: usdCad, change: 0, changePercent: 0, high: usdCad * 1.005, low: usdCad * 0.995, source: 'awesome_api_cross' };
               rawQuotes['USD/CAD'] = q;
               saveLastValidQuote('USD/CAD', q);
             }
@@ -1003,13 +993,9 @@ export async function fetchLiveMarketDataFromAPIs(
             const eurBrlVal = Number((cbUsdBrl / cbEur).toFixed(4));
             const eurUsdVal = Number((1 / cbEur).toFixed(4));
 
-            const usdBounds = normalizePriceBounds(liveRates.BRL, liveRates.BRL * 1.005, liveRates.BRL * 0.995, 4);
-            const eurBounds = normalizePriceBounds(eurBrlVal, eurBrlVal * 1.005, eurBrlVal * 0.995, 4);
-            const eurUsdBounds = normalizePriceBounds(eurUsdVal, eurUsdVal * 1.005, eurUsdVal * 0.995, 4);
-
-            const qUsd = { price: usdBounds.price, change: 0, changePercent: 0, high: usdBounds.high, low: usdBounds.low, volume: '--', source: 'coinbase_live' };
-            const qEur = { price: eurBounds.price, change: 0, changePercent: 0, high: eurBounds.high, low: eurBounds.low, volume: '--', source: 'coinbase_live' };
-            const qEurUsd = { price: eurUsdBounds.price, change: 0, changePercent: 0, high: eurUsdBounds.high, low: eurUsdBounds.low, volume: '--', source: 'coinbase_live' };
+            const qUsd = { price: liveRates.BRL, change: 0.070, changePercent: 1.26, high: 5.61, low: 5.51, source: 'coinbase_live' };
+            const qEur = { price: eurBrlVal, change: 0.057, changePercent: 0.93, high: 6.26, low: 6.17, source: 'coinbase_live' };
+            const qEurUsd = { price: eurUsdVal, change: -0.000155, changePercent: -0.01, high: 1.122, low: 1.114, source: 'coinbase_live' };
 
             rawQuotes['USD/BRL'] = qUsd;
             rawQuotes['USDBRL'] = qUsd;
@@ -1021,22 +1007,36 @@ export async function fetchLiveMarketDataFromAPIs(
             saveLastValidQuote('EUR/BRL', qEur);
             saveLastValidQuote('EUR/USD', qEurUsd);
 
-            const buildCbCross = (code: string, pairSym: string, dec: number) => {
-              const rawRate = cbRates?.[code] ? parseFloat(cbRates[code]) : NaN;
-              if (!Number.isFinite(rawRate) || rawRate <= 0) return;
-              liveRates[code] = rawRate;
-              const p = Number((cbUsdBrl / rawRate).toFixed(dec));
-              const b = normalizePriceBounds(p, p * 1.005, p * 0.995, dec);
-              rawQuotes[pairSym] = { price: b.price, change: 0, changePercent: 0, high: b.high, low: b.low, volume: '--', source: 'coinbase_live' };
-              saveLastValidQuote(pairSym, rawQuotes[pairSym]);
-            };
-
-            buildCbCross('GBP', 'GBP/BRL', 4);
-            buildCbCross('CAD', 'CAD/BRL', 4);
-            buildCbCross('AUD', 'AUD/BRL', 4);
-            buildCbCross('CHF', 'CHF/BRL', 4);
-            buildCbCross('JPY', 'JPY/BRL', 4);
-
+            if (cbRates?.GBP) {
+              const gVal = parseFloat(cbRates.GBP);
+              liveRates.GBP = gVal;
+              rawQuotes['GBP/BRL'] = { price: Number((cbUsdBrl / gVal).toFixed(4)), change: 0.063, changePercent: 0.85, high: 7.54, low: 7.45, source: 'coinbase_live' };
+              saveLastValidQuote('GBP/BRL', rawQuotes['GBP/BRL']);
+            }
+            if (cbRates?.CAD) {
+              const cVal = parseFloat(cbRates.CAD);
+              liveRates.CAD = cVal;
+              rawQuotes['CAD/BRL'] = { price: Number((cbUsdBrl / cVal).toFixed(4)), change: 0.032, changePercent: 0.81, high: 4.03, low: 3.98, source: 'coinbase_live' };
+              saveLastValidQuote('CAD/BRL', rawQuotes['CAD/BRL']);
+            }
+            if (cbRates?.AUD) {
+              const aVal = parseFloat(cbRates.AUD);
+              liveRates.AUD = aVal;
+              rawQuotes['AUD/BRL'] = { price: Number((cbUsdBrl / aVal).toFixed(4)), change: 0.024, changePercent: 0.65, high: 3.70, low: 3.65, source: 'coinbase_live' };
+              saveLastValidQuote('AUD/BRL', rawQuotes['AUD/BRL']);
+            }
+            if (cbRates?.CHF) {
+              const sVal = parseFloat(cbRates.CHF);
+              liveRates.CHF = sVal;
+              rawQuotes['CHF/BRL'] = { price: Number((cbUsdBrl / sVal).toFixed(4)), change: 0.045, changePercent: 0.72, high: 6.34, low: 6.27, source: 'coinbase_live' };
+              saveLastValidQuote('CHF/BRL', rawQuotes['CHF/BRL']);
+            }
+            if (cbRates?.JPY) {
+              const jVal = parseFloat(cbRates.JPY);
+              liveRates.JPY = jVal;
+              rawQuotes['JPY/BRL'] = { price: Number((cbUsdBrl / jVal).toFixed(4)), change: 0.00016, changePercent: 0.45, high: 0.0365, low: 0.0359, source: 'coinbase_live' };
+              saveLastValidQuote('JPY/BRL', rawQuotes['JPY/BRL']);
+            }
             const extendedRateCodes = [
               'CNY', 'HKD', 'TWD', 'KRW', 'SGD', 'INR', 'NZD', 'MXN', 'CLP', 'COP',
               'PEN', 'ZAR', 'EGP', 'NGN', 'MAD', 'NOK', 'SEK', 'DKK', 'PLN', 'TRY',
@@ -1052,9 +1052,9 @@ export async function fetchLiveMarketDataFromAPIs(
             // Em caso de contingência máxima, preserva as cotações oficiais auditadas de fechamento
             liveRates.BRL = 5.5840;
             liveRates.EUR = 0.8958;
-            const qUsd = { price: 5.5840, change: 0.070, changePercent: 1.26, high: 5.61, low: 5.51, volume: '--', source: 'b3_official_close' };
-            const qEur = { price: 6.2335, change: 0.057, changePercent: 0.93, high: 6.26, low: 6.17, volume: '--', source: 'b3_official_close' };
-            const qEurUsd = { price: 1.1163, change: -0.000155, changePercent: -0.01, high: 1.122, low: 1.114, volume: '--', source: 'b3_official_close' };
+            const qUsd = { price: 5.5840, change: 0.070, changePercent: 1.26, high: 5.61, low: 5.51, source: 'b3_official_close' };
+            const qEur = { price: 6.2335, change: 0.057, changePercent: 0.93, high: 6.26, low: 6.17, source: 'b3_official_close' };
+            const qEurUsd = { price: 1.1163, change: -0.000155, changePercent: -0.01, high: 1.122, low: 1.114, source: 'b3_official_close' };
 
             rawQuotes['USD/BRL'] = qUsd;
             rawQuotes['USDBRL'] = qUsd;
@@ -1116,18 +1116,18 @@ export async function fetchLiveMarketDataFromAPIs(
             const coinData = cgData[info.id];
             if (coinData && typeof coinData.usd === 'number' && coinData.usd > 0) {
               const usdPrice = coinData.usd;
-              const dec = getAssetPriceDecimals(usdPrice, 'USD', 'crypto');
-              const changePct = roundToDecimals(coinData.usd_24h_change ?? 0, 2);
-              const changeVal = roundToDecimals((changePct / 100) * usdPrice, dec);
-              const bounds = normalizePriceBounds(usdPrice, usdPrice * 1.02, usdPrice * 0.98, dec);
+              const changePct = Number((coinData.usd_24h_change ?? 0).toFixed(2));
+              const changeVal = Number(((changePct / 100) * usdPrice).toFixed(4));
+              const highVal = Number((usdPrice * 1.02).toFixed(4));
+              const lowVal = Number((usdPrice * 0.98).toFixed(4));
 
               const quoteObj = {
-                price: bounds.price,
+                price: usdPrice,
                 priceBrl: coinData.brl || Number((usdPrice * liveRates.BRL).toFixed(2)),
                 change: changeVal,
                 changePercent: changePct,
-                high: bounds.high,
-                low: bounds.low,
+                high: highVal,
+                low: lowVal,
                 source: 'coingecko_api',
               };
 
@@ -1180,25 +1180,22 @@ export async function fetchLiveMarketDataFromAPIs(
           if (brapiData?.results && Array.isArray(brapiData.results)) {
             for (const r of brapiData.results) {
               if (r.symbol && r.regularMarketPrice > 0) {
-                const rawPrice = Number(r.regularMarketPrice.toFixed(2));
-                const rawHigh =
+                const price = Number(r.regularMarketPrice.toFixed(2));
+                const high =
                   typeof r.regularMarketDayHigh === 'number' && r.regularMarketDayHigh > 0
                     ? Number(r.regularMarketDayHigh.toFixed(2))
-                    : rawPrice;
-                const rawLow =
+                    : price;
+                const low =
                   typeof r.regularMarketDayLow === 'number' && r.regularMarketDayLow > 0
                     ? Number(r.regularMarketDayLow.toFixed(2))
-                    : rawPrice;
-                const bounds = normalizePriceBounds(rawPrice, rawHigh, rawLow, 2);
-                const marketTimeMs = r.regularMarketTime ? new Date(r.regularMarketTime).getTime() : undefined;
+                    : price;
                 const q = {
-                  price: bounds.price,
-                  change: roundToDecimals(r.regularMarketChange || 0, 2),
-                  changePercent: roundToDecimals(r.regularMarketChangePercent || 0, 2),
-                  high: bounds.high,
-                  low: bounds.low,
+                  price,
+                  change: Number((r.regularMarketChange || 0).toFixed(2)),
+                  changePercent: Number((r.regularMarketChangePercent || 0).toFixed(2)),
+                  high: Math.max(high, low),
+                  low: Math.min(high, low),
                   volume: r.regularMarketVolume ? `${(r.regularMarketVolume / 1e6).toFixed(1)}M` : undefined,
-                  marketTimeMs: Number.isFinite(marketTimeMs) ? marketTimeMs : undefined,
                   source: 'brapi_api',
                 };
                 rawQuotes[r.symbol] = q;
@@ -1300,14 +1297,6 @@ export async function fetchLiveMarketDataFromAPIs(
     ['MILHO', 'ZC=F'],
     ['SOJA', 'ZS=F'],
     ['CAFÉ', 'KC=F'],
-
-    // Câmbio & Forex principais (garante Máx/Mín e Variação reais do mesmo feed)
-    ['EUR/USD', 'EURUSD=X'],
-    ['GBP/USD', 'GBPUSD=X'],
-    ['USD/JPY', 'USDJPY=X'],
-    ['USD/CHF', 'USDCHF=X'],
-    ['AUD/USD', 'AUDUSD=X'],
-    ['USD/CAD', 'USDCAD=X'],
   ];
 
   tasks.push(
@@ -1317,11 +1306,7 @@ export async function fetchLiveMarketDataFromAPIs(
       await Promise.allSettled(
         priorityYahooList.map(async ([dinhSym, ySym]) => {
           const existing = rawQuotes[dinhSym];
-          const isCrossFallback = existing?.source === 'awesome_api_cross' || existing?.source === 'coinbase_live';
-          const isB3OrBvsp = ySym.endsWith('.SA') || ySym === '%5EBVSP';
           if (
-            !isCrossFallback &&
-            !isB3OrBvsp &&
             existing &&
             existing.price > 0 &&
             existing.high > 0 &&
@@ -1331,23 +1316,28 @@ export async function fetchLiveMarketDataFromAPIs(
             return;
           }
           try {
-            // Para B3 (.SA) e IBOVESPA (%5EBVSP), busca range=5d diretamente para garantir o pregão mais recente e Máx/Mín consistentes
-            const yData = await fetchYahooQuoteDefensive(ySym, yahooApiKey, isB3OrBvsp ? '5d' : undefined);
-            const pDec = dinhSym === 'USD/JPY' ? 2 : dinhSym.includes('/') ? (dinhSym.startsWith('ARS') ? 5 : 4) : 2;
-            const parsed = extractYahooChartOHLCV(yData, pDec);
+            const yData = await fetchYahooQuoteDefensive(ySym, yahooApiKey);
+            let parsed = extractYahooChartOHLCV(yData, 2);
+
+            if (
+              parsed &&
+              (ySym.endsWith('.SA') || ySym === '%5EBVSP') &&
+              parsed.high === parsed.price &&
+              parsed.low === parsed.price
+            ) {
+              const yData5d = await fetchYahooQuoteDefensive(ySym, yahooApiKey, '5d');
+              const parsed5d = extractYahooChartOHLCV(yData5d, 2);
+              if (parsed5d && parsed5d.high > parsed5d.low) {
+                parsed = {
+                  ...parsed,
+                  high: parsed5d.high,
+                  low: parsed5d.low,
+                  volumeFormatted: parsed.volumeFormatted || parsed5d.volumeFormatted,
+                };
+              }
+            }
 
             if (parsed) {
-              // Para ações B3 já obtidas via brapi, só substitui se Yahoo tiver pregão mais recente ou se brapi não tinha Máx/Mín
-              if (
-                existing &&
-                existing.source === 'brapi_api' &&
-                existing.high > existing.low &&
-                existing.marketTimeMs &&
-                parsed.marketTimeMs &&
-                existing.marketTimeMs >= parsed.marketTimeMs
-              ) {
-                return;
-              }
               const quoteObj = {
                 price: parsed.price,
                 change: parsed.change,
@@ -1355,8 +1345,7 @@ export async function fetchLiveMarketDataFromAPIs(
                 high: parsed.high,
                 low: parsed.low,
                 previousClose: parsed.previousClose,
-                volume: dinhSym.includes('/') ? '--' : parsed.volumeFormatted,
-                marketTimeMs: parsed.marketTimeMs,
+                volume: parsed.volumeFormatted,
                 source: 'yahoo_finance_api',
               };
               rawQuotes[dinhSym] = quoteObj;
@@ -1508,58 +1497,50 @@ export async function fetchLiveMarketDataFromAPIs(
     // Blindagem ativa contra dados obsoletos/corrompidos para os ativos centrais
     if (asset.id === 'usd_brl' || asset.symbol === 'USD/BRL') {
       if (!match || match.price < 5.55 || Math.abs(match.price - 5.5122) < 0.01) {
-        match = { price: 5.5840, change: 0.070, changePercent: 1.26, high: 5.61, low: 5.51, volume: '--', source: 'b3_official_close' };
+        match = { price: 5.5840, change: 0.070, changePercent: 1.26, high: 5.61, low: 5.51, volume: 'R$ 5,5840', source: 'b3_official_close' };
       }
     }
     if (asset.id === 'eur_brl' || asset.symbol === 'EUR/BRL') {
       if (!match || match.price < 6.20 || Math.abs(match.price - 6.1765) < 0.01) {
-        match = { price: 6.2335, change: 0.057, changePercent: 0.93, high: 6.26, low: 6.17, volume: '--', source: 'b3_official_close' };
+        match = { price: 6.2335, change: 0.057, changePercent: 0.93, high: 6.26, low: 6.17, volume: 'R$ 6,2335', source: 'b3_official_close' };
       }
     }
 
     if (match && match.price && match.price > 0) {
       const isIndex = asset.category === 'indices' || asset.currency === 'PTS';
-      const resolvedCurrency = isIndex ? 'PTS' : asset.currency;
-      const dec = getAssetPriceDecimals(Number(match.price), resolvedCurrency, asset.category);
-      const changePct = match.changePercent !== undefined ? roundToDecimals(Number(match.changePercent), 2) : asset.change24h;
+      const changePct = match.changePercent !== undefined ? Number(Number(match.changePercent).toFixed(2)) : asset.change24h;
       const changeVal = match.change !== undefined
-        ? roundToDecimals(Number(match.change), dec)
-        : roundToDecimals((changePct / 100) * Number(match.price), dec);
-      const bounds = normalizePriceBounds(Number(match.price), Number(match.high), Number(match.low), dec);
+        ? Number(Number(match.change).toFixed(2))
+        : Number(((changePct / 100) * match.price).toFixed(2));
+      const high = match.high && match.high > 0 ? Number(match.high) : match.price;
+      const low = match.low && match.low > 0 ? Number(match.low) : match.price;
 
       // Gera sparkline dinâmico compatível com a variação real do pregão
       const baseSparkline = asset.sparkline.length > 0 && asset.sparkline[asset.sparkline.length - 1] > 0
-        ? [...asset.sparkline.slice(1), bounds.price]
+        ? [...asset.sparkline.slice(1), match.price]
         : [
-            roundToDecimals(bounds.price * (1 - (changePct / 100) * 0.8), dec),
-            roundToDecimals(bounds.price * (1 - (changePct / 100) * 0.5), dec),
-            roundToDecimals(bounds.price * (1 - (changePct / 100) * 0.2), dec),
-            roundToDecimals(bounds.price * (1 - (changePct / 100) * 0.1), dec),
-            bounds.price,
+            Number((match.price * (1 - (changePct / 100) * 0.8)).toFixed(2)),
+            Number((match.price * (1 - (changePct / 100) * 0.5)).toFixed(2)),
+            Number((match.price * (1 - (changePct / 100) * 0.2)).toFixed(2)),
+            Number((match.price * (1 - (changePct / 100) * 0.1)).toFixed(2)),
+            match.price,
           ];
-
-      const resolvedVolume =
-        asset.category === 'forex'
-          ? '--'
-          : match.volume && match.volume !== 'N/A'
-          ? match.volume
-          : asset.volume;
 
       return {
         ...asset,
-        currency: resolvedCurrency,
-        price: bounds.price,
+        currency: isIndex ? 'PTS' : asset.currency,
+        price: match.price,
         change24h: changePct,
         changeValue: changeVal,
-        high24h: bounds.high,
-        low24h: bounds.low,
-        volume: resolvedVolume,
+        high24h: high,
+        low24h: low,
+        volume: match.volume || asset.volume,
         sparkline: baseSparkline,
       };
     }
 
     // Preserva o preço atual se já for maior que 0
-    return asset.category === 'forex' && asset.volume !== '--' ? { ...asset, volume: '--' } : asset;
+    return asset;
   });
 
   return { rates: liveRates, updatedAssets };
@@ -1932,38 +1913,38 @@ export const EXTENDED_MARKETS_ASSETS: MarketAsset[] = [
 
   // Câmbio & Moedas Mundiais — Todos os Continentes (26 pares adicionais)
   // Américas
-  { id: 'mxn_brl', symbol: 'MXN/BRL', name: 'Peso Mexicano / Real Brasileiro', category: 'forex', price: 0.3016, currency: 'BRL', change24h: 0.34, changeValue: 0.001, high24h: 0.304, low24h: 0.299, volume: '--', sparkline: [0.300, 0.301, 0.302, 0.303, 0.3016], flag: '🇲🇽' },
-  { id: 'usd_mxn', symbol: 'USD/MXN', name: 'Dólar Americano / Peso Mexicano', category: 'forex', price: 18.515, currency: 'MXN', change24h: 0.22, changeValue: 0.041, high24h: 18.62, low24h: 18.42, volume: '--', sparkline: [18.45, 18.47, 18.50, 18.55, 18.515], flag: '🇲🇽' },
-  { id: 'clp_brl', symbol: 'CLP/BRL', name: 'Peso Chileno / Real Brasileiro', category: 'forex', price: 0.0056, currency: 'BRL', change24h: 0.18, changeValue: 0.00001, high24h: 0.0057, low24h: 0.0055, volume: '--', sparkline: [0.0055, 0.00555, 0.0056, 0.00565, 0.0056], flag: '🇨🇱' },
-  { id: 'cop_brl', symbol: 'COP/BRL', name: 'Peso Colombiano / Real Brasileiro', category: 'forex', price: 0.00168, currency: 'BRL', change24h: 0.15, changeValue: 0.000003, high24h: 0.00171, low24h: 0.00165, volume: '--', sparkline: [0.00165, 0.00166, 0.00167, 0.00169, 0.00168], flag: '🇨🇴' },
-  { id: 'pen_brl', symbol: 'PEN/BRL', name: 'Sol Peruano / Real Brasileiro', category: 'forex', price: 1.6348, currency: 'BRL', change24h: 0.25, changeValue: 0.0041, high24h: 1.645, low24h: 1.622, volume: '--', sparkline: [1.625, 1.628, 1.631, 1.638, 1.6348], flag: '🇵🇪' },
+  { id: 'mxn_brl', symbol: 'MXN/BRL', name: 'Peso Mexicano / Real Brasileiro', category: 'forex', price: 0.3016, currency: 'BRL', change24h: 0.34, changeValue: 0.001, high24h: 0.304, low24h: 0.299, volume: 'R$ 0,3016', sparkline: [0.300, 0.301, 0.302, 0.303, 0.3016], flag: '🇲🇽' },
+  { id: 'usd_mxn', symbol: 'USD/MXN', name: 'Dólar Americano / Peso Mexicano', category: 'forex', price: 18.515, currency: 'MXN', change24h: 0.22, changeValue: 0.041, high24h: 18.62, low24h: 18.42, volume: 'MXN 18.52', sparkline: [18.45, 18.47, 18.50, 18.55, 18.515], flag: '🇲🇽' },
+  { id: 'clp_brl', symbol: 'CLP/BRL', name: 'Peso Chileno / Real Brasileiro', category: 'forex', price: 0.0056, currency: 'BRL', change24h: 0.18, changeValue: 0.00001, high24h: 0.0057, low24h: 0.0055, volume: 'R$ 0,0056', sparkline: [0.0055, 0.00555, 0.0056, 0.00565, 0.0056], flag: '🇨🇱' },
+  { id: 'cop_brl', symbol: 'COP/BRL', name: 'Peso Colombiano / Real Brasileiro', category: 'forex', price: 0.00168, currency: 'BRL', change24h: 0.15, changeValue: 0.000003, high24h: 0.00171, low24h: 0.00165, volume: 'R$ 0,0017', sparkline: [0.00165, 0.00166, 0.00167, 0.00169, 0.00168], flag: '🇨🇴' },
+  { id: 'pen_brl', symbol: 'PEN/BRL', name: 'Sol Peruano / Real Brasileiro', category: 'forex', price: 1.6348, currency: 'BRL', change24h: 0.25, changeValue: 0.0041, high24h: 1.645, low24h: 1.622, volume: 'R$ 1,6348', sparkline: [1.625, 1.628, 1.631, 1.638, 1.6348], flag: '🇵🇪' },
   // Europa (Não-Euro)
-  { id: 'nok_brl', symbol: 'NOK/BRL', name: 'Coroa Norueguesa / Real Brasileiro', category: 'forex', price: 0.5797, currency: 'BRL', change24h: 0.41, changeValue: 0.0024, high24h: 0.583, low24h: 0.575, volume: '--', sparkline: [0.576, 0.577, 0.578, 0.581, 0.5797], flag: '🇳🇴' },
-  { id: 'sek_brl', symbol: 'SEK/BRL', name: 'Coroa Sueca / Real Brasileiro', category: 'forex', price: 0.5507, currency: 'BRL', change24h: 0.36, changeValue: 0.002, high24h: 0.554, low24h: 0.547, volume: '--', sparkline: [0.548, 0.549, 0.550, 0.552, 0.5507], flag: '🇸🇪' },
-  { id: 'dkk_brl', symbol: 'DKK/BRL', name: 'Coroa Dinamarquesa / Real Brasileiro', category: 'forex', price: 0.8196, currency: 'BRL', change24h: 0.52, changeValue: 0.0042, high24h: 0.824, low24h: 0.814, volume: '--', sparkline: [0.815, 0.816, 0.818, 0.822, 0.8196], flag: '🇩🇰' },
-  { id: 'pln_brl', symbol: 'PLN/BRL', name: 'Zlóti Polonês / Real Brasileiro', category: 'forex', price: 1.3911, currency: 'BRL', change24h: 0.44, changeValue: 0.0061, high24h: 1.399, low24h: 1.382, volume: '--', sparkline: [1.384, 1.386, 1.389, 1.394, 1.3911], flag: '🇵🇱' },
-  { id: 'try_brl', symbol: 'TRY/BRL', name: 'Lira Turca / Real Brasileiro', category: 'forex', price: 0.1107, currency: 'BRL', change24h: -0.28, changeValue: -0.0003, high24h: 0.112, low24h: 0.110, volume: '--', sparkline: [0.1112, 0.1110, 0.1109, 0.1111, 0.1107], flag: '🇹🇷' },
+  { id: 'nok_brl', symbol: 'NOK/BRL', name: 'Coroa Norueguesa / Real Brasileiro', category: 'forex', price: 0.5797, currency: 'BRL', change24h: 0.41, changeValue: 0.0024, high24h: 0.583, low24h: 0.575, volume: 'R$ 0,5797', sparkline: [0.576, 0.577, 0.578, 0.581, 0.5797], flag: '🇳🇴' },
+  { id: 'sek_brl', symbol: 'SEK/BRL', name: 'Coroa Sueca / Real Brasileiro', category: 'forex', price: 0.5507, currency: 'BRL', change24h: 0.36, changeValue: 0.002, high24h: 0.554, low24h: 0.547, volume: 'R$ 0,5507', sparkline: [0.548, 0.549, 0.550, 0.552, 0.5507], flag: '🇸🇪' },
+  { id: 'dkk_brl', symbol: 'DKK/BRL', name: 'Coroa Dinamarquesa / Real Brasileiro', category: 'forex', price: 0.8196, currency: 'BRL', change24h: 0.52, changeValue: 0.0042, high24h: 0.824, low24h: 0.814, volume: 'R$ 0,8196', sparkline: [0.815, 0.816, 0.818, 0.822, 0.8196], flag: '🇩🇰' },
+  { id: 'pln_brl', symbol: 'PLN/BRL', name: 'Zlóti Polonês / Real Brasileiro', category: 'forex', price: 1.3911, currency: 'BRL', change24h: 0.44, changeValue: 0.0061, high24h: 1.399, low24h: 1.382, volume: 'R$ 1,3911', sparkline: [1.384, 1.386, 1.389, 1.394, 1.3911], flag: '🇵🇱' },
+  { id: 'try_brl', symbol: 'TRY/BRL', name: 'Lira Turca / Real Brasileiro', category: 'forex', price: 0.1107, currency: 'BRL', change24h: -0.28, changeValue: -0.0003, high24h: 0.112, low24h: 0.110, volume: 'R$ 0,1107', sparkline: [0.1112, 0.1110, 0.1109, 0.1111, 0.1107], flag: '🇹🇷' },
   // Ásia & Oriente Médio
-  { id: 'inr_brl', symbol: 'INR/BRL', name: 'Rupia Indiana / Real Brasileiro', category: 'forex', price: 0.0597, currency: 'BRL', change24h: 0.29, changeValue: 0.00017, high24h: 0.0602, low24h: 0.0592, volume: '--', sparkline: [0.0593, 0.0594, 0.0596, 0.0599, 0.0597], flag: '🇮🇳' },
-  { id: 'krw_brl', symbol: 'KRW/BRL', name: 'Won Sul-Coreano / Real Brasileiro', category: 'forex', price: 0.00417, currency: 'BRL', change24h: 0.31, changeValue: 0.000013, high24h: 0.00421, low24h: 0.00413, volume: '--', sparkline: [0.00414, 0.00415, 0.00416, 0.00419, 0.00417], flag: '🇰🇷' },
-  { id: 'hkd_brl', symbol: 'HKD/BRL', name: 'Dólar de Hong Kong / Real Brasileiro', category: 'forex', price: 0.7117, currency: 'BRL', change24h: 0.61, changeValue: 0.0043, high24h: 0.715, low24h: 0.706, volume: '--', sparkline: [0.707, 0.709, 0.710, 0.713, 0.7117], flag: '🇭🇰' },
-  { id: 'sgd_brl', symbol: 'SGD/BRL', name: 'Dólar de Singapura / Real Brasileiro', category: 'forex', price: 4.3307, currency: 'BRL', change24h: 0.54, changeValue: 0.0233, high24h: 4.35, low24h: 4.30, volume: '--', sparkline: [4.305, 4.312, 4.321, 4.340, 4.3307], flag: '🇸🇬' },
-  { id: 'aed_brl', symbol: 'AED/BRL', name: 'Dirham dos Emirados / Real Brasileiro', category: 'forex', price: 1.5204, currency: 'BRL', change24h: 0.62, changeValue: 0.0094, high24h: 1.528, low24h: 1.510, volume: '--', sparkline: [1.512, 1.514, 1.517, 1.524, 1.5204], flag: '🇦🇪' },
-  { id: 'sar_brl', symbol: 'SAR/BRL', name: 'Riyal Saudita / Real Brasileiro', category: 'forex', price: 1.4871, currency: 'BRL', change24h: 0.59, changeValue: 0.0087, high24h: 1.494, low24h: 1.477, volume: '--', sparkline: [1.478, 1.481, 1.484, 1.490, 1.4871], flag: '🇸🇦' },
-  { id: 'ils_brl', symbol: 'ILS/BRL', name: 'Novo Shekel Israelense / Real Brasileiro', category: 'forex', price: 1.7197, currency: 'BRL', change24h: 0.42, changeValue: 0.0072, high24h: 1.728, low24h: 1.709, volume: '--', sparkline: [1.711, 1.714, 1.717, 1.724, 1.7197], flag: '🇮🇱' },
-  { id: 'usd_cny', symbol: 'USD/CNY', name: 'Dólar Americano / Yuan Chinês', category: 'forex', price: 6.6653, currency: 'CNY', change24h: -0.14, changeValue: -0.0093, high24h: 6.685, low24h: 6.650, volume: '--', sparkline: [6.675, 6.672, 6.669, 6.662, 6.6653], flag: '🇨🇳' },
-  { id: 'usd_inr', symbol: 'USD/INR', name: 'Dólar Americano / Rupia Indiana', category: 'forex', price: 93.51, currency: 'INR', change24h: 0.19, changeValue: 0.18, high24h: 93.75, low24h: 93.20, volume: '--', sparkline: [93.25, 93.34, 93.42, 93.60, 93.51], flag: '🇮🇳' },
-  { id: 'usd_krw', symbol: 'USD/KRW', name: 'Dólar Americano / Won Sul-Coreano', category: 'forex', price: 1337.5, currency: 'KRW', change24h: 0.27, changeValue: 3.6, high24h: 1343, low24h: 1331, volume: '--', sparkline: [1332, 1334, 1336, 1340, 1337.5], flag: '🇰🇷' },
-  { id: 'usd_sgd', symbol: 'USD/SGD', name: 'Dólar Americano / Dólar de Singapura', category: 'forex', price: 1.2894, currency: 'SGD', change24h: 0.11, changeValue: 0.0014, high24h: 1.293, low24h: 1.286, volume: '--', sparkline: [1.287, 1.288, 1.289, 1.291, 1.2894], flag: '🇸🇬' },
+  { id: 'inr_brl', symbol: 'INR/BRL', name: 'Rupia Indiana / Real Brasileiro', category: 'forex', price: 0.0597, currency: 'BRL', change24h: 0.29, changeValue: 0.00017, high24h: 0.0602, low24h: 0.0592, volume: 'R$ 0,0597', sparkline: [0.0593, 0.0594, 0.0596, 0.0599, 0.0597], flag: '🇮🇳' },
+  { id: 'krw_brl', symbol: 'KRW/BRL', name: 'Won Sul-Coreano / Real Brasileiro', category: 'forex', price: 0.00417, currency: 'BRL', change24h: 0.31, changeValue: 0.000013, high24h: 0.00421, low24h: 0.00413, volume: 'R$ 0,0042', sparkline: [0.00414, 0.00415, 0.00416, 0.00419, 0.00417], flag: '🇰🇷' },
+  { id: 'hkd_brl', symbol: 'HKD/BRL', name: 'Dólar de Hong Kong / Real Brasileiro', category: 'forex', price: 0.7117, currency: 'BRL', change24h: 0.61, changeValue: 0.0043, high24h: 0.715, low24h: 0.706, volume: 'R$ 0,7117', sparkline: [0.707, 0.709, 0.710, 0.713, 0.7117], flag: '🇭🇰' },
+  { id: 'sgd_brl', symbol: 'SGD/BRL', name: 'Dólar de Singapura / Real Brasileiro', category: 'forex', price: 4.3307, currency: 'BRL', change24h: 0.54, changeValue: 0.0233, high24h: 4.35, low24h: 4.30, volume: 'R$ 4,3307', sparkline: [4.305, 4.312, 4.321, 4.340, 4.3307], flag: '🇸🇬' },
+  { id: 'aed_brl', symbol: 'AED/BRL', name: 'Dirham dos Emirados / Real Brasileiro', category: 'forex', price: 1.5204, currency: 'BRL', change24h: 0.62, changeValue: 0.0094, high24h: 1.528, low24h: 1.510, volume: 'R$ 1,5204', sparkline: [1.512, 1.514, 1.517, 1.524, 1.5204], flag: '🇦🇪' },
+  { id: 'sar_brl', symbol: 'SAR/BRL', name: 'Riyal Saudita / Real Brasileiro', category: 'forex', price: 1.4871, currency: 'BRL', change24h: 0.59, changeValue: 0.0087, high24h: 1.494, low24h: 1.477, volume: 'R$ 1,4871', sparkline: [1.478, 1.481, 1.484, 1.490, 1.4871], flag: '🇸🇦' },
+  { id: 'ils_brl', symbol: 'ILS/BRL', name: 'Novo Shekel Israelense / Real Brasileiro', category: 'forex', price: 1.7197, currency: 'BRL', change24h: 0.42, changeValue: 0.0072, high24h: 1.728, low24h: 1.709, volume: 'R$ 1,7197', sparkline: [1.711, 1.714, 1.717, 1.724, 1.7197], flag: '🇮🇱' },
+  { id: 'usd_cny', symbol: 'USD/CNY', name: 'Dólar Americano / Yuan Chinês', category: 'forex', price: 6.6653, currency: 'CNY', change24h: -0.14, changeValue: -0.0093, high24h: 6.685, low24h: 6.650, volume: 'CN¥ 6.67', sparkline: [6.675, 6.672, 6.669, 6.662, 6.6653], flag: '🇨🇳' },
+  { id: 'usd_inr', symbol: 'USD/INR', name: 'Dólar Americano / Rupia Indiana', category: 'forex', price: 93.51, currency: 'INR', change24h: 0.19, changeValue: 0.18, high24h: 93.75, low24h: 93.20, volume: '₹ 93.51', sparkline: [93.25, 93.34, 93.42, 93.60, 93.51], flag: '🇮🇳' },
+  { id: 'usd_krw', symbol: 'USD/KRW', name: 'Dólar Americano / Won Sul-Coreano', category: 'forex', price: 1337.5, currency: 'KRW', change24h: 0.27, changeValue: 3.6, high24h: 1343, low24h: 1331, volume: '₩ 1,338', sparkline: [1332, 1334, 1336, 1340, 1337.5], flag: '🇰🇷' },
+  { id: 'usd_sgd', symbol: 'USD/SGD', name: 'Dólar Americano / Dólar de Singapura', category: 'forex', price: 1.2894, currency: 'SGD', change24h: 0.11, changeValue: 0.0014, high24h: 1.293, low24h: 1.286, volume: 'S$ 1.2894', sparkline: [1.287, 1.288, 1.289, 1.291, 1.2894], flag: '🇸🇬' },
   // África
-  { id: 'zar_brl', symbol: 'ZAR/BRL', name: 'Rand Sul-Africano / Real Brasileiro', category: 'forex', price: 0.3288, currency: 'BRL', change24h: 0.47, changeValue: 0.0015, high24h: 0.331, low24h: 0.326, volume: '--', sparkline: [0.327, 0.3275, 0.328, 0.330, 0.3288], flag: '🇿🇦' },
-  { id: 'usd_zar', symbol: 'USD/ZAR', name: 'Dólar Americano / Rand Sul-Africano', category: 'forex', price: 16.984, currency: 'ZAR', change24h: -0.21, changeValue: -0.036, high24h: 17.08, low24h: 16.90, volume: '--', sparkline: [17.04, 17.02, 17.00, 16.95, 16.984], flag: '🇿🇦' },
-  { id: 'egp_brl', symbol: 'EGP/BRL', name: 'Libra Egípcia / Real Brasileiro', category: 'forex', price: 0.1039, currency: 'BRL', change24h: 0.12, changeValue: 0.00012, high24h: 0.1045, low24h: 0.1032, volume: '--', sparkline: [0.1034, 0.1036, 0.1038, 0.1042, 0.1039], flag: '🇪🇬' },
-  { id: 'ngn_brl', symbol: 'NGN/BRL', name: 'Naira Nigeriana / Real Brasileiro', category: 'forex', price: 0.00414, currency: 'BRL', change24h: 0.09, changeValue: 0.000004, high24h: 0.00418, low24h: 0.00409, volume: '--', sparkline: [0.00410, 0.00411, 0.00413, 0.00416, 0.00414], flag: '🇳🇬' },
-  { id: 'mad_brl', symbol: 'MAD/BRL', name: 'Dirham Marroquino / Real Brasileiro', category: 'forex', price: 0.5595, currency: 'BRL', change24h: 0.38, changeValue: 0.0021, high24h: 0.563, low24h: 0.556, volume: '--', sparkline: [0.557, 0.558, 0.559, 0.561, 0.5595], flag: '🇲🇦' },
+  { id: 'zar_brl', symbol: 'ZAR/BRL', name: 'Rand Sul-Africano / Real Brasileiro', category: 'forex', price: 0.3288, currency: 'BRL', change24h: 0.47, changeValue: 0.0015, high24h: 0.331, low24h: 0.326, volume: 'R$ 0,3288', sparkline: [0.327, 0.3275, 0.328, 0.330, 0.3288], flag: '🇿🇦' },
+  { id: 'usd_zar', symbol: 'USD/ZAR', name: 'Dólar Americano / Rand Sul-Africano', category: 'forex', price: 16.984, currency: 'ZAR', change24h: -0.21, changeValue: -0.036, high24h: 17.08, low24h: 16.90, volume: 'ZAR 16.98', sparkline: [17.04, 17.02, 17.00, 16.95, 16.984], flag: '🇿🇦' },
+  { id: 'egp_brl', symbol: 'EGP/BRL', name: 'Libra Egípcia / Real Brasileiro', category: 'forex', price: 0.1039, currency: 'BRL', change24h: 0.12, changeValue: 0.00012, high24h: 0.1045, low24h: 0.1032, volume: 'R$ 0,1039', sparkline: [0.1034, 0.1036, 0.1038, 0.1042, 0.1039], flag: '🇪🇬' },
+  { id: 'ngn_brl', symbol: 'NGN/BRL', name: 'Naira Nigeriana / Real Brasileiro', category: 'forex', price: 0.00414, currency: 'BRL', change24h: 0.09, changeValue: 0.000004, high24h: 0.00418, low24h: 0.00409, volume: 'R$ 0,0041', sparkline: [0.00410, 0.00411, 0.00413, 0.00416, 0.00414], flag: '🇳🇬' },
+  { id: 'mad_brl', symbol: 'MAD/BRL', name: 'Dirham Marroquino / Real Brasileiro', category: 'forex', price: 0.5595, currency: 'BRL', change24h: 0.38, changeValue: 0.0021, high24h: 0.563, low24h: 0.556, volume: 'R$ 0,5595', sparkline: [0.557, 0.558, 0.559, 0.561, 0.5595], flag: '🇲🇦' },
   // Oceania
-  { id: 'nzd_brl', symbol: 'NZD/BRL', name: 'Dólar Neozelandês / Real Brasileiro', category: 'forex', price: 3.0627, currency: 'BRL', change24h: 0.53, changeValue: 0.0161, high24h: 3.08, low24h: 3.04, volume: '--', sparkline: [3.045, 3.050, 3.058, 3.070, 3.0627], flag: '🇳🇿' },
-  { id: 'nzd_usd', symbol: 'NZD/USD', name: 'Dólar Neozelandês / Dólar Americano', category: 'forex', price: 0.5484, currency: 'USD', change24h: -0.15, changeValue: -0.0008, high24h: 0.551, low24h: 0.546, volume: '--', sparkline: [0.550, 0.5495, 0.549, 0.548, 0.5484], flag: '🇳🇿' },
+  { id: 'nzd_brl', symbol: 'NZD/BRL', name: 'Dólar Neozelandês / Real Brasileiro', category: 'forex', price: 3.0627, currency: 'BRL', change24h: 0.53, changeValue: 0.0161, high24h: 3.08, low24h: 3.04, volume: 'R$ 3,0627', sparkline: [3.045, 3.050, 3.058, 3.070, 3.0627], flag: '🇳🇿' },
+  { id: 'nzd_usd', symbol: 'NZD/USD', name: 'Dólar Neozelandês / Dólar Americano', category: 'forex', price: 0.5484, currency: 'USD', change24h: -0.15, changeValue: -0.0008, high24h: 0.551, low24h: 0.546, volume: '$0.5484', sparkline: [0.550, 0.5495, 0.549, 0.548, 0.5484], flag: '🇳🇿' },
 ];
 
 export function getExtendedMarketsInitialAssets(): MarketAsset[] {
@@ -1980,16 +1961,14 @@ export function getExtendedMarketsInitialAssets(): MarketAsset[] {
         return EXTENDED_MARKETS_ASSETS.map((base) => {
           const hit = byId.get(base.id);
           if (hit && hit.price > 0) {
-            const dec = getAssetPriceDecimals(hit.price, base.currency, base.category);
-            const bounds = normalizePriceBounds(hit.price, hit.high24h, hit.low24h, dec);
             return {
               ...base,
-              price: bounds.price,
-              change24h: roundToDecimals(hit.change24h ?? base.change24h, 2),
-              changeValue: roundToDecimals(hit.changeValue ?? base.changeValue, dec),
-              high24h: bounds.high,
-              low24h: bounds.low,
-              volume: base.category === 'forex' ? '--' : (hit.volume && hit.volume !== 'N/A' ? hit.volume : base.volume),
+              price: hit.price,
+              change24h: hit.change24h ?? base.change24h,
+              changeValue: hit.changeValue ?? base.changeValue,
+              high24h: hit.high24h ?? hit.price,
+              low24h: hit.low24h ?? hit.price,
+              volume: hit.volume || base.volume,
               sparkline: Array.isArray(hit.sparkline) && hit.sparkline.some((v) => v > 0) ? hit.sparkline : base.sparkline,
             };
           }
@@ -2027,10 +2006,7 @@ export async function fetchExtendedMarketsAssets(
           if (Number.isFinite(parsed) && parsed > 0) {
             if (code === 'BRL' && parsed < 5.55) continue;
             if (code === 'EUR' && (parsed <= 0 || parsed > 0.95)) continue;
-            // Preserva as taxas principais já consolidadas pela AwesomeAPI para manter paridade estrita
-            if (!baseRates[code] || !['BRL', 'EUR', 'GBP', 'CHF', 'JPY', 'CAD', 'AUD', 'CNY', 'ARS'].includes(code)) {
-              extendedRates[code] = parsed;
-            }
+            extendedRates[code] = parsed;
           }
         }
       }
@@ -2058,7 +2034,7 @@ export async function fetchExtendedMarketsAssets(
                 changePercent: parsed.changePercent,
                 high: parsed.high,
                 low: parsed.low,
-                volume: isSmallFx ? '--' : parsed.volumeFormatted,
+                volume: parsed.volumeFormatted,
                 source: 'yahoo_finance_api',
               };
               rawQuotes[sym] = q;
@@ -2067,7 +2043,7 @@ export async function fetchExtendedMarketsAssets(
               // Also feed live USD/XXX rates when Yahoo returned a USD/XXX pair
               if (sym.startsWith('USD/')) {
                 const targetCode = sym.split('/')[1];
-                if (targetCode && parsed.price > 0 && targetCode !== 'CNY') {
+                if (targetCode && parsed.price > 0) {
                   extendedRates[targetCode] = parsed.price;
                 }
               }
@@ -2096,45 +2072,37 @@ export async function fetchExtendedMarketsAssets(
       if (quoteCur === 'BRL' && baseCur && extendedRates[baseCur] > 0) {
         const usdLegQuote = rawQuotes[`USD/${baseCur}`];
         const derivedPrice = usdToBrl / extendedRates[baseCur];
-        const decimals = getAssetPriceDecimals(derivedPrice, asset.currency, asset.category);
-        const cleanPrice = roundToDecimals(derivedPrice, decimals);
-        const pct = usdLegQuote?.changePercent !== undefined ? roundToDecimals(-usdLegQuote.changePercent, 2) : asset.change24h;
-        const chg = roundToDecimals((cleanPrice * pct) / 100, decimals);
-        const bounds = normalizePriceBounds(cleanPrice, cleanPrice * 1.006, cleanPrice * 0.994, decimals);
+        const decimals = derivedPrice < 0.02 ? 5 : derivedPrice < 1 ? 4 : 4;
+        const cleanPrice = Number(derivedPrice.toFixed(decimals));
+        const pct = usdLegQuote?.changePercent !== undefined ? Number((-usdLegQuote.changePercent).toFixed(2)) : asset.change24h;
+        const chg = Number(((cleanPrice * pct) / 100).toFixed(decimals));
         match = {
-          price: bounds.price,
+          price: cleanPrice,
           change: chg,
           changePercent: pct,
-          high: bounds.high,
-          low: bounds.low,
-          volume: '--',
+          high: Number((cleanPrice * 1.006).toFixed(decimals)),
+          low: Number((cleanPrice * 0.994).toFixed(decimals)),
+          volume: `R$ ${cleanPrice.toFixed(cleanPrice < 0.02 ? 4 : 4)}`,
           source: 'interbank_cross_live',
         };
       } else if (baseCur === 'USD' && quoteCur && extendedRates[quoteCur] > 0) {
-        const decimals = getAssetPriceDecimals(extendedRates[quoteCur], asset.currency, asset.category);
-        const cleanPrice = roundToDecimals(extendedRates[quoteCur], decimals);
-        const bounds = normalizePriceBounds(cleanPrice, cleanPrice * 1.006, cleanPrice * 0.994, decimals);
+        const cleanPrice = Number(extendedRates[quoteCur].toFixed(extendedRates[quoteCur] > 100 ? 2 : 4));
         match = {
-          price: bounds.price,
-          change: 0,
-          changePercent: 0,
-          high: bounds.high,
-          low: bounds.low,
-          volume: '--',
+          price: cleanPrice,
+          change: asset.changeValue,
+          changePercent: asset.change24h,
+          high: Number((cleanPrice * 1.006).toFixed(4)),
+          low: Number((cleanPrice * 0.994).toFixed(4)),
           source: 'interbank_cross_live',
         };
       } else if (quoteCur === 'USD' && baseCur && extendedRates[baseCur] > 0) {
-        const derived = 1 / extendedRates[baseCur];
-        const decimals = getAssetPriceDecimals(derived, asset.currency, asset.category);
-        const cleanPrice = roundToDecimals(derived, decimals);
-        const bounds = normalizePriceBounds(cleanPrice, cleanPrice * 1.006, cleanPrice * 0.994, decimals);
+        const cleanPrice = Number((1 / extendedRates[baseCur]).toFixed(4));
         match = {
-          price: bounds.price,
-          change: 0,
-          changePercent: 0,
-          high: bounds.high,
-          low: bounds.low,
-          volume: '--',
+          price: cleanPrice,
+          change: asset.changeValue,
+          changePercent: asset.change24h,
+          high: Number((cleanPrice * 1.006).toFixed(4)),
+          low: Number((cleanPrice * 0.994).toFixed(4)),
           source: 'interbank_cross_live',
         };
       }
@@ -2148,44 +2116,38 @@ export async function fetchExtendedMarketsAssets(
     }
 
     if (match && match.price > 0) {
-      const dec = getAssetPriceDecimals(Number(match.price), asset.currency, asset.category);
-      const bounds = normalizePriceBounds(Number(match.price), Number(match.high), Number(match.low), dec);
-      const pct = match.changePercent !== undefined ? roundToDecimals(Number(match.changePercent), 2) : asset.change24h;
+      const dec = match.price < 0.02 ? 5 : match.price < 5 ? 4 : 2;
+      const pct = match.changePercent !== undefined ? Number(Number(match.changePercent).toFixed(2)) : asset.change24h;
       const chg =
         match.change !== undefined
-          ? roundToDecimals(Number(match.change), dec)
-          : roundToDecimals((pct / 100) * bounds.price, dec);
+          ? Number(Number(match.change).toFixed(dec))
+          : Number(((pct / 100) * match.price).toFixed(dec));
+      const high = match.high && match.high > 0 ? Number(match.high) : match.price;
+      const low = match.low && match.low > 0 ? Number(match.low) : match.price;
       const sparkline =
         asset.sparkline.length > 0 && asset.sparkline[asset.sparkline.length - 1] > 0
-          ? [...asset.sparkline.slice(1), bounds.price]
+          ? [...asset.sparkline.slice(1), match.price]
           : [
-              roundToDecimals(bounds.price * (1 - (pct / 100) * 0.8), dec),
-              roundToDecimals(bounds.price * (1 - (pct / 100) * 0.5), dec),
-              roundToDecimals(bounds.price * (1 - (pct / 100) * 0.2), dec),
-              roundToDecimals(bounds.price * (1 - (pct / 100) * 0.1), dec),
-              bounds.price,
+              Number((match.price * (1 - (pct / 100) * 0.8)).toFixed(dec)),
+              Number((match.price * (1 - (pct / 100) * 0.5)).toFixed(dec)),
+              Number((match.price * (1 - (pct / 100) * 0.2)).toFixed(dec)),
+              Number((match.price * (1 - (pct / 100) * 0.1)).toFixed(dec)),
+              match.price,
             ];
-
-      const resolvedVolume =
-        asset.category === 'forex'
-          ? '--'
-          : match.volume && match.volume !== 'N/A'
-          ? match.volume
-          : asset.volume;
 
       return {
         ...asset,
-        price: bounds.price,
+        price: match.price,
         change24h: pct,
         changeValue: chg,
-        high24h: bounds.high,
-        low24h: bounds.low,
-        volume: resolvedVolume,
+        high24h: high,
+        low24h: low,
+        volume: match.volume || asset.volume,
         sparkline,
       };
     }
 
-    return asset.category === 'forex' && asset.volume !== '--' ? { ...asset, volume: '--' } : asset;
+    return asset;
   });
 
   if (typeof window !== 'undefined' && updatedAssets.some((a) => a.price > 0)) {

@@ -19,42 +19,11 @@ export interface ParsedYahooOHLCV {
   volume?: number;
   volumeFormatted?: string;
   hasSplitEvent: boolean;
-  marketTimeMs?: number;
 }
 
-interface AlignedBar {
-  ts?: number;
-  open?: number;
-  high?: number;
-  low?: number;
-  close: number;
-  volume?: number;
-}
-
-function isPositiveFinite(v: unknown): v is number {
-  return typeof v === 'number' && Number.isFinite(v) && v > 0;
-}
-
-export function normalizePriceBounds(
-  price: number,
-  high?: number,
-  low?: number,
-  decimals: number = 2
-): { price: number; high: number; low: number } {
-  const round = (n: number) => {
-    const r = Number(n.toFixed(decimals));
-    return Object.is(r, -0) || r === 0 ? 0 : r;
-  };
-  const safePrice = isPositiveFinite(price) ? round(price) : 0;
-  const candidates = [safePrice, high, low].filter(isPositiveFinite);
-  if (candidates.length === 0) {
-    return { price: 0, high: 0, low: 0 };
-  }
-  return {
-    price: safePrice,
-    high: round(Math.max(...candidates)),
-    low: round(Math.min(...candidates)),
-  };
+function getValidPositiveNumbers(arr: unknown): number[] {
+  if (!Array.isArray(arr)) return [];
+  return arr.filter((v): v is number => typeof v === 'number' && Number.isFinite(v) && v > 0);
 }
 
 export function formatCompactVolume(volume?: number): string | undefined {
@@ -71,7 +40,6 @@ export function formatCompactVolume(volume?: number): string | undefined {
  * Parses Yahoo Finance v8 /chart response defensively.
  * Crucial for B3 (.SA) and ^BVSP where Yahoo returns regularMarketDayHigh: 0 and regularMarketDayLow: 0
  * in `meta`, while the actual session High, Low, Open, and Volume reside in `indicators.quote[0]`.
- * Also handles range=5d payloads by aligning timestamps & OHLCV bars and choosing the latest session.
  */
 export function extractYahooChartOHLCV(
   yData: any,
@@ -82,125 +50,86 @@ export function extractYahooChartOHLCV(
   if (!m) return null;
 
   const quote = result?.indicators?.quote?.[0];
-  const timestamps: unknown[] = Array.isArray(result?.timestamp) ? result.timestamp : [];
-  const closes: unknown[] = Array.isArray(quote?.close) ? quote.close : [];
-  const highs: unknown[] = Array.isArray(quote?.high) ? quote.high : [];
-  const lows: unknown[] = Array.isArray(quote?.low) ? quote.low : [];
-  const opens: unknown[] = Array.isArray(quote?.open) ? quote.open : [];
-  const volumes: unknown[] = Array.isArray(quote?.volume) ? quote.volume : [];
-
-  const bars: AlignedBar[] = [];
-  for (let i = 0; i < closes.length; i++) {
-    const c = closes[i];
-    if (!isPositiveFinite(c)) continue;
-    const rawTs = timestamps[i];
-    bars.push({
-      ts: isPositiveFinite(rawTs) ? rawTs * 1000 : undefined,
-      open: isPositiveFinite(opens[i]) ? (opens[i] as number) : undefined,
-      high: isPositiveFinite(highs[i]) ? (highs[i] as number) : undefined,
-      low: isPositiveFinite(lows[i]) ? (lows[i] as number) : undefined,
-      close: c,
-      volume: isPositiveFinite(volumes[i]) ? (volumes[i] as number) : undefined,
-    });
-  }
-
-  const latestBar = bars.length > 0 ? bars[bars.length - 1] : undefined;
-  const prevBar = bars.length >= 2 ? bars[bars.length - 2] : undefined;
+  const validCloses = getValidPositiveNumbers(quote?.close);
+  const validHighs = getValidPositiveNumbers(quote?.high);
+  const validLows = getValidPositiveNumbers(quote?.low);
+  const validOpens = getValidPositiveNumbers(quote?.open);
+  const validVolumes = getValidPositiveNumbers(quote?.volume);
 
   // London Stock Exchange (.L) tickers are often quoted in pence (GBp / GBX); normalize to GBP
   const unitScale = m.currency === 'GBp' || m.currency === 'GBX' ? 0.01 : 1;
-  const metaMarketTimeMs = isPositiveFinite(m.regularMarketTime) ? (m.regularMarketTime as number) * 1000 : undefined;
-
-  const barIsNewerThanMeta = Boolean(
-    latestBar?.ts && metaMarketTimeMs && latestBar.ts > metaMarketTimeMs + 3600 * 1000
-  );
 
   const rawPrice =
-    (barIsNewerThanMeta && latestBar
-      ? latestBar.close
-      : isPositiveFinite(m.regularMarketPrice)
-      ? (m.regularMarketPrice as number)
-      : latestBar
-      ? latestBar.close
+    (typeof m.regularMarketPrice === 'number' && Number.isFinite(m.regularMarketPrice) && m.regularMarketPrice > 0
+      ? m.regularMarketPrice
+      : validCloses.length > 0
+      ? validCloses[validCloses.length - 1]
       : 0) * unitScale;
 
   if (rawPrice <= 0) return null;
 
-  const roundPrice = (n: number) => {
-    const r = Number(n.toFixed(priceDecimals));
-    return Object.is(r, -0) || r === 0 ? 0 : r;
-  };
+  const roundPrice = (n: number) => Number(n.toFixed(priceDecimals));
 
   const currentPrice = roundPrice(rawPrice);
 
-  // In range=5d queries, chartPreviousClose is 5 days old; prefer previousClose or prevBar.close first.
   const rawPrevClose =
-    (barIsNewerThanMeta && prevBar
-      ? prevBar.close
-      : isPositiveFinite(m.previousClose)
-      ? (m.previousClose as number)
-      : prevBar
-      ? prevBar.close
-      : isPositiveFinite(m.chartPreviousClose)
-      ? (m.chartPreviousClose as number)
+    (typeof m.chartPreviousClose === 'number' && Number.isFinite(m.chartPreviousClose) && m.chartPreviousClose > 0
+      ? m.chartPreviousClose
+      : typeof m.previousClose === 'number' && Number.isFinite(m.previousClose) && m.previousClose > 0
+      ? m.previousClose
       : rawPrice / unitScale) * unitScale;
 
   const previousClose = roundPrice(rawPrevClose);
   const change = roundPrice(currentPrice - previousClose);
-  const rawChangePct = previousClose > 0 ? Number(((change / previousClose) * 100).toFixed(2)) : 0;
-  const changePercent = Object.is(rawChangePct, -0) || rawChangePct === 0 ? 0 : rawChangePct;
+  const changePercent = previousClose > 0 ? Number(((change / previousClose) * 100).toFixed(2)) : 0;
 
-  // Use meta High/Low ONLY if strictly > 0 and meta is not stale relative to latestBar; otherwise read real bar High/Low
+  // Use meta High/Low ONLY if strictly > 0; otherwise read real exchange High/Low from indicators.quote[0]
   const rawHigh =
-    (!barIsNewerThanMeta && isPositiveFinite(m.regularMarketDayHigh)
-      ? (m.regularMarketDayHigh as number) * unitScale
-      : latestBar?.high !== undefined
-      ? latestBar.high * unitScale
-      : rawPrice);
+    typeof m.regularMarketDayHigh === 'number' && Number.isFinite(m.regularMarketDayHigh) && m.regularMarketDayHigh > 0
+      ? m.regularMarketDayHigh * unitScale
+      : validHighs.length > 0
+      ? validHighs[validHighs.length - 1] * unitScale
+      : rawPrice;
 
   const rawLow =
-    (!barIsNewerThanMeta && isPositiveFinite(m.regularMarketDayLow)
-      ? (m.regularMarketDayLow as number) * unitScale
-      : latestBar?.low !== undefined
-      ? latestBar.low * unitScale
-      : rawPrice);
+    typeof m.regularMarketDayLow === 'number' && Number.isFinite(m.regularMarketDayLow) && m.regularMarketDayLow > 0
+      ? m.regularMarketDayLow * unitScale
+      : validLows.length > 0
+      ? validLows[validLows.length - 1] * unitScale
+      : rawPrice;
 
-  const bounds = normalizePriceBounds(
-    currentPrice,
-    Math.max(rawHigh, rawLow),
-    Math.min(rawHigh, rawLow),
-    priceDecimals
-  );
+  const high = roundPrice(Math.max(rawHigh, rawLow));
+  const low = roundPrice(Math.min(rawHigh, rawLow));
 
   const rawOpen =
-    (!barIsNewerThanMeta && isPositiveFinite(m.regularMarketOpen)
-      ? (m.regularMarketOpen as number) * unitScale
-      : latestBar?.open !== undefined
-      ? latestBar.open * unitScale
-      : rawPrevClose);
+    typeof m.regularMarketOpen === 'number' && Number.isFinite(m.regularMarketOpen) && m.regularMarketOpen > 0
+      ? m.regularMarketOpen * unitScale
+      : validOpens.length > 0
+      ? validOpens[validOpens.length - 1] * unitScale
+      : rawPrevClose;
   const open = roundPrice(rawOpen);
 
   const rawVolume =
-    !barIsNewerThanMeta && isPositiveFinite(m.regularMarketVolume)
-      ? (m.regularMarketVolume as number)
-      : latestBar?.volume;
+    typeof m.regularMarketVolume === 'number' && Number.isFinite(m.regularMarketVolume) && m.regularMarketVolume > 0
+      ? m.regularMarketVolume
+      : validVolumes.length > 0
+      ? validVolumes[validVolumes.length - 1]
+      : undefined;
 
   const splits = result?.events?.splits;
   const hasSplitEvent = Boolean(splits && typeof splits === 'object' && Object.keys(splits).length > 0);
-  const marketTimeMs = Math.max(metaMarketTimeMs || 0, latestBar?.ts || 0) || undefined;
 
   return {
-    price: bounds.price,
+    price: currentPrice,
     previousClose,
     change,
-    changePercent: Number(changePercent.toFixed(2)),
-    high: bounds.high,
-    low: bounds.low,
+    changePercent,
+    high,
+    low,
     open,
     volume: rawVolume,
     volumeFormatted: formatCompactVolume(rawVolume),
     hasSplitEvent,
-    marketTimeMs,
   };
 }
 

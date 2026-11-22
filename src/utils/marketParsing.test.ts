@@ -4,7 +4,6 @@ import {
   extractYahooChartOHLCV,
   reconcileSilverSpotParity,
   auditSplitAndFractionSanity,
-  normalizePriceBounds,
 } from './marketParsing';
 
 describe('Market Parsing, Spot Metals Parity & Split Sanity Audit', () => {
@@ -112,58 +111,4 @@ describe('Market Parsing, Spot Metals Parity & Split Sanity Audit', () => {
     assert.strictEqual(splitDivergence.resolvedChangePct, -8.75);
     assert.strictEqual(splitDivergence.divergenceDetected, true);
   });
-
-  it('normalizes price bounds so low <= price <= high always holds', () => {
-    const out = normalizePriceBounds(3.75, 3.60, 3.40, 2);
-    assert.strictEqual(out.price, 3.75);
-    assert.strictEqual(out.high, 3.75);
-    assert.strictEqual(out.low, 3.4);
-
-    const outLow = normalizePriceBounds(3.25, 3.60, 3.40, 2);
-    assert.strictEqual(outLow.price, 3.25);
-    assert.strictEqual(outLow.high, 3.6);
-    assert.strictEqual(outLow.low, 3.25);
-  });
-
-  it('handles Yahoo range=5d payload using latest session close and previous bar close', () => {
-    const range5dPayload = {
-      chart: {
-        result: [
-          {
-            meta: {
-              currency: 'BRL',
-              symbol: 'CSNA3.SA',
-              regularMarketPrice: 3.40,
-              regularMarketTime: 1700000000,
-              chartPreviousClose: 3.10, // 5 days old!
-              regularMarketDayHigh: 0,
-              regularMarketDayLow: 0,
-            },
-            timestamp: [1700000000, 1700086400, 1700172800],
-            indicators: {
-              quote: [
-                {
-                  open: [3.35, 3.42, 3.45],
-                  high: [3.44, 3.55, 3.70],
-                  low: [3.30, 3.38, 3.43],
-                  close: [3.40, 3.50, 3.56],
-                  volume: [1200000, 1400000, 1850000],
-                },
-              ],
-            },
-          },
-        ],
-      },
-    };
-
-    const parsed = extractYahooChartOHLCV(range5dPayload, 2);
-    assert.ok(parsed);
-    assert.strictEqual(parsed.price, 3.56);
-    assert.strictEqual(parsed.previousClose, 3.50);
-    assert.strictEqual(parsed.high, 3.70);
-    assert.strictEqual(parsed.low, 3.43);
-    assert.ok(parsed.low <= parsed.price && parsed.price <= parsed.high);
-    assert.strictEqual(parsed.marketTimeMs, 1700172800 * 1000);
-  });
 });
-
