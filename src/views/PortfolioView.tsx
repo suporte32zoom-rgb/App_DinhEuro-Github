@@ -12,7 +12,7 @@ import {
   Check,
 } from 'lucide-react';
 import { useMarket } from '../context/MarketContext';
-import { formatCurrencyValue } from '../utils/finance';
+import { formatCurrencyValue, formatSignedCurrencyChange, formatSignedPercentChange, getAssetPriceDecimals } from '../utils/finance';
 import { DualPrice } from '../components/DualPrice';
 import { useI18n } from '../i18n/I18nContext';
 import { getNumberLocale } from '../i18n/translations';
@@ -202,7 +202,11 @@ export const PortfolioView: React.FC = () => {
               portfolio.length === 0 ? 'text-slate-400' : isOverallPositive ? 'text-emerald-400' : 'text-rose-400'
             }`}
           >
-            <span>{portfolio.length > 0 && isOverallPositive ? '+' : ''}{formatCurrencyValue(totalPLBRL, 'BRL', 2, locale)}</span>
+            <span>
+              {portfolio.length > 0
+                ? formatSignedCurrencyChange(totalPLBRL, 'BRL', 2, locale)
+                : formatCurrencyValue(0, 'BRL', 2, locale)}
+            </span>
           </div>
           <div
             className={`flex items-center gap-1 text-xs font-bold font-mono-numbers mt-2 ${
@@ -215,10 +219,7 @@ export const PortfolioView: React.FC = () => {
             <span>
               {portfolio.length === 0
                 ? tPort.accumulatedZero
-                : `${isOverallPositive ? '+' : ''}${totalPLPercent.toLocaleString(locale, {
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2,
-                  })}% ${tPort.accumulatedReturnSuffix}`}
+                : `${formatSignedPercentChange(totalPLPercent, 2, locale).text} ${tPort.accumulatedReturnSuffix}`}
             </span>
           </div>
         </div>
@@ -320,7 +321,16 @@ export const PortfolioView: React.FC = () => {
               </thead>
               <tbody className="divide-y divide-slate-800/60">
                 {positionsWithLiveMetrics.map((pos) => {
-                  const isPos = pos.profitLoss >= 0;
+                  const pctInfo = formatSignedPercentChange(pos.profitPercent, 2, locale);
+                  const posCategory =
+                    pos.assetType === 'stock_br'
+                      ? 'stocks_br'
+                      : pos.assetType === 'stock_us'
+                      ? 'stocks_us'
+                      : pos.assetType === 'crypto'
+                      ? 'crypto'
+                      : 'forex';
+                  const dec = getAssetPriceDecimals(pos.currentPrice, pos.currency, posCategory);
                   return (
                     <tr key={pos.id} className="hover:bg-slate-800/40 transition">
                       <td className="py-3.5 px-4">
@@ -333,13 +343,14 @@ export const PortfolioView: React.FC = () => {
                         {pos.quantity.toLocaleString(locale)}
                       </td>
                       <td className="py-3.5 px-4 text-right font-mono-numbers text-slate-300">
-                        {formatCurrencyValue(pos.averageBuyPrice, pos.currency, 2, locale)}
+                        {formatCurrencyValue(pos.averageBuyPrice, pos.currency, dec, locale)}
                       </td>
                       <td className="py-3.5 px-4 text-right">
                         <DualPrice
                           price={pos.currentPrice}
                           currency={pos.currency}
                           rates={universalRates}
+                          category={posCategory}
                           layout="compact"
                           primaryClassName="font-mono-numbers font-bold text-white text-xs"
                           secondaryClassName="text-[10px] font-mono-numbers text-emerald-400"
@@ -350,6 +361,7 @@ export const PortfolioView: React.FC = () => {
                           price={pos.currentTotalValue}
                           currency={pos.currency}
                           rates={universalRates}
+                          category={posCategory}
                           layout="compact"
                           primaryClassName="font-mono-numbers font-bold text-white text-xs"
                           secondaryClassName="text-[10px] font-mono-numbers text-emerald-400 font-medium"
@@ -358,15 +370,10 @@ export const PortfolioView: React.FC = () => {
                       <td className="py-3.5 px-4 text-right font-mono-numbers font-bold">
                         <span
                           className={`inline-flex items-center gap-1 px-2 py-0.5 rounded ${
-                            isPos ? 'text-emerald-400 bg-emerald-500/10' : 'text-rose-400 bg-rose-500/10'
+                            !pctInfo.isNegative ? 'text-emerald-400 bg-emerald-500/10' : 'text-rose-400 bg-rose-500/10'
                           }`}
                         >
-                          {isPos ? '+' : ''}
-                          {formatCurrencyValue(pos.profitLoss, pos.currency, 2, locale)} ({isPos ? '+' : ''}
-                          {pos.profitPercent.toLocaleString(locale, {
-                            minimumFractionDigits: 2,
-                            maximumFractionDigits: 2,
-                          })}%)
+                          {formatSignedCurrencyChange(pos.profitLoss, pos.currency, 2, locale)} ({pctInfo.text})
                         </span>
                       </td>
                       <td className="py-3.5 px-4 text-center">

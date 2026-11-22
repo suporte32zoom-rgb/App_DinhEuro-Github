@@ -1,7 +1,7 @@
 import React from 'react';
 import { TrendingUp, TrendingDown } from 'lucide-react';
 import { useMarket } from '../context/MarketContext';
-import { getDualCurrencyDisplay } from '../utils/finance';
+import { getDualCurrencyDisplay, formatSignedPercentChange } from '../utils/finance';
 import { useI18n } from '../i18n/I18nContext';
 import { getLocalizedAssetSymbol } from '../i18n/marketDataTranslations';
 
@@ -28,9 +28,9 @@ export const TickerTape: React.FC = () => {
         <div className="overflow-hidden flex-1 no-scrollbar">
           <div className="animate-ticker flex items-center gap-6">
             {displayItems.map((item, idx) => {
-              const isPositive = item.change24h >= 0;
+              const pctInfo = formatSignedPercentChange(item.change24h, 2);
               const isIndex = item.category === 'indices' || item.currency === 'PTS';
-              const dual = getDualCurrencyDisplay(item.price, item.currency, universalRates, isIndex);
+              const dual = getDualCurrencyDisplay(item.price, item.currency, universalRates, isIndex, undefined, item.category);
 
               return (
                 <button
@@ -49,16 +49,15 @@ export const TickerTape: React.FC = () => {
                   </div>
                   <span
                     className={`flex items-center text-[11px] font-semibold font-mono-numbers ${
-                      isPositive ? 'text-[#009B77] dark:text-emerald-400' : 'text-[#DC2626] dark:text-rose-400'
+                      !pctInfo.isNegative ? 'text-[#009B77] dark:text-emerald-400' : 'text-[#DC2626] dark:text-rose-400'
                     }`}
                   >
-                    {isPositive ? (
+                    {pctInfo.isPositive ? (
                       <TrendingUp className="w-3 h-3 mr-0.5 inline" />
-                    ) : (
+                    ) : pctInfo.isNegative ? (
                       <TrendingDown className="w-3 h-3 mr-0.5 inline" />
-                    )}
-                    {isPositive ? '+' : ''}
-                    {item.change24h.toFixed(2)}%
+                    ) : null}
+                    {pctInfo.text}
                   </span>
                 </button>
               );

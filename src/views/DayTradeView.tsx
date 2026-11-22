@@ -37,7 +37,7 @@ import {
   Radio,
 } from 'lucide-react';
 import { useMarket } from '../context/MarketContext';
-import { formatCurrencyValue, getDualCurrencyDisplay } from '../utils/finance';
+import { formatCurrencyValue, getDualCurrencyDisplay, formatSignedPercentChange, getAssetPriceDecimals } from '../utils/finance';
 import { MarketAsset } from '../services/marketData';
 import { useI18n } from '../i18n/I18nContext';
 import { getNumberLocale } from '../i18n/translations';
@@ -692,7 +692,7 @@ export const DayTradeView: React.FC = () => {
 
         <div className="flex items-center gap-3 sm:gap-4 overflow-x-auto no-scrollbar flex-nowrap py-0.5">
           {globalTickers.map((t) => {
-            const isPos = t.change >= 0;
+            const pctInfo = formatSignedPercentChange(t.change, 2);
             return (
               <div
                 key={t.symbol}
@@ -706,17 +706,16 @@ export const DayTradeView: React.FC = () => {
                 <span className="font-black text-white text-[11px]">{t.price}</span>
                 <span
                   className={`text-[10px] font-bold flex items-center ${
-                    isPos ? 'text-emerald-400' : 'text-rose-400'
+                    !pctInfo.isNegative ? 'text-emerald-400' : 'text-rose-400'
                   }`}
                 >
-                  {isPos ? '+' : ''}
-                  {t.change.toFixed(2)}%
+                  {pctInfo.text}
                 </span>
                 {/* Micro SVG Sparkline */}
                 <svg className="w-10 h-3 overflow-visible shrink-0" viewBox="0 0 40 12">
                   <polyline
                     fill="none"
-                    stroke={isPos ? dtUpHex : dtDownHex}
+                    stroke={!pctInfo.isNegative ? dtUpHex : dtDownHex}
                     strokeWidth="1.2"
                     points="0,8 12,4 24,9 40,2"
                   />
@@ -870,34 +869,40 @@ export const DayTradeView: React.FC = () => {
               </div>
 
               {/* Price, 24h Variation & Synchronized Dual/Tri Currency Display */}
-              <div className="flex items-center gap-2 pl-2 border-l border-slate-800 font-mono-numbers">
-                <div className="flex flex-col leading-tight">
-                  <div className="flex items-baseline gap-1.5">
-                    <span className="text-sm sm:text-base font-black text-white">
-                      {formatCurrencyValue(currentMarketPrice, currentAsset.currency, 2, locale)}
-                    </span>
-                    <span
-                      className={`text-[10px] font-bold px-1.5 py-0.2 rounded ${
-                        currentAsset.change24h >= 0 ? 'text-emerald-400 bg-emerald-500/10' : 'text-rose-400 bg-rose-500/10'
-                      }`}
-                    >
-                      {currentAsset.change24h >= 0 ? '+' : ''}
-                      {currentAsset.change24h}%
-                    </span>
-                  </div>
-                  <div className="flex items-center gap-1.5 text-[9px] text-emerald-400/90 font-medium">
-                    <span>≈ {dualAssetDisplay.secondaryFormatted}</span>
-                    <span className="text-slate-600">|</span>
-                    <span className="text-slate-400">≈ {dualAssetDisplay.tertiaryFormatted}</span>
-                  </div>
-                </div>
+              {(() => {
+                const dec = getAssetPriceDecimals(currentMarketPrice, currentAsset.currency, currentAsset.category);
+                const pctInfo = formatSignedPercentChange(currentAsset.change24h, 2);
+                const dispVol = currentAsset.category === 'forex' ? '--' : currentAsset.volume;
+                return (
+                  <div className="flex items-center gap-2 pl-2 border-l border-slate-800 font-mono-numbers">
+                    <div className="flex flex-col leading-tight">
+                      <div className="flex items-baseline gap-1.5">
+                        <span className="text-sm sm:text-base font-black text-white">
+                          {formatCurrencyValue(currentMarketPrice, currentAsset.currency, dec, locale)}
+                        </span>
+                        <span
+                          className={`text-[10px] font-bold px-1.5 py-0.2 rounded ${
+                            !pctInfo.isNegative ? 'text-emerald-400 bg-emerald-500/10' : 'text-rose-400 bg-rose-500/10'
+                          }`}
+                        >
+                          {pctInfo.text}
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-1.5 text-[9px] text-emerald-400/90 font-medium">
+                        <span>≈ {dualAssetDisplay.secondaryFormatted}</span>
+                        <span className="text-slate-600">|</span>
+                        <span className="text-slate-400">≈ {dualAssetDisplay.tertiaryFormatted}</span>
+                      </div>
+                    </div>
 
-                <div className="hidden 2xl:flex items-center gap-2 text-[10px] text-slate-400 pl-2 border-l border-slate-800/80">
-                  <span>{tDt.minShort} <strong className="text-slate-200">{formatCurrencyValue(currentAsset.low24h, currentAsset.currency, 2, locale)}</strong></span>
-                  <span>{tDt.maxShort} <strong className="text-slate-200">{formatCurrencyValue(currentAsset.high24h, currentAsset.currency, 2, locale)}</strong></span>
-                  <span>{tDt.volShort} <strong className="text-slate-200">{currentAsset.volume}</strong></span>
-                </div>
-              </div>
+                    <div className="hidden 2xl:flex items-center gap-2 text-[10px] text-slate-400 pl-2 border-l border-slate-800/80">
+                      <span>{tDt.minShort} <strong className="text-slate-200">{formatCurrencyValue(currentAsset.low24h, currentAsset.currency, dec, locale)}</strong></span>
+                      <span>{tDt.maxShort} <strong className="text-slate-200">{formatCurrencyValue(currentAsset.high24h, currentAsset.currency, dec, locale)}</strong></span>
+                      <span>{tDt.volShort} <strong className="text-slate-200">{dispVol}</strong></span>
+                    </div>
+                  </div>
+                );
+              })()}
             </div>
 
             {/* Center: Functional Terminal Tabs */}
@@ -1469,7 +1474,8 @@ export const DayTradeView: React.FC = () => {
             <div className="flex-1 overflow-y-auto no-scrollbar space-y-0.5 font-mono-numbers text-[10px]">
               {filteredMarketWatch.map((item) => {
                 const isSelected = item.symbol === selectedSymbol;
-                const isPos = item.change24h >= 0;
+                const pctInfo = formatSignedPercentChange(item.change24h, 2);
+                const dec = getAssetPriceDecimals(item.price, item.currency, item.category);
                 return (
                   <div
                     key={item.id}
@@ -1486,14 +1492,14 @@ export const DayTradeView: React.FC = () => {
                     </div>
                     <div className="text-right">
                       <span className="font-bold text-white text-[10px] block font-mono-numbers">
-                        {formatCurrencyValue(item.price, item.currency, 2, locale)}
+                        {formatCurrencyValue(item.price, item.currency, dec, locale)}
                       </span>
                       <div className="flex items-center justify-end gap-1 text-[9px] font-mono-numbers">
                         <span className="text-slate-400 text-[8px]">
-                          ≈ {getDualCurrencyDisplay(item.price, item.currency, universalRates, undefined, locale).secondaryFormatted}
+                          ≈ {getDualCurrencyDisplay(item.price, item.currency, universalRates, undefined, locale, item.category).secondaryFormatted}
                         </span>
-                        <span className={`font-bold ${isPos ? 'text-emerald-400' : 'text-rose-400'}`}>
-                          {isPos ? '+' : ''}{item.change24h}%
+                        <span className={`font-bold ${!pctInfo.isNegative ? 'text-emerald-400' : 'text-rose-400'}`}>
+                          {pctInfo.text}
                         </span>
                       </div>
                     </div>
@@ -1673,7 +1679,7 @@ export const DayTradeView: React.FC = () => {
                     <span>{tDt.buyActionVerb} {contracts}x {currentAsset.symbol}</span>
                   </div>
                   <span className="text-[10px] font-mono-numbers opacity-90">
-                    {formatCurrencyValue(currentMarketPrice, currentAsset.currency, 2, locale)} (≈ {dualAssetDisplay.secondaryFormatted})
+                    {formatCurrencyValue(currentMarketPrice, currentAsset.currency, getAssetPriceDecimals(currentMarketPrice, currentAsset.currency, currentAsset.category), locale)} (≈ {dualAssetDisplay.secondaryFormatted})
                   </span>
                 </button>
               ) : (
@@ -1687,7 +1693,7 @@ export const DayTradeView: React.FC = () => {
                     <span>{tDt.sellActionVerb} {contracts}x {currentAsset.symbol}</span>
                   </div>
                   <span className="text-[10px] font-mono-numbers opacity-90">
-                    {formatCurrencyValue(currentMarketPrice, currentAsset.currency, 2, locale)} (≈ {dualAssetDisplay.secondaryFormatted})
+                    {formatCurrencyValue(currentMarketPrice, currentAsset.currency, getAssetPriceDecimals(currentMarketPrice, currentAsset.currency, currentAsset.category), locale)} (≈ {dualAssetDisplay.secondaryFormatted})
                   </span>
                 </button>
               )}
@@ -1784,19 +1790,24 @@ export const DayTradeView: React.FC = () => {
               </div>
 
               {/* Price & Variation */}
-              <div className="flex items-baseline gap-1.5 font-mono-numbers shrink-0">
-                <span className="text-sm font-black text-white">
-                  {formatCurrencyValue(currentMarketPrice, currentAsset.currency, 2, locale)}
-                </span>
-                <span
-                  className={`text-[10px] font-bold px-1.5 py-0.5 rounded ${
-                    currentAsset.change24h >= 0 ? 'text-emerald-400 bg-emerald-500/10' : 'text-rose-400 bg-rose-500/10'
-                  }`}
-                >
-                  {currentAsset.change24h >= 0 ? '+' : ''}
-                  {currentAsset.change24h}%
-                </span>
-              </div>
+              {(() => {
+                const dec = getAssetPriceDecimals(currentMarketPrice, currentAsset.currency, currentAsset.category);
+                const pctInfo = formatSignedPercentChange(currentAsset.change24h, 2);
+                return (
+                  <div className="flex items-baseline gap-1.5 font-mono-numbers shrink-0">
+                    <span className="text-sm font-black text-white">
+                      {formatCurrencyValue(currentMarketPrice, currentAsset.currency, dec, locale)}
+                    </span>
+                    <span
+                      className={`text-[10px] font-bold px-1.5 py-0.5 rounded ${
+                        !pctInfo.isNegative ? 'text-emerald-400 bg-emerald-500/10' : 'text-rose-400 bg-rose-500/10'
+                      }`}
+                    >
+                      {pctInfo.text}
+                    </span>
+                  </div>
+                );
+              })()}
             </div>
 
             {/* Timeframes & Dual Conversion */}
@@ -2244,7 +2255,8 @@ export const DayTradeView: React.FC = () => {
                   <div className="space-y-1 max-h-[360px] overflow-y-auto no-scrollbar font-mono-numbers text-xs">
                     {filteredMarketWatch.map((item) => {
                       const isSelected = item.symbol === selectedSymbol;
-                      const isPos = item.change24h >= 0;
+                      const pctInfo = formatSignedPercentChange(item.change24h, 2);
+                      const dec = getAssetPriceDecimals(item.price, item.currency, item.category);
                       return (
                         <div
                           key={item.id}
@@ -2264,10 +2276,10 @@ export const DayTradeView: React.FC = () => {
                           </div>
                           <div className="text-right">
                             <span className="font-bold text-white text-xs block">
-                              {formatCurrencyValue(item.price, item.currency, 2, locale)}
+                              {formatCurrencyValue(item.price, item.currency, dec, locale)}
                             </span>
-                            <span className={`text-[10px] font-bold ${isPos ? 'text-emerald-400' : 'text-rose-400'}`}>
-                              {isPos ? '+' : ''}{item.change24h}%
+                            <span className={`text-[10px] font-bold ${!pctInfo.isNegative ? 'text-emerald-400' : 'text-rose-400'}`}>
+                              {pctInfo.text}
                             </span>
                           </div>
                         </div>
