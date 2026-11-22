@@ -14,7 +14,7 @@ import {
   EyeOff,
 } from 'lucide-react';
 import { MarketAsset, CandlePoint } from '../services/marketData';
-import { formatPointsValue } from '../utils/finance';
+import { formatPointsValue, formatCurrencyValue, getAssetPriceDecimals } from '../utils/finance';
 import { useI18n } from '../i18n/I18nContext';
 import { getNumberLocale } from '../i18n/translations';
 import { VIEWS_TRANSLATIONS } from '../i18n/viewsTranslations';
@@ -49,7 +49,8 @@ export function generateD3Series(
   symbol: string,
   timeframe: D3Timeframe,
   basePrice: number,
-  locale: string = 'pt-BR'
+  locale: string = 'pt-BR',
+  decimals: number = 2
 ): Array<CandlePoint & { date: Date }> {
   const prng = createDeterministicPRNG(`${symbol}_${timeframe}_d3v7_dinh`);
   let count = 30;
@@ -89,14 +90,15 @@ export function generateD3Series(
   const series: Array<CandlePoint & { date: Date }> = [];
   let price = basePrice * (0.92 + prng() * 0.05);
   const now = Date.now();
+  const minStep = Math.pow(10, -decimals);
 
   for (let i = count; i >= 0; i--) {
     const timeStamp = new Date(now - i * intervalMs);
     const variance = (prng() - 0.48) * (price * 0.018);
     const open = price;
-    const close = Math.max(0.01, open + variance);
+    const close = Math.max(minStep, open + variance);
     const high = Math.max(open, close) + prng() * (price * 0.007);
-    const low = Math.min(open, close) - prng() * (price * 0.007);
+    const low = Math.max(minStep, Math.min(open, close) - prng() * (price * 0.007));
     const volume = Math.floor(prng() * 60000 + 15000);
 
     const timeStr =
@@ -107,10 +109,10 @@ export function generateD3Series(
     series.push({
       date: timeStamp,
       time: timeStr,
-      open: Number(open.toFixed(2)),
-      high: Number(high.toFixed(2)),
-      low: Number(low.toFixed(2)),
-      close: Number(close.toFixed(2)),
+      open: Number(open.toFixed(decimals)),
+      high: Number(high.toFixed(decimals)),
+      low: Number(low.toFixed(decimals)),
+      close: Number(close.toFixed(decimals)),
       volume,
     });
 
@@ -120,7 +122,7 @@ export function generateD3Series(
   // Pin final bar to current price
   if (series.length > 0) {
     const last = series[series.length - 1];
-    last.close = Number(basePrice.toFixed(2));
+    last.close = Number(basePrice.toFixed(decimals));
     last.high = Math.max(last.high, last.close);
     last.low = Math.min(last.low, last.close);
   }
@@ -165,11 +167,12 @@ export const D3AdvancedChart: React.FC<D3AdvancedChartProps> = ({
   }, []);
 
   const isIndex = asset.category === 'indices' || asset.currency === 'PTS' || asset.currency === 'PONTOS';
+  const priceDecimals = getAssetPriceDecimals(asset.price, asset.currency, asset.category);
 
   // Primary Series
   const data = useMemo(() => {
-    return generateD3Series(asset.symbol, timeframe, asset.price, locale);
-  }, [asset.symbol, timeframe, asset.price, locale]);
+    return generateD3Series(asset.symbol, timeframe, asset.price, locale, priceDecimals);
+  }, [asset.symbol, timeframe, asset.price, locale, priceDecimals]);
 
   // Comparison series normalized to percentage change (Base 0%)
   const comparisonAsset = useMemo(() => {
@@ -179,7 +182,8 @@ export const D3AdvancedChart: React.FC<D3AdvancedChartProps> = ({
 
   const comparisonData = useMemo(() => {
     if (!comparisonAsset || !showBenchmark) return null;
-    return generateD3Series(comparisonAsset.symbol, timeframe, comparisonAsset.price, locale);
+    const compDecimals = getAssetPriceDecimals(comparisonAsset.price, comparisonAsset.currency, comparisonAsset.category);
+    return generateD3Series(comparisonAsset.symbol, timeframe, comparisonAsset.price, locale, compDecimals);
   }, [comparisonAsset, timeframe, showBenchmark, locale]);
 
   // Simple Moving Averages (SMA 20 & SMA 50) using D3 data
@@ -498,7 +502,7 @@ export const D3AdvancedChart: React.FC<D3AdvancedChartProps> = ({
             <span className="text-[#DC2626] dark:text-rose-400 font-bold">
               {isIndex
                 ? formatPointsValue(minPrice, locale)
-                : `${asset.currency === 'BRL' ? 'R$' : asset.currency === 'EUR' ? '€' : '$'} ${minPrice.toLocaleString(locale, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
+                : formatCurrencyValue(minPrice, asset.currency, priceDecimals, locale)}
             </span>
           </div>
           <div className="flex items-center gap-1.5">
@@ -506,7 +510,7 @@ export const D3AdvancedChart: React.FC<D3AdvancedChartProps> = ({
             <span className="text-[#006B52] dark:text-emerald-400 font-bold">
               {isIndex
                 ? formatPointsValue(maxPrice, locale)
-                : `${asset.currency === 'BRL' ? 'R$' : asset.currency === 'EUR' ? '€' : '$'} ${maxPrice.toLocaleString(locale, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
+                : formatCurrencyValue(maxPrice, asset.currency, priceDecimals, locale)}
             </span>
           </div>
         </div>
@@ -515,10 +519,10 @@ export const D3AdvancedChart: React.FC<D3AdvancedChartProps> = ({
         {hoveredPoint ? (
           <div className="flex items-center gap-3 text-xs bg-[#F4F7F9] dark:bg-slate-900/90 border border-[#E2E8F0] dark:border-slate-700/80 px-3 py-1 rounded-lg text-[#0F172A] dark:text-white">
             <span className="text-[#475569] dark:text-slate-400">{hoveredPoint.time}</span>
-            <span>{tD3.openShort} <strong>{isIndex ? `${hoveredPoint.open.toFixed(2)} pts` : hoveredPoint.open.toFixed(2)}</strong></span>
-            <span>{tD3.highShort} <strong className="text-[#006B52] dark:text-emerald-400">{isIndex ? `${hoveredPoint.high.toFixed(2)} pts` : hoveredPoint.high.toFixed(2)}</strong></span>
-            <span>{tD3.lowShort} <strong className="text-[#DC2626] dark:text-rose-400">{isIndex ? `${hoveredPoint.low.toFixed(2)} pts` : hoveredPoint.low.toFixed(2)}</strong></span>
-            <span>{tD3.closeShort} <strong>{isIndex ? `${hoveredPoint.close.toFixed(2)} pts` : hoveredPoint.close.toFixed(2)}</strong></span>
+            <span>{tD3.openShort} <strong>{isIndex ? `${hoveredPoint.open.toFixed(priceDecimals)} pts` : hoveredPoint.open.toFixed(priceDecimals)}</strong></span>
+            <span>{tD3.highShort} <strong className="text-[#006B52] dark:text-emerald-400">{isIndex ? `${hoveredPoint.high.toFixed(priceDecimals)} pts` : hoveredPoint.high.toFixed(priceDecimals)}</strong></span>
+            <span>{tD3.lowShort} <strong className="text-[#DC2626] dark:text-rose-400">{isIndex ? `${hoveredPoint.low.toFixed(priceDecimals)} pts` : hoveredPoint.low.toFixed(priceDecimals)}</strong></span>
+            <span>{tD3.closeShort} <strong>{isIndex ? `${hoveredPoint.close.toFixed(priceDecimals)} pts` : hoveredPoint.close.toFixed(priceDecimals)}</strong></span>
             {showVolume && <span className="text-[#475569] dark:text-slate-400">{tD3.volShort} {hoveredPoint.volume.toLocaleString(locale)}</span>}
           </div>
         ) : (
@@ -582,7 +586,7 @@ export const D3AdvancedChart: React.FC<D3AdvancedChartProps> = ({
                   >
                     {isIndex
                       ? tickVal.toLocaleString(locale, { minimumFractionDigits: 0, maximumFractionDigits: 1 })
-                      : tickVal.toFixed(2)}
+                      : tickVal.toFixed(priceDecimals)}
                   </text>
                 </g>
               );

@@ -68,36 +68,46 @@ export function toInsightSchemaInput(
   };
 }
 
-export const DailyInsightsSidebar: React.FC = () => {
+interface DailyInsightsSidebarProps {
+  variant?: 'desktop' | 'mobile';
+}
+
+export const DailyInsightsSidebar: React.FC<DailyInsightsSidebarProps> = ({
+  variant = 'desktop',
+}) => {
   const { lang } = useI18n();
   const copy = DAILY_INSIGHTS_UI_COPY[lang];
   const items = useMemo(() => DAILY_INSIGHTS_ITEMS.slice(0, MAX_DAILY_INSIGHTS), []);
 
   const [selectedInsight, setSelectedInsight] = useState<DailyInsightItem | null>(null);
   const [failedThumbIds, setFailedThumbIds] = useState<Record<string, boolean>>({});
+  const isMobileVariant = variant === 'mobile';
+  const headingId = isMobileVariant ? 'daily-insights-heading-mobile' : 'daily-insights-heading';
 
   useEffect(() => {
+    if (isMobileVariant && !selectedInsight) return;
     const insightSchemas = items.map((item) => toInsightSchemaInput(item, lang));
     const dossierSchemas = getInstitutionalDossiersSchemaInputs(lang);
     const focused = selectedInsight ? toInsightSchemaInput(selectedInsight, lang) : null;
     syncEditorialArticlesSchema(lang, [...insightSchemas, ...dossierSchemas], focused);
-  }, [lang, selectedInsight, items]);
+  }, [lang, selectedInsight, items, isMobileVariant]);
 
   if (items.length === 0) return null;
 
   return (
     <>
-      {/* Exibição estritamente restrita a telas desktop (>= 1024px) abaixo da Matriz Cambial Global */}
       <section
-        aria-labelledby="daily-insights-heading"
-        className="hidden lg:block lg:mt-6 bg-[#FFFFFF] dark:bg-[#0d1627] rounded-xl border border-[#E2E8F0] dark:border-slate-800 p-4 sm:p-5 shadow-sm space-y-4"
+        aria-labelledby={headingId}
+        className={`${
+          isMobileVariant ? 'block lg:hidden' : 'hidden lg:block lg:mt-6'
+        } bg-[#FFFFFF] dark:bg-[#0d1627] rounded-xl border border-[#E2E8F0] dark:border-slate-800 p-4 sm:p-5 shadow-sm space-y-4`}
       >
         {/* Header alinhado ao padrão visual da sidebar */}
         <div className="flex items-center justify-between border-b border-[#E2E8F0] dark:border-slate-800 pb-3">
           <div className="flex items-center gap-2">
             <Newspaper className="w-4 h-4 text-[#003399] dark:text-emerald-400" />
             <h2
-              id="daily-insights-heading"
+              id={headingId}
               className="text-xs sm:text-sm font-bold text-[#0F172A] dark:text-white uppercase tracking-wider"
             >
               {copy.sectionTitle}

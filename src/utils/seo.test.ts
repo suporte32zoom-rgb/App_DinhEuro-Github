@@ -312,4 +312,21 @@ test('syncHreflangLinks maintains global pt-BR, en, es, and x-default alternate 
   assert.ok(indexHtml.includes('<link rel="alternate" hreflang="x-default" href="https://dinheuro.com/" />'));
   assert.ok(indexHtml.includes('G-XS3S97LWQC'));
   assert.ok(indexHtml.includes('"areaServed":"Worldwide"'));
+
+  const dashboardSource = fs.readFileSync(
+    path.resolve(process.cwd(), 'src/views/DashboardView.tsx'),
+    'utf8'
+  );
+  const mercosulIdx = dashboardSource.indexOf('<MercosulEuDossierPanel />');
+  const mobileInsightsIdx = dashboardSource.indexOf('<DailyInsightsSidebar variant="mobile" />');
+  const drexIdx = dashboardSource.indexOf('<DrexDossierPanel />');
+  const desktopInsightsIdx = dashboardSource.indexOf('<DailyInsightsSidebar />');
+  assert.ok(mercosulIdx > 0 && mobileInsightsIdx > mercosulIdx && drexIdx > mobileInsightsIdx);
+  assert.ok(desktopInsightsIdx > drexIdx);
+
+  const sidebarSource = fs.readFileSync(
+    path.resolve(process.cwd(), 'src/components/DailyInsightsSidebar.tsx'),
+    'utf8'
+  );
+  assert.ok(sidebarSource.includes("isMobileVariant ? 'block lg:hidden' : 'hidden lg:block lg:mt-6'"));
 });

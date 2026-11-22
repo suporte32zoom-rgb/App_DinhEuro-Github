@@ -19,7 +19,7 @@ import {
   HelpCircle,
 } from 'lucide-react';
 import { useMarket } from '../context/MarketContext';
-import { formatCurrencyValue } from '../utils/finance';
+import { formatCurrencyValue, formatSignedPercentChange } from '../utils/finance';
 import { useI18n } from '../i18n/I18nContext';
 import { getNumberLocale } from '../i18n/translations';
 import { TRADING_TRANSLATIONS } from '../i18n/tradingTranslations';
@@ -843,7 +843,7 @@ export const FixedIncomeDerivativesView: React.FC = () => {
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {dynamicFutures.map((contract) => {
-                const isPositive = contract.change >= 0;
+                const pctInfo = formatSignedPercentChange(contract.change, 2);
                 return (
                   <div
                     key={contract.code}
@@ -861,13 +861,12 @@ export const FixedIncomeDerivativesView: React.FC = () => {
                       </div>
                       <div
                         className={`text-xs font-bold font-mono-numbers px-2 py-0.5 rounded ${
-                          isPositive
+                          !pctInfo.isNegative
                             ? 'text-emerald-400 bg-emerald-500/10'
                             : 'text-rose-400 bg-rose-500/10'
                         }`}
                       >
-                        {isPositive ? '+' : ''}
-                        {contract.change.toFixed(2)}%
+                        {pctInfo.text}
                       </div>
                     </div>
 

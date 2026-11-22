@@ -467,8 +467,13 @@ export const DashboardView: React.FC = () => {
           {/* Radar Macroeconômico DinhEuro: Boletim Focus (Preenche a coluna central ao lado esquerdo da Matriz Cambial) */}
           <FocusRadarPanel />
 
-          {/* Dossiê DinhEuro: Acordo MERCOSUL-União Europeia */}
-          <MercosulEuDossierPanel />
+          <div className="space-y-6 lg:space-y-0">
+            {/* Dossiê DinhEuro: Acordo MERCOSUL-União Europeia */}
+            <MercosulEuDossierPanel />
+
+            {/* Insights do Dia exclusivo para telas mobile e tablet (< 1024px) logo abaixo do bloco Mercosul–UE */}
+            <DailyInsightsSidebar variant="mobile" />
+          </div>
 
           {/* Dossiê DinhEuro: Drex - A Moeda Digital do Banco Central */}
           <DrexDossierPanel />
