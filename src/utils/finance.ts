@@ -658,15 +658,21 @@ export type MarketSentimentZone =
 export interface MarketSentimentResult {
   score: number;
   zone: MarketSentimentZone;
+  hasMarketBreadth: boolean;
+  activeAssetsCount: number;
+  advancers: number;
+  decliners: number;
+  avgChangePercent: number;
+  vixPrice: number | null;
 }
 
 /**
  * Computes a dynamic 0–100 Market Sentiment (Risk Appetite) index directly from
  * the current percentage variations (`change24h`) of loaded assets and currencies.
- * Falls back strictly to neutral 50 when valid market variations have not arrived yet.
+ * Falls back strictly to neutral 50 when risk market variations have not arrived yet.
  */
 export function calculateMarketSentimentIndex(
-  assets: Array<{ price?: number; change24h?: number; category?: string }>
+  assets: Array<{ id?: string; symbol?: string; price?: number; change24h?: number; category?: string }>
 ): MarketSentimentResult {
   const validAssets = Array.isArray(assets)
     ? assets.filter(
@@ -679,42 +685,110 @@ export function calculateMarketSentimentIndex(
       )
     : [];
 
-  if (validAssets.length === 0) {
-    return { score: 50, zone: 'neutral' };
+  const nonForexValid = validAssets.filter((a) => a.category !== 'forex');
+
+  if (validAssets.length === 0 || nonForexValid.length === 0) {
+    return {
+      score: 50,
+      zone: 'neutral',
+      hasMarketBreadth: false,
+      activeAssetsCount: validAssets.length,
+      advancers: 0,
+      decliners: 0,
+      avgChangePercent: 0,
+      vixPrice: null,
+    };
   }
 
   const categoryWeights: Record<string, number> = {
-    indices: 1.3,
+    indices: 1.5,
     stocks_br: 1.2,
     stocks_us: 1.2,
     stocks_eu: 1.1,
     stocks_asia: 1.1,
     crypto: 1.0,
-    commodities: 0.8,
-    forex: 0.6,
+    commodities: 0.7,
+    forex: 0.4,
+  };
+
+  // Higher weights for flagship global benchmarks loaded in MarketContext
+  const globalBenchmarkWeights: Record<string, number> = {
+    sp500: 3.0,
+    nasdaq: 2.6,
+    dowjones: 2.2,
+    ibovespa: 2.6,
+    stoxx50: 2.2,
+    dax: 2.0,
+    ftse100: 1.8,
+    nikkei: 1.8,
+    vix: 3.0,
+    btc: 2.0,
+    btc_usd: 2.0,
+    eth: 1.5,
+    eth_usd: 1.5,
+    gold: 1.3,
+    usd_brl: 0.9,
+    eur_brl: 0.9,
+    eur_usd: 0.9,
   };
 
   let weightedSum = 0;
   let totalWeight = 0;
-  let advancers = 0;
-  let decliners = 0;
+  let sentimentAdvancers = 0;
+  let sentimentDecliners = 0;
+  let displayAdvancers = 0;
+  let displayDecliners = 0;
+  let riskAssetChgSum = 0;
+  let riskAssetCount = 0;
+  let vixPrice: number | null = null;
 
   for (const asset of validAssets) {
     const chg = asset.change24h as number;
-    const clampedChg = Math.max(-8, Math.min(8, chg));
-    const weight = (asset.category && categoryWeights[asset.category]) || 1.0;
+    const normId = asset.id?.toLowerCase() || '';
+    const normSym = asset.symbol?.toUpperCase() || '';
+    const isVix = normId === 'vix' || normSym === 'VIX';
+
+    if (isVix && typeof asset.price === 'number' && asset.price > 0) {
+      vixPrice = asset.price;
+    }
+
+    const effectiveChg = isVix ? -chg : chg;
+    const clampedChg = Math.max(-8, Math.min(8, effectiveChg));
+    const baseWeight = (asset.category && categoryWeights[asset.category]) || 1.0;
+    const benchmarkWeight = globalBenchmarkWeights[normId];
+    const weight = benchmarkWeight !== undefined ? benchmarkWeight : baseWeight;
 
     weightedSum += clampedChg * weight;
     totalWeight += weight;
 
-    if (chg > 0.005) advancers += 1;
-    else if (chg < -0.005) decliners += 1;
+    if (effectiveChg > 0.005) sentimentAdvancers += 1;
+    else if (effectiveChg < -0.005) sentimentDecliners += 1;
+
+    if (!isVix) {
+      if (chg > 0.005) displayAdvancers += 1;
+      else if (chg < -0.005) displayDecliners += 1;
+      if (asset.category !== 'forex') {
+        riskAssetChgSum += chg;
+        riskAssetCount += 1;
+      }
+    }
   }
 
   const avgChange = totalWeight > 0 ? weightedSum / totalWeight : 0;
-  const breadthRatio = (advancers - decliners) / validAssets.length;
-  const rawScore = 50 + avgChange * 12 + breadthRatio * 20;
+  const breadthRatio = (sentimentAdvancers - sentimentDecliners) / validAssets.length;
+  const vixLevelAdjustment =
+    vixPrice !== null
+      ? vixPrice > 22
+        ? (22 - Math.min(45, vixPrice)) * 0.5
+        : vixPrice < 16
+        ? (16 - Math.max(10, vixPrice)) * 0.5
+        : 0
+      : 0;
+
+  const rawScore = 50 + avgChange * 12 + breadthRatio * 20 + vixLevelAdjustment;
   const score = Math.round(Math.max(0, Math.min(100, rawScore)));
+  const avgChangePercent =
+    riskAssetCount > 0 ? Number((riskAssetChgSum / riskAssetCount).toFixed(2)) : 0;
 
   let zone: MarketSentimentZone = 'neutral';
   if (score < 25) zone = 'extreme_fear';
@@ -723,7 +797,17 @@ export function calculateMarketSentimentIndex(
   else if (score < 75) zone = 'moderate_greed';
   else zone = 'extreme_optimism';
 
-  return { score, zone };
+  return {
+    score,
+    zone,
+    hasMarketBreadth: true,
+    activeAssetsCount: validAssets.length,
+    advancers: displayAdvancers,
+    decliners: displayDecliners,
+    avgChangePercent,
+    vixPrice,
+  };
 }
+
 
 

@@ -252,32 +252,56 @@ test('buildAlignedMarketRates keeps EUR/BRL, USD/BRL, and FX matrix rates synchr
 });
 
 test('calculateMarketSentimentIndex falls back to 50 neutral and reacts dynamically to asset variations', () => {
-  // Neutral fallback of 50 when empty or invalid/unloaded
-  assert.deepEqual(calculateMarketSentimentIndex([]), { score: 50, zone: 'neutral' });
-  assert.deepEqual(
-    calculateMarketSentimentIndex([{ price: 0, change24h: 2.5, category: 'indices' }]),
-    { score: 50, zone: 'neutral' }
+  // Neutral fallback of 50 when empty, invalid, or only initial forex placeholders are present
+  assert.equal(calculateMarketSentimentIndex([]).score, 50);
+  assert.equal(calculateMarketSentimentIndex([]).zone, 'neutral');
+  assert.equal(calculateMarketSentimentIndex([]).hasMarketBreadth, false);
+
+  assert.equal(
+    calculateMarketSentimentIndex([{ price: 0, change24h: 2.5, category: 'indices' }]).score,
+    50
+  );
+  assert.equal(
+    calculateMarketSentimentIndex([{ price: 5.58, change24h: 1.26, category: 'forex' }]).score,
+    50
   );
 
   // Bullish session -> moderate greed or extreme optimism (> 55)
   const bullish = calculateMarketSentimentIndex([
-    { price: 171670, change24h: 1.4, category: 'indices' },
-    { price: 7575, change24h: 0.9, category: 'indices' },
-    { price: 220, change24h: 1.2, category: 'stocks_us' },
-    { price: 5.58, change24h: 0.3, category: 'forex' },
+    { id: 'ibovespa', symbol: 'IBOVESPA', price: 171670, change24h: 1.4, category: 'indices' },
+    { id: 'sp500', symbol: 'S&P 500', price: 7575, change24h: 0.9, category: 'indices' },
+    { id: 'aapl', symbol: 'AAPL', price: 220, change24h: 1.2, category: 'stocks_us' },
+    { id: 'vix', symbol: 'VIX', price: 14.5, change24h: -3.2, category: 'indices' },
+    { id: 'usd_brl', symbol: 'USD/BRL', price: 5.58, change24h: 0.3, category: 'forex' },
   ]);
-  assert.ok(bullish.score > 60 && bullish.score <= 100);
+  assert.equal(bullish.hasMarketBreadth, true);
+  assert.ok(bullish.score > 65 && bullish.score <= 100);
   assert.ok(bullish.zone === 'moderate_greed' || bullish.zone === 'extreme_optimism');
+  assert.equal(bullish.vixPrice, 14.5);
 
-  // Bearish session -> fear or extreme fear (< 45)
+  // Bearish session with VIX surge -> extreme fear (< 25)
   const bearish = calculateMarketSentimentIndex([
-    { price: 165000, change24h: -2.6, category: 'indices' },
-    { price: 7200, change24h: -2.1, category: 'indices' },
-    { price: 190, change24h: -3.0, category: 'stocks_us' },
-    { price: 5.72, change24h: -0.8, category: 'forex' },
+    { id: 'ibovespa', symbol: 'IBOVESPA', price: 165000, change24h: -2.6, category: 'indices' },
+    { id: 'sp500', symbol: 'S&P 500', price: 6910, change24h: -3.7, category: 'indices' },
+    { id: 'aapl', symbol: 'AAPL', price: 190, change24h: -3.0, category: 'stocks_us' },
+    { id: 'vix', symbol: 'VIX', price: 35.89, change24h: 26.2, category: 'indices' },
+    { id: 'usd_brl', symbol: 'USD/BRL', price: 5.72, change24h: -0.8, category: 'forex' },
   ]);
-  assert.ok(bearish.score >= 0 && bearish.score < 35);
-  assert.ok(bearish.zone === 'extreme_fear' || bearish.zone === 'fear');
+  assert.equal(bearish.hasMarketBreadth, true);
+  assert.ok(bearish.score >= 0 && bearish.score < 25);
+  assert.equal(bearish.zone, 'extreme_fear');
+  assert.equal(bearish.vixPrice, 35.89);
+
+  // Benchmark weighting reacts strongly when major global indices shift
+  const shiftedBenchmarks = calculateMarketSentimentIndex([
+    { id: 'sp500', symbol: 'S&P 500', price: 7100, change24h: 2.2, category: 'indices' },
+    { id: 'nasdaq', symbol: 'NASDAQ', price: 23500, change24h: 2.8, category: 'indices' },
+    { id: 'ibovespa', symbol: 'IBOVESPA', price: 170000, change24h: 1.5, category: 'indices' },
+    { id: 'vix', symbol: 'VIX', price: 15.2, change24h: -8.5, category: 'indices' },
+    { id: 'minor_fx', symbol: 'ZAR/BRL', price: 0.33, change24h: -0.2, category: 'forex' },
+  ]);
+  assert.ok(shiftedBenchmarks.score > bearish.score + 50);
 });
+
 
 

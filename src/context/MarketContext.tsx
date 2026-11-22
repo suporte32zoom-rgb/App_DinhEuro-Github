@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect, useCallback, useRef } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import {
   MarketAsset,
   NewsItem,
@@ -13,7 +13,12 @@ import {
   obterCotacaoFinnhub,
 } from '../services/marketData';
 import { normalizeRoutePath, syncCanonicalLink } from '../utils/seo';
-import { getAssetPriceDecimals, roundToDecimals } from '../utils/finance';
+import {
+  getAssetPriceDecimals,
+  roundToDecimals,
+  calculateMarketSentimentIndex,
+  MarketSentimentResult,
+} from '../utils/finance';
 import { normalizePriceBounds } from '../utils/marketParsing';
 
 export interface PortfolioPosition {
@@ -133,6 +138,7 @@ interface MarketContextType {
   toggleTheme: () => void;
   setTheme: (theme: ThemeMode) => void;
   apiSourceSummary: string;
+  riskAppetite: MarketSentimentResult;
 }
 
 const MarketContext = createContext<MarketContextType | undefined>(undefined);
@@ -412,6 +418,12 @@ export const MarketProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     return () => clearInterval(interval);
   }, [refreshData, isLiveUpdating]);
 
+  // Reactive Risk Appetite (0-100) calculated from weighted % variations of global assets in MarketContext
+  const riskAppetite = useMemo(
+    () => calculateMarketSentimentIndex(assets),
+    [assets]
+  );
+
   return (
     <MarketContext.Provider
       value={{
@@ -444,6 +456,7 @@ export const MarketProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         toggleTheme,
         setTheme,
         apiSourceSummary,
+        riskAppetite,
       }}
     >
       {children}

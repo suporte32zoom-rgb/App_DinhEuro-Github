@@ -27,7 +27,6 @@ import {
   buildAlignedMarketRates,
   resolveEurBrlRate,
   resolveUsdBrlRate,
-  calculateMarketSentimentIndex,
   MarketSentimentZone,
 } from '../utils/finance';
 import { DualPrice } from '../components/DualPrice';
@@ -40,7 +39,7 @@ import { HomeSeoEditorialSection } from '../components/HomeSeoEditorialSection';
 import { DailyInsightsSidebar } from '../components/DailyInsightsSidebar';
 
 export const DashboardView: React.FC = () => {
-  const { assets, universalRates, news, setActiveTab, setSelectedAsset, openAssetDetail, refreshData, lastUpdated, apiSourceSummary } =
+  const { assets, universalRates, news, setActiveTab, setSelectedAsset, openAssetDetail, refreshData, lastUpdated, isSyncing, apiSourceSummary, riskAppetite } =
     useMarket();
   const { t, lang } = useI18n();
   const numberLocale = getNumberLocale(lang);
@@ -75,10 +74,7 @@ export const DashboardView: React.FC = () => {
   const eurBrlFormatted = formatCurrencyValue(resolvedEurBrl, 'BRL', 4, numberLocale);
   const usdBrlFormatted = formatCurrencyValue(resolvedUsdBrl, 'BRL', 4, numberLocale);
 
-  const marketSentiment = useMemo(
-    () => calculateMarketSentimentIndex(assets),
-    [assets]
-  );
+  const marketSentiment = riskAppetite;
 
   const sentimentConfig: Record<
     MarketSentimentZone,
@@ -282,6 +278,49 @@ export const DashboardView: React.FC = () => {
               <span>{t.dashboard.extremeFear}</span>
               <span>{t.dashboard.neutral}</span>
               <span>{t.dashboard.optimism}</span>
+            </div>
+            <div className="flex flex-wrap items-center justify-between gap-1.5 pt-1 text-[10px] font-mono-numbers text-[#475569] dark:text-slate-400 border-t border-[#E2E8F0]/70 dark:border-slate-800/70">
+              {!marketSentiment.hasMarketBreadth ? (
+                <span className="font-sans">
+                  {lang === 'en'
+                    ? 'Syncing live global market quotes...'
+                    : lang === 'es'
+                    ? 'Sincronizando cotizaciones globales...'
+                    : 'Sincronizando cotações globais...'}
+                </span>
+              ) : (
+                <>
+                  <span>
+                    {marketSentiment.activeAssetsCount}{' '}
+                    {lang === 'en' ? 'assets' : lang === 'es' ? 'activos' : 'ativos'} ·{' '}
+                    <span className="text-[#009B77] dark:text-emerald-400 font-semibold">{marketSentiment.advancers}↑</span>
+                    {' / '}
+                    <span className="text-[#DC2626] dark:text-rose-400 font-semibold">{marketSentiment.decliners}↓</span>
+                  </span>
+                  <span>
+                    {lang === 'en' ? 'Avg' : lang === 'es' ? 'Prom.' : 'Média'}{' '}
+                    <strong className={marketSentiment.avgChangePercent >= 0 ? 'text-[#009B77] dark:text-emerald-400' : 'text-[#DC2626] dark:text-rose-400'}>
+                      {marketSentiment.avgChangePercent >= 0 ? '+' : ''}
+                      {marketSentiment.avgChangePercent.toLocaleString(numberLocale, {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2,
+                      })}%
+                    </strong>
+                    {marketSentiment.vixPrice !== null && (
+                      <>
+                        {' · VIX '}
+                        <strong className="text-[#0F172A] dark:text-slate-200">
+                          {marketSentiment.vixPrice.toLocaleString(numberLocale, {
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2,
+                          })}
+                        </strong>
+                      </>
+                    )}
+                    {isSyncing && <span className="ml-1 inline-block w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse align-middle" />}
+                  </span>
+                </>
+              )}
             </div>
           </div>
 
