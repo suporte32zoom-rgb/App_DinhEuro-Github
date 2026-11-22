@@ -118,7 +118,11 @@ export interface AppTranslations {
     };
     thermometerTitle: string;
     riskAppetiteBadge: string;
+    sentimentExtremeFearLabel: string;
+    sentimentFearLabel: string;
+    sentimentNeutralLabel: string;
     moderateGreed: string;
+    sentimentExtremeOptimismLabel: string;
     extremeFear: string;
     neutral: string;
     optimism: string;
@@ -567,7 +571,11 @@ export const TRANSLATIONS: Record<SupportedLanguage, AppTranslations> = {
       },
       thermometerTitle: 'Termômetro de Mercado',
       riskAppetiteBadge: 'Apetite por Risco',
+      sentimentExtremeFearLabel: 'Medo Extremo',
+      sentimentFearLabel: 'Cautela / Medo',
+      sentimentNeutralLabel: 'Neutro',
       moderateGreed: 'Ganância Moderada',
+      sentimentExtremeOptimismLabel: 'Otimismo Extremo',
       extremeFear: '0 Medo Extremo',
       neutral: '50 Neutro',
       optimism: '100 Otimismo',
@@ -1055,7 +1063,11 @@ export const TRANSLATIONS: Record<SupportedLanguage, AppTranslations> = {
       },
       thermometerTitle: 'Market Sentiment',
       riskAppetiteBadge: 'Risk Appetite',
+      sentimentExtremeFearLabel: 'Extreme Fear',
+      sentimentFearLabel: 'Fear / Caution',
+      sentimentNeutralLabel: 'Neutral',
       moderateGreed: 'Moderate Greed',
+      sentimentExtremeOptimismLabel: 'Extreme Optimism',
       extremeFear: '0 Extreme Fear',
       neutral: '50 Neutral',
       optimism: '100 Optimism',
@@ -1543,7 +1555,11 @@ export const TRANSLATIONS: Record<SupportedLanguage, AppTranslations> = {
       },
       thermometerTitle: 'Termómetro de Mercado',
       riskAppetiteBadge: 'Apetito por Riesgo',
+      sentimentExtremeFearLabel: 'Miedo Extremo',
+      sentimentFearLabel: 'Cautela / Miedo',
+      sentimentNeutralLabel: 'Neutral',
       moderateGreed: 'Codicia Moderada',
+      sentimentExtremeOptimismLabel: 'Optimismo Extremo',
       extremeFear: '0 Miedo Extremo',
       neutral: '50 Neutral',
       optimism: '100 Optimismo',

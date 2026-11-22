@@ -1,5 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import path from 'node:path';
 import { ROUTE_TAB_MAP, TAB_ROUTE_MAP, NavigationTab } from '../context/MarketContext';
 
 test('ROUTE_TAB_MAP correctly routes legal and institutional paths', () => {
@@ -35,3 +37,26 @@ test('LGPD consent payload structure conforms to legal auditing schema', () => {
   assert.ok(typeof samplePayload.date === 'string');
   assert.ok(samplePayload.version.startsWith('2026'));
 });
+
+test('Visible footer and institutional pages use official admin@dinheuro.com email only', () => {
+  const files = [
+    'src/components/Footer.tsx',
+    'src/views/AboutView.tsx',
+    'src/views/DisclaimerView.tsx',
+    'src/views/PrivacyPolicyView.tsx',
+    'src/views/TermsOfUseView.tsx',
+  ];
+
+  for (const relPath of files) {
+    const content = fs.readFileSync(path.resolve(process.cwd(), relPath), 'utf8');
+    assert.ok(
+      content.includes('admin@dinheuro.com'),
+      `${relPath} must include admin@dinheuro.com`
+    );
+    assert.ok(
+      !content.includes('admin@dinheiro.com'),
+      `${relPath} must not include admin@dinheiro.com`
+    );
+  }
+});
+

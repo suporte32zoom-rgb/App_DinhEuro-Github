@@ -106,7 +106,7 @@ export const DisclaimerView: React.FC = () => {
           </h2>
           <p>{tDisc.s4P1}</p>
           <p className="text-slate-400 text-xs pt-2 border-t border-slate-800/80">
-            {tDisc.s4Contact} <a href="mailto:admin@dinheiro.com" className="text-emerald-400 hover:underline font-mono">admin@dinheiro.com</a>.
+            {tDisc.s4Contact} <a href="mailto:admin@dinheuro.com" className="text-emerald-400 hover:underline font-mono">admin@dinheuro.com</a>.
           </p>
         </div>
       </div>

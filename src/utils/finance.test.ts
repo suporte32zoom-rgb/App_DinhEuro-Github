@@ -11,6 +11,10 @@ import {
   formatSignedCurrencyChange,
   formatSignedPercentChange,
   getAssetPriceDecimals,
+  buildAlignedMarketRates,
+  resolveEurBrlRate,
+  resolveUsdBrlRate,
+  calculateMarketSentimentIndex,
   CurrencyRates
 } from './finance';
 
@@ -224,3 +228,56 @@ test('getDualCurrencyDisplay computes accurate BRL conversion for non-USD/EUR cu
   assert.equal(dualGbp.secondaryCurrency, 'BRL');
   assert.ok(Math.abs(dualGbp.convertedBRL - (100 / 0.7432) * 5.584) < 0.1);
 });
+
+test('buildAlignedMarketRates keeps EUR/BRL, USD/BRL, and FX matrix rates synchronized', () => {
+  const assets = [
+    { id: 'usd_brl', symbol: 'USD/BRL', price: 5.584, category: 'forex' },
+    { id: 'eur_brl', symbol: 'EUR/BRL', price: 6.2335, category: 'forex' },
+    { id: 'gbp_brl', symbol: 'GBP/BRL', price: 7.512, category: 'forex' },
+  ];
+  const rawRates: CurrencyRates = {
+    USD: 1.0,
+    BRL: 5.45, // Divergent raw rate below floor
+    EUR: 0.90,
+    GBP: 0.75,
+  };
+
+  assert.equal(resolveUsdBrlRate(assets, rawRates), 5.584);
+  assert.equal(resolveEurBrlRate(assets, rawRates), 6.2335);
+
+  const aligned = buildAlignedMarketRates(assets, rawRates);
+  assert.equal(aligned.BRL, 5.584);
+  assert.ok(Math.abs(aligned.BRL / aligned.EUR - 6.2335) < 1e-9);
+  assert.ok(Math.abs(aligned.BRL / aligned.GBP - 7.512) < 1e-9);
+});
+
+test('calculateMarketSentimentIndex falls back to 50 neutral and reacts dynamically to asset variations', () => {
+  // Neutral fallback of 50 when empty or invalid/unloaded
+  assert.deepEqual(calculateMarketSentimentIndex([]), { score: 50, zone: 'neutral' });
+  assert.deepEqual(
+    calculateMarketSentimentIndex([{ price: 0, change24h: 2.5, category: 'indices' }]),
+    { score: 50, zone: 'neutral' }
+  );
+
+  // Bullish session -> moderate greed or extreme optimism (> 55)
+  const bullish = calculateMarketSentimentIndex([
+    { price: 171670, change24h: 1.4, category: 'indices' },
+    { price: 7575, change24h: 0.9, category: 'indices' },
+    { price: 220, change24h: 1.2, category: 'stocks_us' },
+    { price: 5.58, change24h: 0.3, category: 'forex' },
+  ]);
+  assert.ok(bullish.score > 60 && bullish.score <= 100);
+  assert.ok(bullish.zone === 'moderate_greed' || bullish.zone === 'extreme_optimism');
+
+  // Bearish session -> fear or extreme fear (< 45)
+  const bearish = calculateMarketSentimentIndex([
+    { price: 165000, change24h: -2.6, category: 'indices' },
+    { price: 7200, change24h: -2.1, category: 'indices' },
+    { price: 190, change24h: -3.0, category: 'stocks_us' },
+    { price: 5.72, change24h: -0.8, category: 'forex' },
+  ]);
+  assert.ok(bearish.score >= 0 && bearish.score < 35);
+  assert.ok(bearish.zone === 'extreme_fear' || bearish.zone === 'fear');
+});
+
+

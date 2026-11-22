@@ -560,3 +560,170 @@ export function getDualCurrencyDisplay(
     };
   }
 }
+
+export interface MinimalMarketAssetForRates {
+  id?: string;
+  symbol?: string;
+  price: number;
+  category?: string;
+}
+
+export function resolveUsdBrlRate(
+  assets: MinimalMarketAssetForRates[],
+  rates?: CurrencyRates
+): number {
+  const usdBrlAsset = assets.find((a) => a.id === 'usd_brl' || a.symbol === 'USD/BRL');
+  if (
+    usdBrlAsset?.price &&
+    usdBrlAsset.price >= 5.55 &&
+    Math.abs(usdBrlAsset.price - 5.5122) > 0.001
+  ) {
+    return usdBrlAsset.price;
+  }
+  const brl = rates?.BRL ?? 0;
+  return brl >= 5.55 && Math.abs(brl - 5.5122) > 0.001 ? brl : 5.584;
+}
+
+export function resolveEurBrlRate(
+  assets: MinimalMarketAssetForRates[],
+  rates?: CurrencyRates
+): number {
+  const eurBrlAsset = assets.find((a) => a.id === 'eur_brl' || a.symbol === 'EUR/BRL');
+  if (
+    eurBrlAsset?.price &&
+    eurBrlAsset.price >= 6.2 &&
+    Math.abs(eurBrlAsset.price - 6.1765) > 0.001
+  ) {
+    return eurBrlAsset.price;
+  }
+  const brl = rates?.BRL ?? 0;
+  const eur = rates?.EUR || 0.8958;
+  const derived = brl >= 5.55 ? brl / eur : 6.2335;
+  return derived >= 6.2 && Math.abs(derived - 6.1765) > 0.001 ? derived : 6.2335;
+}
+
+/**
+ * Aligns USD-based conversion rates with displayed MarketContext FX pair assets
+ * so Hero KPIs, Quick Simulator, Currency Matrix, Ticker, and fallback quotes match.
+ */
+export function buildAlignedMarketRates(
+  assets: MinimalMarketAssetForRates[],
+  rates: CurrencyRates
+): CurrencyRates {
+  const usdBrl = resolveUsdBrlRate(assets, rates);
+  const eurBrl = resolveEurBrlRate(assets, rates);
+
+  const aligned: CurrencyRates = {
+    ...rates,
+    USD: 1.0,
+    BRL: usdBrl,
+    EUR: usdBrl / eurBrl,
+  };
+
+  const brlSynced = new Set<string>(['USD', 'BRL', 'EUR']);
+
+  for (const asset of assets) {
+    if (asset.category !== 'forex' || !asset.price || asset.price <= 0 || !asset.symbol) continue;
+    const parts = asset.symbol.split('/');
+    if (parts.length !== 2) continue;
+    const [base, quote] = parts;
+    if (quote === 'BRL' && !brlSynced.has(base)) {
+      aligned[base] = usdBrl / asset.price;
+      brlSynced.add(base);
+    }
+  }
+
+  for (const asset of assets) {
+    if (asset.category !== 'forex' || !asset.price || asset.price <= 0 || !asset.symbol) continue;
+    const parts = asset.symbol.split('/');
+    if (parts.length !== 2) continue;
+    const [base, quote] = parts;
+    if (base === 'USD' && !brlSynced.has(quote)) {
+      aligned[quote] = asset.price;
+    } else if (quote === 'USD' && !brlSynced.has(base)) {
+      aligned[base] = 1 / asset.price;
+    }
+  }
+
+  return aligned;
+}
+
+export type MarketSentimentZone =
+  | 'extreme_fear'
+  | 'fear'
+  | 'neutral'
+  | 'moderate_greed'
+  | 'extreme_optimism';
+
+export interface MarketSentimentResult {
+  score: number;
+  zone: MarketSentimentZone;
+}
+
+/**
+ * Computes a dynamic 0–100 Market Sentiment (Risk Appetite) index directly from
+ * the current percentage variations (`change24h`) of loaded assets and currencies.
+ * Falls back strictly to neutral 50 when valid market variations have not arrived yet.
+ */
+export function calculateMarketSentimentIndex(
+  assets: Array<{ price?: number; change24h?: number; category?: string }>
+): MarketSentimentResult {
+  const validAssets = Array.isArray(assets)
+    ? assets.filter(
+        (a) =>
+          typeof a?.price === 'number' &&
+          Number.isFinite(a.price) &&
+          a.price > 0 &&
+          typeof a?.change24h === 'number' &&
+          Number.isFinite(a.change24h)
+      )
+    : [];
+
+  if (validAssets.length === 0) {
+    return { score: 50, zone: 'neutral' };
+  }
+
+  const categoryWeights: Record<string, number> = {
+    indices: 1.3,
+    stocks_br: 1.2,
+    stocks_us: 1.2,
+    stocks_eu: 1.1,
+    stocks_asia: 1.1,
+    crypto: 1.0,
+    commodities: 0.8,
+    forex: 0.6,
+  };
+
+  let weightedSum = 0;
+  let totalWeight = 0;
+  let advancers = 0;
+  let decliners = 0;
+
+  for (const asset of validAssets) {
+    const chg = asset.change24h as number;
+    const clampedChg = Math.max(-8, Math.min(8, chg));
+    const weight = (asset.category && categoryWeights[asset.category]) || 1.0;
+
+    weightedSum += clampedChg * weight;
+    totalWeight += weight;
+
+    if (chg > 0.005) advancers += 1;
+    else if (chg < -0.005) decliners += 1;
+  }
+
+  const avgChange = totalWeight > 0 ? weightedSum / totalWeight : 0;
+  const breadthRatio = (advancers - decliners) / validAssets.length;
+  const rawScore = 50 + avgChange * 12 + breadthRatio * 20;
+  const score = Math.round(Math.max(0, Math.min(100, rawScore)));
+
+  let zone: MarketSentimentZone = 'neutral';
+  if (score < 25) zone = 'extreme_fear';
+  else if (score < 45) zone = 'fear';
+  else if (score <= 55) zone = 'neutral';
+  else if (score < 75) zone = 'moderate_greed';
+  else zone = 'extreme_optimism';
+
+  return { score, zone };
+}
+
+

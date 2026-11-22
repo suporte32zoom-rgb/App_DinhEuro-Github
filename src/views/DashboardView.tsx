@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import {
   TrendingUp,
   TrendingDown,
@@ -20,7 +20,16 @@ import {
   getLocalizedAssetSymbol,
   localizeNewsItem,
 } from '../i18n/marketDataTranslations';
-import { formatCurrencyValue, convertCurrency } from '../utils/finance';
+import {
+  formatCurrencyValue,
+  formatPointsValue,
+  convertCurrency,
+  buildAlignedMarketRates,
+  resolveEurBrlRate,
+  resolveUsdBrlRate,
+  calculateMarketSentimentIndex,
+  MarketSentimentZone,
+} from '../utils/finance';
 import { DualPrice } from '../components/DualPrice';
 import { FocusRadarPanel } from '../components/FocusRadarPanel';
 import { MercosulEuDossierPanel } from '../components/MercosulEuDossierPanel';
@@ -34,13 +43,19 @@ export const DashboardView: React.FC = () => {
   const { assets, universalRates, news, setActiveTab, setSelectedAsset, openAssetDetail, refreshData, lastUpdated, apiSourceSummary } =
     useMarket();
   const { t, lang } = useI18n();
+  const numberLocale = getNumberLocale(lang);
 
-  // Currency Converter local quick state (synchronised with global rates)
+  // Currency Converter local quick state (synchronised with aligned global market rates)
   const [calcAmount, setCalcAmount] = useState<number>(1);
   const [calcFrom, setCalcFrom] = useState<string>('EUR');
   const [calcTo, setCalcTo] = useState<string>('BRL');
 
-  const convertedValue = convertCurrency(calcAmount, calcFrom, calcTo, universalRates);
+  const alignedRates = useMemo(
+    () => buildAlignedMarketRates(assets, universalRates),
+    [assets, universalRates]
+  );
+
+  const convertedValue = convertCurrency(calcAmount, calcFrom, calcTo, alignedRates);
 
   const swapCurrencies = () => {
     setCalcFrom(calcTo);
@@ -54,24 +69,58 @@ export const DashboardView: React.FC = () => {
   const commodities = assets.filter((a) => a.category === 'commodities');
   const sp500Asset = assets.find((a) => a.id === 'sp500' || a.symbol === 'S&P 500');
   const ibovAsset = assets.find((a) => a.id === 'ibovespa' || a.symbol === 'IBOVESPA');
-  const eurBrlAsset = assets.find((a) => a.id === 'eur_brl' || a.symbol === 'EUR/BRL');
-  const usdBrlAsset = assets.find((a) => a.id === 'usd_brl' || a.symbol === 'USD/BRL');
 
-  const eurBrlDisplay = (() => {
-    if (eurBrlAsset?.price && eurBrlAsset.price >= 6.20 && Math.abs(eurBrlAsset.price - 6.1765) > 0.001) {
-      return eurBrlAsset.price.toFixed(4);
-    }
-    const derived = (universalRates.BRL >= 5.55 ? universalRates.BRL / (universalRates.EUR || 0.8958) : 6.2335);
-    return (derived >= 6.20 && Math.abs(derived - 6.1765) > 0.001 ? derived : 6.2335).toFixed(4);
-  })();
+  const resolvedEurBrl = resolveEurBrlRate(assets, universalRates);
+  const resolvedUsdBrl = resolveUsdBrlRate(assets, universalRates);
+  const eurBrlFormatted = formatCurrencyValue(resolvedEurBrl, 'BRL', 4, numberLocale);
+  const usdBrlFormatted = formatCurrencyValue(resolvedUsdBrl, 'BRL', 4, numberLocale);
 
-  const usdBrlDisplay = (() => {
-    if (usdBrlAsset?.price && usdBrlAsset.price >= 5.55 && Math.abs(usdBrlAsset.price - 5.5122) > 0.001) {
-      return usdBrlAsset.price.toFixed(4);
-    }
-    const val = (universalRates.BRL >= 5.55 && Math.abs(universalRates.BRL - 5.5122) > 0.001 ? universalRates.BRL : 5.5840);
-    return val.toFixed(4);
-  })();
+  const marketSentiment = useMemo(
+    () => calculateMarketSentimentIndex(assets),
+    [assets]
+  );
+
+  const sentimentConfig: Record<
+    MarketSentimentZone,
+    { label: string; scoreClass: string; labelClass: string; badgeClass: string; markerClass: string }
+  > = {
+    extreme_fear: {
+      label: t.dashboard.sentimentExtremeFearLabel,
+      scoreClass: 'text-[#DC2626] dark:text-rose-400',
+      labelClass: 'text-[#DC2626] dark:text-rose-400',
+      badgeClass: 'text-[#DC2626] dark:text-rose-400 bg-rose-50 dark:bg-rose-500/10 border-rose-300/60 dark:border-rose-500/25',
+      markerClass: 'bg-[#DC2626]',
+    },
+    fear: {
+      label: t.dashboard.sentimentFearLabel,
+      scoreClass: 'text-[#B45309] dark:text-amber-400',
+      labelClass: 'text-[#B45309] dark:text-amber-400',
+      badgeClass: 'text-[#B45309] dark:text-amber-400 bg-[#FEF7E0] dark:bg-amber-500/10 border-[#E5A910]/40 dark:border-amber-500/25',
+      markerClass: 'bg-[#E5A910]',
+    },
+    neutral: {
+      label: t.dashboard.sentimentNeutralLabel,
+      scoreClass: 'text-[#003399] dark:text-sky-400',
+      labelClass: 'text-[#003399] dark:text-sky-400',
+      badgeClass: 'text-[#003399] dark:text-sky-400 bg-[#E6EEFF] dark:bg-sky-500/10 border-[#6699CC]/40 dark:border-sky-500/25',
+      markerClass: 'bg-[#003399] dark:bg-sky-400',
+    },
+    moderate_greed: {
+      label: t.dashboard.moderateGreed,
+      scoreClass: 'text-[#003399] dark:text-white',
+      labelClass: 'text-[#006B52] dark:text-emerald-400',
+      badgeClass: 'text-[#006B52] dark:text-emerald-400 bg-[#E3F7F2] dark:bg-emerald-500/10 border-[#009B77]/25 dark:border-emerald-500/20',
+      markerClass: 'bg-[#009B77] dark:bg-emerald-400',
+    },
+    extreme_optimism: {
+      label: t.dashboard.sentimentExtremeOptimismLabel,
+      scoreClass: 'text-[#006B52] dark:text-emerald-300',
+      labelClass: 'text-[#006B52] dark:text-emerald-300',
+      badgeClass: 'text-[#006B52] dark:text-emerald-300 bg-[#E3F7F2] dark:bg-emerald-500/15 border-[#009B77]/40 dark:border-emerald-400/30',
+      markerClass: 'bg-[#009B77] dark:bg-emerald-300',
+    },
+  };
+  const activeSentimentStyle = sentimentConfig[marketSentiment.zone];
 
   // Sorted Gainers and Losers
   const topGainers = [...topStocks].sort((a, b) => b.change24h - a.change24h).slice(0, 4);
@@ -119,7 +168,7 @@ export const DashboardView: React.FC = () => {
                   <span className="text-[9px] text-[#003399] dark:text-emerald-400 font-semibold">{t.dashboard.chartAction}</span>
                 </div>
                 <p className="text-sm font-bold font-mono-numbers text-[#006B52] dark:text-emerald-400">
-                  R$ {eurBrlDisplay}
+                  {eurBrlFormatted}
                 </p>
               </div>
 
@@ -137,7 +186,7 @@ export const DashboardView: React.FC = () => {
                   <span className="text-[9px] text-[#003399] dark:text-emerald-400 font-semibold">{t.dashboard.chartAction}</span>
                 </div>
                 <p className="text-sm font-bold font-mono-numbers text-[#006B52] dark:text-emerald-400">
-                  R$ {usdBrlDisplay}
+                  {usdBrlFormatted}
                 </p>
               </div>
 
@@ -157,7 +206,7 @@ export const DashboardView: React.FC = () => {
                   </span>
                 </div>
                 <p className="text-sm font-bold font-mono-numbers text-[#0F172A] dark:text-slate-200">
-                  {sp500Asset?.price ? `${sp500Asset.price.toLocaleString(getNumberLocale(lang), { minimumFractionDigits: 2, maximumFractionDigits: 2 })} pts` : '-- pts'}
+                  {sp500Asset?.price ? formatPointsValue(sp500Asset.price, numberLocale) : '-- pts'}
                 </p>
               </div>
 
@@ -177,7 +226,7 @@ export const DashboardView: React.FC = () => {
                   </span>
                 </div>
                 <p className="text-sm font-bold font-mono-numbers text-[#003399] dark:text-emerald-400">
-                  {ibovAsset?.price ? `${Math.round(ibovAsset.price).toLocaleString(getNumberLocale(lang))} pts` : '-- pts'}
+                  {ibovAsset?.price ? formatPointsValue(ibovAsset.price, numberLocale) : '-- pts'}
                 </p>
               </div>
             </div>
@@ -193,7 +242,7 @@ export const DashboardView: React.FC = () => {
                 {t.dashboard.thermometerTitle}
               </span>
             </div>
-            <span className="text-[11px] font-bold text-[#006B52] dark:text-emerald-400 bg-[#E3F7F2] dark:bg-emerald-500/10 px-2 py-0.5 rounded-full border border-[#009B77]/25 dark:border-emerald-500/20">
+            <span className={`text-[11px] font-bold px-2 py-0.5 rounded-full border transition-colors duration-300 ${activeSentimentStyle.badgeClass}`}>
               {t.dashboard.riskAppetiteBadge}
             </span>
           </div>
@@ -201,15 +250,33 @@ export const DashboardView: React.FC = () => {
           {/* Fear & Greed Indicator */}
           <div className="space-y-2">
             <div className="flex items-baseline justify-between">
-              <span className="text-2xl font-black font-mono-numbers text-[#003399] dark:text-white">68</span>
-              <span className="text-xs font-semibold text-[#006B52] dark:text-emerald-400">{t.dashboard.moderateGreed}</span>
+              <span className={`text-2xl font-black font-mono-numbers transition-colors duration-300 ${activeSentimentStyle.scoreClass}`}>
+                {marketSentiment.score}
+              </span>
+              <span className={`text-xs font-semibold transition-colors duration-300 ${activeSentimentStyle.labelClass}`}>
+                {activeSentimentStyle.label}
+              </span>
             </div>
-            {/* Visual gradient bar */}
-            <div className="w-full bg-[#E2E8F0] dark:bg-slate-800 h-2.5 rounded-full overflow-hidden p-0.5 flex">
-              <div className="h-full bg-[#DC2626] rounded-l-full w-1/4"></div>
-              <div className="h-full bg-[#E5A910] w-1/4"></div>
-              <div className="h-full bg-[#003399] w-1/4"></div>
-              <div className="h-full bg-[#009B77] rounded-r-full w-1/4"></div>
+            {/* Visual gradient bar with dynamic marker */}
+            <div
+              className="relative py-1"
+              role="meter"
+              aria-label={t.dashboard.thermometerTitle}
+              aria-valuemin={0}
+              aria-valuemax={100}
+              aria-valuenow={marketSentiment.score}
+              aria-valuetext={`${marketSentiment.score} - ${activeSentimentStyle.label}`}
+            >
+              <div className="w-full bg-[#E2E8F0] dark:bg-slate-800 h-2.5 rounded-full overflow-hidden p-0.5 flex">
+                <div className="h-full bg-[#DC2626] rounded-l-full w-1/4"></div>
+                <div className="h-full bg-[#E5A910] w-1/4"></div>
+                <div className="h-full bg-[#003399] w-1/4"></div>
+                <div className="h-full bg-[#009B77] rounded-r-full w-1/4"></div>
+              </div>
+              <div
+                className={`absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-3.5 h-3.5 rounded-full border-2 border-white dark:border-slate-950 shadow-md transition-all duration-500 ${activeSentimentStyle.markerClass}`}
+                style={{ left: `clamp(7px, ${marketSentiment.score}%, calc(100% - 7px))` }}
+              />
             </div>
             <div className="flex justify-between text-[9px] text-[#475569] dark:text-slate-400 font-medium">
               <span>{t.dashboard.extremeFear}</span>
@@ -225,7 +292,9 @@ export const DashboardView: React.FC = () => {
                 <ArrowRightLeft className="w-3.5 h-3.5 text-[#D99B00] dark:text-amber-400" />
                 <span>{t.dashboard.quickSimulator}</span>
               </span>
-              <span className="text-[10px] text-[#475569] dark:text-slate-400 font-mono">1 {calcFrom} = {(universalRates[calcTo] / universalRates[calcFrom]).toFixed(4)} {calcTo}</span>
+              <span className="text-[10px] text-[#475569] dark:text-slate-400 font-mono">
+                1 {calcFrom} = {(alignedRates[calcTo] / alignedRates[calcFrom]).toLocaleString(numberLocale, { minimumFractionDigits: 4, maximumFractionDigits: 4 })} {calcTo}
+              </span>
             </div>
 
             <div className="flex items-center gap-2">
@@ -280,7 +349,7 @@ export const DashboardView: React.FC = () => {
             <div className="pt-1 flex items-center justify-between text-xs">
               <span className="text-[#475569] dark:text-slate-400 text-[11px]">{t.dashboard.convertedResult}</span>
               <span className="font-bold font-mono-numbers text-[#006B52] dark:text-emerald-400 text-sm">
-                {formatCurrencyValue(convertedValue, calcTo, calcTo === 'JPY' ? 0 : 2)}
+                {formatCurrencyValue(convertedValue, calcTo, calcTo === 'JPY' ? 0 : 2, numberLocale)}
               </span>
             </div>
           </div>
@@ -319,7 +388,7 @@ export const DashboardView: React.FC = () => {
                 <DualPrice
                   price={index.price}
                   currency={index.currency}
-                  rates={universalRates}
+                  rates={alignedRates}
                   isIndex={true}
                   layout="stacked"
                   primaryClassName="font-mono-numbers text-sm font-extrabold text-[#0F172A] dark:text-slate-100"
@@ -405,7 +474,7 @@ export const DashboardView: React.FC = () => {
                       <DualPrice
                         price={stock.price}
                         currency={stock.currency}
-                        rates={universalRates}
+                        rates={alignedRates}
                         layout="compact"
                         primaryClassName="text-xs font-mono-numbers font-semibold text-[#0F172A] dark:text-white"
                         secondaryClassName="text-[10px] font-mono-numbers text-[#006B52] dark:text-emerald-500/90"
@@ -449,7 +518,7 @@ export const DashboardView: React.FC = () => {
                       <DualPrice
                         price={stock.price}
                         currency={stock.currency}
-                        rates={universalRates}
+                        rates={alignedRates}
                         layout="compact"
                         primaryClassName="text-xs font-mono-numbers font-semibold text-[#0F172A] dark:text-white"
                         secondaryClassName="text-[10px] font-mono-numbers text-[#006B52] dark:text-emerald-500/90"
@@ -521,7 +590,7 @@ export const DashboardView: React.FC = () => {
                       <DualPrice
                         price={pair.price}
                         currency={pair.currency}
-                        rates={universalRates}
+                        rates={alignedRates}
                         layout="compact"
                         primaryClassName="text-xs font-mono-numbers font-bold text-[#0F172A] dark:text-white"
                         secondaryClassName="text-[10px] font-mono-numbers text-[#006B52] dark:text-emerald-400/80"

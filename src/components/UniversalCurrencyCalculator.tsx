@@ -22,7 +22,7 @@ import {
   formatConvertedAmount,
   formatUnitRate,
 } from '../utils/awesomeCalculator';
-import { formatSignedPercentChange } from '../utils/finance';
+import { formatSignedPercentChange, buildAlignedMarketRates } from '../utils/finance';
 
 interface UniversalCurrencyCalculatorProps {
   showRemittanceFeesDefault?: boolean;
@@ -40,9 +40,14 @@ export const UniversalCurrencyCalculator: React.FC<UniversalCurrencyCalculatorPr
   defaultTo = 'BRL',
   defaultAmount = 1,
 }) => {
-  const { universalRates } = useMarket();
+  const { assets, universalRates } = useMarket();
   const { t, lang } = useI18n();
   const numberLocale = getNumberLocale(lang);
+
+  const alignedRates = useMemo(
+    () => buildAlignedMarketRates(assets, universalRates),
+    [assets, universalRates]
+  );
 
   const [amountInput, setAmountInput] = useState<string>(String(defaultAmount));
   const [fromCurrency, setFromCurrency] = useState<string>(defaultFrom);
@@ -50,7 +55,7 @@ export const UniversalCurrencyCalculator: React.FC<UniversalCurrencyCalculatorPr
   const [quoteMode, setQuoteMode] = useState<AwesomeQuoteMode>('bid');
 
   const [quotes, setQuotes] = useState<AwesomeQuotesMap>(() =>
-    buildFallbackAwesomeQuotes(universalRates)
+    buildFallbackAwesomeQuotes(alignedRates)
   );
   const [dataSource, setDataSource] = useState<'awesomeapi' | 'fallback'>('fallback');
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -64,8 +69,8 @@ export const UniversalCurrencyCalculator: React.FC<UniversalCurrencyCalculatorPr
   const [spreadPercent, setSpreadPercent] = useState<number>(1.1);
   const [iofPercent, setIofPercent] = useState<number>(1.1);
 
-  const universalRatesRef = React.useRef(universalRates);
-  universalRatesRef.current = universalRates;
+  const alignedRatesRef = React.useRef(alignedRates);
+  alignedRatesRef.current = alignedRates;
   const hasSyncedOnceRef = React.useRef(false);
 
   const syncFromAwesomeApi = useCallback(async (manual = false) => {
@@ -75,7 +80,7 @@ export const UniversalCurrencyCalculator: React.FC<UniversalCurrencyCalculatorPr
       setIsLoading(true);
     }
 
-    const result = await fetchAwesomeApiQuotes(universalRatesRef.current);
+    const result = await fetchAwesomeApiQuotes(alignedRatesRef.current);
     hasSyncedOnceRef.current = true;
     setQuotes(result.quotes);
     setDataSource(result.source);
@@ -98,12 +103,12 @@ export const UniversalCurrencyCalculator: React.FC<UniversalCurrencyCalculatorPr
     return () => clearInterval(interval);
   }, [syncFromAwesomeApi]);
 
-  // Keeps fallback synchronized if universalRates updates while offline
+  // Keeps fallback synchronized if market rates update while offline
   useEffect(() => {
     if (dataSource === 'fallback') {
-      setQuotes(buildFallbackAwesomeQuotes(universalRates));
+      setQuotes(buildFallbackAwesomeQuotes(alignedRates));
     }
-  }, [universalRates, dataSource]);
+  }, [alignedRates, dataSource]);
 
   const numericAmount = useMemo(() => {
     const normalized = amountInput.replace(',', '.');
@@ -148,6 +153,29 @@ export const UniversalCurrencyCalculator: React.FC<UniversalCurrencyCalculatorPr
     : fromCurrency === 'BRL' && toCurrency !== 'BRL'
     ? toQuote
     : toQuote;
+
+  const spotMatrixRate = useMemo(() => {
+    if (fromCurrency === toCurrency) return 1;
+    const fromRate = alignedRates[fromCurrency];
+    const toRate = alignedRates[toCurrency];
+    if (fromRate && toRate && fromRate > 0 && toRate > 0) {
+      return toRate / fromRate;
+    }
+    return 0;
+  }, [alignedRates, fromCurrency, toCurrency]);
+
+  const hasSpotDivergence =
+    fromCurrency !== toCurrency &&
+    spotMatrixRate > 0 &&
+    conversion.directRate > 0 &&
+    Math.abs(conversion.directRate - spotMatrixRate) / spotMatrixRate > 0.0005;
+
+  const spotRefLabel =
+    lang === 'en' ? 'Spot Matrix Ref.:' : lang === 'es' ? 'Ref. Matriz Spot:' : 'Ref. Matriz Spot:';
+  const commercialModeBadge =
+    lang === 'en'
+      ? `Commercial (${quoteMode === 'bid' ? t.calculator.buyLabel : t.calculator.sellLabel})`
+      : `Comercial (${quoteMode === 'bid' ? t.calculator.buyLabel : t.calculator.sellLabel})`;
 
   return (
     <section
@@ -384,19 +412,32 @@ export const UniversalCurrencyCalculator: React.FC<UniversalCurrencyCalculatorPr
           </div>
 
           {/* Direct & Inverse Unit Parity */}
-          <div className="flex flex-wrap items-center justify-between gap-2 text-[11px] font-mono-numbers text-[#475569] dark:text-slate-400 pt-1">
-            <span>
-              1 {fromCurrency} ={' '}
-              <strong className="text-[#0F172A] dark:text-slate-200">
-                {formatUnitRate(conversion.directRate, toCurrency, numberLocale)} {toCurrency}
-              </strong>
-            </span>
-            <span>
-              1 {toCurrency} ={' '}
-              <strong className="text-[#0F172A] dark:text-slate-200">
-                {formatUnitRate(conversion.inverseRate, fromCurrency, numberLocale)} {fromCurrency}
-              </strong>
-            </span>
+          <div className="space-y-1 pt-1">
+            <div className="flex flex-wrap items-center justify-between gap-2 text-[11px] font-mono-numbers text-[#475569] dark:text-slate-400">
+              <span>
+                <span className="text-[10px] font-sans font-semibold text-[#003399] dark:text-emerald-400 mr-1.5">
+                  {commercialModeBadge}:
+                </span>
+                1 {fromCurrency} ={' '}
+                <strong className="text-[#0F172A] dark:text-slate-200">
+                  {formatUnitRate(conversion.directRate, toCurrency, numberLocale)} {toCurrency}
+                </strong>
+              </span>
+              <span>
+                1 {toCurrency} ={' '}
+                <strong className="text-[#0F172A] dark:text-slate-200">
+                  {formatUnitRate(conversion.inverseRate, fromCurrency, numberLocale)} {fromCurrency}
+                </strong>
+              </span>
+            </div>
+            {hasSpotDivergence && (
+              <div className="flex items-center justify-between text-[10px] font-mono-numbers text-[#475569] dark:text-slate-400">
+                <span className="font-sans">{spotRefLabel}</span>
+                <span>
+                  1 {fromCurrency} = {formatUnitRate(spotMatrixRate, toCurrency, numberLocale)} {toCurrency}
+                </span>
+              </div>
+            )}
           </div>
         </div>
       </div>

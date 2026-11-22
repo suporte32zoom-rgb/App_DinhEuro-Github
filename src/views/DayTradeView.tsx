@@ -37,7 +37,7 @@ import {
   Radio,
 } from 'lucide-react';
 import { useMarket } from '../context/MarketContext';
-import { formatCurrencyValue, getDualCurrencyDisplay, formatSignedPercentChange, getAssetPriceDecimals } from '../utils/finance';
+import { formatCurrencyValue, formatPointsValue, getDualCurrencyDisplay, formatSignedPercentChange, getAssetPriceDecimals } from '../utils/finance';
 import { MarketAsset } from '../services/marketData';
 import { useI18n } from '../i18n/I18nContext';
 import { getNumberLocale } from '../i18n/translations';
@@ -588,53 +588,61 @@ export const DayTradeView: React.FC = () => {
     const petr = getAsset('PETR4');
     const vale = getAsset('VALE3');
 
+    const ibovPrice = ibov && ibov.price > 0 ? ibov.price : 171670;
+    const usdPrice = usdBrl && usdBrl.price > 0 ? usdBrl.price : 5.584;
+    const eurPrice = eurBrl && eurBrl.price > 0 ? eurBrl.price : 6.2335;
+    const sp500Price = sp500 && sp500.price > 0 ? sp500.price : 7575.4;
+    const btcPrice = btc && btc.price > 0 ? btc.price : 87950;
+    const petrPrice = petr && petr.price > 0 ? petr.price : 38.65;
+    const valePrice = vale && vale.price > 0 ? vale.price : 62.4;
+
     return [
       {
         symbol: 'IBOVESPA',
         label: 'IBOV',
-        price: (ibov && ibov.price > 0 ? ibov.price : 171670).toLocaleString(locale, { maximumFractionDigits: 0 }),
+        price: formatPointsValue(ibovPrice, locale),
         change: ibov ? ibov.change24h : +0.68,
         spark: ibov?.sparkline?.length ? ibov.sparkline : [171000, 171300, 171500, 171670],
       },
       {
         symbol: 'USD/BRL',
         label: tDt.dollarLabel,
-        price: formatCurrencyValue(usdBrl ? usdBrl.price : 5.500, 'BRL', 3, locale),
+        price: formatCurrencyValue(usdPrice, 'BRL', getAssetPriceDecimals(usdPrice, 'BRL', 'forex'), locale),
         change: usdBrl ? usdBrl.change24h : -0.52,
-        spark: usdBrl?.sparkline?.length ? usdBrl.sparkline : [5.50, 5.48, 5.47, 5.500],
+        spark: usdBrl?.sparkline?.length ? usdBrl.sparkline : [5.52, 5.54, 5.57, 5.584],
       },
       {
         symbol: 'EUR/BRL',
         label: tDt.euroLabel,
-        price: formatCurrencyValue(eurBrl ? eurBrl.price : 5.978, 'BRL', 3, locale),
+        price: formatCurrencyValue(eurPrice, 'BRL', getAssetPriceDecimals(eurPrice, 'BRL', 'forex'), locale),
         change: eurBrl ? eurBrl.change24h : +0.21,
-        spark: eurBrl?.sparkline?.length ? eurBrl.sparkline : [5.95, 5.96, 5.97, 5.978],
+        spark: eurBrl?.sparkline?.length ? eurBrl.sparkline : [6.18, 6.20, 6.22, 6.2335],
       },
       {
         symbol: 'S&P 500',
         label: 'S&P 500',
-        price: (sp500 && sp500.price > 0 ? sp500.price : 7575.4).toLocaleString(locale, { minimumFractionDigits: 1, maximumFractionDigits: 1 }),
+        price: formatPointsValue(sp500Price, locale),
         change: sp500 ? sp500.change24h : +0.48,
         spark: sp500?.sparkline?.length ? sp500.sparkline : [7520, 7540, 7560, 7575],
       },
       {
         symbol: 'BTC/USD',
         label: 'BTC/USD',
-        price: `$ ${(btc ? btc.price : 87950).toLocaleString(locale, { maximumFractionDigits: 0 })}`,
+        price: formatCurrencyValue(btcPrice, 'USD', getAssetPriceDecimals(btcPrice, 'USD', 'crypto'), locale),
         change: btc ? btc.change24h : +1.84,
         spark: btc?.sparkline?.length ? btc.sparkline : [85200, 86400, 87100, 87950],
       },
       {
         symbol: 'PETR4',
         label: 'PETR4',
-        price: formatCurrencyValue(petr ? petr.price : 38.65, 'BRL', 2, locale),
+        price: formatCurrencyValue(petrPrice, 'BRL', getAssetPriceDecimals(petrPrice, 'BRL', 'stocks_br'), locale),
         change: petr ? petr.change24h : +1.15,
         spark: petr?.sparkline?.length ? petr.sparkline : [38.1, 38.3, 38.5, 38.65],
       },
       {
         symbol: 'VALE3',
         label: 'VALE3',
-        price: formatCurrencyValue(vale ? vale.price : 62.40, 'BRL', 2, locale),
+        price: formatCurrencyValue(valePrice, 'BRL', getAssetPriceDecimals(valePrice, 'BRL', 'stocks_br'), locale),
         change: vale ? vale.change24h : -0.42,
         spark: vale?.sparkline?.length ? vale.sparkline : [62.9, 62.7, 62.5, 62.4],
       },

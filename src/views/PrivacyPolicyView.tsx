@@ -67,11 +67,11 @@ export const PrivacyPolicyView: React.FC = () => {
           </p>
         </div>
         <a
-          href="mailto:admin@dinheiro.com"
+          href="mailto:admin@dinheuro.com"
           className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs transition shadow-lg shrink-0 cursor-pointer"
         >
           <Mail className="w-4 h-4" />
-          <span>admin@dinheiro.com</span>
+          <span>admin@dinheuro.com</span>
         </a>
       </div>
 
@@ -155,7 +155,7 @@ export const PrivacyPolicyView: React.FC = () => {
             ))}
           </ul>
           <p className="pt-2">
-            {tPrivacy.s5ContactPrefix} <a href="mailto:admin@dinheiro.com" className="text-emerald-400 hover:underline font-mono">admin@dinheiro.com</a>. {tPrivacy.s5ContactSuffix}
+            {tPrivacy.s5ContactPrefix} <a href="mailto:admin@dinheuro.com" className="text-emerald-400 hover:underline font-mono">admin@dinheuro.com</a>. {tPrivacy.s5ContactSuffix}
           </p>
         </div>
 

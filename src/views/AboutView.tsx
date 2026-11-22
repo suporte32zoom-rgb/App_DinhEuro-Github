@@ -140,11 +140,11 @@ export const AboutView: React.FC = () => {
           </p>
         </div>
         <a
-          href="mailto:admin@dinheiro.com"
+          href="mailto:admin@dinheuro.com"
           className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#F4F7F9] dark:bg-slate-800 hover:bg-[#E6EEFF] dark:hover:bg-slate-700 text-[#003399] dark:text-white font-mono text-xs transition border border-[#CBD5E1] dark:border-slate-700 cursor-pointer shrink-0"
         >
           <Mail className="w-4 h-4 text-[#009B77] dark:text-emerald-400" />
-          <span>admin@dinheiro.com</span>
+          <span>admin@dinheuro.com</span>
         </a>
       </div>
     </div>

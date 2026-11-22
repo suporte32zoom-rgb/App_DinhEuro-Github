@@ -364,9 +364,24 @@ var TROY_OUNCE_GRAMS = 31.1034768;
 var DEFAULT_GOLD_SILVER_RATIO = 79.91;
 var MIN_GOLD_SILVER_RATIO = 25;
 var MAX_GOLD_SILVER_RATIO = 130;
-function getValidPositiveNumbers(arr) {
-  if (!Array.isArray(arr)) return [];
-  return arr.filter((v) => typeof v === "number" && Number.isFinite(v) && v > 0);
+function isPositiveFinite(v) {
+  return typeof v === "number" && Number.isFinite(v) && v > 0;
+}
+function normalizePriceBounds(price, high, low, decimals = 2) {
+  const round = (n) => {
+    const r = Number(n.toFixed(decimals));
+    return Object.is(r, -0) || r === 0 ? 0 : r;
+  };
+  const safePrice = isPositiveFinite(price) ? round(price) : 0;
+  const candidates = [safePrice, high, low].filter(isPositiveFinite);
+  if (candidates.length === 0) {
+    return { price: 0, high: 0, low: 0 };
+  }
+  return {
+    price: safePrice,
+    high: round(Math.max(...candidates)),
+    low: round(Math.min(...candidates))
+  };
 }
 function formatCompactVolume(volume) {
   if (typeof volume !== "number" || !Number.isFinite(volume) || volume <= 0) {
@@ -382,40 +397,71 @@ function extractYahooChartOHLCV(yData, priceDecimals = 2) {
   const m = result?.meta;
   if (!m) return null;
   const quote = result?.indicators?.quote?.[0];
-  const validCloses = getValidPositiveNumbers(quote?.close);
-  const validHighs = getValidPositiveNumbers(quote?.high);
-  const validLows = getValidPositiveNumbers(quote?.low);
-  const validOpens = getValidPositiveNumbers(quote?.open);
-  const validVolumes = getValidPositiveNumbers(quote?.volume);
+  const timestamps = Array.isArray(result?.timestamp) ? result.timestamp : [];
+  const closes = Array.isArray(quote?.close) ? quote.close : [];
+  const highs = Array.isArray(quote?.high) ? quote.high : [];
+  const lows = Array.isArray(quote?.low) ? quote.low : [];
+  const opens = Array.isArray(quote?.open) ? quote.open : [];
+  const volumes = Array.isArray(quote?.volume) ? quote.volume : [];
+  const bars = [];
+  for (let i = 0; i < closes.length; i++) {
+    const c = closes[i];
+    if (!isPositiveFinite(c)) continue;
+    const rawTs = timestamps[i];
+    bars.push({
+      ts: isPositiveFinite(rawTs) ? rawTs * 1e3 : void 0,
+      open: isPositiveFinite(opens[i]) ? opens[i] : void 0,
+      high: isPositiveFinite(highs[i]) ? highs[i] : void 0,
+      low: isPositiveFinite(lows[i]) ? lows[i] : void 0,
+      close: c,
+      volume: isPositiveFinite(volumes[i]) ? volumes[i] : void 0
+    });
+  }
+  const latestBar = bars.length > 0 ? bars[bars.length - 1] : void 0;
+  const prevBar = bars.length >= 2 ? bars[bars.length - 2] : void 0;
   const unitScale = m.currency === "GBp" || m.currency === "GBX" ? 0.01 : 1;
-  const rawPrice = (typeof m.regularMarketPrice === "number" && Number.isFinite(m.regularMarketPrice) && m.regularMarketPrice > 0 ? m.regularMarketPrice : validCloses.length > 0 ? validCloses[validCloses.length - 1] : 0) * unitScale;
+  const metaMarketTimeMs = isPositiveFinite(m.regularMarketTime) ? m.regularMarketTime * 1e3 : void 0;
+  const barIsNewerThanMeta = Boolean(
+    latestBar?.ts && metaMarketTimeMs && latestBar.ts > metaMarketTimeMs + 3600 * 1e3
+  );
+  const rawPrice = (barIsNewerThanMeta && latestBar ? latestBar.close : isPositiveFinite(m.regularMarketPrice) ? m.regularMarketPrice : latestBar ? latestBar.close : 0) * unitScale;
   if (rawPrice <= 0) return null;
-  const roundPrice = (n) => Number(n.toFixed(priceDecimals));
+  const roundPrice = (n) => {
+    const r = Number(n.toFixed(priceDecimals));
+    return Object.is(r, -0) || r === 0 ? 0 : r;
+  };
   const currentPrice = roundPrice(rawPrice);
-  const rawPrevClose = (typeof m.chartPreviousClose === "number" && Number.isFinite(m.chartPreviousClose) && m.chartPreviousClose > 0 ? m.chartPreviousClose : typeof m.previousClose === "number" && Number.isFinite(m.previousClose) && m.previousClose > 0 ? m.previousClose : rawPrice / unitScale) * unitScale;
+  const rawPrevClose = (barIsNewerThanMeta && prevBar ? prevBar.close : isPositiveFinite(m.previousClose) ? m.previousClose : prevBar ? prevBar.close : isPositiveFinite(m.chartPreviousClose) ? m.chartPreviousClose : rawPrice / unitScale) * unitScale;
   const previousClose = roundPrice(rawPrevClose);
   const change = roundPrice(currentPrice - previousClose);
-  const changePercent = previousClose > 0 ? Number((change / previousClose * 100).toFixed(2)) : 0;
-  const rawHigh = typeof m.regularMarketDayHigh === "number" && Number.isFinite(m.regularMarketDayHigh) && m.regularMarketDayHigh > 0 ? m.regularMarketDayHigh * unitScale : validHighs.length > 0 ? validHighs[validHighs.length - 1] * unitScale : rawPrice;
-  const rawLow = typeof m.regularMarketDayLow === "number" && Number.isFinite(m.regularMarketDayLow) && m.regularMarketDayLow > 0 ? m.regularMarketDayLow * unitScale : validLows.length > 0 ? validLows[validLows.length - 1] * unitScale : rawPrice;
-  const high = roundPrice(Math.max(rawHigh, rawLow));
-  const low = roundPrice(Math.min(rawHigh, rawLow));
-  const rawOpen = typeof m.regularMarketOpen === "number" && Number.isFinite(m.regularMarketOpen) && m.regularMarketOpen > 0 ? m.regularMarketOpen * unitScale : validOpens.length > 0 ? validOpens[validOpens.length - 1] * unitScale : rawPrevClose;
+  const rawChangePct = previousClose > 0 ? Number((change / previousClose * 100).toFixed(2)) : 0;
+  const changePercent = Object.is(rawChangePct, -0) || rawChangePct === 0 ? 0 : rawChangePct;
+  const rawHigh = !barIsNewerThanMeta && isPositiveFinite(m.regularMarketDayHigh) ? m.regularMarketDayHigh * unitScale : latestBar?.high !== void 0 ? latestBar.high * unitScale : rawPrice;
+  const rawLow = !barIsNewerThanMeta && isPositiveFinite(m.regularMarketDayLow) ? m.regularMarketDayLow * unitScale : latestBar?.low !== void 0 ? latestBar.low * unitScale : rawPrice;
+  const bounds = normalizePriceBounds(
+    currentPrice,
+    Math.max(rawHigh, rawLow),
+    Math.min(rawHigh, rawLow),
+    priceDecimals
+  );
+  const rawOpen = !barIsNewerThanMeta && isPositiveFinite(m.regularMarketOpen) ? m.regularMarketOpen * unitScale : latestBar?.open !== void 0 ? latestBar.open * unitScale : rawPrevClose;
   const open = roundPrice(rawOpen);
-  const rawVolume = typeof m.regularMarketVolume === "number" && Number.isFinite(m.regularMarketVolume) && m.regularMarketVolume > 0 ? m.regularMarketVolume : validVolumes.length > 0 ? validVolumes[validVolumes.length - 1] : void 0;
+  const rawVolume = !barIsNewerThanMeta && isPositiveFinite(m.regularMarketVolume) ? m.regularMarketVolume : latestBar?.volume;
   const splits = result?.events?.splits;
   const hasSplitEvent = Boolean(splits && typeof splits === "object" && Object.keys(splits).length > 0);
+  const marketTimeMs = Math.max(metaMarketTimeMs || 0, latestBar?.ts || 0) || void 0;
   return {
-    price: currentPrice,
+    price: bounds.price,
     previousClose,
     change,
-    changePercent,
-    high,
-    low,
+    changePercent: Number(changePercent.toFixed(2)),
+    high: bounds.high,
+    low: bounds.low,
     open,
     volume: rawVolume,
     volumeFormatted: formatCompactVolume(rawVolume),
-    hasSplitEvent
+    hasSplitEvent,
+    marketTimeMs
   };
 }
 function reconcileSilverSpotParity(params) {
@@ -697,17 +743,18 @@ async function fetchRealTimeMarketData(customFinnhubKey) {
             if (item && item.bid) {
               const bid = parseFloat(item.bid);
               const ask = parseFloat(item.ask) || bid;
-              const high = parseFloat(item.high) || bid;
-              const low = parseFloat(item.low) || bid;
+              const rawHigh = parseFloat(item.high) || bid;
+              const rawLow = parseFloat(item.low) || bid;
+              const bounds = normalizePriceBounds(bid, rawHigh, rawLow, 4);
               const varBid = parseFloat(item.varBid) || 0;
               const pct = parseFloat(item.pctChange) || 0;
               pairs[key] = {
                 code,
                 codein: "BRL",
                 name,
-                high,
-                low,
-                bid,
+                high: bounds.high,
+                low: bounds.low,
+                bid: bounds.price,
                 ask,
                 varBid,
                 pctChange: pct,
@@ -715,14 +762,14 @@ async function fetchRealTimeMarketData(customFinnhubKey) {
               };
               quotes[dinhSym] = {
                 symbol: dinhSym,
-                price: bid,
+                price: bounds.price,
                 change: varBid,
                 changePercent: pct,
-                high,
-                low,
-                open: Number((bid - varBid).toFixed(4)),
-                previousClose: Number((bid - varBid).toFixed(4)),
-                volume: `${Math.abs(pct)}%`,
+                high: bounds.high,
+                low: bounds.low,
+                open: Number((bounds.price - varBid).toFixed(4)),
+                previousClose: Number((bounds.price - varBid).toFixed(4)),
+                volume: "--",
                 currency: "BRL",
                 source: "awesome_api_live"
               };
@@ -769,14 +816,14 @@ async function fetchRealTimeMarketData(customFinnhubKey) {
         if (cbData?.data?.rates) {
           sourcesStatus.coinbase = true;
           const r = cbData.data.rates;
-          if (r.BRL) rates.BRL = parseFloat(r.BRL) || rates.BRL;
-          if (r.EUR) rates.EUR = parseFloat(r.EUR) || rates.EUR;
-          if (r.GBP) rates.GBP = parseFloat(r.GBP) || rates.GBP;
-          if (r.JPY) rates.JPY = parseFloat(r.JPY) || rates.JPY;
-          if (r.CHF) rates.CHF = parseFloat(r.CHF) || rates.CHF;
-          if (r.CAD) rates.CAD = parseFloat(r.CAD) || rates.CAD;
-          if (r.AUD) rates.AUD = parseFloat(r.AUD) || rates.AUD;
-          if (r.CNY) rates.CNY = parseFloat(r.CNY) || rates.CNY;
+          if (!sourcesStatus.awesomeApi && r.BRL) rates.BRL = parseFloat(r.BRL) || rates.BRL;
+          if (!sourcesStatus.ecb && r.EUR) rates.EUR = parseFloat(r.EUR) || rates.EUR;
+          if (!sourcesStatus.ecb && r.GBP) rates.GBP = parseFloat(r.GBP) || rates.GBP;
+          if (!sourcesStatus.ecb && r.JPY) rates.JPY = parseFloat(r.JPY) || rates.JPY;
+          if (!sourcesStatus.ecb && r.CHF) rates.CHF = parseFloat(r.CHF) || rates.CHF;
+          if (!sourcesStatus.ecb && r.CAD) rates.CAD = parseFloat(r.CAD) || rates.CAD;
+          if (!sourcesStatus.ecb && r.AUD) rates.AUD = parseFloat(r.AUD) || rates.AUD;
+          if (!sourcesStatus.ecb && r.CNY) rates.CNY = parseFloat(r.CNY) || rates.CNY;
           if (r.BTC) rates.BTC = parseFloat(r.BTC) || rates.BTC;
           if (r.ETH) rates.ETH = parseFloat(r.ETH) || rates.ETH;
           if (r.SOL) rates.SOL = parseFloat(r.SOL) || rates.SOL;
@@ -871,40 +918,18 @@ async function fetchRealTimeMarketData(customFinnhubKey) {
       await Promise.all(
         chunk.map(async ([dinhSymbol, meta]) => {
           try {
-            const yRes = await fetch(`https://query1.finance.yahoo.com/v8/finance/chart/${meta.yahoo}?interval=1d&events=div,split`, {
+            const isB3OrIndex = meta.category === "stocks_br" || meta.category === "indices";
+            const rangeQuery = isB3OrIndex ? "range=5d&interval=1d" : "interval=1d";
+            const yRes = await fetch(`https://query1.finance.yahoo.com/v8/finance/chart/${meta.yahoo}?${rangeQuery}&events=div,split`, {
               headers: {
                 "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
                 "Accept": "application/json"
               }
             });
             if (yRes.ok) {
-              let yData = await yRes.json();
-              const decimals = meta.currency === "BRL" && dinhSymbol.includes("/") ? 4 : 2;
-              let parsed = extractYahooChartOHLCV(yData, decimals);
-              if (parsed && (meta.category === "stocks_br" || meta.category === "indices") && parsed.high === parsed.price && parsed.low === parsed.price) {
-                try {
-                  const yRes5d = await fetch(`https://query1.finance.yahoo.com/v8/finance/chart/${meta.yahoo}?range=5d&interval=1d`, {
-                    headers: {
-                      "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
-                      "Accept": "application/json"
-                    }
-                  });
-                  if (yRes5d.ok) {
-                    const yData5d = await yRes5d.json();
-                    const parsed5d = extractYahooChartOHLCV(yData5d, decimals);
-                    if (parsed5d && parsed5d.high > parsed5d.low) {
-                      parsed = {
-                        ...parsed,
-                        high: parsed5d.high,
-                        low: parsed5d.low,
-                        open: parsed5d.open > 0 ? parsed5d.open : parsed.open,
-                        volumeFormatted: parsed.volumeFormatted || parsed5d.volumeFormatted
-                      };
-                    }
-                  }
-                } catch {
-                }
-              }
+              const yData = await yRes.json();
+              const decimals = dinhSymbol === "USD/JPY" ? 2 : dinhSymbol.includes("/") ? dinhSymbol.startsWith("ARS") ? 5 : 4 : 2;
+              const parsed = extractYahooChartOHLCV(yData, decimals);
               if (parsed) {
                 sourcesStatus.yahooFinance = true;
                 const currentPrice = parsed.price;
@@ -914,7 +939,7 @@ async function fetchRealTimeMarketData(customFinnhubKey) {
                 const highVal = parsed.high;
                 const lowVal = parsed.low;
                 const openVal = parsed.open;
-                const volStr = parsed.volumeFormatted || "N/A";
+                const volStr = meta.category === "forex" ? "--" : parsed.volumeFormatted || "--";
                 quotes[dinhSymbol] = {
                   symbol: dinhSymbol,
                   price: currentPrice,
@@ -1315,21 +1340,26 @@ async function fetchRealTimeMarketData(customFinnhubKey) {
       if (override && override.price > 0) {
         const existing = quotes[sym];
         const prevClose = existing?.previousClose || override.price;
-        const isBrlPair = sym.includes("/") && (existing?.currency === "BRL" || sym.endsWith("/BRL"));
-        const changeVal = Number((override.price - prevClose).toFixed(isBrlPair ? 4 : 2));
+        const isFxPair = ["USD/BRL", "EUR/BRL", "EUR/USD", "GBP/USD", "USD/JPY", "USD/CHF", "AUD/USD", "USD/CAD"].includes(sym);
+        const dec = isFxPair ? sym === "USD/JPY" ? 2 : 4 : 2;
+        const changeVal = Number((override.price - prevClose).toFixed(dec));
         const changePct = prevClose > 0 ? Number((changeVal / prevClose * 100).toFixed(2)) : 0;
-        const high = existing ? Math.max(existing.high, override.price) : Number((override.price * 1.01).toFixed(2));
-        const low = existing ? Math.min(existing.low, override.price) : Number((override.price * 0.99).toFixed(2));
+        const bounds = normalizePriceBounds(
+          override.price,
+          existing?.high ?? override.price * 1.01,
+          existing?.low ?? override.price * 0.99,
+          dec
+        );
         quotes[sym] = {
           symbol: sym,
-          price: override.price,
+          price: bounds.price,
           change: changeVal,
           changePercent: changePct,
-          high,
-          low,
+          high: bounds.high,
+          low: bounds.low,
           open: existing?.open || prevClose,
           previousClose: prevClose,
-          volume: override.volume ? `${override.volume}` : existing?.volume || "N/A",
+          volume: isFxPair ? "--" : override.volume ? `${override.volume}` : existing?.volume || "--",
           currency: existing?.currency || (sym.includes("BRL") ? "BRL" : "USD"),
           source: "finnhub_webhook_live"
         };
@@ -1352,7 +1382,7 @@ async function fetchRealTimeMarketData(customFinnhubKey) {
         low: 5.51,
         open: 5.514,
         previousClose: 5.514,
-        volume: "R$ 5,5840",
+        volume: "--",
         currency: "BRL",
         source: "b3_official_close"
       };
@@ -1367,7 +1397,7 @@ async function fetchRealTimeMarketData(customFinnhubKey) {
         low: 6.17,
         open: 6.1765,
         previousClose: 6.1765,
-        volume: "R$ 6,2335",
+        volume: "--",
         currency: "BRL",
         source: "b3_official_close"
       };
@@ -1418,21 +1448,26 @@ function updateQuoteFromWebhook(rawSymbol, price, volume, timestamp) {
   if (cachedData) {
     const existing = cachedData.quotes[symbol];
     const prevClose = existing?.previousClose || price;
-    const isBrlPair = symbol.includes("/") && (existing?.currency === "BRL" || symbol.endsWith("/BRL"));
-    const changeVal = Number((price - prevClose).toFixed(isBrlPair ? 4 : 2));
+    const isFxPair = ["USD/BRL", "EUR/BRL", "EUR/USD", "GBP/USD", "USD/JPY", "USD/CHF", "AUD/USD", "USD/CAD"].includes(symbol);
+    const dec = isFxPair ? symbol === "USD/JPY" ? 2 : 4 : 2;
+    const changeVal = Number((price - prevClose).toFixed(dec));
     const changePct = prevClose > 0 ? Number((changeVal / prevClose * 100).toFixed(2)) : 0;
-    const high = existing ? Math.max(existing.high, price) : Number((price * 1.01).toFixed(2));
-    const low = existing ? Math.min(existing.low, price) : Number((price * 0.99).toFixed(2));
+    const bounds = normalizePriceBounds(
+      price,
+      existing?.high ?? price * 1.01,
+      existing?.low ?? price * 0.99,
+      dec
+    );
     cachedData.quotes[symbol] = {
       symbol,
-      price,
+      price: bounds.price,
       change: changeVal,
       changePercent: changePct,
-      high,
-      low,
+      high: bounds.high,
+      low: bounds.low,
       open: existing?.open || prevClose,
       previousClose: prevClose,
-      volume: volume ? volume >= 1e6 ? `${(volume / 1e6).toFixed(1)}M` : `${Math.round(volume)}` : existing?.volume || "N/A",
+      volume: isFxPair ? "--" : volume ? volume >= 1e6 ? `${(volume / 1e6).toFixed(1)}M` : `${Math.round(volume)}` : existing?.volume || "--",
       currency: existing?.currency || (symbol.includes("BRL") ? "BRL" : "USD"),
       source: "finnhub_webhook_live"
     };

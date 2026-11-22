@@ -3,18 +3,14 @@ import { Globe, Coins, TrendingUp } from 'lucide-react';
 import { useI18n } from '../i18n/I18nContext';
 import { getNumberLocale } from '../i18n/translations';
 import { useMarket } from '../context/MarketContext';
+import { resolveEurBrlRate, resolveUsdBrlRate } from '../utils/finance';
 
 export const HomeSeoEditorialSection: React.FC = () => {
   const { t, lang } = useI18n();
   const { assets, universalRates } = useMarket();
 
-  const eurBrl =
-    assets.find((a) => a.id === 'eur_brl')?.price ||
-    (universalRates.BRL && universalRates.EUR
-      ? universalRates.BRL / universalRates.EUR
-      : 6.2335);
-  const usdBrl =
-    assets.find((a) => a.id === 'usd_brl')?.price || universalRates.BRL || 5.584;
+  const eurBrl = resolveEurBrlRate(assets, universalRates);
+  const usdBrl = resolveUsdBrlRate(assets, universalRates);
 
   const numberLocale = getNumberLocale(lang);
   const formattedEur = eurBrl.toLocaleString(numberLocale, {
