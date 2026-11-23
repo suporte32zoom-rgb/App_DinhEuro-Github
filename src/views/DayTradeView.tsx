@@ -688,13 +688,13 @@ export const DayTradeView: React.FC = () => {
   ];
 
   return (
-    <div className="w-full h-full flex flex-col min-h-0 bg-[#070d18] text-slate-100 select-none overflow-hidden text-xs">
+    <div className="w-full h-full flex flex-col min-h-0 bg-[#F4F7F9] dark:bg-[#070d18] text-slate-900 dark:text-slate-100 select-none overflow-hidden text-xs">
       {/* =========================================================================
           1. TOP CONTINUOUS GLOBAL TICKERS MARQUEE (IBOV, DÓLAR, EURO, S&P 500, BTC)
          ========================================================================= */}
-      <div className="bg-[#050a14] border-b border-slate-800/90 px-2 py-1 flex items-center justify-between gap-3 overflow-x-auto no-scrollbar shrink-0 text-[11px] font-mono-numbers">
-        <div className="flex items-center gap-1.5 shrink-0 text-slate-400 font-bold uppercase text-[10px] tracking-wider pr-2 border-r border-slate-800">
-          <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+      <div className="bg-white dark:bg-[#050a14] border-b border-[#E2E8F0] dark:border-slate-800/90 px-2 py-1 flex items-center justify-between gap-3 overflow-x-auto no-scrollbar shrink-0 text-[11px] font-mono-numbers">
+        <div className="flex items-center gap-1.5 shrink-0 text-slate-600 dark:text-slate-400 font-bold uppercase text-[10px] tracking-wider pr-2 border-r border-[#E2E8F0] dark:border-slate-800">
+          <span className="w-2 h-2 rounded-full bg-[#009B77] dark:bg-emerald-400 animate-pulse" />
           <span>{tDt.feedGlobalLive}</span>
         </div>
 
@@ -708,13 +708,13 @@ export const DayTradeView: React.FC = () => {
                   const match = dayTradeAssets.find((a) => a.symbol === t.symbol);
                   if (match) setSelectedSymbol(match.symbol);
                 }}
-                className="flex items-center gap-1.5 px-2 py-0.5 rounded bg-slate-900/60 hover:bg-slate-800/80 border border-slate-800 transition cursor-pointer shrink-0"
+                className="flex items-center gap-1.5 px-2 py-0.5 rounded bg-[#F8FAFC] dark:bg-slate-900/60 hover:bg-[#F1F5F9] dark:hover:bg-slate-800/80 border border-[#E2E8F0] dark:border-slate-800 transition cursor-pointer shrink-0"
               >
-                <span className="font-bold text-slate-200 text-[10px]">{t.label}</span>
-                <span className="font-black text-white text-[11px]">{t.price}</span>
+                <span className="font-bold text-slate-700 dark:text-slate-200 text-[10px]">{t.label}</span>
+                <span className="font-black text-slate-950 dark:text-white text-[11px]">{t.price}</span>
                 <span
                   className={`text-[10px] font-bold flex items-center ${
-                    !pctInfo.isNegative ? 'text-emerald-400' : 'text-rose-400'
+                    !pctInfo.isNegative ? 'text-[#006B52] dark:text-emerald-400' : 'text-[#DC2626] dark:text-rose-400'
                   }`}
                 >
                   {pctInfo.text}
@@ -734,9 +734,9 @@ export const DayTradeView: React.FC = () => {
         </div>
 
         {/* Paper Trading Status Badge (Real API button excluded as requested) */}
-        <div className="flex items-center gap-1.5 shrink-0 pl-2 border-l border-slate-800 text-[10px]">
-          <span className="flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-emerald-500/15 border border-emerald-500/35 text-emerald-400 font-black uppercase tracking-wider shadow-sm">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+        <div className="flex items-center gap-1.5 shrink-0 pl-2 border-l border-[#E2E8F0] dark:border-slate-800 text-[10px]">
+          <span className="flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-[#E3F7F2] dark:bg-emerald-500/15 border border-[#009B77]/40 dark:border-emerald-500/35 text-[#006B52] dark:text-emerald-400 font-black uppercase tracking-wider shadow-sm">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#009B77] dark:bg-emerald-400 animate-pulse" />
             {tDt.paperSimulatorBadge}
           </span>
         </div>
@@ -744,9 +744,9 @@ export const DayTradeView: React.FC = () => {
 
       {/* Floating Notification */}
       {orderNotification && (
-        <div className="bg-emerald-950/95 border-b border-emerald-500/70 text-emerald-200 px-3 py-1 text-xs flex items-center justify-between shadow-lg shrink-0">
+        <div className="bg-[#E3F7F2] dark:bg-emerald-950/95 border-b border-[#009B77]/50 dark:border-emerald-500/70 text-[#006B52] dark:text-emerald-200 px-3 py-1 text-xs flex items-center justify-between shadow-lg shrink-0">
           <span className="font-semibold">{orderNotification}</span>
-          <button onClick={() => setOrderNotification(null)} className="text-emerald-400 hover:text-white ml-2">
+          <button onClick={() => setOrderNotification(null)} className="text-[#006B52] dark:text-emerald-400 hover:text-slate-950 dark:hover:text-white ml-2 cursor-pointer">
             <X className="w-3.5 h-3.5" />
           </button>
         </div>
@@ -759,7 +759,7 @@ export const DayTradeView: React.FC = () => {
         {/* =======================================================================
             2A. SLIM LEFT SIDEBAR MENU (Icons with Institutional Seal)
            ======================================================================= */}
-        <aside className="hidden lg:flex w-11 sm:w-12 bg-[#050a14] border-r border-slate-800/90 flex-col items-center justify-between py-2 shrink-0 select-none z-10">
+        <aside className="hidden lg:flex w-11 sm:w-12 bg-white dark:bg-[#050a14] border-r border-[#E2E8F0] dark:border-slate-800/90 flex-col items-center justify-between py-2 shrink-0 select-none z-10">
           <div className="flex flex-col items-center gap-1 w-full">
             {sidebarItems.slice(0, 10).map((item) => {
               const IconComp = item.icon;
@@ -769,7 +769,7 @@ export const DayTradeView: React.FC = () => {
                   type="button"
                   onClick={item.action}
                   title={item.label}
-                  className="w-8 h-8 rounded-lg flex items-center justify-center text-slate-400 hover:text-emerald-400 hover:bg-slate-800/70 transition cursor-pointer group relative"
+                  className="w-8 h-8 rounded-lg flex items-center justify-center text-slate-600 dark:text-slate-400 hover:text-[#006B52] dark:hover:text-emerald-400 hover:bg-[#F1F5F9] dark:hover:bg-slate-800/70 transition cursor-pointer group relative"
                 >
                   <IconComp className="w-4 h-4" />
                 </button>
@@ -778,7 +778,7 @@ export const DayTradeView: React.FC = () => {
           </div>
 
           {/* Lower tools & DinhEuro Institutional Seal */}
-          <div className="flex flex-col items-center gap-1 w-full pt-1 border-t border-slate-800/80">
+          <div className="flex flex-col items-center gap-1 w-full pt-1 border-t border-[#E2E8F0] dark:border-slate-800/80">
             {sidebarItems.slice(10).map((item) => {
               const IconComp = item.icon;
               return (
@@ -787,7 +787,7 @@ export const DayTradeView: React.FC = () => {
                   type="button"
                   onClick={item.action}
                   title={item.label}
-                  className="w-8 h-8 rounded-lg flex items-center justify-center text-slate-400 hover:text-amber-400 hover:bg-slate-800/70 transition cursor-pointer"
+                  className="w-8 h-8 rounded-lg flex items-center justify-center text-slate-600 dark:text-slate-400 hover:text-[#B45309] dark:hover:text-amber-400 hover:bg-[#F1F5F9] dark:hover:bg-slate-800/70 transition cursor-pointer"
                 >
                   <IconComp className="w-4 h-4" />
                 </button>
@@ -800,10 +800,13 @@ export const DayTradeView: React.FC = () => {
               title={tDt.proSealTitle}
               className="mt-1 cursor-pointer group flex flex-col items-center"
             >
-              <div className="w-7 h-7 rounded-full bg-gradient-to-br from-emerald-500 to-teal-700 p-0.5 shadow-md shadow-emerald-950 flex items-center justify-center">
-                <span className="text-[9px] font-black text-slate-950">D€</span>
+              <div
+                data-on-dark="true"
+                className="w-7 h-7 rounded-full bg-gradient-to-br from-[#009B77] to-[#003399] dark:from-emerald-500 dark:to-teal-700 p-0.5 shadow-md flex items-center justify-center"
+              >
+                <span className="text-[9px] font-black text-white dark:text-slate-950">D€</span>
               </div>
-              <span className="text-[7px] text-emerald-400 font-bold uppercase tracking-tighter mt-0.5">PRO</span>
+              <span className="text-[7px] text-[#006B52] dark:text-emerald-400 font-bold uppercase tracking-tighter mt-0.5">PRO</span>
             </div>
           </div>
         </aside>
@@ -813,7 +816,7 @@ export const DayTradeView: React.FC = () => {
            ======================================================================= */}
         <div className="hidden lg:flex flex-1 min-h-0 flex-col overflow-hidden">
           {/* Top Asset & Function Tabs Header Strip */}
-          <div className="bg-[#09111e] border-b border-slate-800 px-3 py-1.5 flex items-center justify-between gap-2 flex-wrap shrink-0">
+          <div className="bg-white dark:bg-[#09111e] border-b border-[#E2E8F0] dark:border-slate-800 px-3 py-1.5 flex items-center justify-between gap-2 flex-wrap shrink-0">
             {/* Left: Asset Select Dropdown & Current Price with Dual/Tri Conversion */}
             <div className="flex items-center gap-2">
               <div className="relative">
@@ -821,7 +824,7 @@ export const DayTradeView: React.FC = () => {
                   value={selectedSymbol}
                   onChange={(e) => setSelectedSymbol(e.target.value)}
                   aria-label={tDt.selectAssetAria}
-                  className="bg-[#060c18] border border-slate-700 hover:border-emerald-500 rounded px-2 pr-6 py-1 text-xs font-black text-white font-mono-numbers outline-none cursor-pointer max-w-[210px] truncate"
+                  className="bg-[#F8FAFC] dark:bg-[#060c18] border border-[#CBD5E1] dark:border-slate-700 hover:border-[#009B77] dark:hover:border-emerald-500 rounded px-2 pr-6 py-1 text-xs font-black text-slate-900 dark:text-white font-mono-numbers outline-none cursor-pointer max-w-[210px] truncate"
                 >
                   <optgroup label={tDt.groupFuturesB3}>
                     <option value="WINFUT">WINFUT • {tDt.winfutShort}</option>
@@ -873,7 +876,7 @@ export const DayTradeView: React.FC = () => {
                       ))}
                   </optgroup>
                 </select>
-                <ChevronDown className="w-3 h-3 text-slate-400 absolute right-1.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                <ChevronDown className="w-3 h-3 text-slate-500 dark:text-slate-400 absolute right-1.5 top-1/2 -translate-y-1/2 pointer-events-none" />
               </div>
 
               {/* Price, 24h Variation & Synchronized Dual/Tri Currency Display */}
@@ -882,31 +885,31 @@ export const DayTradeView: React.FC = () => {
                 const pctInfo = formatSignedPercentChange(currentAsset.change24h, 2);
                 const dispVol = currentAsset.category === 'forex' ? '--' : currentAsset.volume;
                 return (
-                  <div className="flex items-center gap-2 pl-2 border-l border-slate-800 font-mono-numbers">
+                  <div className="flex items-center gap-2 pl-2 border-l border-[#E2E8F0] dark:border-slate-800 font-mono-numbers">
                     <div className="flex flex-col leading-tight">
                       <div className="flex items-baseline gap-1.5">
-                        <span className="text-sm sm:text-base font-black text-white">
+                        <span className="text-sm sm:text-base font-black text-slate-950 dark:text-white">
                           {formatCurrencyValue(currentMarketPrice, currentAsset.currency, dec, locale)}
                         </span>
                         <span
                           className={`text-[10px] font-bold px-1.5 py-0.2 rounded ${
-                            !pctInfo.isNegative ? 'text-emerald-400 bg-emerald-500/10' : 'text-rose-400 bg-rose-500/10'
+                            !pctInfo.isNegative ? 'text-[#006B52] dark:text-emerald-400 bg-[#E3F7F2] dark:bg-emerald-500/10' : 'text-[#DC2626] dark:text-rose-400 bg-[#FEE2E2] dark:bg-rose-500/10'
                           }`}
                         >
                           {pctInfo.text}
                         </span>
                       </div>
-                      <div className="flex items-center gap-1.5 text-[9px] text-emerald-400/90 font-medium">
+                      <div className="flex items-center gap-1.5 text-[9px] text-[#006B52] dark:text-emerald-400/90 font-semibold dark:font-medium">
                         <span>≈ {dualAssetDisplay.secondaryFormatted}</span>
-                        <span className="text-slate-600">|</span>
-                        <span className="text-slate-400">≈ {dualAssetDisplay.tertiaryFormatted}</span>
+                        <span className="text-slate-400 dark:text-slate-600">|</span>
+                        <span className="text-slate-600 dark:text-slate-400">≈ {dualAssetDisplay.tertiaryFormatted}</span>
                       </div>
                     </div>
 
-                    <div className="hidden 2xl:flex items-center gap-2 text-[10px] text-slate-400 pl-2 border-l border-slate-800/80">
-                      <span>{tDt.minShort} <strong className="text-slate-200">{formatCurrencyValue(currentAsset.low24h, currentAsset.currency, dec, locale)}</strong></span>
-                      <span>{tDt.maxShort} <strong className="text-slate-200">{formatCurrencyValue(currentAsset.high24h, currentAsset.currency, dec, locale)}</strong></span>
-                      <span>{tDt.volShort} <strong className="text-slate-200">{dispVol}</strong></span>
+                    <div className="hidden 2xl:flex items-center gap-2 text-[10px] text-slate-600 dark:text-slate-400 pl-2 border-l border-[#E2E8F0] dark:border-slate-800/80">
+                      <span>{tDt.minShort} <strong className="text-slate-900 dark:text-slate-200">{formatCurrencyValue(currentAsset.low24h, currentAsset.currency, dec, locale)}</strong></span>
+                      <span>{tDt.maxShort} <strong className="text-slate-900 dark:text-slate-200">{formatCurrencyValue(currentAsset.high24h, currentAsset.currency, dec, locale)}</strong></span>
+                      <span>{tDt.volShort} <strong className="text-slate-900 dark:text-slate-200">{dispVol}</strong></span>
                     </div>
                   </div>
                 );
@@ -914,7 +917,7 @@ export const DayTradeView: React.FC = () => {
             </div>
 
             {/* Center: Functional Terminal Tabs */}
-            <div className="flex items-center gap-1 bg-[#060c18] p-0.5 rounded border border-slate-800 text-[11px] font-bold">
+            <div className="flex items-center gap-1 bg-[#F1F5F9] dark:bg-[#060c18] p-0.5 rounded border border-[#E2E8F0] dark:border-slate-800 text-[11px] font-bold">
               {[
                 { id: 'chart', label: tDt.tabs.chart },
                 { id: 'tape', label: tDt.tabs.tape },
@@ -925,10 +928,11 @@ export const DayTradeView: React.FC = () => {
                 <button
                   key={tab.id}
                   onClick={() => setActiveCenterTab(tab.id as any)}
+                  data-on-dark={activeCenterTab === tab.id ? 'true' : undefined}
                   className={`px-2 py-0.5 rounded transition cursor-pointer ${
                     activeCenterTab === tab.id
-                      ? 'bg-slate-800 text-emerald-400 font-black shadow-sm'
-                      : 'text-slate-400 hover:text-white'
+                      ? 'bg-[#003399] dark:bg-slate-800 text-white dark:text-emerald-400 font-black shadow-sm'
+                      : 'text-slate-700 dark:text-slate-400 hover:text-slate-950 dark:hover:text-white'
                   }`}
                 >
                   {tab.label}
@@ -939,13 +943,15 @@ export const DayTradeView: React.FC = () => {
             {/* Right: Timeframes & Indicator Badges */}
             <div className="flex items-center gap-2">
               {/* Timeframes */}
-              <div className="flex items-center bg-[#060c18] p-0.5 rounded border border-slate-800 text-[10px] font-bold">
+              <div className="flex items-center bg-[#F1F5F9] dark:bg-[#060c18] p-0.5 rounded border border-[#E2E8F0] dark:border-slate-800 text-[10px] font-bold">
                 {(['1m', '5m', '15m', '1h', '1D'] as const).map((tf) => (
                   <button
                     key={tf}
                     onClick={() => setChartInterval(tf)}
                     className={`px-1.5 py-0.5 rounded transition cursor-pointer ${
-                      chartInterval === tf ? 'bg-slate-800 text-emerald-400 font-black' : 'text-slate-400 hover:text-white'
+                      chartInterval === tf
+                        ? 'bg-white dark:bg-slate-800 text-[#003399] dark:text-emerald-400 font-black shadow-sm dark:shadow-none'
+                        : 'text-slate-600 dark:text-slate-400 hover:text-slate-950 dark:hover:text-white'
                     }`}
                   >
                     {tf}
@@ -958,7 +964,9 @@ export const DayTradeView: React.FC = () => {
                 <button
                   onClick={() => setShowMA9(!showMA9)}
                   className={`px-1.5 py-0.5 rounded border transition cursor-pointer ${
-                    showMA9 ? 'bg-sky-500/20 text-sky-300 border-sky-500/40 font-bold' : 'text-slate-500 border-slate-800'
+                    showMA9
+                      ? 'bg-[#E6EEFF] dark:bg-sky-500/20 text-[#003399] dark:text-sky-300 border-[#003399]/35 dark:border-sky-500/40 font-bold'
+                      : 'text-slate-500 border-[#CBD5E1] dark:border-slate-800'
                   }`}
                 >
                   MA 9
@@ -966,7 +974,9 @@ export const DayTradeView: React.FC = () => {
                 <button
                   onClick={() => setShowMA21(!showMA21)}
                   className={`px-1.5 py-0.5 rounded border transition cursor-pointer ${
-                    showMA21 ? 'bg-purple-500/20 text-purple-300 border-purple-500/40 font-bold' : 'text-slate-500 border-slate-800'
+                    showMA21
+                      ? 'bg-purple-100 dark:bg-purple-500/20 text-purple-800 dark:text-purple-300 border-purple-400/50 dark:border-purple-500/40 font-bold'
+                      : 'text-slate-500 border-[#CBD5E1] dark:border-slate-800'
                   }`}
                 >
                   MA 21
@@ -974,7 +984,9 @@ export const DayTradeView: React.FC = () => {
                 <button
                   onClick={() => setShowMA200(!showMA200)}
                   className={`px-1.5 py-0.5 rounded border transition cursor-pointer ${
-                    showMA200 ? 'bg-amber-500/20 text-amber-300 border-amber-500/40 font-bold' : 'text-slate-500 border-slate-800'
+                    showMA200
+                      ? 'bg-[#FEF7E0] dark:bg-amber-500/20 text-[#B45309] dark:text-amber-300 border-[#E5A910]/50 dark:border-amber-500/40 font-bold'
+                      : 'text-slate-500 border-[#CBD5E1] dark:border-slate-800'
                   }`}
                 >
                   MA 200
@@ -982,7 +994,9 @@ export const DayTradeView: React.FC = () => {
                 <button
                   onClick={() => setShowVWAP(!showVWAP)}
                   className={`px-1.5 py-0.5 rounded border transition cursor-pointer ${
-                    showVWAP ? 'bg-fuchsia-500/20 text-fuchsia-300 border-fuchsia-500/40 font-bold' : 'text-slate-500 border-slate-800'
+                    showVWAP
+                      ? 'bg-fuchsia-100 dark:bg-fuchsia-500/20 text-fuchsia-800 dark:text-fuchsia-300 border-fuchsia-400/50 dark:border-fuchsia-500/40 font-bold'
+                      : 'text-slate-500 border-[#CBD5E1] dark:border-slate-800'
                   }`}
                 >
                   VWAP
@@ -990,7 +1004,9 @@ export const DayTradeView: React.FC = () => {
                 <button
                   onClick={() => setShowVolume(!showVolume)}
                   className={`px-1.5 py-0.5 rounded border transition cursor-pointer ${
-                    showVolume ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40 font-bold' : 'text-slate-500 border-slate-800'
+                    showVolume
+                      ? 'bg-[#E3F7F2] dark:bg-emerald-500/20 text-[#006B52] dark:text-emerald-300 border-[#009B77]/40 dark:border-emerald-500/40 font-bold'
+                      : 'text-slate-500 border-[#CBD5E1] dark:border-slate-800'
                   }`}
                 >
                   Vol
@@ -1000,9 +1016,9 @@ export const DayTradeView: React.FC = () => {
           </div>
 
           {/* Central Active View Area (Flex-1) */}
-          <div className="flex-1 min-h-0 relative bg-[#060c18] overflow-hidden p-1.5">
+          <div className="flex-1 min-h-0 relative bg-[#F4F7F9] dark:bg-[#060c18] overflow-hidden p-1.5">
             {activeCenterTab === 'chart' && (
-              <div className="w-full h-full relative rounded border border-slate-800/80 bg-[#060c18] overflow-hidden flex flex-col">
+              <div className="w-full h-full relative rounded border border-[#E2E8F0] dark:border-slate-800/80 bg-white dark:bg-[#060c18] overflow-hidden flex flex-col">
                 <svg className="w-full h-full flex-1" viewBox="0 0 700 280" preserveAspectRatio="none">
                   <defs>
                     <linearGradient id="vol-grad" x1="0" y1="0" x2="0" y2="1">
@@ -1105,8 +1121,8 @@ export const DayTradeView: React.FC = () => {
                   {/* Active Positions Overlay Line */}
                   {positions.length > 0 && (
                     <g>
-                      <line x1="0" y1="95" x2="700" y2="95" stroke="#3B82F6" strokeWidth="1.5" strokeDasharray="5 3" />
-                      <text x="8" y="90" fill="#60A5FA" fontSize="9" fontWeight="bold">
+                      <line x1="0" y1="95" x2="700" y2="95" stroke={isLight ? '#003399' : '#3B82F6'} strokeWidth="1.5" strokeDasharray="5 3" />
+                      <text x="8" y="90" fill={isLight ? '#003399' : '#60A5FA'} fontSize="9" fontWeight="bold">
                         {tDt.avgPriceOverlay} ({positions[0].side === 'BUY' ? tDt.sideBuy : tDt.sideSell}): {formatCurrencyValue(positions[0].entryPrice, currentAsset.currency, 2, locale)}
                       </text>
                     </g>
@@ -1115,29 +1131,29 @@ export const DayTradeView: React.FC = () => {
 
                 {/* Overlaid Indicators Legend */}
                 <div className="absolute top-2 left-2 flex items-center gap-1.5 text-[9px] font-mono-numbers">
-                  {showMA9 && <span className="text-sky-400 bg-sky-950/70 px-1 py-0.2 rounded border border-sky-500/30">MA 9: {formatCurrencyValue(currentMarketPrice * 1.001, currentAsset.currency, 2, locale)}</span>}
-                  {showMA21 && <span className="text-purple-400 bg-purple-950/70 px-1 py-0.2 rounded border border-purple-500/30">MA 21: {formatCurrencyValue(currentMarketPrice * 0.998, currentAsset.currency, 2, locale)}</span>}
-                  {showMA200 && <span className="text-amber-400 bg-amber-950/70 px-1 py-0.2 rounded border border-amber-500/30">MA 200: {formatCurrencyValue(currentMarketPrice * 0.985, currentAsset.currency, 2, locale)}</span>}
-                  {showVWAP && <span className="text-fuchsia-400 bg-fuchsia-950/70 px-1 py-0.2 rounded border border-fuchsia-500/30">VWAP: {formatCurrencyValue(currentMarketPrice * 0.999, currentAsset.currency, 2, locale)}</span>}
+                  {showMA9 && <span className="text-[#003399] dark:text-sky-400 bg-[#E6EEFF]/95 dark:bg-sky-950/70 px-1 py-0.2 rounded border border-[#003399]/30 dark:border-sky-500/30 font-semibold">MA 9: {formatCurrencyValue(currentMarketPrice * 1.001, currentAsset.currency, 2, locale)}</span>}
+                  {showMA21 && <span className="text-purple-800 dark:text-purple-400 bg-purple-100/95 dark:bg-purple-950/70 px-1 py-0.2 rounded border border-purple-400/40 dark:border-purple-500/30 font-semibold">MA 21: {formatCurrencyValue(currentMarketPrice * 0.998, currentAsset.currency, 2, locale)}</span>}
+                  {showMA200 && <span className="text-[#B45309] dark:text-amber-400 bg-[#FEF7E0]/95 dark:bg-amber-950/70 px-1 py-0.2 rounded border border-[#E5A910]/40 dark:border-amber-500/30 font-semibold">MA 200: {formatCurrencyValue(currentMarketPrice * 0.985, currentAsset.currency, 2, locale)}</span>}
+                  {showVWAP && <span className="text-fuchsia-800 dark:text-fuchsia-400 bg-fuchsia-100/95 dark:bg-fuchsia-950/70 px-1 py-0.2 rounded border border-fuchsia-400/40 dark:border-fuchsia-500/30 font-semibold">VWAP: {formatCurrencyValue(currentMarketPrice * 0.999, currentAsset.currency, 2, locale)}</span>}
                 </div>
               </div>
             )}
 
             {/* Other functional views inside central pane */}
             {activeCenterTab === 'tape' && (
-              <div className="w-full h-full flex flex-col rounded border border-slate-800 bg-[#070e1b] p-2 overflow-hidden">
-                <div className="flex items-center justify-between pb-1.5 mb-1 border-b border-slate-800 text-[11px] shrink-0">
-                  <span className="font-bold text-white flex items-center gap-1.5">
-                    <Activity className="w-3.5 h-3.5 text-emerald-400" />
+              <div className="w-full h-full flex flex-col rounded border border-[#E2E8F0] dark:border-slate-800 bg-white dark:bg-[#070e1b] p-2 overflow-hidden">
+                <div className="flex items-center justify-between pb-1.5 mb-1 border-b border-[#E2E8F0] dark:border-slate-800 text-[11px] shrink-0">
+                  <span className="font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
+                    <Activity className="w-3.5 h-3.5 text-[#009B77] dark:text-emerald-400" />
                     {tDt.tapeTabTitle} • {currentAsset.symbol}
                   </span>
                   <div className="flex items-center gap-2 text-[10px] font-mono-numbers">
-                    <span className="text-slate-400">{tDt.currentPriceLabel}</span>
-                    <strong className="text-white font-bold">{formatCurrencyValue(currentMarketPrice, currentAsset.currency, 2, locale)}</strong>
+                    <span className="text-slate-600 dark:text-slate-400">{tDt.currentPriceLabel}</span>
+                    <strong className="text-slate-950 dark:text-white font-bold">{formatCurrencyValue(currentMarketPrice, currentAsset.currency, 2, locale)}</strong>
                   </div>
                 </div>
 
-                <div className="grid grid-cols-5 py-1 px-2 text-[9px] font-bold text-slate-400 border-b border-slate-800/80 uppercase tracking-wider shrink-0">
+                <div className="grid grid-cols-5 py-1 px-2 text-[9px] font-bold text-slate-600 dark:text-slate-400 border-b border-[#E2E8F0] dark:border-slate-800/80 uppercase tracking-wider shrink-0">
                   <span>{tDt.colTime}</span>
                   <span>{tDt.colTradedPrice}</span>
                   <span>{tDt.colLotVolume}</span>
@@ -1149,17 +1165,17 @@ export const DayTradeView: React.FC = () => {
                   {timesAndTrades.map((t) => (
                     <div
                       key={t.id}
-                      className={`grid grid-cols-5 py-0.5 px-2 rounded transition hover:bg-slate-800/50 ${
-                        t.isLargeTrade ? 'bg-amber-500/10 border-l-2 border-amber-400' : ''
+                      className={`grid grid-cols-5 py-0.5 px-2 rounded transition hover:bg-slate-100 dark:hover:bg-slate-800/50 ${
+                        t.isLargeTrade ? 'bg-[#FEF7E0] dark:bg-amber-500/10 border-l-2 border-[#E5A910] dark:border-amber-400' : ''
                       }`}
                     >
-                      <span className="text-slate-400 text-[9px]">{t.time}</span>
-                      <span className={`font-black ${t.aggressor === 'BUY' ? 'text-emerald-400' : 'text-rose-400'}`}>
+                      <span className="text-slate-500 dark:text-slate-400 text-[9px]">{t.time}</span>
+                      <span className={`font-black ${t.aggressor === 'BUY' ? 'text-[#006B52] dark:text-emerald-400' : 'text-[#DC2626] dark:text-rose-400'}`}>
                         {formatCurrencyValue(t.price, currentAsset.currency, 2, locale)}
                       </span>
-                      <span className="text-white font-bold">{t.qty} {tDt.lotsUnit}</span>
-                      <span className="text-sky-300 font-medium">{t.buyerBroker}</span>
-                      <span className="text-rose-300 font-medium text-right">{t.sellerBroker}</span>
+                      <span className="text-slate-900 dark:text-white font-bold">{t.qty} {tDt.lotsUnit}</span>
+                      <span className="text-[#003399] dark:text-sky-300 font-medium">{t.buyerBroker}</span>
+                      <span className="text-[#DC2626] dark:text-rose-300 font-medium text-right">{t.sellerBroker}</span>
                     </div>
                   ))}
                 </div>
@@ -1167,20 +1183,20 @@ export const DayTradeView: React.FC = () => {
             )}
 
             {activeCenterTab === 'book' && (
-              <div className="w-full h-full flex flex-col rounded border border-slate-800 bg-[#070e1b] p-2 overflow-hidden">
-                <div className="flex items-center justify-between pb-1.5 mb-1 border-b border-slate-800 text-[11px] shrink-0">
-                  <span className="font-bold text-white flex items-center gap-1.5">
-                    <Layers className="w-3.5 h-3.5 text-sky-400" />
+              <div className="w-full h-full flex flex-col rounded border border-[#E2E8F0] dark:border-slate-800 bg-white dark:bg-[#070e1b] p-2 overflow-hidden">
+                <div className="flex items-center justify-between pb-1.5 mb-1 border-b border-[#E2E8F0] dark:border-slate-800 text-[11px] shrink-0">
+                  <span className="font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
+                    <Layers className="w-3.5 h-3.5 text-[#003399] dark:text-sky-400" />
                     {tDt.bookTabTitle} • {currentAsset.symbol}
                   </span>
                   <div className="flex items-center gap-2 text-[10px] font-mono-numbers">
-                    <span className="text-emerald-400 font-bold">{tDt.buyTotalLabel} {bookOffers.reduce((a, b) => a + b.bidQty, 0)}</span>
-                    <span className="text-slate-600">|</span>
-                    <span className="text-rose-400 font-bold">{tDt.sellTotalLabel} {bookOffers.reduce((a, b) => a + b.askQty, 0)}</span>
+                    <span className="text-[#006B52] dark:text-emerald-400 font-bold">{tDt.buyTotalLabel} {bookOffers.reduce((a, b) => a + b.bidQty, 0)}</span>
+                    <span className="text-slate-400 dark:text-slate-600">|</span>
+                    <span className="text-[#DC2626] dark:text-rose-400 font-bold">{tDt.sellTotalLabel} {bookOffers.reduce((a, b) => a + b.askQty, 0)}</span>
                   </div>
                 </div>
 
-                <div className="grid grid-cols-3 py-1 px-2 text-[9px] font-bold text-slate-400 border-b border-slate-800/80 uppercase tracking-wider shrink-0">
+                <div className="grid grid-cols-3 py-1 px-2 text-[9px] font-bold text-slate-600 dark:text-slate-400 border-b border-[#E2E8F0] dark:border-slate-800/80 uppercase tracking-wider shrink-0">
                   <span>{tDt.colBidQty}</span>
                   <span className="text-center">{tDt.colOfficialPrice}</span>
                   <span className="text-right">{tDt.colAskQty}</span>
@@ -1192,29 +1208,29 @@ export const DayTradeView: React.FC = () => {
                       key={idx}
                       onClick={() => setLimitPrice(b.price)}
                       title={`${tDt.bookClickTitlePrefix} ${b.price} ${tDt.bookClickTitleSuffix}`}
-                      className={`relative grid grid-cols-3 py-0.5 px-2 rounded transition cursor-pointer hover:bg-slate-800/60 ${
-                        b.isPoc ? 'bg-amber-500/10 border border-amber-500/30' : ''
+                      className={`relative grid grid-cols-3 py-0.5 px-2 rounded transition cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-800/60 ${
+                        b.isPoc ? 'bg-[#FEF7E0] dark:bg-amber-500/10 border border-[#E5A910]/40 dark:border-amber-500/30' : ''
                       }`}
                     >
                       {/* Depth Bar Background for Bid / Ask */}
                       {b.bidQty > 0 && (
                         <div
-                          className="absolute left-0 top-0 bottom-0 bg-emerald-500/15 pointer-events-none rounded-l"
+                          className="absolute left-0 top-0 bottom-0 bg-[#009B77]/15 dark:bg-emerald-500/15 pointer-events-none rounded-l"
                           style={{ width: `${b.bidVolPct / 2}%` }}
                         />
                       )}
                       {b.askQty > 0 && (
                         <div
-                          className="absolute right-0 top-0 bottom-0 bg-rose-500/15 pointer-events-none rounded-r"
+                          className="absolute right-0 top-0 bottom-0 bg-[#DC2626]/15 dark:bg-rose-500/15 pointer-events-none rounded-r"
                           style={{ width: `${b.askVolPct / 2}%` }}
                         />
                       )}
 
-                      <span className="relative z-10 text-emerald-400 font-bold">{b.bidQty > 0 ? b.bidQty : ''}</span>
-                      <span className="relative z-10 text-center font-black text-white">
+                      <span className="relative z-10 text-[#006B52] dark:text-emerald-400 font-bold">{b.bidQty > 0 ? b.bidQty : ''}</span>
+                      <span className="relative z-10 text-center font-black text-slate-900 dark:text-white">
                         {formatCurrencyValue(b.price, currentAsset.currency, 2, locale)}
                       </span>
-                      <span className="relative z-10 text-right text-rose-400 font-bold">{b.askQty > 0 ? b.askQty : ''}</span>
+                      <span className="relative z-10 text-right text-[#DC2626] dark:text-rose-400 font-bold">{b.askQty > 0 ? b.askQty : ''}</span>
                     </div>
                   ))}
                 </div>
@@ -1222,40 +1238,40 @@ export const DayTradeView: React.FC = () => {
             )}
 
             {activeCenterTab === 'indicators' && (
-              <div className="w-full h-full flex flex-col rounded border border-slate-800 bg-[#070e1b] p-3 overflow-y-auto no-scrollbar space-y-2">
-                <h4 className="font-bold text-white text-xs">{tDt.indicatorsTabTitle}</h4>
+              <div className="w-full h-full flex flex-col rounded border border-[#E2E8F0] dark:border-slate-800 bg-white dark:bg-[#070e1b] p-3 overflow-y-auto no-scrollbar space-y-2">
+                <h4 className="font-bold text-slate-900 dark:text-white text-xs">{tDt.indicatorsTabTitle}</h4>
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-[11px]">
-                  <div className="p-2 rounded bg-slate-900 border border-slate-800">
-                    <span className="text-slate-400 block text-[10px]">{tDt.rsiLabel}</span>
-                    <strong className="text-emerald-400 font-bold font-mono-numbers">{tDt.rsiStatus}</strong>
+                  <div className="p-2 rounded bg-[#F8FAFC] dark:bg-slate-900 border border-[#E2E8F0] dark:border-slate-800">
+                    <span className="text-slate-600 dark:text-slate-400 block text-[10px]">{tDt.rsiLabel}</span>
+                    <strong className="text-[#006B52] dark:text-emerald-400 font-bold font-mono-numbers">{tDt.rsiStatus}</strong>
                   </div>
-                  <div className="p-2 rounded bg-slate-900 border border-slate-800">
-                    <span className="text-slate-400 block text-[10px]">{tDt.macdLabel}</span>
-                    <strong className="text-emerald-400 font-bold font-mono-numbers">{tDt.macdStatus}</strong>
+                  <div className="p-2 rounded bg-[#F8FAFC] dark:bg-slate-900 border border-[#E2E8F0] dark:border-slate-800">
+                    <span className="text-slate-600 dark:text-slate-400 block text-[10px]">{tDt.macdLabel}</span>
+                    <strong className="text-[#006B52] dark:text-emerald-400 font-bold font-mono-numbers">{tDt.macdStatus}</strong>
                   </div>
-                  <div className="p-2 rounded bg-slate-900 border border-slate-800">
-                    <span className="text-slate-400 block text-[10px]">{tDt.stochLabel}</span>
-                    <strong className="text-amber-400 font-bold font-mono-numbers">{tDt.stochStatus}</strong>
+                  <div className="p-2 rounded bg-[#F8FAFC] dark:bg-slate-900 border border-[#E2E8F0] dark:border-slate-800">
+                    <span className="text-slate-600 dark:text-slate-400 block text-[10px]">{tDt.stochLabel}</span>
+                    <strong className="text-[#B45309] dark:text-amber-400 font-bold font-mono-numbers">{tDt.stochStatus}</strong>
                   </div>
-                  <div className="p-2 rounded bg-slate-900 border border-slate-800">
-                    <span className="text-slate-400 block text-[10px]">{tDt.bollingerLabel}</span>
-                    <strong className="text-sky-400 font-bold font-mono-numbers">{tDt.bollingerStatus}</strong>
+                  <div className="p-2 rounded bg-[#F8FAFC] dark:bg-slate-900 border border-[#E2E8F0] dark:border-slate-800">
+                    <span className="text-slate-600 dark:text-slate-400 block text-[10px]">{tDt.bollingerLabel}</span>
+                    <strong className="text-[#003399] dark:text-sky-400 font-bold font-mono-numbers">{tDt.bollingerStatus}</strong>
                   </div>
                 </div>
               </div>
             )}
 
             {activeCenterTab === 'strategies' && (
-              <div className="w-full h-full flex flex-col rounded border border-slate-800 bg-[#070e1b] p-3 overflow-y-auto no-scrollbar space-y-2 text-xs">
-                <h4 className="font-bold text-white">{tDt.strategiesTabTitle}</h4>
+              <div className="w-full h-full flex flex-col rounded border border-[#E2E8F0] dark:border-slate-800 bg-white dark:bg-[#070e1b] p-3 overflow-y-auto no-scrollbar space-y-2 text-xs">
+                <h4 className="font-bold text-slate-900 dark:text-white">{tDt.strategiesTabTitle}</h4>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                  <div className="p-2.5 rounded bg-slate-900 border border-slate-800">
-                    <span className="font-bold text-emerald-400 block">{tDt.strat1Title}</span>
-                    <p className="text-[11px] text-slate-400">{tDt.strat1Desc}</p>
+                  <div className="p-2.5 rounded bg-[#F8FAFC] dark:bg-slate-900 border border-[#E2E8F0] dark:border-slate-800">
+                    <span className="font-bold text-[#006B52] dark:text-emerald-400 block">{tDt.strat1Title}</span>
+                    <p className="text-[11px] text-slate-600 dark:text-slate-400">{tDt.strat1Desc}</p>
                   </div>
-                  <div className="p-2.5 rounded bg-slate-900 border border-slate-800">
-                    <span className="font-bold text-sky-400 block">{tDt.strat2Title}</span>
-                    <p className="text-[11px] text-slate-400">{tDt.strat2Desc}</p>
+                  <div className="p-2.5 rounded bg-[#F8FAFC] dark:bg-slate-900 border border-[#E2E8F0] dark:border-slate-800">
+                    <span className="font-bold text-[#003399] dark:text-sky-400 block">{tDt.strat2Title}</span>
+                    <p className="text-[11px] text-slate-600 dark:text-slate-400">{tDt.strat2Desc}</p>
                   </div>
                 </div>
               </div>
@@ -1265,18 +1281,18 @@ export const DayTradeView: React.FC = () => {
           {/* =====================================================================
               2C. BOTTOM MONITORING & PERFORMANCE DOCK (Minhas Posições + Performance + Notícias)
              ===================================================================== */}
-          <div className="h-44 sm:h-48 border-t border-slate-800 bg-[#070d18] grid grid-cols-12 gap-1.5 p-1.5 shrink-0 overflow-hidden">
+          <div className="h-44 sm:h-48 border-t border-[#E2E8F0] dark:border-slate-800 bg-[#F4F7F9] dark:bg-[#070d18] grid grid-cols-12 gap-1.5 p-1.5 shrink-0 overflow-hidden">
             {/* Box 1: Minhas Posições (5 Cols) */}
-            <div className="col-span-12 lg:col-span-5 bg-[#09111e] border border-slate-800 rounded p-1.5 flex flex-col min-h-0 overflow-hidden">
-              <div className="flex items-center justify-between pb-1 border-b border-slate-800/80 mb-1 shrink-0 text-xs">
-                <span className="font-bold text-white uppercase text-[10px] tracking-wider flex items-center gap-1">
-                  <Activity className="w-3 h-3 text-emerald-400" />
+            <div className="col-span-12 lg:col-span-5 bg-white dark:bg-[#09111e] border border-[#E2E8F0] dark:border-slate-800 rounded p-1.5 flex flex-col min-h-0 overflow-hidden">
+              <div className="flex items-center justify-between pb-1 border-b border-[#E2E8F0] dark:border-slate-800/80 mb-1 shrink-0 text-xs">
+                <span className="font-bold text-slate-900 dark:text-white uppercase text-[10px] tracking-wider flex items-center gap-1">
+                  <Activity className="w-3 h-3 text-[#009B77] dark:text-emerald-400" />
                   {tDt.myPositions} ({positions.length})
                 </span>
                 {positions.length > 0 && (
                   <button
                     onClick={() => handleCloseAllPositions()}
-                    className="px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-500/40 text-[9px] font-bold"
+                    className="px-1.5 py-0.2 rounded bg-[#FEF7E0] dark:bg-amber-500/20 text-[#B45309] dark:text-amber-300 border border-[#E5A910]/50 dark:border-amber-500/40 text-[9px] font-bold cursor-pointer"
                   >
                     {tDt.closeAllShort}
                   </button>
@@ -1290,7 +1306,7 @@ export const DayTradeView: React.FC = () => {
                   </div>
                 ) : (
                   <table className="w-full text-left text-[10px] font-mono-numbers">
-                    <thead className="bg-[#060c18] text-slate-400 border-b border-slate-800 sticky top-0">
+                    <thead className="bg-[#F1F5F9] dark:bg-[#060c18] text-slate-600 dark:text-slate-400 border-b border-[#E2E8F0] dark:border-slate-800 sticky top-0">
                       <tr>
                         <th className="py-0.5 px-1">{tDt.colAsset}</th>
                         <th className="py-0.5 px-1">{tDt.colSide}</th>
@@ -1301,7 +1317,7 @@ export const DayTradeView: React.FC = () => {
                         <th className="py-0.5 px-1 text-center">{tDt.colAction}</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-slate-800/60">
+                    <tbody className="divide-y divide-[#E2E8F0] dark:divide-slate-800/60">
                       {positions.map((pos) => {
                         const isWin = pos.symbol.includes('WIN');
                         const isWdo = pos.symbol.includes('WDO');
@@ -1309,23 +1325,23 @@ export const DayTradeView: React.FC = () => {
                         let pnlBrl = isWin ? diff * 0.2 * pos.contracts : isWdo ? diff * 10 * pos.contracts : diff * pos.contracts;
 
                         return (
-                          <tr key={pos.id} className="hover:bg-slate-800/40">
-                            <td className="py-0.5 px-1 font-bold text-white">{pos.symbol}</td>
+                          <tr key={pos.id} className="hover:bg-slate-50 dark:hover:bg-slate-800/40">
+                            <td className="py-0.5 px-1 font-bold text-slate-900 dark:text-white">{pos.symbol}</td>
                             <td className="py-0.5 px-1">
-                              <span className={`px-1 py-0.2 rounded text-[8px] font-bold ${pos.side === 'BUY' ? 'text-emerald-400 bg-emerald-500/10' : 'text-rose-400 bg-rose-500/10'}`}>
+                              <span className={`px-1 py-0.2 rounded text-[8px] font-bold ${pos.side === 'BUY' ? 'text-[#006B52] dark:text-emerald-400 bg-[#E3F7F2] dark:bg-emerald-500/10' : 'text-[#DC2626] dark:text-rose-400 bg-[#FEE2E2] dark:bg-rose-500/10'}`}>
                                 {pos.side === 'BUY' ? tDt.sideBuy : tDt.sideSell}
                               </span>
                             </td>
-                            <td className="py-0.5 px-1 text-right text-slate-200">{pos.contracts}</td>
-                            <td className="py-0.5 px-1 text-right text-slate-400">{pos.entryPrice}</td>
-                            <td className="py-0.5 px-1 text-right text-white font-bold">{currentMarketPrice}</td>
-                            <td className={`py-0.5 px-1 text-right font-bold ${pnlBrl >= 0 ? 'text-emerald-400' : 'text-rose-400'}`}>
+                            <td className="py-0.5 px-1 text-right text-slate-800 dark:text-slate-200">{pos.contracts}</td>
+                            <td className="py-0.5 px-1 text-right text-slate-600 dark:text-slate-400">{pos.entryPrice}</td>
+                            <td className="py-0.5 px-1 text-right text-slate-900 dark:text-white font-bold">{currentMarketPrice}</td>
+                            <td className={`py-0.5 px-1 text-right font-bold ${pnlBrl >= 0 ? 'text-[#006B52] dark:text-emerald-400' : 'text-[#DC2626] dark:text-rose-400'}`}>
                               {pnlBrl >= 0 ? '+' : ''}{formatCurrencyValue(pnlBrl, 'BRL', 2, locale)}
                             </td>
                             <td className="py-0.5 px-1 text-center">
                               <button
                                 onClick={() => handleClosePosition(pos.id)}
-                                className="px-1 py-0.2 rounded bg-slate-800 hover:bg-rose-600 text-slate-300 text-[8px] font-bold transition"
+                                className="px-1 py-0.2 rounded bg-[#F1F5F9] dark:bg-slate-800 hover:bg-[#DC2626] dark:hover:bg-rose-600 text-slate-700 hover:text-white dark:text-slate-300 text-[8px] font-bold transition cursor-pointer"
                               >
                                 {tDt.flattenBtn}
                               </button>
@@ -1340,13 +1356,13 @@ export const DayTradeView: React.FC = () => {
             </div>
 
             {/* Box 2: Performance do Dia (Anel Win Rate + P&L + Cronômetro) (3.5 Cols) */}
-            <div className="col-span-12 lg:col-span-4 bg-[#09111e] border border-slate-800 rounded p-2 flex flex-col justify-between overflow-hidden">
-              <div className="flex items-center justify-between pb-1 border-b border-slate-800/80 shrink-0 text-xs">
-                <span className="font-bold text-white uppercase text-[10px] tracking-wider flex items-center gap-1">
-                  <Target className="w-3 h-3 text-amber-400" />
+            <div className="col-span-12 lg:col-span-4 bg-white dark:bg-[#09111e] border border-[#E2E8F0] dark:border-slate-800 rounded p-2 flex flex-col justify-between overflow-hidden">
+              <div className="flex items-center justify-between pb-1 border-b border-[#E2E8F0] dark:border-slate-800/80 shrink-0 text-xs">
+                <span className="font-bold text-slate-900 dark:text-white uppercase text-[10px] tracking-wider flex items-center gap-1">
+                  <Target className="w-3 h-3 text-[#D99B00] dark:text-amber-400" />
                   {tDt.dayPerformance}
                 </span>
-                <span className="text-[10px] text-slate-400 font-mono-numbers flex items-center gap-1">
+                <span className="text-[10px] text-slate-600 dark:text-slate-400 font-mono-numbers flex items-center gap-1">
                   <Clock className="w-3 h-3 text-slate-500" />
                   {sessionTimer}
                 </span>
@@ -1357,14 +1373,14 @@ export const DayTradeView: React.FC = () => {
                 <div className="relative w-14 h-14 flex items-center justify-center shrink-0">
                   <svg className="w-full h-full -rotate-90" viewBox="0 0 36 36">
                     <path
-                      className="text-slate-800"
+                      className="text-slate-200 dark:text-slate-800"
                       strokeWidth="3.5"
                       stroke="currentColor"
                       fill="none"
                       d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
                     />
                     <path
-                      className="text-emerald-500"
+                      className="text-[#009B77] dark:text-emerald-500"
                       strokeDasharray={`${winRate}, 100`}
                       strokeWidth="3.5"
                       strokeLinecap="round"
@@ -1374,22 +1390,22 @@ export const DayTradeView: React.FC = () => {
                     />
                   </svg>
                   <div className="absolute flex flex-col items-center">
-                    <span className="text-xs font-black font-mono-numbers text-white">{winRate}%</span>
-                    <span className="text-[7px] text-slate-400 uppercase font-bold">{tDt.winRateLabel}</span>
+                    <span className="text-xs font-black font-mono-numbers text-slate-900 dark:text-white">{winRate}%</span>
+                    <span className="text-[7px] text-slate-500 dark:text-slate-400 uppercase font-bold">{tDt.winRateLabel}</span>
                   </div>
                 </div>
 
                 {/* Performance Metrics Values */}
                 <div className="space-y-1 font-mono-numbers text-[10px] flex-1">
                   <div className="flex items-center justify-between">
-                    <span className="text-slate-400">{tDt.netResultLabel}</span>
-                    <strong className={`font-black text-xs ${totalDayPnl >= 0 ? 'text-emerald-400' : 'text-rose-400'}`}>
+                    <span className="text-slate-600 dark:text-slate-400">{tDt.netResultLabel}</span>
+                    <strong className={`font-black text-xs ${totalDayPnl >= 0 ? 'text-[#006B52] dark:text-emerald-400' : 'text-[#DC2626] dark:text-rose-400'}`}>
                       {totalDayPnl >= 0 ? '+' : ''}{formatCurrencyValue(totalDayPnl, 'BRL', 2, locale)}
                     </strong>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-slate-400">{tDt.dayReturnLabel}</span>
-                    <span className={`font-bold ${totalDayPnl >= 0 ? 'text-emerald-400' : 'text-rose-400'}`}>
+                    <span className="text-slate-600 dark:text-slate-400">{tDt.dayReturnLabel}</span>
+                    <span className={`font-bold ${totalDayPnl >= 0 ? 'text-[#006B52] dark:text-emerald-400' : 'text-[#DC2626] dark:text-rose-400'}`}>
                       {totalDayPnl >= 0 ? '+' : ''}{returnPercentage}%
                     </span>
                   </div>
@@ -1402,13 +1418,13 @@ export const DayTradeView: React.FC = () => {
             </div>
 
             {/* Box 3: Notícias do Mercado (3.5 Cols) */}
-            <div className="col-span-12 lg:col-span-3 bg-[#09111e] border border-slate-800 rounded p-1.5 flex flex-col min-h-0 overflow-hidden">
-              <div className="flex items-center justify-between pb-1 border-b border-slate-800/80 mb-1 shrink-0 text-xs">
-                <span className="font-bold text-white uppercase text-[10px] tracking-wider flex items-center gap-1">
-                  <Newspaper className="w-3 h-3 text-sky-400" />
+            <div className="col-span-12 lg:col-span-3 bg-white dark:bg-[#09111e] border border-[#E2E8F0] dark:border-slate-800 rounded p-1.5 flex flex-col min-h-0 overflow-hidden">
+              <div className="flex items-center justify-between pb-1 border-b border-[#E2E8F0] dark:border-slate-800/80 mb-1 shrink-0 text-xs">
+                <span className="font-bold text-slate-900 dark:text-white uppercase text-[10px] tracking-wider flex items-center gap-1">
+                  <Newspaper className="w-3 h-3 text-[#003399] dark:text-sky-400" />
                   {tDt.marketNewsTitle}
                 </span>
-                <span className="text-[9px] text-emerald-400 font-bold uppercase">{tDt.realTimeTag}</span>
+                <span className="text-[9px] text-[#006B52] dark:text-emerald-400 font-bold uppercase">{tDt.realTimeTag}</span>
               </div>
 
               <div className="flex-1 overflow-y-auto no-scrollbar space-y-1 text-[10px]">
@@ -1418,13 +1434,13 @@ export const DayTradeView: React.FC = () => {
                     <div
                       key={item.id || idx}
                       onClick={() => setActiveTab('noticias')}
-                      className="p-1 rounded bg-[#060c18] hover:bg-slate-800/60 border border-slate-800/60 transition cursor-pointer"
+                      className="p-1 rounded bg-[#F8FAFC] dark:bg-[#060c18] hover:bg-[#F1F5F9] dark:hover:bg-slate-800/60 border border-[#E2E8F0] dark:border-slate-800/60 transition cursor-pointer"
                     >
                       <div className="flex items-center justify-between text-[9px] text-slate-500 mb-0.5">
                         <span className="font-mono-numbers">{localizedItem.datetime ? localizedItem.datetime.split(' ')[1] || '14:32' : '14:32'}</span>
-                        <span className="text-emerald-400 font-semibold">{getLocalizedNewsCategory(item.category || 'Macro', lang)}</span>
+                        <span className="text-[#006B52] dark:text-emerald-400 font-semibold">{getLocalizedNewsCategory(item.category || 'Macro', lang)}</span>
                       </div>
-                      <p className="text-slate-300 font-medium line-clamp-1 text-[10px] leading-tight hover:text-white">
+                      <p className="text-slate-800 dark:text-slate-300 font-medium line-clamp-1 text-[10px] leading-tight hover:text-slate-950 dark:hover:text-white">
                         {localizedItem.title}
                       </p>
                     </div>
@@ -1438,12 +1454,12 @@ export const DayTradeView: React.FC = () => {
         {/* =======================================================================
             2D. RIGHT COLUMN: "MERCADO EM TEMPO REAL" + BOLETA DE EXECUÇÃO RÁPIDA
            ======================================================================= */}
-        <div className="hidden lg:flex w-64 sm:w-72 bg-[#050a14] border-l border-slate-800/90 flex-col shrink-0 select-none overflow-hidden">
+        <div className="hidden lg:flex w-64 sm:w-72 bg-white dark:bg-[#050a14] border-l border-[#E2E8F0] dark:border-slate-800/90 flex-col shrink-0 select-none overflow-hidden">
           {/* Upper Right: Mercado em Tempo Real */}
-          <div className="h-56 flex flex-col border-b border-slate-800 p-2 overflow-hidden shrink-0">
+          <div className="h-56 flex flex-col border-b border-[#E2E8F0] dark:border-slate-800 p-2 overflow-hidden shrink-0">
             <div className="flex items-center justify-between pb-1 mb-1">
-              <span className="font-bold text-white uppercase text-[10px] tracking-wider flex items-center gap-1">
-                <Globe className="w-3 h-3 text-emerald-400" />
+              <span className="font-bold text-slate-900 dark:text-white uppercase text-[10px] tracking-wider flex items-center gap-1">
+                <Globe className="w-3 h-3 text-[#009B77] dark:text-emerald-400" />
                 {tDt.realTimeMarketTitle}
               </span>
               <span className="text-[9px] text-slate-500 font-mono-numbers">{filteredMarketWatch.length} {tDt.assetsCountSuffix}</span>
@@ -1455,10 +1471,11 @@ export const DayTradeView: React.FC = () => {
                 <button
                   key={cat.key}
                   onClick={() => setMarketWatchCategory(cat.key)}
+                  data-on-dark={marketWatchCategory === cat.key ? 'true' : undefined}
                   className={`px-1.5 py-0.5 rounded transition cursor-pointer shrink-0 ${
                     marketWatchCategory === cat.key
-                      ? 'bg-emerald-600 text-white font-bold'
-                      : 'bg-slate-900 text-slate-400 hover:text-white border border-slate-800'
+                      ? 'bg-[#009B77] dark:bg-emerald-600 text-white font-bold'
+                      : 'bg-[#F1F5F9] dark:bg-slate-900 text-slate-700 dark:text-slate-400 hover:text-slate-950 dark:hover:text-white border border-[#CBD5E1] dark:border-slate-800'
                   }`}
                 >
                   {cat.label}
@@ -1474,7 +1491,7 @@ export const DayTradeView: React.FC = () => {
                 placeholder={tDt.searchAssetPlaceholder}
                 value={marketWatchSearch}
                 onChange={(e) => setMarketWatchSearch(e.target.value)}
-                className="w-full bg-[#08111e] border border-slate-800 rounded pl-6 pr-2 py-0.5 text-[10px] text-white placeholder:text-slate-600 outline-none"
+                className="w-full bg-[#F8FAFC] dark:bg-[#08111e] border border-[#CBD5E1] dark:border-slate-800 rounded pl-6 pr-2 py-0.5 text-[10px] text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-600 outline-none"
               />
             </div>
 
@@ -1490,23 +1507,23 @@ export const DayTradeView: React.FC = () => {
                     onClick={() => setSelectedSymbol(item.symbol)}
                     className={`flex items-center justify-between px-1.5 py-1 rounded transition cursor-pointer ${
                       isSelected
-                        ? 'bg-emerald-950/40 border border-emerald-500/40'
-                        : 'hover:bg-slate-800/40'
+                        ? 'bg-[#E3F7F2] dark:bg-emerald-950/40 border border-[#009B77]/50 dark:border-emerald-500/40'
+                        : 'hover:bg-slate-100 dark:hover:bg-slate-800/40'
                     }`}
                   >
                     <div>
-                      <span className="font-bold text-white block text-[10px]">{item.symbol}</span>
+                      <span className="font-bold text-slate-900 dark:text-white block text-[10px]">{item.symbol}</span>
                       <span className="text-[8px] text-slate-500">{item.type}</span>
                     </div>
                     <div className="text-right">
-                      <span className="font-bold text-white text-[10px] block font-mono-numbers">
+                      <span className="font-bold text-slate-900 dark:text-white text-[10px] block font-mono-numbers">
                         {formatCurrencyValue(item.price, item.currency, dec, locale)}
                       </span>
                       <div className="flex items-center justify-end gap-1 text-[9px] font-mono-numbers">
-                        <span className="text-slate-400 text-[8px]">
+                        <span className="text-slate-500 dark:text-slate-400 text-[8px]">
                           ≈ {getDualCurrencyDisplay(item.price, item.currency, universalRates, undefined, locale, item.category).secondaryFormatted}
                         </span>
-                        <span className={`font-bold ${!pctInfo.isNegative ? 'text-emerald-400' : 'text-rose-400'}`}>
+                        <span className={`font-bold ${!pctInfo.isNegative ? 'text-[#006B52] dark:text-emerald-400' : 'text-[#DC2626] dark:text-rose-400'}`}>
                           {pctInfo.text}
                         </span>
                       </div>
@@ -1518,27 +1535,28 @@ export const DayTradeView: React.FC = () => {
           </div>
 
           {/* Lower Right: Boleta de Execução Rápida */}
-          <div className="flex-1 min-h-0 bg-[#09111e] p-2.5 flex flex-col justify-between overflow-hidden">
+          <div className="flex-1 min-h-0 bg-white dark:bg-[#09111e] p-2.5 flex flex-col justify-between overflow-hidden">
             <div className="space-y-2">
-              <div className="flex items-center justify-between pb-1 border-b border-slate-800">
-                <span className="font-bold text-white uppercase text-[10px] tracking-wider flex items-center gap-1">
-                  <SlidersHorizontal className="w-3 h-3 text-emerald-400" />
+              <div className="flex items-center justify-between pb-1 border-b border-[#E2E8F0] dark:border-slate-800">
+                <span className="font-bold text-slate-900 dark:text-white uppercase text-[10px] tracking-wider flex items-center gap-1">
+                  <SlidersHorizontal className="w-3 h-3 text-[#009B77] dark:text-emerald-400" />
                   {tDt.quickTicketTitle}
                 </span>
-                <span className="text-[9px] text-slate-400 font-mono-numbers font-semibold">
+                <span className="text-[9px] text-slate-600 dark:text-slate-400 font-mono-numbers font-semibold">
                   Spread: {currentAsset.symbol.includes('WIN') ? '5 pts' : '0.5 pt'}
                 </span>
               </div>
 
               {/* Order Ticket Tabs (Compra / Venda) */}
-              <div className="grid grid-cols-2 gap-1 bg-[#060c18] p-0.5 rounded border border-slate-800 text-xs font-black">
+              <div className="grid grid-cols-2 gap-1 bg-[#F1F5F9] dark:bg-[#060c18] p-0.5 rounded border border-[#E2E8F0] dark:border-slate-800 text-xs font-black">
                 <button
                   type="button"
                   onClick={() => setOrderTicketTab('BUY')}
+                  data-on-dark={orderTicketTab === 'BUY' ? 'true' : undefined}
                   className={`py-1 rounded transition cursor-pointer flex items-center justify-center gap-1 ${
                     orderTicketTab === 'BUY'
-                      ? 'bg-emerald-600 text-white shadow'
-                      : 'text-slate-400 hover:text-white'
+                      ? 'bg-[#009B77] dark:bg-emerald-600 text-white shadow'
+                      : 'text-slate-700 dark:text-slate-400 hover:text-slate-950 dark:hover:text-white'
                   }`}
                 >
                   <ArrowUpRight className="w-3 h-3" /> {tDt.ticketBuyTab}
@@ -1546,10 +1564,11 @@ export const DayTradeView: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setOrderTicketTab('SELL')}
+                  data-on-dark={orderTicketTab === 'SELL' ? 'true' : undefined}
                   className={`py-1 rounded transition cursor-pointer flex items-center justify-center gap-1 ${
                     orderTicketTab === 'SELL'
-                      ? 'bg-rose-600 text-white shadow'
-                      : 'text-slate-400 hover:text-white'
+                      ? 'bg-[#DC2626] dark:bg-rose-600 text-white shadow'
+                      : 'text-slate-700 dark:text-slate-400 hover:text-slate-950 dark:hover:text-white'
                   }`}
                 >
                   <ArrowDownRight className="w-3 h-3" /> {tDt.ticketSellTab}
@@ -1561,10 +1580,11 @@ export const DayTradeView: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setOrderType('MARKET')}
+                  data-on-dark={orderType === 'MARKET' ? 'true' : undefined}
                   className={`py-1 rounded border transition cursor-pointer ${
                     orderType === 'MARKET'
-                      ? 'bg-slate-800 border-slate-700 text-white'
-                      : 'bg-[#060c18] border-slate-800 text-slate-400 hover:text-white'
+                      ? 'bg-[#003399] dark:bg-slate-800 border-[#003399] dark:border-slate-700 text-white'
+                      : 'bg-[#F8FAFC] dark:bg-[#060c18] border-[#CBD5E1] dark:border-slate-800 text-slate-700 dark:text-slate-400 hover:text-slate-950 dark:hover:text-white'
                   }`}
                 >
                   {tDt.marketOrderBtn}
@@ -1572,10 +1592,11 @@ export const DayTradeView: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setOrderType('LIMIT')}
+                  data-on-dark={orderType === 'LIMIT' ? 'true' : undefined}
                   className={`py-1 rounded border transition cursor-pointer ${
                     orderType === 'LIMIT'
-                      ? 'bg-slate-800 border-slate-700 text-white'
-                      : 'bg-[#060c18] border-slate-800 text-slate-400 hover:text-white'
+                      ? 'bg-[#003399] dark:bg-slate-800 border-[#003399] dark:border-slate-700 text-white'
+                      : 'bg-[#F8FAFC] dark:bg-[#060c18] border-[#CBD5E1] dark:border-slate-800 text-slate-700 dark:text-slate-400 hover:text-slate-950 dark:hover:text-white'
                   }`}
                 >
                   {tDt.limitOrderBtn}
@@ -1584,9 +1605,9 @@ export const DayTradeView: React.FC = () => {
 
               {/* Quantity / Contratos */}
               <div>
-                <div className="flex items-center justify-between text-[10px] text-slate-400 mb-0.5">
+                <div className="flex items-center justify-between text-[10px] text-slate-600 dark:text-slate-400 mb-0.5">
                   <span>{tDt.contractsQtyLabel}</span>
-                  <span className="font-mono-numbers text-white font-bold">{contracts}x</span>
+                  <span className="font-mono-numbers text-slate-900 dark:text-white font-bold">{contracts}x</span>
                 </div>
                 <div className="flex items-center gap-1">
                   <input
@@ -1595,7 +1616,7 @@ export const DayTradeView: React.FC = () => {
                     max="500"
                     value={contracts}
                     onChange={(e) => setContracts(Math.max(1, Number(e.target.value)))}
-                    className="w-16 bg-[#060c18] border border-slate-700 rounded px-1.5 py-1 text-white font-mono-numbers text-xs font-bold outline-none text-center"
+                    className="w-16 bg-[#F8FAFC] dark:bg-[#060c18] border border-[#CBD5E1] dark:border-slate-700 rounded px-1.5 py-1 text-slate-900 dark:text-white font-mono-numbers text-xs font-bold outline-none text-center"
                   />
                   <div className="flex-1 grid grid-cols-5 gap-1">
                     {[1, 5, 10, 25, 50].map((q) => (
@@ -1605,8 +1626,8 @@ export const DayTradeView: React.FC = () => {
                         onClick={() => setContracts(q)}
                         className={`py-1 rounded text-[10px] font-bold border transition cursor-pointer ${
                           contracts === q
-                            ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40'
-                            : 'bg-slate-900 border-slate-800 text-slate-400 hover:text-white'
+                            ? 'bg-[#E3F7F2] dark:bg-emerald-500/20 text-[#006B52] dark:text-emerald-300 border-[#009B77]/50 dark:border-emerald-500/40'
+                            : 'bg-[#F1F5F9] dark:bg-slate-900 border-[#CBD5E1] dark:border-slate-800 text-slate-700 dark:text-slate-400 hover:text-slate-950 dark:hover:text-white'
                         }`}
                       >
                         {q}
@@ -1619,21 +1640,21 @@ export const DayTradeView: React.FC = () => {
               {/* Limit Price if selected */}
               {orderType === 'LIMIT' && (
                 <div className="space-y-0.5">
-                  <span className="text-[10px] text-slate-400">{tDt.limitPriceLabel}</span>
+                  <span className="text-[10px] text-slate-600 dark:text-slate-400">{tDt.limitPriceLabel}</span>
                   <input
                     type="number"
                     step={currentAsset.symbol.includes('WIN') ? 5 : 0.5}
                     value={limitPrice}
                     onChange={(e) => setLimitPrice(Number(e.target.value))}
-                    className="w-full bg-[#060c18] border border-slate-700 rounded px-2 py-1 text-white font-mono-numbers text-xs font-bold outline-none"
+                    className="w-full bg-[#F8FAFC] dark:bg-[#060c18] border border-[#CBD5E1] dark:border-slate-700 rounded px-2 py-1 text-slate-900 dark:text-white font-mono-numbers text-xs font-bold outline-none"
                   />
                 </div>
               )}
 
               {/* Stop Loss & Gain Offsets */}
               <div className="grid grid-cols-2 gap-1 text-[10px]">
-                <div className="bg-[#060c18] p-1 rounded border border-slate-800/80 flex items-center justify-between">
-                  <label className="text-rose-400 font-bold flex items-center gap-1 cursor-pointer">
+                <div className="bg-[#F8FAFC] dark:bg-[#060c18] p-1 rounded border border-[#E2E8F0] dark:border-slate-800/80 flex items-center justify-between">
+                  <label className="text-[#DC2626] dark:text-rose-400 font-bold flex items-center gap-1 cursor-pointer">
                     <input
                       type="checkbox"
                       checked={useStopLoss}
@@ -1647,13 +1668,13 @@ export const DayTradeView: React.FC = () => {
                       type="number"
                       value={stopLossOffset}
                       onChange={(e) => setStopLossOffset(Number(e.target.value))}
-                      className="w-14 bg-slate-900 border border-slate-700 rounded px-1 text-white font-mono-numbers text-right text-[10px]"
+                      className="w-14 bg-white dark:bg-slate-900 border border-[#CBD5E1] dark:border-slate-700 rounded px-1 text-slate-900 dark:text-white font-mono-numbers text-right text-[10px]"
                     />
                   )}
                 </div>
 
-                <div className="bg-[#060c18] p-1 rounded border border-slate-800/80 flex items-center justify-between">
-                  <label className="text-emerald-400 font-bold flex items-center gap-1 cursor-pointer">
+                <div className="bg-[#F8FAFC] dark:bg-[#060c18] p-1 rounded border border-[#E2E8F0] dark:border-slate-800/80 flex items-center justify-between">
+                  <label className="text-[#006B52] dark:text-emerald-400 font-bold flex items-center gap-1 cursor-pointer">
                     <input
                       type="checkbox"
                       checked={useTakeProfit}
@@ -1667,7 +1688,7 @@ export const DayTradeView: React.FC = () => {
                       type="number"
                       value={takeProfitOffset}
                       onChange={(e) => setTakeProfitOffset(Number(e.target.value))}
-                      className="w-14 bg-slate-900 border border-slate-700 rounded px-1 text-white font-mono-numbers text-right text-[10px]"
+                      className="w-14 bg-white dark:bg-slate-900 border border-[#CBD5E1] dark:border-slate-700 rounded px-1 text-slate-900 dark:text-white font-mono-numbers text-right text-[10px]"
                     />
                   )}
                 </div>
@@ -1680,7 +1701,8 @@ export const DayTradeView: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => handleExecuteOrder('BUY')}
-                  className="w-full py-2.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-black text-xs uppercase tracking-wider transition cursor-pointer flex flex-col items-center justify-center shadow-lg shadow-emerald-950 active:scale-98"
+                  data-on-dark="true"
+                  className="w-full py-2.5 rounded-lg bg-[#009B77] hover:bg-[#008263] dark:bg-emerald-600 dark:hover:bg-emerald-500 text-white font-black text-xs uppercase tracking-wider transition cursor-pointer flex flex-col items-center justify-center shadow-lg active:scale-98"
                 >
                   <div className="flex items-center gap-1">
                     <ArrowUpRight className="w-3.5 h-3.5" />
@@ -1694,7 +1716,8 @@ export const DayTradeView: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => handleExecuteOrder('SELL')}
-                  className="w-full py-2.5 rounded-lg bg-rose-600 hover:bg-rose-500 text-white font-black text-xs uppercase tracking-wider transition cursor-pointer flex flex-col items-center justify-center shadow-lg shadow-rose-950 active:scale-98"
+                  data-on-dark="true"
+                  className="w-full py-2.5 rounded-lg bg-[#DC2626] hover:bg-red-700 dark:bg-rose-600 dark:hover:bg-rose-500 text-white font-black text-xs uppercase tracking-wider transition cursor-pointer flex flex-col items-center justify-center shadow-lg active:scale-98"
                 >
                   <div className="flex items-center gap-1">
                     <ArrowDownRight className="w-3.5 h-3.5" />
@@ -1711,7 +1734,7 @@ export const DayTradeView: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => handleCloseAllPositions()}
-                  className="py-1.5 px-2 rounded bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs uppercase tracking-wide transition cursor-pointer flex items-center justify-center gap-1 shadow-md shadow-amber-950"
+                  className="py-1.5 px-2 rounded bg-[#E5A910] hover:bg-[#D99B00] dark:bg-amber-500 dark:hover:bg-amber-400 text-slate-950 font-black text-xs uppercase tracking-wide transition cursor-pointer flex items-center justify-center gap-1 shadow-md"
                 >
                   <Square className="w-3 h-3 fill-current" />
                   <span>{tDt.flattenBtn.toUpperCase()}</span>
@@ -1720,7 +1743,7 @@ export const DayTradeView: React.FC = () => {
                 <button
                   type="button"
                   onClick={handleReversePosition}
-                  className="py-1.5 px-2 rounded bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 font-bold text-xs uppercase tracking-wide transition cursor-pointer flex items-center justify-center gap-1"
+                  className="py-1.5 px-2 rounded bg-[#F1F5F9] hover:bg-[#E2E8F0] dark:bg-slate-800 dark:hover:bg-slate-700 border border-[#CBD5E1] dark:border-slate-700 text-slate-900 dark:text-slate-200 font-bold text-xs uppercase tracking-wide transition cursor-pointer flex items-center justify-center gap-1"
                 >
                   <ArrowRightLeft className="w-3 h-3" />
                   <span>{tDt.reverseBtn}</span>
@@ -1733,16 +1756,16 @@ export const DayTradeView: React.FC = () => {
         {/* =======================================================================
             2E. MOBILE WORKSPACE (100% Width Chart + Abas/Accordion for Boleta & Mercado)
            ======================================================================= */}
-        <div className="lg:hidden flex-1 min-h-0 flex flex-col overflow-y-auto w-full bg-[#050a14]">
+        <div className="lg:hidden flex-1 min-h-0 flex flex-col overflow-y-auto w-full bg-[#F4F7F9] dark:bg-[#050a14]">
           {/* Mobile Top Asset Strip */}
-          <div className="bg-[#09111e] border-b border-slate-800 px-3 py-2 flex flex-col gap-1.5 shrink-0">
+          <div className="bg-white dark:bg-[#09111e] border-b border-[#E2E8F0] dark:border-slate-800 px-3 py-2 flex flex-col gap-1.5 shrink-0">
             <div className="flex items-center justify-between gap-2">
               <div className="relative flex-1">
                 <select
                   value={selectedSymbol}
                   onChange={(e) => setSelectedSymbol(e.target.value)}
                   aria-label={tDt.selectAssetAria}
-                  className="w-full bg-[#060c18] border border-slate-700 hover:border-emerald-500 rounded px-2 pr-6 py-1.5 text-xs font-black text-white font-mono-numbers outline-none cursor-pointer"
+                  className="w-full bg-[#F8FAFC] dark:bg-[#060c18] border border-[#CBD5E1] dark:border-slate-700 hover:border-[#009B77] dark:hover:border-emerald-500 rounded px-2 pr-6 py-1.5 text-xs font-black text-slate-900 dark:text-white font-mono-numbers outline-none cursor-pointer"
                 >
                   <optgroup label={tDt.groupFuturesB3}>
                     <option value="WINFUT">WINFUT • {tDt.winfutShort}</option>
@@ -1794,7 +1817,7 @@ export const DayTradeView: React.FC = () => {
                       ))}
                   </optgroup>
                 </select>
-                <ChevronDown className="w-3 h-3 text-slate-400 absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none" />
+                <ChevronDown className="w-3 h-3 text-slate-500 dark:text-slate-400 absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none" />
               </div>
 
               {/* Price & Variation */}
@@ -1803,12 +1826,12 @@ export const DayTradeView: React.FC = () => {
                 const pctInfo = formatSignedPercentChange(currentAsset.change24h, 2);
                 return (
                   <div className="flex items-baseline gap-1.5 font-mono-numbers shrink-0">
-                    <span className="text-sm font-black text-white">
+                    <span className="text-sm font-black text-slate-950 dark:text-white">
                       {formatCurrencyValue(currentMarketPrice, currentAsset.currency, dec, locale)}
                     </span>
                     <span
                       className={`text-[10px] font-bold px-1.5 py-0.5 rounded ${
-                        !pctInfo.isNegative ? 'text-emerald-400 bg-emerald-500/10' : 'text-rose-400 bg-rose-500/10'
+                        !pctInfo.isNegative ? 'text-[#006B52] dark:text-emerald-400 bg-[#E3F7F2] dark:bg-emerald-500/10' : 'text-[#DC2626] dark:text-rose-400 bg-[#FEE2E2] dark:bg-rose-500/10'
                       }`}
                     >
                       {pctInfo.text}
@@ -1820,27 +1843,27 @@ export const DayTradeView: React.FC = () => {
 
             {/* Timeframes & Dual Conversion */}
             <div className="flex items-center justify-between text-[10px] font-mono-numbers">
-              <div className="flex items-center gap-1 bg-[#060c18] p-0.5 rounded border border-slate-800">
+              <div className="flex items-center gap-1 bg-[#F1F5F9] dark:bg-[#060c18] p-0.5 rounded border border-[#E2E8F0] dark:border-slate-800">
                 {(['1m', '5m', '15m', '1h', '1D'] as const).map((tf) => (
                   <button
                     key={tf}
                     onClick={() => setChartInterval(tf)}
                     className={`px-2 py-0.5 rounded transition cursor-pointer ${
-                      chartInterval === tf ? 'bg-slate-800 text-emerald-400 font-black' : 'text-slate-400'
+                      chartInterval === tf ? 'bg-white dark:bg-slate-800 text-[#003399] dark:text-emerald-400 font-black shadow-sm dark:shadow-none' : 'text-slate-600 dark:text-slate-400'
                     }`}
                   >
                     {tf}
                   </button>
                 ))}
               </div>
-              <div className="text-[9px] text-emerald-400/90 font-medium truncate max-w-[170px]">
+              <div className="text-[9px] text-[#006B52] dark:text-emerald-400/90 font-semibold dark:font-medium truncate max-w-[170px]">
                 ≈ {dualAssetDisplay.secondaryFormatted} | {dualAssetDisplay.tertiaryFormatted}
               </div>
             </div>
           </div>
 
           {/* 100% Width Main Chart Container (Smartphones & Tablets) */}
-          <div className="w-full h-[320px] sm:h-[380px] shrink-0 relative bg-[#060c18] border-b border-slate-800 p-1.5 overflow-hidden flex flex-col">
+          <div className="w-full h-[320px] sm:h-[380px] shrink-0 relative bg-white dark:bg-[#060c18] border-b border-[#E2E8F0] dark:border-slate-800 p-1.5 overflow-hidden flex flex-col">
             <svg className="w-full h-full flex-1" viewBox="0 0 700 280" preserveAspectRatio="none">
               <defs>
                 <linearGradient id="vol-grad-mob" x1="0" y1="0" x2="0" y2="1">
@@ -1909,8 +1932,8 @@ export const DayTradeView: React.FC = () => {
               {/* Position Overlay Line */}
               {positions.length > 0 && (
                 <g>
-                  <line x1="0" y1="95" x2="700" y2="95" stroke="#3B82F6" strokeWidth="1.5" strokeDasharray="5 3" />
-                  <text x="8" y="90" fill="#60A5FA" fontSize="10" fontWeight="bold">
+                  <line x1="0" y1="95" x2="700" y2="95" stroke={isLight ? '#003399' : '#3B82F6'} strokeWidth="1.5" strokeDasharray="5 3" />
+                  <text x="8" y="90" fill={isLight ? '#003399' : '#60A5FA'} fontSize="10" fontWeight="bold">
                     {tDt.avgPriceOverlay} ({positions[0].side === 'BUY' ? tDt.sideBuy : tDt.sideSell}): {formatCurrencyValue(positions[0].entryPrice, currentAsset.currency, 2, locale)}
                   </text>
                 </g>
@@ -1919,78 +1942,83 @@ export const DayTradeView: React.FC = () => {
 
             {/* Overlaid Badges */}
             <div className="absolute top-2 left-2 flex items-center gap-1 text-[8px] font-mono-numbers">
-              {showMA9 && <span className="text-sky-400 bg-sky-950/80 px-1 py-0.2 rounded border border-sky-500/30">MA9</span>}
-              {showMA21 && <span className="text-purple-400 bg-purple-950/80 px-1 py-0.2 rounded border border-purple-500/30">MA21</span>}
-              {showMA200 && <span className="text-amber-400 bg-amber-950/80 px-1 py-0.2 rounded border border-amber-500/30">MA200</span>}
-              {showVWAP && <span className="text-fuchsia-400 bg-fuchsia-950/80 px-1 py-0.2 rounded border border-fuchsia-500/30">VWAP</span>}
+              {showMA9 && <span className="text-[#003399] dark:text-sky-400 bg-[#E6EEFF]/95 dark:bg-sky-950/80 px-1 py-0.2 rounded border border-[#003399]/30 dark:border-sky-500/30 font-semibold">MA9</span>}
+              {showMA21 && <span className="text-purple-800 dark:text-purple-400 bg-purple-100/95 dark:bg-purple-950/80 px-1 py-0.2 rounded border border-purple-400/40 dark:border-purple-500/30 font-semibold">MA21</span>}
+              {showMA200 && <span className="text-[#B45309] dark:text-amber-400 bg-[#FEF7E0]/95 dark:bg-amber-950/80 px-1 py-0.2 rounded border border-[#E5A910]/40 dark:border-amber-500/30 font-semibold">MA200</span>}
+              {showVWAP && <span className="text-fuchsia-800 dark:text-fuchsia-400 bg-fuchsia-100/95 dark:bg-fuchsia-950/80 px-1 py-0.2 rounded border border-fuchsia-400/40 dark:border-fuchsia-500/30 font-semibold">VWAP</span>}
             </div>
           </div>
 
           {/* Mobile Module Navigation (Abas / Accordion Header) */}
-          <div className="bg-[#09111e] border-b border-slate-800 px-2.5 py-2 flex items-center justify-between gap-2 shrink-0 sticky top-0 z-20 shadow-md">
+          <div className="bg-white dark:bg-[#09111e] border-b border-[#E2E8F0] dark:border-slate-800 px-2.5 py-2 flex items-center justify-between gap-2 shrink-0 sticky top-0 z-20 shadow-md">
             <div className="flex items-center gap-1 overflow-x-auto no-scrollbar text-xs font-bold">
               <button
                 type="button"
                 onClick={() => { setMobileBottomSection('boleta'); setIsMobilePanelCollapsed(false); }}
+                data-on-dark={mobileBottomSection === 'boleta' && !isMobilePanelCollapsed ? 'true' : undefined}
                 className={`px-2.5 py-1 rounded transition cursor-pointer flex items-center gap-1 shrink-0 ${
                   mobileBottomSection === 'boleta' && !isMobilePanelCollapsed
-                    ? 'bg-emerald-600 text-white shadow'
-                    : 'bg-[#060c18] border border-slate-800 text-slate-300 hover:text-white'
+                    ? 'bg-[#009B77] dark:bg-emerald-600 text-white shadow'
+                    : 'bg-[#F1F5F9] dark:bg-[#060c18] border border-[#CBD5E1] dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:text-slate-950 dark:hover:text-white'
                 }`}
               >
-                <SlidersHorizontal className="w-3.5 h-3.5 text-emerald-400" />
+                <SlidersHorizontal className={`w-3.5 h-3.5 ${mobileBottomSection === 'boleta' && !isMobilePanelCollapsed ? 'text-white' : 'text-[#009B77] dark:text-emerald-400'}`} />
                 <span>{tDt.mobileTabs.ticket}</span>
               </button>
 
               <button
                 type="button"
                 onClick={() => { setMobileBottomSection('mercado'); setIsMobilePanelCollapsed(false); }}
+                data-on-dark={mobileBottomSection === 'mercado' && !isMobilePanelCollapsed ? 'true' : undefined}
                 className={`px-2.5 py-1 rounded transition cursor-pointer flex items-center gap-1 shrink-0 ${
                   mobileBottomSection === 'mercado' && !isMobilePanelCollapsed
-                    ? 'bg-emerald-600 text-white shadow'
-                    : 'bg-[#060c18] border border-slate-800 text-slate-300 hover:text-white'
+                    ? 'bg-[#009B77] dark:bg-emerald-600 text-white shadow'
+                    : 'bg-[#F1F5F9] dark:bg-[#060c18] border border-[#CBD5E1] dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:text-slate-950 dark:hover:text-white'
                 }`}
               >
-                <Globe className="w-3.5 h-3.5 text-emerald-400" />
+                <Globe className={`w-3.5 h-3.5 ${mobileBottomSection === 'mercado' && !isMobilePanelCollapsed ? 'text-white' : 'text-[#009B77] dark:text-emerald-400'}`} />
                 <span>{tDt.mobileTabs.market}</span>
               </button>
 
               <button
                 type="button"
                 onClick={() => { setMobileBottomSection('book'); setIsMobilePanelCollapsed(false); }}
+                data-on-dark={mobileBottomSection === 'book' && !isMobilePanelCollapsed ? 'true' : undefined}
                 className={`px-2.5 py-1 rounded transition cursor-pointer flex items-center gap-1 shrink-0 ${
                   mobileBottomSection === 'book' && !isMobilePanelCollapsed
-                    ? 'bg-emerald-600 text-white shadow'
-                    : 'bg-[#060c18] border border-slate-800 text-slate-300 hover:text-white'
+                    ? 'bg-[#009B77] dark:bg-emerald-600 text-white shadow'
+                    : 'bg-[#F1F5F9] dark:bg-[#060c18] border border-[#CBD5E1] dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:text-slate-950 dark:hover:text-white'
                 }`}
               >
-                <Layers className="w-3.5 h-3.5 text-emerald-400" />
+                <Layers className={`w-3.5 h-3.5 ${mobileBottomSection === 'book' && !isMobilePanelCollapsed ? 'text-white' : 'text-[#009B77] dark:text-emerald-400'}`} />
                 <span>{tDt.mobileTabs.bookDom}</span>
               </button>
 
               <button
                 type="button"
                 onClick={() => { setMobileBottomSection('tape'); setIsMobilePanelCollapsed(false); }}
+                data-on-dark={mobileBottomSection === 'tape' && !isMobilePanelCollapsed ? 'true' : undefined}
                 className={`px-2.5 py-1 rounded transition cursor-pointer flex items-center gap-1 shrink-0 ${
                   mobileBottomSection === 'tape' && !isMobilePanelCollapsed
-                    ? 'bg-emerald-600 text-white shadow'
-                    : 'bg-[#060c18] border border-slate-800 text-slate-300 hover:text-white'
+                    ? 'bg-[#009B77] dark:bg-emerald-600 text-white shadow'
+                    : 'bg-[#F1F5F9] dark:bg-[#060c18] border border-[#CBD5E1] dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:text-slate-950 dark:hover:text-white'
                 }`}
               >
-                <Activity className="w-3.5 h-3.5 text-emerald-400" />
+                <Activity className={`w-3.5 h-3.5 ${mobileBottomSection === 'tape' && !isMobilePanelCollapsed ? 'text-white' : 'text-[#009B77] dark:text-emerald-400'}`} />
                 <span>{tDt.mobileTabs.tape}</span>
               </button>
 
               <button
                 type="button"
                 onClick={() => { setMobileBottomSection('posicoes'); setIsMobilePanelCollapsed(false); }}
+                data-on-dark={mobileBottomSection === 'posicoes' && !isMobilePanelCollapsed ? 'true' : undefined}
                 className={`px-2.5 py-1 rounded transition cursor-pointer flex items-center gap-1 shrink-0 ${
                   mobileBottomSection === 'posicoes' && !isMobilePanelCollapsed
-                    ? 'bg-emerald-600 text-white shadow'
-                    : 'bg-[#060c18] border border-slate-800 text-slate-300 hover:text-white'
+                    ? 'bg-[#009B77] dark:bg-emerald-600 text-white shadow'
+                    : 'bg-[#F1F5F9] dark:bg-[#060c18] border border-[#CBD5E1] dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:text-slate-950 dark:hover:text-white'
                 }`}
               >
-                <Briefcase className="w-3.5 h-3.5 text-emerald-400" />
+                <Briefcase className={`w-3.5 h-3.5 ${mobileBottomSection === 'posicoes' && !isMobilePanelCollapsed ? 'text-white' : 'text-[#009B77] dark:text-emerald-400'}`} />
                 <span>{tDt.mobileTabs.positions} ({positions.length})</span>
               </button>
             </div>
@@ -1999,38 +2027,39 @@ export const DayTradeView: React.FC = () => {
             <button
               type="button"
               onClick={() => setIsMobilePanelCollapsed(!isMobilePanelCollapsed)}
-              className="p-1 rounded bg-[#060c18] border border-slate-800 text-slate-400 hover:text-white shrink-0 cursor-pointer"
+              className="p-1 rounded bg-[#F1F5F9] dark:bg-[#060c18] border border-[#CBD5E1] dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:text-slate-950 dark:hover:text-white shrink-0 cursor-pointer"
               title={isMobilePanelCollapsed ? tDt.expandPanelTitle : tDt.collapsePanelTitle}
             >
-              {isMobilePanelCollapsed ? <ChevronDown className="w-4 h-4 text-emerald-400" /> : <ChevronUp className="w-4 h-4" />}
+              {isMobilePanelCollapsed ? <ChevronDown className="w-4 h-4 text-[#009B77] dark:text-emerald-400" /> : <ChevronUp className="w-4 h-4" />}
             </button>
           </div>
 
           {/* Mobile Panel Content Body (When Not Collapsed) */}
           {!isMobilePanelCollapsed && (
-            <div className="p-3 bg-[#060c18] flex-1">
+            <div className="p-3 bg-[#F4F7F9] dark:bg-[#060c18] flex-1">
               {/* 1. BOLETA DE EXECUÇÃO */}
               {mobileBottomSection === 'boleta' && (
-                <div className="space-y-3 bg-[#09111e] p-3 rounded-xl border border-slate-800">
-                  <div className="flex items-center justify-between pb-1.5 border-b border-slate-800">
-                    <span className="font-bold text-white uppercase text-xs tracking-wider flex items-center gap-1.5">
-                      <SlidersHorizontal className="w-4 h-4 text-emerald-400" />
+                <div className="space-y-3 bg-white dark:bg-[#09111e] p-3 rounded-xl border border-[#E2E8F0] dark:border-slate-800 shadow-sm dark:shadow-none">
+                  <div className="flex items-center justify-between pb-1.5 border-b border-[#E2E8F0] dark:border-slate-800">
+                    <span className="font-bold text-slate-900 dark:text-white uppercase text-xs tracking-wider flex items-center gap-1.5">
+                      <SlidersHorizontal className="w-4 h-4 text-[#009B77] dark:text-emerald-400" />
                       {tDt.quickTicketTitle} • {currentAsset.symbol}
                     </span>
-                    <span className="text-[10px] text-slate-400 font-mono-numbers">
+                    <span className="text-[10px] text-slate-600 dark:text-slate-400 font-mono-numbers">
                       Spread: {currentAsset.symbol.includes('WIN') ? '5 pts' : '0.5 pt'}
                     </span>
                   </div>
 
                   {/* Compra / Venda Tabs */}
-                  <div className="grid grid-cols-2 gap-1.5 bg-[#060c18] p-1 rounded-lg border border-slate-800 text-xs font-black">
+                  <div className="grid grid-cols-2 gap-1.5 bg-[#F1F5F9] dark:bg-[#060c18] p-1 rounded-lg border border-[#E2E8F0] dark:border-slate-800 text-xs font-black">
                     <button
                       type="button"
                       onClick={() => setOrderTicketTab('BUY')}
+                      data-on-dark={orderTicketTab === 'BUY' ? 'true' : undefined}
                       className={`py-2 rounded-md transition cursor-pointer flex items-center justify-center gap-1 ${
                         orderTicketTab === 'BUY'
-                          ? 'bg-emerald-600 text-white shadow'
-                          : 'text-slate-400 hover:text-white'
+                          ? 'bg-[#009B77] dark:bg-emerald-600 text-white shadow'
+                          : 'text-slate-700 dark:text-slate-400 hover:text-slate-950 dark:hover:text-white'
                       }`}
                     >
                       <ArrowUpRight className="w-4 h-4" /> {tDt.ticketBuyTab}
@@ -2038,10 +2067,11 @@ export const DayTradeView: React.FC = () => {
                     <button
                       type="button"
                       onClick={() => setOrderTicketTab('SELL')}
+                      data-on-dark={orderTicketTab === 'SELL' ? 'true' : undefined}
                       className={`py-2 rounded-md transition cursor-pointer flex items-center justify-center gap-1 ${
                         orderTicketTab === 'SELL'
-                          ? 'bg-rose-600 text-white shadow'
-                          : 'text-slate-400 hover:text-white'
+                          ? 'bg-[#DC2626] dark:bg-rose-600 text-white shadow'
+                          : 'text-slate-700 dark:text-slate-400 hover:text-slate-950 dark:hover:text-white'
                       }`}
                     >
                       <ArrowDownRight className="w-4 h-4" /> {tDt.ticketSellTab}
@@ -2053,10 +2083,11 @@ export const DayTradeView: React.FC = () => {
                     <button
                       type="button"
                       onClick={() => setOrderType('MARKET')}
+                      data-on-dark={orderType === 'MARKET' ? 'true' : undefined}
                       className={`py-1.5 rounded-lg border transition cursor-pointer ${
                         orderType === 'MARKET'
-                          ? 'bg-slate-800 border-slate-700 text-white'
-                          : 'bg-[#060c18] border-slate-800 text-slate-400 hover:text-white'
+                          ? 'bg-[#003399] dark:bg-slate-800 border-[#003399] dark:border-slate-700 text-white'
+                          : 'bg-[#F8FAFC] dark:bg-[#060c18] border-[#CBD5E1] dark:border-slate-800 text-slate-700 dark:text-slate-400 hover:text-slate-950 dark:hover:text-white'
                       }`}
                     >
                       {tDt.marketOrderBtn}
@@ -2064,10 +2095,11 @@ export const DayTradeView: React.FC = () => {
                     <button
                       type="button"
                       onClick={() => setOrderType('LIMIT')}
+                      data-on-dark={orderType === 'LIMIT' ? 'true' : undefined}
                       className={`py-1.5 rounded-lg border transition cursor-pointer ${
                         orderType === 'LIMIT'
-                          ? 'bg-slate-800 border-slate-700 text-white'
-                          : 'bg-[#060c18] border-slate-800 text-slate-400 hover:text-white'
+                          ? 'bg-[#003399] dark:bg-slate-800 border-[#003399] dark:border-slate-700 text-white'
+                          : 'bg-[#F8FAFC] dark:bg-[#060c18] border-[#CBD5E1] dark:border-slate-800 text-slate-700 dark:text-slate-400 hover:text-slate-950 dark:hover:text-white'
                       }`}
                     >
                       {tDt.limitOrderBtn}
@@ -2076,9 +2108,9 @@ export const DayTradeView: React.FC = () => {
 
                   {/* Contratos */}
                   <div>
-                    <div className="flex items-center justify-between text-xs text-slate-400 mb-1">
+                    <div className="flex items-center justify-between text-xs text-slate-600 dark:text-slate-400 mb-1">
                       <span>{tDt.contractsQtyLabel}</span>
-                      <span className="font-mono-numbers text-white font-bold">{contracts}x</span>
+                      <span className="font-mono-numbers text-slate-900 dark:text-white font-bold">{contracts}x</span>
                     </div>
                     <div className="flex items-center gap-2">
                       <input
@@ -2087,7 +2119,7 @@ export const DayTradeView: React.FC = () => {
                         max="500"
                         value={contracts}
                         onChange={(e) => setContracts(Math.max(1, Number(e.target.value)))}
-                        className="w-20 bg-[#060c18] border border-slate-700 rounded-lg px-2 py-1.5 text-white font-mono-numbers text-sm font-bold outline-none text-center"
+                        className="w-20 bg-[#F8FAFC] dark:bg-[#060c18] border border-[#CBD5E1] dark:border-slate-700 rounded-lg px-2 py-1.5 text-slate-900 dark:text-white font-mono-numbers text-sm font-bold outline-none text-center"
                       />
                       <div className="flex-1 grid grid-cols-5 gap-1">
                         {[1, 5, 10, 25, 50].map((q) => (
@@ -2097,8 +2129,8 @@ export const DayTradeView: React.FC = () => {
                             onClick={() => setContracts(q)}
                             className={`py-1.5 rounded-lg text-xs font-bold border transition cursor-pointer ${
                               contracts === q
-                                ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40'
-                                : 'bg-slate-900 border-slate-800 text-slate-400 hover:text-white'
+                                ? 'bg-[#E3F7F2] dark:bg-emerald-500/20 text-[#006B52] dark:text-emerald-300 border-[#009B77]/50 dark:border-emerald-500/40'
+                                : 'bg-[#F1F5F9] dark:bg-slate-900 border-[#CBD5E1] dark:border-slate-800 text-slate-700 dark:text-slate-400 hover:text-slate-950 dark:hover:text-white'
                             }`}
                           >
                             {q}
@@ -2111,21 +2143,21 @@ export const DayTradeView: React.FC = () => {
                   {/* Limit Price if selected */}
                   {orderType === 'LIMIT' && (
                     <div className="space-y-1">
-                      <span className="text-xs text-slate-400">{tDt.limitPriceLabel}</span>
+                      <span className="text-xs text-slate-600 dark:text-slate-400">{tDt.limitPriceLabel}</span>
                       <input
                         type="number"
                         step={currentAsset.symbol.includes('WIN') ? 5 : 0.5}
                         value={limitPrice}
                         onChange={(e) => setLimitPrice(Number(e.target.value))}
-                        className="w-full bg-[#060c18] border border-slate-700 rounded-lg px-3 py-2 text-white font-mono-numbers text-sm font-bold outline-none"
+                        className="w-full bg-[#F8FAFC] dark:bg-[#060c18] border border-[#CBD5E1] dark:border-slate-700 rounded-lg px-3 py-2 text-slate-900 dark:text-white font-mono-numbers text-sm font-bold outline-none"
                       />
                     </div>
                   )}
 
                   {/* Stop Loss & Take Profit */}
                   <div className="grid grid-cols-2 gap-2 text-xs">
-                    <div className="bg-[#060c18] p-2 rounded-lg border border-slate-800 flex items-center justify-between">
-                      <label className="text-rose-400 font-bold flex items-center gap-1.5 cursor-pointer">
+                    <div className="bg-[#F8FAFC] dark:bg-[#060c18] p-2 rounded-lg border border-[#E2E8F0] dark:border-slate-800 flex items-center justify-between">
+                      <label className="text-[#DC2626] dark:text-rose-400 font-bold flex items-center gap-1.5 cursor-pointer">
                         <input
                           type="checkbox"
                           checked={useStopLoss}
@@ -2139,13 +2171,13 @@ export const DayTradeView: React.FC = () => {
                           type="number"
                           value={stopLossOffset}
                           onChange={(e) => setStopLossOffset(Number(e.target.value))}
-                          className="w-16 bg-slate-900 border border-slate-700 rounded px-1.5 py-0.5 text-white font-mono-numbers text-right text-xs"
+                          className="w-16 bg-white dark:bg-slate-900 border border-[#CBD5E1] dark:border-slate-700 rounded px-1.5 py-0.5 text-slate-900 dark:text-white font-mono-numbers text-right text-xs"
                         />
                       )}
                     </div>
 
-                    <div className="bg-[#060c18] p-2 rounded-lg border border-slate-800 flex items-center justify-between">
-                      <label className="text-emerald-400 font-bold flex items-center gap-1.5 cursor-pointer">
+                    <div className="bg-[#F8FAFC] dark:bg-[#060c18] p-2 rounded-lg border border-[#E2E8F0] dark:border-slate-800 flex items-center justify-between">
+                      <label className="text-[#006B52] dark:text-emerald-400 font-bold flex items-center gap-1.5 cursor-pointer">
                         <input
                           type="checkbox"
                           checked={useTakeProfit}
@@ -2159,7 +2191,7 @@ export const DayTradeView: React.FC = () => {
                           type="number"
                           value={takeProfitOffset}
                           onChange={(e) => setTakeProfitOffset(Number(e.target.value))}
-                          className="w-16 bg-slate-900 border border-slate-700 rounded px-1.5 py-0.5 text-white font-mono-numbers text-right text-xs"
+                          className="w-16 bg-white dark:bg-slate-900 border border-[#CBD5E1] dark:border-slate-700 rounded px-1.5 py-0.5 text-slate-900 dark:text-white font-mono-numbers text-right text-xs"
                         />
                       )}
                     </div>
@@ -2170,7 +2202,8 @@ export const DayTradeView: React.FC = () => {
                     <button
                       type="button"
                       onClick={() => handleExecuteOrder('BUY')}
-                      className="w-full py-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-black text-sm uppercase tracking-wider transition cursor-pointer flex flex-col items-center justify-center shadow-lg shadow-emerald-950 active:scale-98"
+                      data-on-dark="true"
+                      className="w-full py-3 rounded-xl bg-[#009B77] hover:bg-[#008263] dark:bg-emerald-600 dark:hover:bg-emerald-500 text-white font-black text-sm uppercase tracking-wider transition cursor-pointer flex flex-col items-center justify-center shadow-lg active:scale-98"
                     >
                       <div className="flex items-center gap-1.5">
                         <ArrowUpRight className="w-4 h-4" />
@@ -2184,7 +2217,8 @@ export const DayTradeView: React.FC = () => {
                     <button
                       type="button"
                       onClick={() => handleExecuteOrder('SELL')}
-                      className="w-full py-3 rounded-xl bg-rose-600 hover:bg-rose-500 text-white font-black text-sm uppercase tracking-wider transition cursor-pointer flex flex-col items-center justify-center shadow-lg shadow-rose-950 active:scale-98"
+                      data-on-dark="true"
+                      className="w-full py-3 rounded-xl bg-[#DC2626] hover:bg-red-700 dark:bg-rose-600 dark:hover:bg-rose-500 text-white font-black text-sm uppercase tracking-wider transition cursor-pointer flex flex-col items-center justify-center shadow-lg active:scale-98"
                     >
                       <div className="flex items-center gap-1.5">
                         <ArrowDownRight className="w-4 h-4" />
@@ -2201,7 +2235,7 @@ export const DayTradeView: React.FC = () => {
                     <button
                       type="button"
                       onClick={() => handleCloseAllPositions()}
-                      className="py-2.5 px-3 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs uppercase tracking-wide transition cursor-pointer flex items-center justify-center gap-1.5 shadow-md shadow-amber-950"
+                      className="py-2.5 px-3 rounded-lg bg-[#E5A910] hover:bg-[#D99B00] dark:bg-amber-500 dark:hover:bg-amber-400 text-slate-950 font-black text-xs uppercase tracking-wide transition cursor-pointer flex items-center justify-center gap-1.5 shadow-md"
                     >
                       <Square className="w-3.5 h-3.5 fill-current" />
                       <span>{tDt.flattenAllBtn}</span>
@@ -2210,7 +2244,7 @@ export const DayTradeView: React.FC = () => {
                     <button
                       type="button"
                       onClick={handleReversePosition}
-                      className="py-2.5 px-3 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 font-bold text-xs uppercase tracking-wide transition cursor-pointer flex items-center justify-center gap-1.5"
+                      className="py-2.5 px-3 rounded-lg bg-[#F1F5F9] hover:bg-[#E2E8F0] dark:bg-slate-800 dark:hover:bg-slate-700 border border-[#CBD5E1] dark:border-slate-700 text-slate-900 dark:text-slate-200 font-bold text-xs uppercase tracking-wide transition cursor-pointer flex items-center justify-center gap-1.5"
                     >
                       <ArrowRightLeft className="w-3.5 h-3.5" />
                       <span>{tDt.reverseBtn}</span>
@@ -2221,10 +2255,10 @@ export const DayTradeView: React.FC = () => {
 
               {/* 2. MERCADO EM TEMPO REAL */}
               {mobileBottomSection === 'mercado' && (
-                <div className="space-y-2 bg-[#09111e] p-3 rounded-xl border border-slate-800">
-                  <div className="flex items-center justify-between pb-1 border-b border-slate-800">
-                    <span className="font-bold text-white uppercase text-xs tracking-wider flex items-center gap-1.5">
-                      <Globe className="w-4 h-4 text-emerald-400" />
+                <div className="space-y-2 bg-white dark:bg-[#09111e] p-3 rounded-xl border border-[#E2E8F0] dark:border-slate-800 shadow-sm dark:shadow-none">
+                  <div className="flex items-center justify-between pb-1 border-b border-[#E2E8F0] dark:border-slate-800">
+                    <span className="font-bold text-slate-900 dark:text-white uppercase text-xs tracking-wider flex items-center gap-1.5">
+                      <Globe className="w-4 h-4 text-[#009B77] dark:text-emerald-400" />
                       {tDt.realTimeMarketTitle}
                     </span>
                     <span className="text-[10px] text-slate-500 font-mono-numbers">{filteredMarketWatch.length} {tDt.assetsCountSuffix}</span>
@@ -2236,10 +2270,11 @@ export const DayTradeView: React.FC = () => {
                       <button
                         key={cat.key}
                         onClick={() => setMarketWatchCategory(cat.key)}
+                        data-on-dark={marketWatchCategory === cat.key ? 'true' : undefined}
                         className={`px-2.5 py-1 rounded-lg transition cursor-pointer shrink-0 ${
                           marketWatchCategory === cat.key
-                            ? 'bg-emerald-600 text-white font-bold'
-                            : 'bg-[#060c18] text-slate-400 hover:text-white border border-slate-800'
+                            ? 'bg-[#009B77] dark:bg-emerald-600 text-white font-bold'
+                            : 'bg-[#F1F5F9] dark:bg-[#060c18] text-slate-700 dark:text-slate-400 hover:text-slate-950 dark:hover:text-white border border-[#CBD5E1] dark:border-slate-800'
                         }`}
                       >
                         {cat.label}
@@ -2255,7 +2290,7 @@ export const DayTradeView: React.FC = () => {
                       placeholder={tDt.filterAssetsMobilePlaceholder}
                       value={marketWatchSearch}
                       onChange={(e) => setMarketWatchSearch(e.target.value)}
-                      className="w-full bg-[#060c18] border border-slate-800 rounded-lg pl-8 pr-3 py-1.5 text-xs text-white placeholder:text-slate-600 outline-none"
+                      className="w-full bg-[#F8FAFC] dark:bg-[#060c18] border border-[#CBD5E1] dark:border-slate-800 rounded-lg pl-8 pr-3 py-1.5 text-xs text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-600 outline-none"
                     />
                   </div>
 
@@ -2274,19 +2309,19 @@ export const DayTradeView: React.FC = () => {
                           }}
                           className={`flex items-center justify-between px-2.5 py-2 rounded-lg transition cursor-pointer border ${
                             isSelected
-                              ? 'bg-emerald-950/60 border-emerald-500/50'
-                              : 'bg-[#060c18] border-slate-800/80 hover:bg-slate-800/50'
+                              ? 'bg-[#E3F7F2] dark:bg-emerald-950/60 border-[#009B77]/50 dark:border-emerald-500/50'
+                              : 'bg-[#F8FAFC] dark:bg-[#060c18] border-[#E2E8F0] dark:border-slate-800/80 hover:bg-slate-100 dark:hover:bg-slate-800/50'
                           }`}
                         >
                           <div>
-                            <span className="font-bold text-white block text-xs">{item.symbol}</span>
-                            <span className="text-[10px] text-slate-400">{item.name}</span>
+                            <span className="font-bold text-slate-900 dark:text-white block text-xs">{item.symbol}</span>
+                            <span className="text-[10px] text-slate-600 dark:text-slate-400">{item.name}</span>
                           </div>
                           <div className="text-right">
-                            <span className="font-bold text-white text-xs block">
+                            <span className="font-bold text-slate-900 dark:text-white text-xs block">
                               {formatCurrencyValue(item.price, item.currency, dec, locale)}
                             </span>
-                            <span className={`text-[10px] font-bold ${!pctInfo.isNegative ? 'text-emerald-400' : 'text-rose-400'}`}>
+                            <span className={`text-[10px] font-bold ${!pctInfo.isNegative ? 'text-[#006B52] dark:text-emerald-400' : 'text-[#DC2626] dark:text-rose-400'}`}>
                               {pctInfo.text}
                             </span>
                           </div>
@@ -2299,18 +2334,18 @@ export const DayTradeView: React.FC = () => {
 
               {/* 3. BOOK DE OFERTAS (DOM) */}
               {mobileBottomSection === 'book' && (
-                <div className="space-y-2 bg-[#09111e] p-3 rounded-xl border border-slate-800">
-                  <div className="flex items-center justify-between pb-1 border-b border-slate-800">
-                    <span className="font-bold text-white uppercase text-xs tracking-wider flex items-center gap-1.5">
-                      <Layers className="w-4 h-4 text-emerald-400" />
+                <div className="space-y-2 bg-white dark:bg-[#09111e] p-3 rounded-xl border border-[#E2E8F0] dark:border-slate-800 shadow-sm dark:shadow-none">
+                  <div className="flex items-center justify-between pb-1 border-b border-[#E2E8F0] dark:border-slate-800">
+                    <span className="font-bold text-slate-900 dark:text-white uppercase text-xs tracking-wider flex items-center gap-1.5">
+                      <Layers className="w-4 h-4 text-[#009B77] dark:text-emerald-400" />
                       {tDt.tabs.book} (DOM) • {currentAsset.symbol}
                     </span>
-                    <span className="text-[10px] font-mono-numbers text-slate-400">
-                      {tDt.priceShort} <strong className="text-white">{formatCurrencyValue(currentMarketPrice, currentAsset.currency, 2, locale)}</strong>
+                    <span className="text-[10px] font-mono-numbers text-slate-600 dark:text-slate-400">
+                      {tDt.priceShort} <strong className="text-slate-900 dark:text-white">{formatCurrencyValue(currentMarketPrice, currentAsset.currency, 2, locale)}</strong>
                     </span>
                   </div>
 
-                  <div className="grid grid-cols-3 py-1 px-2 text-[10px] font-bold text-slate-400 border-b border-slate-800 uppercase">
+                  <div className="grid grid-cols-3 py-1 px-2 text-[10px] font-bold text-slate-600 dark:text-slate-400 border-b border-[#E2E8F0] dark:border-slate-800 uppercase">
                     <span>{tDt.bidMobile}</span>
                     <span className="text-center">{tDt.colCurrent}</span>
                     <span className="text-right">{tDt.askMobile}</span>
@@ -2318,23 +2353,23 @@ export const DayTradeView: React.FC = () => {
 
                   <div className="space-y-1 font-mono-numbers text-xs">
                     {bookOffers.slice(0, 10).map((row, idx) => (
-                      <div key={idx} className="grid grid-cols-3 items-center py-1 px-2 rounded bg-[#060c18] border border-slate-800/60 relative overflow-hidden">
+                      <div key={idx} className="grid grid-cols-3 items-center py-1 px-2 rounded bg-[#F8FAFC] dark:bg-[#060c18] border border-[#E2E8F0] dark:border-slate-800/60 relative overflow-hidden">
                         {/* Bid depth bar */}
                         <div
-                          className="absolute left-0 top-0 bottom-0 bg-emerald-500/15 pointer-events-none"
+                          className="absolute left-0 top-0 bottom-0 bg-[#009B77]/15 dark:bg-emerald-500/15 pointer-events-none"
                           style={{ width: `${Math.min(100, row.bidVolPct * 1.5)}%` }}
                         />
                         {/* Ask depth bar */}
                         <div
-                          className="absolute right-0 top-0 bottom-0 bg-rose-500/15 pointer-events-none"
+                          className="absolute right-0 top-0 bottom-0 bg-[#DC2626]/15 dark:bg-rose-500/15 pointer-events-none"
                           style={{ width: `${Math.min(100, row.askVolPct * 1.5)}%` }}
                         />
 
-                        <span className="text-emerald-400 font-bold z-10">{row.bidQty}</span>
-                        <span className="text-center font-bold text-white z-10">
+                        <span className="text-[#006B52] dark:text-emerald-400 font-bold z-10">{row.bidQty}</span>
+                        <span className="text-center font-bold text-slate-900 dark:text-white z-10">
                           {formatCurrencyValue(row.price, currentAsset.currency, 2, locale)}
                         </span>
-                        <span className="text-right text-rose-400 font-bold z-10">{row.askQty}</span>
+                        <span className="text-right text-[#DC2626] dark:text-rose-400 font-bold z-10">{row.askQty}</span>
                       </div>
                     ))}
                   </div>
@@ -2343,18 +2378,18 @@ export const DayTradeView: React.FC = () => {
 
               {/* 4. TAPE READING */}
               {mobileBottomSection === 'tape' && (
-                <div className="space-y-2 bg-[#09111e] p-3 rounded-xl border border-slate-800">
-                  <div className="flex items-center justify-between pb-1 border-b border-slate-800">
-                    <span className="font-bold text-white uppercase text-xs tracking-wider flex items-center gap-1.5">
-                      <Activity className="w-4 h-4 text-emerald-400" />
+                <div className="space-y-2 bg-white dark:bg-[#09111e] p-3 rounded-xl border border-[#E2E8F0] dark:border-slate-800 shadow-sm dark:shadow-none">
+                  <div className="flex items-center justify-between pb-1 border-b border-[#E2E8F0] dark:border-slate-800">
+                    <span className="font-bold text-slate-900 dark:text-white uppercase text-xs tracking-wider flex items-center gap-1.5">
+                      <Activity className="w-4 h-4 text-[#009B77] dark:text-emerald-400" />
                       Tape Reading (Times & Trades) • {currentAsset.symbol}
                     </span>
-                    <span className="text-[10px] font-mono-numbers text-emerald-400 font-bold">
+                    <span className="text-[10px] font-mono-numbers text-[#006B52] dark:text-emerald-400 font-bold">
                       {tDt.liveFlowTag}
                     </span>
                   </div>
 
-                  <div className="grid grid-cols-4 py-1 px-2 text-[10px] font-bold text-slate-400 border-b border-slate-800 uppercase">
+                  <div className="grid grid-cols-4 py-1 px-2 text-[10px] font-bold text-slate-600 dark:text-slate-400 border-b border-[#E2E8F0] dark:border-slate-800 uppercase">
                     <span>{tDt.colTime}</span>
                     <span>{tDt.priceShort.replace(':', '')}</span>
                     <span className="text-center">{tDt.colQty}</span>
@@ -2366,11 +2401,11 @@ export const DayTradeView: React.FC = () => {
                       <div
                         key={t.id}
                         className={`grid grid-cols-4 py-1 px-2 rounded items-center ${
-                          t.aggressor === 'BUY' ? 'bg-emerald-950/30 text-emerald-300' : 'bg-rose-950/30 text-rose-300'
+                          t.aggressor === 'BUY' ? 'bg-[#E3F7F2]/70 dark:bg-emerald-950/30 text-[#006B52] dark:text-emerald-300' : 'bg-[#FEE2E2]/70 dark:bg-rose-950/30 text-[#DC2626] dark:text-rose-300'
                         }`}
                       >
-                        <span className="text-slate-400 text-[10px]">{t.time}</span>
-                        <span className="font-bold text-white">{formatCurrencyValue(t.price, currentAsset.currency, 2, locale)}</span>
+                        <span className="text-slate-600 dark:text-slate-400 text-[10px]">{t.time}</span>
+                        <span className="font-bold text-slate-900 dark:text-white">{formatCurrencyValue(t.price, currentAsset.currency, 2, locale)}</span>
                         <span className="text-center font-bold">{t.qty}</span>
                         <span className="text-right font-black">{t.aggressor === 'BUY' ? tDt.sideBuy : tDt.sideSell}</span>
                       </div>
@@ -2381,17 +2416,17 @@ export const DayTradeView: React.FC = () => {
 
               {/* 5. MINHAS POSIÇÕES */}
               {mobileBottomSection === 'posicoes' && (
-                <div className="space-y-2 bg-[#09111e] p-3 rounded-xl border border-slate-800">
-                  <div className="flex items-center justify-between pb-1 border-b border-slate-800">
-                    <span className="font-bold text-white uppercase text-xs tracking-wider flex items-center gap-1.5">
-                      <Briefcase className="w-4 h-4 text-emerald-400" />
+                <div className="space-y-2 bg-white dark:bg-[#09111e] p-3 rounded-xl border border-[#E2E8F0] dark:border-slate-800 shadow-sm dark:shadow-none">
+                  <div className="flex items-center justify-between pb-1 border-b border-[#E2E8F0] dark:border-slate-800">
+                    <span className="font-bold text-slate-900 dark:text-white uppercase text-xs tracking-wider flex items-center gap-1.5">
+                      <Briefcase className="w-4 h-4 text-[#009B77] dark:text-emerald-400" />
                       {tDt.myPositions} ({positions.length})
                     </span>
                     {positions.length > 0 && (
                       <button
                         type="button"
                         onClick={() => handleCloseAllPositions()}
-                        className="px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/40 text-[10px] font-bold"
+                        className="px-2 py-0.5 rounded bg-[#FEF7E0] dark:bg-amber-500/20 text-[#B45309] dark:text-amber-300 border border-[#E5A910]/50 dark:border-amber-500/40 text-[10px] font-bold cursor-pointer"
                       >
                         {tDt.closeAllShort}
                       </button>
@@ -2411,27 +2446,27 @@ export const DayTradeView: React.FC = () => {
                         const pnlBrl = isWin ? diff * 0.2 * pos.contracts : isWdo ? diff * 10 * pos.contracts : diff * pos.contracts;
 
                         return (
-                          <div key={pos.id} className="p-2.5 rounded-lg bg-[#060c18] border border-slate-800 flex items-center justify-between">
+                          <div key={pos.id} className="p-2.5 rounded-lg bg-[#F8FAFC] dark:bg-[#060c18] border border-[#E2E8F0] dark:border-slate-800 flex items-center justify-between">
                             <div>
                               <div className="flex items-center gap-1.5">
-                                <span className="font-bold text-white text-xs">{pos.symbol}</span>
-                                <span className={`px-1 py-0.2 rounded text-[9px] font-bold ${pos.side === 'BUY' ? 'text-emerald-400 bg-emerald-500/10' : 'text-rose-400 bg-rose-500/10'}`}>
+                                <span className="font-bold text-slate-900 dark:text-white text-xs">{pos.symbol}</span>
+                                <span className={`px-1 py-0.2 rounded text-[9px] font-bold ${pos.side === 'BUY' ? 'text-[#006B52] dark:text-emerald-400 bg-[#E3F7F2] dark:bg-emerald-500/10' : 'text-[#DC2626] dark:text-rose-400 bg-[#FEE2E2] dark:bg-rose-500/10'}`}>
                                   {pos.side === 'BUY' ? tDt.sideBuy : tDt.sideSell}
                                 </span>
-                                <span className="text-[10px] text-slate-400 font-bold">{pos.contracts}x</span>
+                                <span className="text-[10px] text-slate-600 dark:text-slate-400 font-bold">{pos.contracts}x</span>
                               </div>
-                              <div className="text-[10px] text-slate-400 mt-0.5">
+                              <div className="text-[10px] text-slate-600 dark:text-slate-400 mt-0.5">
                                 {tDt.entryShort} {pos.entryPrice} | {tDt.currentShort} {currentMarketPrice}
                               </div>
                             </div>
                             <div className="text-right">
-                              <span className={`block font-black text-xs ${pnlBrl >= 0 ? 'text-emerald-400' : 'text-rose-400'}`}>
+                              <span className={`block font-black text-xs ${pnlBrl >= 0 ? 'text-[#006B52] dark:text-emerald-400' : 'text-[#DC2626] dark:text-rose-400'}`}>
                                 {pnlBrl >= 0 ? '+' : ''}{pnlBrl.toLocaleString(locale, { style: 'currency', currency: 'BRL' })}
                               </span>
                               <button
                                 type="button"
                                 onClick={() => handleClosePosition(pos.id)}
-                                className="text-[9px] text-rose-400 hover:text-rose-300 underline font-bold mt-0.5"
+                                className="text-[9px] text-[#DC2626] dark:text-rose-400 hover:underline font-bold mt-0.5 cursor-pointer"
                               >
                                 {tDt.closePositionMobile}
                               </button>
@@ -2451,31 +2486,31 @@ export const DayTradeView: React.FC = () => {
       {/* =========================================================================
           3. FIXED INSTITUTIONAL BOTTOM STATUS BAR (Connection: Estável)
          ========================================================================= */}
-      <footer className="bg-[#050a14] border-t border-slate-800/90 px-3 py-1 flex items-center justify-between text-[10px] text-slate-400 shrink-0 font-mono-numbers select-none">
+      <footer className="bg-white dark:bg-[#050a14] border-t border-[#E2E8F0] dark:border-slate-800/90 px-3 py-1 flex items-center justify-between text-[10px] text-slate-600 dark:text-slate-400 shrink-0 font-mono-numbers select-none">
         {/* Left: Connection Status */}
         <div className="flex items-center gap-3">
           <div className="flex items-center gap-1.5">
-            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-            <strong className="text-emerald-400 font-sans font-bold">{tDt.connectionStable}</strong>
+            <span className="w-2 h-2 rounded-full bg-[#009B77] dark:bg-emerald-400 animate-pulse" />
+            <strong className="text-[#006B52] dark:text-emerald-400 font-sans font-bold">{tDt.connectionStable}</strong>
           </div>
-          <span className="text-slate-600">|</span>
-          <span className="text-slate-400 hidden sm:inline">{tDt.feedFooter}</span>
-          <span className="text-slate-600 hidden sm:inline">|</span>
-          <span className="text-slate-400 hidden md:inline">{tDt.latencyFooter}</span>
+          <span className="text-slate-400 dark:text-slate-600">|</span>
+          <span className="text-slate-600 dark:text-slate-400 hidden sm:inline">{tDt.feedFooter}</span>
+          <span className="text-slate-400 dark:text-slate-600 hidden sm:inline">|</span>
+          <span className="text-slate-600 dark:text-slate-400 hidden md:inline">{tDt.latencyFooter}</span>
         </div>
 
         {/* Center: System Clock */}
-        <div className="hidden lg:flex items-center gap-2 text-slate-400">
+        <div className="hidden lg:flex items-center gap-2 text-slate-600 dark:text-slate-400">
           <span>DinhEuro Engine Pro v3.2</span>
         </div>
 
         {/* Right: Security & Compliance Indicator */}
         <div className="flex items-center gap-2 text-[10px]">
-          <span className="flex items-center gap-1 text-slate-400">
-            <ShieldCheck className="w-3 h-3 text-emerald-400" />
+          <span className="flex items-center gap-1 text-slate-600 dark:text-slate-400">
+            <ShieldCheck className="w-3 h-3 text-[#009B77] dark:text-emerald-400" />
             {tDt.e2eEncryption}
           </span>
-          <span className="text-slate-600">|</span>
+          <span className="text-slate-400 dark:text-slate-600">|</span>
           <span className="text-slate-500 hidden sm:inline">{tDt.lgpdAudited}</span>
         </div>
       </footer>
@@ -2485,45 +2520,46 @@ export const DayTradeView: React.FC = () => {
          ========================================================================= */}
 
       {showRiskModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
-          <div className="bg-[#0b1322] border border-slate-700 rounded-2xl max-w-md w-full p-5 space-y-3 shadow-2xl text-left">
-            <div className="flex items-center justify-between border-b border-slate-800 pb-2">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 dark:bg-black/80 backdrop-blur-sm p-4">
+          <div className="bg-white dark:bg-[#0b1322] border border-[#CBD5E1] dark:border-slate-700 rounded-2xl max-w-md w-full p-5 space-y-3 shadow-2xl text-left">
+            <div className="flex items-center justify-between border-b border-[#E2E8F0] dark:border-slate-800 pb-2">
               <div className="flex items-center gap-2">
-                <ShieldCheck className="w-5 h-5 text-emerald-400" />
-                <h3 className="text-sm font-bold text-white uppercase tracking-wider">{tDt.riskModalTitle}</h3>
+                <ShieldCheck className="w-5 h-5 text-[#009B77] dark:text-emerald-400" />
+                <h3 className="text-sm font-bold text-slate-900 dark:text-white uppercase tracking-wider">{tDt.riskModalTitle}</h3>
               </div>
-              <button onClick={() => setShowRiskModal(false)} className="text-slate-400 hover:text-white">
+              <button onClick={() => setShowRiskModal(false)} className="text-slate-500 dark:text-slate-400 hover:text-slate-950 dark:hover:text-white cursor-pointer">
                 <X className="w-4 h-4" />
               </button>
             </div>
 
             <div className="space-y-2.5 text-xs">
               <div>
-                <label className="text-slate-400 block mb-1">{tDt.gainGoalLabel}</label>
+                <label className="text-slate-700 dark:text-slate-400 block mb-1 font-medium">{tDt.gainGoalLabel}</label>
                 <input
                   type="number"
                   value={dailyProfitGoal}
                   onChange={(e) => setDailyProfitGoal(Number(e.target.value))}
-                  className="w-full bg-[#070e1b] border border-slate-700 rounded-xl px-3 py-2 text-white font-mono-numbers text-sm font-bold"
+                  className="w-full bg-[#F8FAFC] dark:bg-[#070e1b] border border-[#CBD5E1] dark:border-slate-700 rounded-xl px-3 py-2 text-slate-900 dark:text-white font-mono-numbers text-sm font-bold"
                 />
               </div>
 
               <div>
-                <label className="text-slate-400 block mb-1">{tDt.dailyStopLossLabel}</label>
+                <label className="text-slate-700 dark:text-slate-400 block mb-1 font-medium">{tDt.dailyStopLossLabel}</label>
                 <input
                   type="number"
                   value={dailyLossLimit}
                   onChange={(e) => setDailyLossLimit(Number(e.target.value))}
-                  className="w-full bg-[#070e1b] border border-slate-700 rounded-xl px-3 py-2 text-white font-mono-numbers text-sm font-bold"
+                  className="w-full bg-[#F8FAFC] dark:bg-[#070e1b] border border-[#CBD5E1] dark:border-slate-700 rounded-xl px-3 py-2 text-slate-900 dark:text-white font-mono-numbers text-sm font-bold"
                 />
               </div>
 
               {isRiskLocked && (
-                <div className="p-2.5 rounded-xl bg-rose-500/20 border border-rose-500/40 text-rose-300 text-xs flex items-center justify-between">
+                <div className="p-2.5 rounded-xl bg-[#FEE2E2] dark:bg-rose-500/20 border border-[#DC2626]/40 dark:border-rose-500/40 text-[#DC2626] dark:text-rose-300 text-xs flex items-center justify-between">
                   <span>{tDt.riskLockTriggered}</span>
                   <button
                     onClick={() => setIsRiskLocked(false)}
-                    className="px-2 py-1 rounded bg-rose-600 text-white font-bold"
+                    data-on-dark="true"
+                    className="px-2 py-1 rounded bg-[#DC2626] dark:bg-rose-600 text-white font-bold cursor-pointer"
                   >
                     {tDt.unlockBtn}
                   </button>
@@ -2531,10 +2567,11 @@ export const DayTradeView: React.FC = () => {
               )}
             </div>
 
-            <div className="flex items-center justify-end gap-2 pt-2 border-t border-slate-800">
+            <div className="flex items-center justify-end gap-2 pt-2 border-t border-[#E2E8F0] dark:border-slate-800">
               <button
                 onClick={() => setShowRiskModal(false)}
-                className="px-3 py-1.5 rounded-lg bg-emerald-600 text-white text-xs font-bold"
+                data-on-dark="true"
+                className="px-3 py-1.5 rounded-lg bg-[#009B77] hover:bg-[#008263] dark:bg-emerald-600 dark:hover:bg-emerald-500 text-white text-xs font-bold cursor-pointer"
               >
                 {tDt.saveParamsBtn}
               </button>
@@ -2544,23 +2581,23 @@ export const DayTradeView: React.FC = () => {
       )}
 
       {showAlertModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
-          <div className="bg-[#0b1322] border border-slate-700 rounded-2xl max-w-sm w-full p-5 space-y-3 shadow-2xl text-left text-xs">
-            <div className="flex items-center justify-between border-b border-slate-800 pb-2">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 dark:bg-black/80 backdrop-blur-sm p-4">
+          <div className="bg-white dark:bg-[#0b1322] border border-[#CBD5E1] dark:border-slate-700 rounded-2xl max-w-sm w-full p-5 space-y-3 shadow-2xl text-left text-xs">
+            <div className="flex items-center justify-between border-b border-[#E2E8F0] dark:border-slate-800 pb-2">
               <div className="flex items-center gap-2">
-                <Bell className="w-4 h-4 text-amber-400" />
-                <h3 className="font-bold text-white uppercase text-xs">{tDt.alertModalTitle}</h3>
+                <Bell className="w-4 h-4 text-[#D99B00] dark:text-amber-400" />
+                <h3 className="font-bold text-slate-900 dark:text-white uppercase text-xs">{tDt.alertModalTitle}</h3>
               </div>
-              <button onClick={() => setShowAlertModal(false)} className="text-slate-400 hover:text-white">
+              <button onClick={() => setShowAlertModal(false)} className="text-slate-500 dark:text-slate-400 hover:text-slate-950 dark:hover:text-white cursor-pointer">
                 <X className="w-4 h-4" />
               </button>
             </div>
 
-            <p className="text-slate-400">{tDt.alertModalDescPrefix} {currentAsset.symbol} {tDt.alertModalDescSuffix}</p>
+            <p className="text-slate-600 dark:text-slate-400">{tDt.alertModalDescPrefix} {currentAsset.symbol} {tDt.alertModalDescSuffix}</p>
             <input
               type="number"
               defaultValue={currentMarketPrice}
-              className="w-full bg-[#070e1b] border border-slate-700 rounded px-3 py-1.5 text-white font-mono-numbers font-bold"
+              className="w-full bg-[#F8FAFC] dark:bg-[#070e1b] border border-[#CBD5E1] dark:border-slate-700 rounded px-3 py-1.5 text-slate-900 dark:text-white font-mono-numbers font-bold"
             />
             <button
               onClick={() => {
@@ -2568,7 +2605,8 @@ export const DayTradeView: React.FC = () => {
                 setOrderNotification(`${tDt.notifications.alertConfiguredPrefix} ${currentAsset.symbol} ${tDt.notifications.alertConfiguredSuffix}`);
                 setTimeout(() => setOrderNotification(null), 3000);
               }}
-              className="w-full py-2 rounded bg-emerald-600 text-white font-bold"
+              data-on-dark="true"
+              className="w-full py-2 rounded bg-[#009B77] hover:bg-[#008263] dark:bg-emerald-600 dark:hover:bg-emerald-500 text-white font-bold cursor-pointer"
             >
               {tDt.createAlertBtn}
             </button>
@@ -2577,40 +2615,40 @@ export const DayTradeView: React.FC = () => {
       )}
 
       {showHelpModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
-          <div className="bg-[#0b1322] border border-slate-700 rounded-2xl max-w-md w-full p-5 space-y-3 shadow-2xl text-left text-xs">
-            <div className="flex items-center justify-between border-b border-slate-800 pb-2">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 dark:bg-black/80 backdrop-blur-sm p-4">
+          <div className="bg-white dark:bg-[#0b1322] border border-[#CBD5E1] dark:border-slate-700 rounded-2xl max-w-md w-full p-5 space-y-3 shadow-2xl text-left text-xs">
+            <div className="flex items-center justify-between border-b border-[#E2E8F0] dark:border-slate-800 pb-2">
               <div className="flex items-center gap-2">
-                <HelpCircle className="w-4 h-4 text-emerald-400" />
-                <h3 className="font-bold text-white uppercase text-xs">{tDt.helpModalTitle}</h3>
+                <HelpCircle className="w-4 h-4 text-[#009B77] dark:text-emerald-400" />
+                <h3 className="font-bold text-slate-900 dark:text-white uppercase text-xs">{tDt.helpModalTitle}</h3>
               </div>
-              <button onClick={() => setShowHelpModal(false)} className="text-slate-400 hover:text-white">
+              <button onClick={() => setShowHelpModal(false)} className="text-slate-500 dark:text-slate-400 hover:text-slate-950 dark:hover:text-white cursor-pointer">
                 <X className="w-4 h-4" />
               </button>
             </div>
 
-            <div className="space-y-1.5 text-slate-300">
-              <div className="flex justify-between p-1 bg-slate-900 rounded">
+            <div className="space-y-1.5 text-slate-700 dark:text-slate-300">
+              <div className="flex justify-between p-1.5 bg-[#F8FAFC] dark:bg-slate-900 rounded border border-[#E2E8F0] dark:border-transparent">
                 <span>{tDt.shortcutBuyMarket}</span>
-                <kbd className="px-1.5 py-0.5 bg-slate-800 rounded font-mono text-emerald-400 font-bold">Shift + B</kbd>
+                <kbd className="px-1.5 py-0.5 bg-white dark:bg-slate-800 border border-[#CBD5E1] dark:border-transparent rounded font-mono text-[#006B52] dark:text-emerald-400 font-bold">Shift + B</kbd>
               </div>
-              <div className="flex justify-between p-1 bg-slate-900 rounded">
+              <div className="flex justify-between p-1.5 bg-[#F8FAFC] dark:bg-slate-900 rounded border border-[#E2E8F0] dark:border-transparent">
                 <span>{tDt.shortcutSellMarket}</span>
-                <kbd className="px-1.5 py-0.5 bg-slate-800 rounded font-mono text-rose-400 font-bold">Shift + S</kbd>
+                <kbd className="px-1.5 py-0.5 bg-white dark:bg-slate-800 border border-[#CBD5E1] dark:border-transparent rounded font-mono text-[#DC2626] dark:text-rose-400 font-bold">Shift + S</kbd>
               </div>
-              <div className="flex justify-between p-1 bg-slate-900 rounded">
+              <div className="flex justify-between p-1.5 bg-[#F8FAFC] dark:bg-slate-900 rounded border border-[#E2E8F0] dark:border-transparent">
                 <span>{tDt.shortcutFlattenNow}</span>
-                <kbd className="px-1.5 py-0.5 bg-slate-800 rounded font-mono text-amber-400 font-bold">{tDt.shortcutSpaceEsc}</kbd>
+                <kbd className="px-1.5 py-0.5 bg-white dark:bg-slate-800 border border-[#CBD5E1] dark:border-transparent rounded font-mono text-[#B45309] dark:text-amber-400 font-bold">{tDt.shortcutSpaceEsc}</kbd>
               </div>
-              <div className="flex justify-between p-1 bg-slate-900 rounded">
+              <div className="flex justify-between p-1.5 bg-[#F8FAFC] dark:bg-slate-900 rounded border border-[#E2E8F0] dark:border-transparent">
                 <span>{tDt.shortcutReverse}</span>
-                <kbd className="px-1.5 py-0.5 bg-slate-800 rounded font-mono text-sky-400 font-bold">Shift + R</kbd>
+                <kbd className="px-1.5 py-0.5 bg-white dark:bg-slate-800 border border-[#CBD5E1] dark:border-transparent rounded font-mono text-[#003399] dark:text-sky-400 font-bold">Shift + R</kbd>
               </div>
             </div>
 
             <button
               onClick={() => setShowHelpModal(false)}
-              className="w-full py-1.5 rounded bg-slate-800 text-slate-200 font-bold hover:text-white"
+              className="w-full py-1.5 rounded bg-[#F1F5F9] hover:bg-[#E2E8F0] dark:bg-slate-800 dark:hover:bg-slate-700 border border-[#CBD5E1] dark:border-transparent text-slate-900 dark:text-slate-200 font-bold cursor-pointer"
             >
               {tDt.closeBtn}
             </button>

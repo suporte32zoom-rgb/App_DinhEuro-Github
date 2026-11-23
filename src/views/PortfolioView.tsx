@@ -139,20 +139,21 @@ export const PortfolioView: React.FC = () => {
   return (
     <div className="space-y-6 pb-12 animate-in fade-in duration-300">
       {/* Portfolio Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-800 pb-5">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#E2E8F0] dark:border-slate-800 pb-5">
         <div>
-          <h1 className="text-xl sm:text-2xl font-black text-white tracking-tight flex items-center gap-2">
-            <Briefcase className="w-6 h-6 text-emerald-400" />
+          <h1 className="text-xl sm:text-2xl font-black text-[#0F172A] dark:text-white tracking-tight flex items-center gap-2">
+            <Briefcase className="w-6 h-6 text-[#006B52] dark:text-emerald-400" />
             <span>{tPort.title}</span>
           </h1>
-          <p className="text-xs text-slate-400 mt-1">
+          <p className="text-xs text-[#475569] dark:text-slate-400 mt-1">
             {tPort.subtitle}
           </p>
         </div>
 
         <button
           onClick={() => setShowAddModal(true)}
-          className="flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-xs font-bold text-white shadow-lg shadow-emerald-950/40 transition cursor-pointer self-start sm:self-auto"
+          data-on-dark="true"
+          className="flex items-center gap-2 px-4 py-2 rounded-xl bg-[#003399] hover:bg-[#002266] dark:bg-gradient-to-r dark:from-emerald-600 dark:to-teal-600 dark:hover:from-emerald-500 dark:hover:to-teal-500 text-xs font-bold text-white shadow-lg shadow-blue-950/20 dark:shadow-emerald-950/40 transition cursor-pointer self-start sm:self-auto"
         >
           <PlusCircle className="w-4 h-4" />
           <span>{tPort.newPosition}</span>
@@ -162,14 +163,14 @@ export const PortfolioView: React.FC = () => {
       {/* KPI Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         {/* Total Value */}
-        <div className="bg-[#0d1627] rounded-2xl border border-slate-800 p-5 shadow-lg">
-          <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">
+        <div className="bg-[#FFFFFF] dark:bg-[#0d1627] rounded-2xl border border-[#E2E8F0] dark:border-slate-800 p-5 shadow-lg">
+          <span className="text-[11px] font-semibold text-[#475569] dark:text-slate-400 uppercase tracking-wider">
             {tPort.totalPortfolioValue}
           </span>
-          <div className="text-2xl sm:text-3xl font-black font-mono-numbers text-white mt-1">
+          <div className="text-2xl sm:text-3xl font-black font-mono-numbers text-[#0F172A] dark:text-white mt-1">
             {formatCurrencyValue(totalPortfolioValueBRL, 'BRL', 2, locale)}
           </div>
-          <div className="flex items-center gap-3 text-xs text-slate-400 mt-2 font-mono">
+          <div className="flex items-center gap-3 text-xs text-[#475569] dark:text-slate-400 mt-2 font-mono">
             <span>
               ≈ €{' '}
               {portfolio.length > 0
@@ -193,13 +194,13 @@ export const PortfolioView: React.FC = () => {
         </div>
 
         {/* Total Profit / Loss */}
-        <div className="bg-[#0d1627] rounded-2xl border border-slate-800 p-5 shadow-lg">
-          <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">
+        <div className="bg-[#FFFFFF] dark:bg-[#0d1627] rounded-2xl border border-[#E2E8F0] dark:border-slate-800 p-5 shadow-lg">
+          <span className="text-[11px] font-semibold text-[#475569] dark:text-slate-400 uppercase tracking-wider">
             {tPort.totalPL}
           </span>
           <div
             className={`text-2xl sm:text-3xl font-black font-mono-numbers mt-1 flex items-baseline gap-1.5 ${
-              portfolio.length === 0 ? 'text-slate-400' : isOverallPositive ? 'text-emerald-400' : 'text-rose-400'
+              portfolio.length === 0 ? 'text-[#475569] dark:text-slate-400' : isOverallPositive ? 'text-[#006B52] dark:text-emerald-400' : 'text-[#DC2626] dark:text-rose-400'
             }`}
           >
             <span>
@@ -210,7 +211,7 @@ export const PortfolioView: React.FC = () => {
           </div>
           <div
             className={`flex items-center gap-1 text-xs font-bold font-mono-numbers mt-2 ${
-              portfolio.length === 0 ? 'text-slate-400' : isOverallPositive ? 'text-emerald-400' : 'text-rose-400'
+              portfolio.length === 0 ? 'text-[#475569] dark:text-slate-400' : isOverallPositive ? 'text-[#006B52] dark:text-emerald-400' : 'text-[#DC2626] dark:text-rose-400'
             }`}
           >
             {portfolio.length > 0 ? (
@@ -225,19 +226,19 @@ export const PortfolioView: React.FC = () => {
         </div>
 
         {/* Positions Count & Diversification */}
-        <div className="bg-[#0d1627] rounded-2xl border border-slate-800 p-5 shadow-lg flex flex-col justify-between">
+        <div className="bg-[#FFFFFF] dark:bg-[#0d1627] rounded-2xl border border-[#E2E8F0] dark:border-slate-800 p-5 shadow-lg flex flex-col justify-between">
           <div>
-            <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">
+            <span className="text-[11px] font-semibold text-[#475569] dark:text-slate-400 uppercase tracking-wider">
               {tPort.diversification}
             </span>
-            <div className="text-2xl sm:text-3xl font-black font-mono-numbers text-white mt-1">
-              {portfolio.length} <span className="text-xs font-normal text-slate-400">{tPort.assetsUnit}</span>
+            <div className="text-2xl sm:text-3xl font-black font-mono-numbers text-[#0F172A] dark:text-white mt-1">
+              {portfolio.length} <span className="text-xs font-normal text-[#475569] dark:text-slate-400">{tPort.assetsUnit}</span>
             </div>
           </div>
 
           {/* Allocation mini progress bars */}
           {portfolio.length > 0 ? (
-            <div className="w-full bg-slate-800 h-2 rounded-full overflow-hidden flex mt-3">
+            <div className="w-full bg-[#E2E8F0] dark:bg-slate-800 h-2 rounded-full overflow-hidden flex mt-3">
               <div
                 style={{ width: `${((typeTotals.stock_br || 0) / (totalPortfolioValueBRL || 1)) * 100}%` }}
                 className="bg-emerald-500 h-full"
@@ -260,7 +261,7 @@ export const PortfolioView: React.FC = () => {
               />
             </div>
           ) : (
-            <div className="mt-3 flex items-center justify-between text-[11px] text-slate-500">
+            <div className="mt-3 flex items-center justify-between text-[11px] text-[#64748B] dark:text-slate-500">
               <span>{tPort.noAssetsAdded}</span>
               <span className="text-[10px]">{tPort.zeroAllocated}</span>
             </div>
@@ -276,30 +277,31 @@ export const PortfolioView: React.FC = () => {
       />
 
       {/* Positions Table or Empty State */}
-      <div className="rounded-2xl bg-[#0d1627] border border-slate-800 overflow-hidden shadow-xl">
-        <div className="p-4 border-b border-slate-800 bg-[#070e1b] flex items-center justify-between">
-          <h3 className="text-xs sm:text-sm font-bold text-white uppercase tracking-wider">
+      <div className="rounded-2xl bg-[#FFFFFF] dark:bg-[#0d1627] border border-[#E2E8F0] dark:border-slate-800 overflow-hidden shadow-xl">
+        <div className="p-4 border-b border-[#E2E8F0] dark:border-slate-800 bg-[#F4F7F9] dark:bg-[#070e1b] flex items-center justify-between">
+          <h3 className="text-xs sm:text-sm font-bold text-[#0F172A] dark:text-white uppercase tracking-wider">
             {tPort.openPositionsTitle}
           </h3>
-          <span className="text-[11px] text-slate-400">
+          <span className="text-[11px] text-[#475569] dark:text-slate-400">
             {portfolio.length > 0 ? tPort.updatedEverySecond : tPort.emptyPortfolioBadge}
           </span>
         </div>
 
         {portfolio.length === 0 ? (
           <div className="py-14 px-6 text-center flex flex-col items-center justify-center space-y-4">
-            <div className="w-14 h-14 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400">
+            <div className="w-14 h-14 rounded-2xl bg-[#E3F7F2] dark:bg-emerald-500/10 border border-[#009B77]/30 dark:border-emerald-500/20 flex items-center justify-center text-[#006B52] dark:text-emerald-400">
               <Wallet className="w-7 h-7" />
             </div>
             <div className="max-w-md space-y-1">
-              <h4 className="text-base font-bold text-white">{tPort.emptyTitle}</h4>
-              <p className="text-xs text-slate-400 leading-relaxed">
+              <h4 className="text-base font-bold text-[#0F172A] dark:text-white">{tPort.emptyTitle}</h4>
+              <p className="text-xs text-[#475569] dark:text-slate-400 leading-relaxed">
                 {tPort.emptyDesc}
               </p>
             </div>
             <button
               onClick={() => setShowAddModal(true)}
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-xs font-bold text-white shadow-lg shadow-emerald-950 transition cursor-pointer"
+              data-on-dark="true"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#003399] hover:bg-[#002266] dark:bg-gradient-to-r dark:from-emerald-600 dark:to-teal-600 dark:hover:from-emerald-500 dark:hover:to-teal-500 text-xs font-bold text-white shadow-lg shadow-blue-950/20 dark:shadow-emerald-950 transition cursor-pointer"
             >
               <PlusCircle className="w-4 h-4" />
               <span>{tPort.addFirstAsset}</span>
@@ -309,7 +311,7 @@ export const PortfolioView: React.FC = () => {
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse text-xs">
               <thead>
-                <tr className="border-b border-slate-800 bg-slate-900/50 text-[11px] font-bold text-slate-400 uppercase tracking-wider">
+                <tr className="border-b border-[#E2E8F0] dark:border-slate-800 bg-[#F4F7F9] dark:bg-slate-900/50 text-[11px] font-bold text-[#475569] dark:text-slate-400 uppercase tracking-wider">
                   <th className="py-3 px-4">{tPort.colAsset}</th>
                   <th className="py-3 px-4 text-right">{tPort.colQty}</th>
                   <th className="py-3 px-4 text-right">{tPort.colAvgPrice}</th>
@@ -319,7 +321,7 @@ export const PortfolioView: React.FC = () => {
                   <th className="py-3 px-4 text-center">{tPort.colActions}</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-800/60">
+              <tbody className="divide-y divide-[#E2E8F0] dark:divide-slate-800/60">
                 {positionsWithLiveMetrics.map((pos) => {
                   const pctInfo = formatSignedPercentChange(pos.profitPercent, 2, locale);
                   const posCategory =
@@ -332,17 +334,17 @@ export const PortfolioView: React.FC = () => {
                       : 'forex';
                   const dec = getAssetPriceDecimals(pos.currentPrice, pos.currency, posCategory);
                   return (
-                    <tr key={pos.id} className="hover:bg-slate-800/40 transition">
+                    <tr key={pos.id} className="hover:bg-[#F8FAFC] dark:hover:bg-slate-800/40 transition">
                       <td className="py-3.5 px-4">
                         <div>
-                          <div className="font-extrabold text-white text-xs">{pos.symbol}</div>
-                          <div className="text-[11px] text-slate-400">{pos.displayName}</div>
+                          <div className="font-extrabold text-[#0F172A] dark:text-white text-xs">{pos.symbol}</div>
+                          <div className="text-[11px] text-[#475569] dark:text-slate-400">{pos.displayName}</div>
                         </div>
                       </td>
-                      <td className="py-3.5 px-4 text-right font-mono-numbers font-semibold text-slate-200">
+                      <td className="py-3.5 px-4 text-right font-mono-numbers font-semibold text-[#0F172A] dark:text-slate-200">
                         {pos.quantity.toLocaleString(locale)}
                       </td>
-                      <td className="py-3.5 px-4 text-right font-mono-numbers text-slate-300">
+                      <td className="py-3.5 px-4 text-right font-mono-numbers text-[#334155] dark:text-slate-300">
                         {formatCurrencyValue(pos.averageBuyPrice, pos.currency, dec, locale)}
                       </td>
                       <td className="py-3.5 px-4 text-right">
@@ -352,8 +354,8 @@ export const PortfolioView: React.FC = () => {
                           rates={universalRates}
                           category={posCategory}
                           layout="compact"
-                          primaryClassName="font-mono-numbers font-bold text-white text-xs"
-                          secondaryClassName="text-[10px] font-mono-numbers text-emerald-400"
+                          primaryClassName="font-mono-numbers font-bold text-[#0F172A] dark:text-white text-xs"
+                          secondaryClassName="text-[10px] font-mono-numbers text-[#006B52] dark:text-emerald-400"
                         />
                       </td>
                       <td className="py-3.5 px-4 text-right">
@@ -363,14 +365,14 @@ export const PortfolioView: React.FC = () => {
                           rates={universalRates}
                           category={posCategory}
                           layout="compact"
-                          primaryClassName="font-mono-numbers font-bold text-white text-xs"
-                          secondaryClassName="text-[10px] font-mono-numbers text-emerald-400 font-medium"
+                          primaryClassName="font-mono-numbers font-bold text-[#0F172A] dark:text-white text-xs"
+                          secondaryClassName="text-[10px] font-mono-numbers text-[#006B52] dark:text-emerald-400 font-medium"
                         />
                       </td>
                       <td className="py-3.5 px-4 text-right font-mono-numbers font-bold">
                         <span
                           className={`inline-flex items-center gap-1 px-2 py-0.5 rounded ${
-                            !pctInfo.isNegative ? 'text-emerald-400 bg-emerald-500/10' : 'text-rose-400 bg-rose-500/10'
+                            !pctInfo.isNegative ? 'text-[#006B52] bg-[#E3F7F2] dark:text-emerald-400 dark:bg-emerald-500/10' : 'text-[#DC2626] bg-[#FEE2E2] dark:text-rose-400 dark:bg-rose-500/10'
                           }`}
                         >
                           {formatSignedCurrencyChange(pos.profitLoss, pos.currency, 2, locale)} ({pctInfo.text})
@@ -379,7 +381,7 @@ export const PortfolioView: React.FC = () => {
                       <td className="py-3.5 px-4 text-center">
                         <button
                           onClick={() => removePortfolioPosition(pos.id)}
-                          className="p-1.5 rounded-lg text-slate-500 hover:text-rose-400 hover:bg-rose-500/10 transition cursor-pointer"
+                          className="p-1.5 rounded-lg text-[#64748B] hover:text-[#DC2626] dark:text-slate-500 dark:hover:text-rose-400 hover:bg-[#FEE2E2] dark:hover:bg-rose-500/10 transition cursor-pointer"
                           title={tPort.removeTooltip}
                         >
                           <Trash2 className="w-4 h-4" />
@@ -397,32 +399,32 @@ export const PortfolioView: React.FC = () => {
       {/* Modal Add Position */}
       {showAddModal && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 backdrop-blur-sm p-4"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4"
           onClick={() => setShowAddModal(false)}
         >
           <div
-            className="w-full max-w-md rounded-2xl bg-slate-900 border border-slate-700 p-6 shadow-2xl text-slate-100 animate-in fade-in duration-200"
+            className="w-full max-w-md rounded-2xl bg-[#FFFFFF] dark:bg-slate-900 border border-[#CBD5E1] dark:border-slate-700 p-6 shadow-2xl text-[#0F172A] dark:text-slate-100 animate-in fade-in duration-200"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-base font-bold text-white flex items-center gap-2">
-                <PlusCircle className="w-5 h-5 text-emerald-400" />
+              <h3 className="text-base font-bold text-[#0F172A] dark:text-white flex items-center gap-2">
+                <PlusCircle className="w-5 h-5 text-[#006B52] dark:text-emerald-400" />
                 <span>{tPort.modalTitle}</span>
               </h3>
-              <button onClick={() => setShowAddModal(false)} className="text-slate-400 hover:text-white">
+              <button onClick={() => setShowAddModal(false)} className="text-[#475569] hover:text-[#0F172A] dark:text-slate-400 dark:hover:text-white cursor-pointer">
                 <X className="w-5 h-5" />
               </button>
             </div>
 
             <form onSubmit={handleAddSubmit} className="space-y-4">
               <div>
-                <label className="block text-xs font-medium text-slate-300 mb-1">
+                <label className="block text-xs font-medium text-[#334155] dark:text-slate-300 mb-1">
                   {tPort.selectCatalogLabel}
                 </label>
                 <select
                   defaultValue=""
                   onChange={(e) => handleSelectAssetPreset(e.target.value)}
-                  className="w-full bg-slate-950 border border-slate-700 rounded-xl px-3.5 py-2 text-xs text-white focus:outline-none focus:border-emerald-500"
+                  className="w-full bg-[#F8FAFC] dark:bg-slate-950 border border-[#CBD5E1] dark:border-slate-700 rounded-xl px-3.5 py-2 text-xs text-[#0F172A] dark:text-white focus:outline-none focus:border-[#003399] dark:focus:border-emerald-500"
                 >
                   <option value="">{tPort.selectCatalogPlaceholder}</option>
                   <optgroup label={tPort.groupStocksBr}>
@@ -457,35 +459,35 @@ export const PortfolioView: React.FC = () => {
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-slate-300 mb-1">{tPort.tickerLabel}</label>
+                <label className="block text-xs font-medium text-[#334155] dark:text-slate-300 mb-1">{tPort.tickerLabel}</label>
                 <input
                   type="text"
                   required
                   value={newSymbol}
                   onChange={(e) => setNewSymbol(e.target.value.toUpperCase())}
                   placeholder={tPort.tickerPlaceholder}
-                  className="w-full bg-slate-950 border border-slate-700 rounded-xl px-3.5 py-2 text-xs text-white font-mono uppercase focus:outline-none focus:border-emerald-500"
+                  className="w-full bg-[#F8FAFC] dark:bg-slate-950 border border-[#CBD5E1] dark:border-slate-700 rounded-xl px-3.5 py-2 text-xs text-[#0F172A] dark:text-white font-mono uppercase focus:outline-none focus:border-[#003399] dark:focus:border-emerald-500"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-slate-300 mb-1">{tPort.assetNameLabel}</label>
+                <label className="block text-xs font-medium text-[#334155] dark:text-slate-300 mb-1">{tPort.assetNameLabel}</label>
                 <input
                   type="text"
                   value={newName}
                   onChange={(e) => setNewName(e.target.value)}
                   placeholder={tPort.assetNamePlaceholder}
-                  className="w-full bg-slate-950 border border-slate-700 rounded-xl px-3.5 py-2 text-xs text-white focus:outline-none focus:border-emerald-500"
+                  className="w-full bg-[#F8FAFC] dark:bg-slate-950 border border-[#CBD5E1] dark:border-slate-700 rounded-xl px-3.5 py-2 text-xs text-[#0F172A] dark:text-white focus:outline-none focus:border-[#003399] dark:focus:border-emerald-500"
                 />
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-medium text-slate-300 mb-1">{tPort.categoryLabel}</label>
+                  <label className="block text-xs font-medium text-[#334155] dark:text-slate-300 mb-1">{tPort.categoryLabel}</label>
                   <select
                     value={newType}
                     onChange={(e) => setNewType(e.target.value as any)}
-                    className="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none"
+                    className="w-full bg-[#F8FAFC] dark:bg-slate-950 border border-[#CBD5E1] dark:border-slate-700 rounded-xl px-3 py-2 text-xs text-[#0F172A] dark:text-white focus:outline-none"
                   >
                     <option value="stock_br">{tPort.catStockBr}</option>
                     <option value="stock_us">{tPort.catStockUs}</option>
@@ -495,11 +497,11 @@ export const PortfolioView: React.FC = () => {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-medium text-slate-300 mb-1">{tPort.currencyLabel}</label>
+                  <label className="block text-xs font-medium text-[#334155] dark:text-slate-300 mb-1">{tPort.currencyLabel}</label>
                   <select
                     value={newCurrency}
                     onChange={(e) => setNewCurrency(e.target.value as any)}
-                    className="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none"
+                    className="w-full bg-[#F8FAFC] dark:bg-slate-950 border border-[#CBD5E1] dark:border-slate-700 rounded-xl px-3 py-2 text-xs text-[#0F172A] dark:text-white focus:outline-none"
                   >
                     <option value="BRL">{tPort.curBrl}</option>
                     <option value="EUR">{tPort.curEur}</option>
@@ -510,26 +512,26 @@ export const PortfolioView: React.FC = () => {
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-medium text-slate-300 mb-1">{tPort.qtyLabel}</label>
+                  <label className="block text-xs font-medium text-[#334155] dark:text-slate-300 mb-1">{tPort.qtyLabel}</label>
                   <input
                     type="number"
                     step="any"
                     required
                     value={newQuantity}
                     onChange={(e) => setNewQuantity(Number(e.target.value))}
-                    className="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white font-mono-numbers focus:outline-none"
+                    className="w-full bg-[#F8FAFC] dark:bg-slate-950 border border-[#CBD5E1] dark:border-slate-700 rounded-xl px-3 py-2 text-xs text-[#0F172A] dark:text-white font-mono-numbers focus:outline-none"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-medium text-slate-300 mb-1">{tPort.avgBuyPriceLabel}</label>
+                  <label className="block text-xs font-medium text-[#334155] dark:text-slate-300 mb-1">{tPort.avgBuyPriceLabel}</label>
                   <input
                     type="number"
                     step="any"
                     required
                     value={newBuyPrice}
                     onChange={(e) => setNewBuyPrice(Number(e.target.value))}
-                    className="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white font-mono-numbers focus:outline-none"
+                    className="w-full bg-[#F8FAFC] dark:bg-slate-950 border border-[#CBD5E1] dark:border-slate-700 rounded-xl px-3 py-2 text-xs text-[#0F172A] dark:text-white font-mono-numbers focus:outline-none"
                   />
                 </div>
               </div>
@@ -538,13 +540,14 @@ export const PortfolioView: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setShowAddModal(false)}
-                  className="px-3 py-1.5 rounded-lg border border-slate-700 text-xs text-slate-300 hover:bg-slate-800"
+                  className="px-3 py-1.5 rounded-lg border border-[#CBD5E1] dark:border-slate-700 text-xs font-semibold text-[#334155] dark:text-slate-300 hover:bg-[#F1F5F9] dark:hover:bg-slate-800 cursor-pointer"
                 >
                   {tPort.cancel}
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-1.5 rounded-lg bg-gradient-to-r from-emerald-600 to-teal-600 text-xs font-bold text-white hover:from-emerald-500 hover:to-teal-500 transition cursor-pointer"
+                  data-on-dark="true"
+                  className="px-4 py-1.5 rounded-lg bg-[#003399] hover:bg-[#002266] dark:bg-gradient-to-r dark:from-emerald-600 dark:to-teal-600 dark:hover:from-emerald-500 dark:hover:to-teal-500 text-xs font-bold text-white transition cursor-pointer"
                 >
                   {tPort.addToPortfolio}
                 </button>

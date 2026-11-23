@@ -101,9 +101,9 @@ export const ToolsView: React.FC = () => {
   return (
     <div className="space-y-6 pb-12 animate-in fade-in duration-300">
       {/* Header */}
-      <div className="border-b border-slate-800 pb-5">
-        <h1 className="text-xl sm:text-2xl font-bold text-white tracking-tight flex items-center gap-2">
-          <Calculator className="w-6 h-6 text-emerald-400 shrink-0" />
+      <div className="border-b border-[#E2E8F0] dark:border-slate-800 pb-5">
+        <h1 className="text-xl sm:text-2xl font-bold text-[#0F172A] dark:text-white tracking-tight flex items-center gap-2">
+          <Calculator className="w-6 h-6 text-[#006B52] dark:text-emerald-400 shrink-0" />
           <span>
             {activeTool === 'cambio'
               ? t.tools.titleFx
@@ -114,7 +114,7 @@ export const ToolsView: React.FC = () => {
               : t.tools.titleTax}
           </span>
         </h1>
-        <p className="text-xs text-slate-400 mt-1">
+        <p className="text-xs text-[#475569] dark:text-slate-400 mt-1">
           {t.tools.subtitle}
         </p>
       </div>
@@ -126,14 +126,16 @@ export const ToolsView: React.FC = () => {
       >
         {toolTabs.map((tab) => {
           const Icon = tab.icon;
+          const isActive = activeTool === tab.id;
           return (
             <button
               key={tab.id}
               onClick={() => setActiveTool(tab.id as any)}
+              data-on-dark={isActive ? 'true' : undefined}
               className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold transition cursor-pointer flex-shrink-0 ${
-                activeTool === tab.id
-                  ? 'bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-md shadow-emerald-950/40'
-                  : 'bg-slate-900 border border-slate-800 text-slate-400 hover:text-white hover:bg-slate-800'
+                isActive
+                  ? 'bg-[#003399] hover:bg-[#002266] dark:bg-gradient-to-r dark:from-emerald-600 dark:to-teal-600 text-white shadow-md shadow-blue-950/20 dark:shadow-emerald-950/40'
+                  : 'bg-[#FFFFFF] dark:bg-slate-900 border border-[#CBD5E1] dark:border-slate-800 text-[#334155] dark:text-slate-400 hover:text-[#0F172A] dark:hover:text-white hover:bg-[#F1F5F9] dark:hover:bg-slate-800'
               }`}
             >
               <Icon className="w-3.5 h-3.5" />
@@ -157,51 +159,51 @@ export const ToolsView: React.FC = () => {
       {activeTool === 'juros' && (
         <div className="space-y-6">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <div className="lg:col-span-2 rounded-2xl bg-[#0d1627] border border-slate-800 p-5 sm:p-6 shadow-xl space-y-5">
+            <div className="lg:col-span-2 rounded-2xl bg-[#FFFFFF] dark:bg-[#0d1627] border border-[#E2E8F0] dark:border-slate-800 p-5 sm:p-6 shadow-xl space-y-5">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                 <div>
-                  <h2 className="text-base font-bold text-white flex items-center gap-2">
-                    <TrendingUp className="w-5 h-5 text-emerald-400" />
+                  <h2 className="text-base font-bold text-[#0F172A] dark:text-white flex items-center gap-2">
+                    <TrendingUp className="w-5 h-5 text-[#006B52] dark:text-emerald-400" />
                     <span>{t.tools.compoundTitle}</span>
                   </h2>
-                  <p className="text-xs text-slate-400 mt-1">
+                  <p className="text-xs text-[#475569] dark:text-slate-400 mt-1">
                     {t.tools.compoundSubtitle}
                   </p>
                 </div>
               </div>
 
               {/* Input Parameters Grid */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs bg-[#070e1b] p-4 rounded-xl border border-slate-800/80">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs bg-[#F4F7F9] dark:bg-[#070e1b] p-4 rounded-xl border border-[#E2E8F0] dark:border-slate-800/80">
                 <div>
                   <div className="flex items-center justify-between mb-1">
-                    <label className="text-slate-400 font-medium">{t.tools.initialPrincipalLabel}</label>
-                    <span className="text-slate-500 font-mono-numbers text-[11px]">{t.tools.initialPrincipalHint}</span>
+                    <label className="text-[#334155] dark:text-slate-400 font-medium">{t.tools.initialPrincipalLabel}</label>
+                    <span className="text-[#64748B] dark:text-slate-500 font-mono-numbers text-[11px]">{t.tools.initialPrincipalHint}</span>
                   </div>
                   <input
                     type="number"
                     value={initialPrincipal}
                     onChange={(e) => setInitialPrincipal(Math.max(0, Number(e.target.value)))}
-                    className="w-full bg-slate-900 border border-slate-700 focus:border-emerald-500 rounded-xl px-3 py-2 text-white font-mono-numbers text-sm transition outline-none"
+                    className="w-full bg-[#FFFFFF] dark:bg-slate-900 border border-[#CBD5E1] dark:border-slate-700 focus:border-[#003399] dark:focus:border-emerald-500 rounded-xl px-3 py-2 text-[#0F172A] dark:text-white font-mono-numbers text-sm transition outline-none"
                   />
                 </div>
 
                 <div>
                   <div className="flex items-center justify-between mb-1">
-                    <label className="text-slate-400 font-medium">{t.tools.monthlyContribLabel}</label>
-                    <span className="text-emerald-400 font-mono-numbers text-[11px]">{t.tools.monthlyContribHint}</span>
+                    <label className="text-[#334155] dark:text-slate-400 font-medium">{t.tools.monthlyContribLabel}</label>
+                    <span className="text-[#006B52] dark:text-emerald-400 font-mono-numbers text-[11px]">{t.tools.monthlyContribHint}</span>
                   </div>
                   <input
                     type="number"
                     value={monthlyContribution}
                     onChange={(e) => setMonthlyContribution(Math.max(0, Number(e.target.value)))}
-                    className="w-full bg-slate-900 border border-slate-700 focus:border-emerald-500 rounded-xl px-3 py-2 text-white font-mono-numbers text-sm transition outline-none"
+                    className="w-full bg-[#FFFFFF] dark:bg-slate-900 border border-[#CBD5E1] dark:border-slate-700 focus:border-[#003399] dark:focus:border-emerald-500 rounded-xl px-3 py-2 text-[#0F172A] dark:text-white font-mono-numbers text-sm transition outline-none"
                   />
                 </div>
 
                 <div>
                   <div className="flex items-center justify-between mb-1">
-                    <label className="text-slate-400 font-medium">{t.tools.annualRateLabel}</label>
-                    <span className="text-cyan-400 font-mono-numbers text-[11px]">
+                    <label className="text-[#334155] dark:text-slate-400 font-medium">{t.tools.annualRateLabel}</label>
+                    <span className="text-[#003399] dark:text-cyan-400 font-mono-numbers text-[11px]">
                       ~{((Math.pow(1 + annualRate / 100, 1 / 12) - 1) * 100).toFixed(2)}{t.tools.rateMonthlySuffix}
                     </span>
                   </div>
@@ -210,14 +212,14 @@ export const ToolsView: React.FC = () => {
                     step="0.1"
                     value={annualRate}
                     onChange={(e) => setAnnualRate(Math.max(0, Number(e.target.value)))}
-                    className="w-full bg-slate-900 border border-slate-700 focus:border-emerald-500 rounded-xl px-3 py-2 text-white font-mono-numbers text-sm transition outline-none"
+                    className="w-full bg-[#FFFFFF] dark:bg-slate-900 border border-[#CBD5E1] dark:border-slate-700 focus:border-[#003399] dark:focus:border-emerald-500 rounded-xl px-3 py-2 text-[#0F172A] dark:text-white font-mono-numbers text-sm transition outline-none"
                   />
                 </div>
 
                 <div>
                   <div className="flex items-center justify-between mb-1">
-                    <label className="text-slate-400 font-medium">{t.tools.yearsLabel}</label>
-                    <span className="text-amber-400 font-mono-numbers text-[11px]">
+                    <label className="text-[#334155] dark:text-slate-400 font-medium">{t.tools.yearsLabel}</label>
+                    <span className="text-[#B45309] dark:text-amber-400 font-mono-numbers text-[11px]">
                       {years * 12} {t.tools.monthsUnit}
                     </span>
                   </div>
@@ -227,37 +229,37 @@ export const ToolsView: React.FC = () => {
                     max="50"
                     value={years}
                     onChange={(e) => setYears(Math.max(1, Number(e.target.value)))}
-                    className="w-full bg-slate-900 border border-slate-700 focus:border-emerald-500 rounded-xl px-3 py-2 text-white font-mono-numbers text-sm transition outline-none"
+                    className="w-full bg-[#FFFFFF] dark:bg-slate-900 border border-[#CBD5E1] dark:border-slate-700 focus:border-[#003399] dark:focus:border-emerald-500 rounded-xl px-3 py-2 text-[#0F172A] dark:text-white font-mono-numbers text-sm transition outline-none"
                   />
                 </div>
               </div>
 
               {/* Results Grid */}
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                <div className="bg-[#070e1b] rounded-xl p-3.5 border border-slate-800">
-                  <span className="text-[10px] text-slate-400 uppercase tracking-wider">{t.tools.totalInvestedLabel}</span>
-                  <p className="text-lg font-bold font-mono-numbers text-blue-400 mt-1">
+                <div className="bg-[#F4F7F9] dark:bg-[#070e1b] rounded-xl p-3.5 border border-[#E2E8F0] dark:border-slate-800">
+                  <span className="text-[10px] text-[#475569] dark:text-slate-400 uppercase tracking-wider">{t.tools.totalInvestedLabel}</span>
+                  <p className="text-lg font-bold font-mono-numbers text-[#003399] dark:text-blue-400 mt-1">
                     {formatCurrencyValue(compoundResult.totalInvested, 'BRL')}
                   </p>
-                  <span className="text-[10px] text-slate-500">{t.tools.totalInvestedHint}</span>
+                  <span className="text-[10px] text-[#64748B] dark:text-slate-500">{t.tools.totalInvestedHint}</span>
                 </div>
 
-                <div className="bg-[#070e1b] rounded-xl p-3.5 border border-slate-800">
-                  <span className="text-[10px] text-slate-400 uppercase tracking-wider">{t.tools.totalInterestLabel}</span>
-                  <p className="text-lg font-bold font-mono-numbers text-emerald-400 mt-1">
+                <div className="bg-[#F4F7F9] dark:bg-[#070e1b] rounded-xl p-3.5 border border-[#E2E8F0] dark:border-slate-800">
+                  <span className="text-[10px] text-[#475569] dark:text-slate-400 uppercase tracking-wider">{t.tools.totalInterestLabel}</span>
+                  <p className="text-lg font-bold font-mono-numbers text-[#006B52] dark:text-emerald-400 mt-1">
                     +{formatCurrencyValue(compoundResult.totalInterest, 'BRL')}
                   </p>
-                  <span className="text-[10px] text-emerald-500 font-semibold">
+                  <span className="text-[10px] text-[#006B52] dark:text-emerald-500 font-semibold">
                     {((compoundResult.totalInterest / compoundResult.finalBalance) * 100).toFixed(0)}{t.tools.ofBalanceSuffix}
                   </span>
                 </div>
 
-                <div className="bg-[#070e1b] rounded-xl p-3.5 border border-slate-800">
-                  <span className="text-[10px] text-slate-400 uppercase tracking-wider">{t.tools.finalBalanceLabel}</span>
-                  <p className="text-lg font-black font-mono-numbers text-amber-400 mt-1">
+                <div className="bg-[#F4F7F9] dark:bg-[#070e1b] rounded-xl p-3.5 border border-[#E2E8F0] dark:border-slate-800">
+                  <span className="text-[10px] text-[#475569] dark:text-slate-400 uppercase tracking-wider">{t.tools.finalBalanceLabel}</span>
+                  <p className="text-lg font-black font-mono-numbers text-[#B45309] dark:text-amber-400 mt-1">
                     {formatCurrencyValue(compoundResult.finalBalance, 'BRL')}
                   </p>
-                  <span className="text-[10px] text-slate-500">{t.tools.finalBalanceHint}</span>
+                  <span className="text-[10px] text-[#64748B] dark:text-slate-500">{t.tools.finalBalanceHint}</span>
                 </div>
               </div>
 
@@ -276,16 +278,16 @@ export const ToolsView: React.FC = () => {
               {/* Annual Breakdown Table */}
               <div className="space-y-2 pt-2">
                 <div className="flex items-center justify-between">
-                  <h3 className="text-xs font-bold text-white uppercase tracking-wider">
+                  <h3 className="text-xs font-bold text-[#0F172A] dark:text-white uppercase tracking-wider">
                     {t.tools.annualBreakdownTitle}
                   </h3>
-                  <span className="text-[11px] text-slate-400 font-mono-numbers">
+                  <span className="text-[11px] text-[#475569] dark:text-slate-400 font-mono-numbers">
                     {compoundResult.breakdown.length} {t.tools.periodsComputedSuffix}
                   </span>
                 </div>
-                <div className="max-h-52 overflow-y-auto no-scrollbar rounded-xl border border-slate-800">
+                <div className="max-h-52 overflow-y-auto no-scrollbar rounded-xl border border-[#E2E8F0] dark:border-slate-800">
                   <table className="w-full text-left text-[11px]">
-                    <thead className="bg-[#070e1b] text-slate-400 border-b border-slate-800 sticky top-0">
+                    <thead className="bg-[#F4F7F9] dark:bg-[#070e1b] text-[#475569] dark:text-slate-400 border-b border-[#E2E8F0] dark:border-slate-800 sticky top-0">
                       <tr>
                         <th className="py-2.5 px-3">{t.tools.colYear}</th>
                         <th className="py-2.5 px-3 text-right">{t.tools.colTotalInvested}</th>
@@ -293,17 +295,17 @@ export const ToolsView: React.FC = () => {
                         <th className="py-2.5 px-3 text-right">{t.tools.colFinalBalance}</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-slate-800/60 font-mono-numbers">
+                    <tbody className="divide-y divide-[#E2E8F0] dark:divide-slate-800/60 font-mono-numbers">
                       {compoundResult.breakdown.map((row) => (
-                        <tr key={row.year} className="hover:bg-slate-800/40 transition">
-                          <td className="py-2 px-3 font-semibold text-white">{t.tools.yearPrefix} {row.year}</td>
-                          <td className="py-2 px-3 text-right text-slate-300">
+                        <tr key={row.year} className="hover:bg-[#F8FAFC] dark:hover:bg-slate-800/40 transition">
+                          <td className="py-2 px-3 font-semibold text-[#0F172A] dark:text-white">{t.tools.yearPrefix} {row.year}</td>
+                          <td className="py-2 px-3 text-right text-[#334155] dark:text-slate-300">
                             {formatCurrencyValue(row.totalInvested, 'BRL')}
                           </td>
-                          <td className="py-2 px-3 text-right text-emerald-400">
+                          <td className="py-2 px-3 text-right text-[#006B52] dark:text-emerald-400">
                             +{formatCurrencyValue(row.interestEarned, 'BRL')}
                           </td>
-                          <td className="py-2 px-3 text-right font-bold text-amber-300">
+                          <td className="py-2 px-3 text-right font-bold text-[#B45309] dark:text-amber-300">
                             {formatCurrencyValue(row.totalBalance, 'BRL')}
                           </td>
                         </tr>
@@ -317,110 +319,110 @@ export const ToolsView: React.FC = () => {
             {/* Right Column: Presets & Educational Strategy */}
             <div className="space-y-5">
               {/* Quick Presets */}
-              <div className="rounded-2xl bg-[#0d1627] border border-slate-800 p-5 shadow-xl space-y-3">
-                <h3 className="text-sm font-bold text-white flex items-center gap-2">
-                  <Sparkles className="w-4 h-4 text-amber-400" />
+              <div className="rounded-2xl bg-[#FFFFFF] dark:bg-[#0d1627] border border-[#E2E8F0] dark:border-slate-800 p-5 shadow-xl space-y-3">
+                <h3 className="text-sm font-bold text-[#0F172A] dark:text-white flex items-center gap-2">
+                  <Sparkles className="w-4 h-4 text-[#B45309] dark:text-amber-400" />
                   <span>{t.tools.presetsTitle}</span>
                 </h3>
-                <p className="text-xs text-slate-400">
+                <p className="text-xs text-[#475569] dark:text-slate-400">
                   {t.tools.presetsSubtitle}
                 </p>
                 <div className="space-y-2 pt-1">
                   <button
                     type="button"
                     onClick={() => applyPreset('milhao')}
-                    className="w-full p-3 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-800 hover:border-emerald-500/40 text-left transition cursor-pointer flex items-center justify-between group"
+                    className="w-full p-3 rounded-xl bg-[#F4F7F9] hover:bg-[#E6EEFF] dark:bg-slate-900 dark:hover:bg-slate-800 border border-[#E2E8F0] dark:border-slate-800 hover:border-[#003399]/35 dark:hover:border-emerald-500/40 text-left transition cursor-pointer flex items-center justify-between group"
                   >
                     <div>
-                      <div className="text-xs font-bold text-white group-hover:text-emerald-400 transition">
+                      <div className="text-xs font-bold text-[#0F172A] dark:text-white group-hover:text-[#003399] dark:group-hover:text-emerald-400 transition">
                         {t.tools.presetMilhaoTitle}
                       </div>
-                      <div className="text-[11px] text-slate-400">
+                      <div className="text-[11px] text-[#475569] dark:text-slate-400">
                         {t.tools.presetMilhaoDesc}
                       </div>
                     </div>
-                    <ArrowUpRight className="w-4 h-4 text-slate-500 group-hover:text-emerald-400 transition" />
+                    <ArrowUpRight className="w-4 h-4 text-[#64748B] dark:text-slate-500 group-hover:text-[#003399] dark:group-hover:text-emerald-400 transition" />
                   </button>
 
                   <button
                     type="button"
                     onClick={() => applyPreset('aposentadoria')}
-                    className="w-full p-3 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-800 hover:border-emerald-500/40 text-left transition cursor-pointer flex items-center justify-between group"
+                    className="w-full p-3 rounded-xl bg-[#F4F7F9] hover:bg-[#E6EEFF] dark:bg-slate-900 dark:hover:bg-slate-800 border border-[#E2E8F0] dark:border-slate-800 hover:border-[#003399]/35 dark:hover:border-emerald-500/40 text-left transition cursor-pointer flex items-center justify-between group"
                   >
                     <div>
-                      <div className="text-xs font-bold text-white group-hover:text-emerald-400 transition">
+                      <div className="text-xs font-bold text-[#0F172A] dark:text-white group-hover:text-[#003399] dark:group-hover:text-emerald-400 transition">
                         {t.tools.presetAposTitle}
                       </div>
-                      <div className="text-[11px] text-slate-400">
+                      <div className="text-[11px] text-[#475569] dark:text-slate-400">
                         {t.tools.presetAposDesc}
                       </div>
                     </div>
-                    <ArrowUpRight className="w-4 h-4 text-slate-500 group-hover:text-emerald-400 transition" />
+                    <ArrowUpRight className="w-4 h-4 text-[#64748B] dark:text-slate-500 group-hover:text-[#003399] dark:group-hover:text-emerald-400 transition" />
                   </button>
 
                   <button
                     type="button"
                     onClick={() => applyPreset('independencia')}
-                    className="w-full p-3 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-800 hover:border-emerald-500/40 text-left transition cursor-pointer flex items-center justify-between group"
+                    className="w-full p-3 rounded-xl bg-[#F4F7F9] hover:bg-[#E6EEFF] dark:bg-slate-900 dark:hover:bg-slate-800 border border-[#E2E8F0] dark:border-slate-800 hover:border-[#003399]/35 dark:hover:border-emerald-500/40 text-left transition cursor-pointer flex items-center justify-between group"
                   >
                     <div>
-                      <div className="text-xs font-bold text-white group-hover:text-emerald-400 transition">
+                      <div className="text-xs font-bold text-[#0F172A] dark:text-white group-hover:text-[#003399] dark:group-hover:text-emerald-400 transition">
                         {t.tools.presetIndepTitle}
                       </div>
-                      <div className="text-[11px] text-slate-400">
+                      <div className="text-[11px] text-[#475569] dark:text-slate-400">
                         {t.tools.presetIndepDesc}
                       </div>
                     </div>
-                    <ArrowUpRight className="w-4 h-4 text-slate-500 group-hover:text-emerald-400 transition" />
+                    <ArrowUpRight className="w-4 h-4 text-[#64748B] dark:text-slate-500 group-hover:text-[#003399] dark:group-hover:text-emerald-400 transition" />
                   </button>
 
                   <button
                     type="button"
                     onClick={() => applyPreset('reserva')}
-                    className="w-full p-3 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-800 hover:border-emerald-500/40 text-left transition cursor-pointer flex items-center justify-between group"
+                    className="w-full p-3 rounded-xl bg-[#F4F7F9] hover:bg-[#E6EEFF] dark:bg-slate-900 dark:hover:bg-slate-800 border border-[#E2E8F0] dark:border-slate-800 hover:border-[#003399]/35 dark:hover:border-emerald-500/40 text-left transition cursor-pointer flex items-center justify-between group"
                   >
                     <div>
-                      <div className="text-xs font-bold text-white group-hover:text-emerald-400 transition">
+                      <div className="text-xs font-bold text-[#0F172A] dark:text-white group-hover:text-[#003399] dark:group-hover:text-emerald-400 transition">
                         {t.tools.presetReservaTitle}
                       </div>
-                      <div className="text-[11px] text-slate-400">
+                      <div className="text-[11px] text-[#475569] dark:text-slate-400">
                         {t.tools.presetReservaDesc}
                       </div>
                     </div>
-                    <ArrowUpRight className="w-4 h-4 text-slate-500 group-hover:text-emerald-400 transition" />
+                    <ArrowUpRight className="w-4 h-4 text-[#64748B] dark:text-slate-500 group-hover:text-[#003399] dark:group-hover:text-emerald-400 transition" />
                   </button>
                 </div>
               </div>
 
               {/* Educational Card */}
-              <div className="rounded-2xl bg-[#0d1627] border border-slate-800 p-5 shadow-xl space-y-3">
-                <h3 className="text-sm font-bold text-white flex items-center gap-2">
-                  <PiggyBank className="w-4 h-4 text-emerald-400" />
+              <div className="rounded-2xl bg-[#FFFFFF] dark:bg-[#0d1627] border border-[#E2E8F0] dark:border-slate-800 p-5 shadow-xl space-y-3">
+                <h3 className="text-sm font-bold text-[#0F172A] dark:text-white flex items-center gap-2">
+                  <PiggyBank className="w-4 h-4 text-[#006B52] dark:text-emerald-400" />
                   <span>{t.tools.snowballTitle}</span>
                 </h3>
-                <p className="text-xs text-slate-300 leading-relaxed">
+                <p className="text-xs text-[#334155] dark:text-slate-300 leading-relaxed">
                   {t.tools.snowballBodyPrefix}{' '}
-                  <strong className="text-emerald-400 font-mono-numbers">
+                  <strong className="text-[#006B52] dark:text-emerald-400 font-mono-numbers">
                     {((compoundResult.totalInterest / compoundResult.finalBalance) * 100).toFixed(1)}%
                   </strong>{' '}
                   {t.tools.snowballBodySuffix}
                 </p>
-                <div className="pt-2 border-t border-slate-800/80 text-[11px] text-slate-400 space-y-1.5">
+                <div className="pt-2 border-t border-[#E2E8F0] dark:border-slate-800/80 text-[11px] text-[#475569] dark:text-slate-400 space-y-1.5">
                   <div className="flex items-center justify-between">
                     <span>{t.tools.monthlyEqRate}</span>
-                    <span className="font-mono-numbers text-white">
+                    <span className="font-mono-numbers text-[#0F172A] dark:text-white font-semibold">
                       {((Math.pow(1 + annualRate / 100, 1 / 12) - 1) * 100).toFixed(2)}{t.tools.rateMonthlySuffix}
                     </span>
                   </div>
                   <div className="flex items-center justify-between">
                     <span>{t.tools.periodTotalContrib}</span>
-                    <span className="font-mono-numbers text-slate-300">
+                    <span className="font-mono-numbers text-[#334155] dark:text-slate-300">
                       {formatCurrencyValue(compoundResult.totalInvested, 'BRL')}
                     </span>
                   </div>
                   <div className="flex items-center justify-between">
                     <span>{t.tools.periodTotalInterest}</span>
-                    <span className="font-mono-numbers text-emerald-400 font-bold">
+                    <span className="font-mono-numbers text-[#006B52] dark:text-emerald-400 font-bold">
                       +{formatCurrencyValue(compoundResult.totalInterest, 'BRL')}
                     </span>
                   </div>
@@ -434,77 +436,77 @@ export const ToolsView: React.FC = () => {
       {/* --- TOOL 3: INFLAÇÃO & PODER DE COMPRA --- */}
       {activeTool === 'inflacao' && (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <div className="lg:col-span-2 rounded-2xl bg-[#0d1627] border border-slate-800 p-5 sm:p-6 shadow-xl space-y-5">
+          <div className="lg:col-span-2 rounded-2xl bg-[#FFFFFF] dark:bg-[#0d1627] border border-[#E2E8F0] dark:border-slate-800 p-5 sm:p-6 shadow-xl space-y-5">
             <div>
-              <h2 className="text-base font-bold text-white">{t.tools.inflationTitle}</h2>
-              <p className="text-xs text-slate-400 mt-1">
+              <h2 className="text-base font-bold text-[#0F172A] dark:text-white">{t.tools.inflationTitle}</h2>
+              <p className="text-xs text-[#475569] dark:text-slate-400 mt-1">
                 {t.tools.inflationSubtitle}
               </p>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs">
               <div>
-                <label className="text-slate-400 block mb-1">{t.tools.inflationCurrentAmount}</label>
+                <label className="text-[#334155] dark:text-slate-400 block mb-1">{t.tools.inflationCurrentAmount}</label>
                 <input
                   type="number"
                   value={inflationAmount}
                   onChange={(e) => setInflationAmount(Math.max(0, Number(e.target.value)))}
-                  className="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white font-mono-numbers"
+                  className="w-full bg-[#FFFFFF] dark:bg-slate-900 border border-[#CBD5E1] dark:border-slate-700 rounded-xl px-3 py-2 text-[#0F172A] dark:text-white font-mono-numbers"
                 />
               </div>
 
               <div>
-                <label className="text-slate-400 block mb-1">{t.tools.inflationAvgRate}</label>
+                <label className="text-[#334155] dark:text-slate-400 block mb-1">{t.tools.inflationAvgRate}</label>
                 <input
                   type="number"
                   step="0.1"
                   value={inflationRate}
                   onChange={(e) => setInflationRate(Math.max(0, Number(e.target.value)))}
-                  className="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white font-mono-numbers"
+                  className="w-full bg-[#FFFFFF] dark:bg-slate-900 border border-[#CBD5E1] dark:border-slate-700 rounded-xl px-3 py-2 text-[#0F172A] dark:text-white font-mono-numbers"
                 />
               </div>
 
               <div>
-                <label className="text-slate-400 block mb-1">{t.tools.inflationPeriodYears}</label>
+                <label className="text-[#334155] dark:text-slate-400 block mb-1">{t.tools.inflationPeriodYears}</label>
                 <input
                   type="number"
                   value={inflationYears}
                   onChange={(e) => setInflationYears(Math.max(1, Number(e.target.value)))}
-                  className="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white font-mono-numbers"
+                  className="w-full bg-[#FFFFFF] dark:bg-slate-900 border border-[#CBD5E1] dark:border-slate-700 rounded-xl px-3 py-2 text-[#0F172A] dark:text-white font-mono-numbers"
                 />
               </div>
             </div>
 
             {/* Impact Box */}
-            <div className="bg-[#070e1b] rounded-2xl p-5 border border-slate-800 space-y-4">
+            <div className="bg-[#F4F7F9] dark:bg-[#070e1b] rounded-2xl p-5 border border-[#E2E8F0] dark:border-slate-800 space-y-4">
               <div className="flex items-center justify-between">
-                <span className="text-xs text-slate-400">{t.tools.inflationFuturePower}</span>
-                <span className="text-xl font-bold font-mono-numbers text-rose-400">
+                <span className="text-xs text-[#475569] dark:text-slate-400">{t.tools.inflationFuturePower}</span>
+                <span className="text-xl font-bold font-mono-numbers text-[#DC2626] dark:text-rose-400">
                   {formatCurrencyValue(inflationResult.futurePurchasingPower, 'BRL')}
                 </span>
               </div>
 
               <div className="flex items-center justify-between">
-                <span className="text-xs text-slate-400">{t.tools.inflationRealLoss}</span>
-                <span className="text-sm font-bold font-mono-numbers text-rose-400">
+                <span className="text-xs text-[#475569] dark:text-slate-400">{t.tools.inflationRealLoss}</span>
+                <span className="text-sm font-bold font-mono-numbers text-[#DC2626] dark:text-rose-400">
                   -{inflationResult.lossPercentage}%
                 </span>
               </div>
 
-              <div className="flex items-center justify-between pt-3 border-t border-slate-800">
-                <span className="text-xs text-slate-300 font-semibold">
+              <div className="flex items-center justify-between pt-3 border-t border-[#E2E8F0] dark:border-slate-800">
+                <span className="text-xs text-[#334155] dark:text-slate-300 font-semibold">
                   {t.tools.inflationNeededFuture}
                 </span>
-                <span className="text-lg font-bold font-mono-numbers text-amber-400">
+                <span className="text-lg font-bold font-mono-numbers text-[#B45309] dark:text-amber-400">
                   {formatCurrencyValue(inflationResult.equivalentNeeded, 'BRL')}
                 </span>
               </div>
             </div>
           </div>
 
-          <div className="rounded-2xl bg-[#0d1627] border border-slate-800 p-5 shadow-xl space-y-4">
-            <h3 className="text-sm font-bold text-white">{t.tools.inflationProtectTitle}</h3>
-            <p className="text-xs text-slate-300 leading-relaxed">
+          <div className="rounded-2xl bg-[#FFFFFF] dark:bg-[#0d1627] border border-[#E2E8F0] dark:border-slate-800 p-5 shadow-xl space-y-4">
+            <h3 className="text-sm font-bold text-[#0F172A] dark:text-white">{t.tools.inflationProtectTitle}</h3>
+            <p className="text-xs text-[#334155] dark:text-slate-300 leading-relaxed">
               {t.tools.inflationProtectBody}
             </p>
           </div>
@@ -514,21 +516,21 @@ export const ToolsView: React.FC = () => {
       {/* --- TOOL 4: DARF & TRIBUTAÇÃO --- */}
       {activeTool === 'darf' && (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <div className="lg:col-span-2 rounded-2xl bg-[#0d1627] border border-slate-800 p-5 sm:p-6 shadow-xl space-y-5">
+          <div className="lg:col-span-2 rounded-2xl bg-[#FFFFFF] dark:bg-[#0d1627] border border-[#E2E8F0] dark:border-slate-800 p-5 sm:p-6 shadow-xl space-y-5">
             <div>
-              <h2 className="text-base font-bold text-white">{t.tools.darfTitle}</h2>
-              <p className="text-xs text-slate-400 mt-1">
+              <h2 className="text-base font-bold text-[#0F172A] dark:text-white">{t.tools.darfTitle}</h2>
+              <p className="text-xs text-[#475569] dark:text-slate-400 mt-1">
                 {t.tools.darfSubtitle}
               </p>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs">
               <div>
-                <label className="text-slate-400 block mb-1">{t.tools.darfAssetType}</label>
+                <label className="text-[#334155] dark:text-slate-400 block mb-1">{t.tools.darfAssetType}</label>
                 <select
                   value={darfAssetType}
                   onChange={(e) => setDarfAssetType(e.target.value as any)}
-                  className="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white"
+                  className="w-full bg-[#FFFFFF] dark:bg-slate-900 border border-[#CBD5E1] dark:border-slate-700 rounded-xl px-3 py-2 text-[#0F172A] dark:text-white"
                 >
                   <option value="stock_br">{t.tools.darfOptBr}</option>
                   <option value="stock_us">{t.tools.darfOptUs}</option>
@@ -537,54 +539,54 @@ export const ToolsView: React.FC = () => {
               </div>
 
               <div>
-                <label className="text-slate-400 block mb-1">{t.tools.darfBuyPrice}</label>
+                <label className="text-[#334155] dark:text-slate-400 block mb-1">{t.tools.darfBuyPrice}</label>
                 <input
                   type="number"
                   step="any"
                   value={darfBuyPrice}
                   onChange={(e) => setDarfBuyPrice(Number(e.target.value))}
-                  className="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white font-mono-numbers"
+                  className="w-full bg-[#FFFFFF] dark:bg-slate-900 border border-[#CBD5E1] dark:border-slate-700 rounded-xl px-3 py-2 text-[#0F172A] dark:text-white font-mono-numbers"
                 />
               </div>
 
               <div>
-                <label className="text-slate-400 block mb-1">{t.tools.darfSellPrice}</label>
+                <label className="text-[#334155] dark:text-slate-400 block mb-1">{t.tools.darfSellPrice}</label>
                 <input
                   type="number"
                   step="any"
                   value={darfSellPrice}
                   onChange={(e) => setDarfSellPrice(Number(e.target.value))}
-                  className="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white font-mono-numbers"
+                  className="w-full bg-[#FFFFFF] dark:bg-slate-900 border border-[#CBD5E1] dark:border-slate-700 rounded-xl px-3 py-2 text-[#0F172A] dark:text-white font-mono-numbers"
                 />
               </div>
 
               <div>
-                <label className="text-slate-400 block mb-1">{t.tools.darfQty}</label>
+                <label className="text-[#334155] dark:text-slate-400 block mb-1">{t.tools.darfQty}</label>
                 <input
                   type="number"
                   value={darfQty}
                   onChange={(e) => setDarfQty(Number(e.target.value))}
-                  className="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white font-mono-numbers"
+                  className="w-full bg-[#FFFFFF] dark:bg-slate-900 border border-[#CBD5E1] dark:border-slate-700 rounded-xl px-3 py-2 text-[#0F172A] dark:text-white font-mono-numbers"
                 />
               </div>
 
               <div>
-                <label className="text-slate-400 block mb-1">{t.tools.darfMonthlyVol}</label>
+                <label className="text-[#334155] dark:text-slate-400 block mb-1">{t.tools.darfMonthlyVol}</label>
                 <input
                   type="number"
                   value={monthlySalesVolume}
                   onChange={(e) => setMonthlySalesVolume(Number(e.target.value))}
-                  className="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white font-mono-numbers"
+                  className="w-full bg-[#FFFFFF] dark:bg-slate-900 border border-[#CBD5E1] dark:border-slate-700 rounded-xl px-3 py-2 text-[#0F172A] dark:text-white font-mono-numbers"
                 />
               </div>
 
               <div className="flex items-center pt-5">
-                <label className="flex items-center gap-2 cursor-pointer text-xs text-slate-200">
+                <label className="flex items-center gap-2 cursor-pointer text-xs text-[#0F172A] dark:text-slate-200 font-medium">
                   <input
                     type="checkbox"
                     checked={isDayTrade}
                     onChange={(e) => setIsDayTrade(e.target.checked)}
-                    className="rounded bg-slate-900 border-slate-700 text-emerald-500"
+                    className="rounded bg-[#FFFFFF] dark:bg-slate-900 border-[#CBD5E1] dark:border-slate-700 text-[#009B77] dark:text-emerald-500"
                   />
                   <span>{t.tools.darfDayTradeCheck}</span>
                 </label>
@@ -592,21 +594,21 @@ export const ToolsView: React.FC = () => {
             </div>
 
             {/* Results */}
-            <div className="bg-[#070e1b] rounded-2xl p-5 border border-slate-800 space-y-3">
+            <div className="bg-[#F4F7F9] dark:bg-[#070e1b] rounded-2xl p-5 border border-[#E2E8F0] dark:border-slate-800 space-y-3">
               <div className="flex justify-between items-center text-xs">
-                <span className="text-slate-400">{t.tools.darfGrossProfit}</span>
-                <span className="text-base font-bold font-mono-numbers text-white">
+                <span className="text-[#475569] dark:text-slate-400">{t.tools.darfGrossProfit}</span>
+                <span className="text-base font-bold font-mono-numbers text-[#0F172A] dark:text-white">
                   {formatCurrencyValue(taxResult.grossProfit, 'BRL')} ({taxResult.returnPercentage.toLocaleString(numberLocale, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}%)
                 </span>
               </div>
 
               <div className="flex justify-between items-center text-xs">
-                <span className="text-slate-400">{t.tools.darfExemptStatus}</span>
+                <span className="text-[#475569] dark:text-slate-400">{t.tools.darfExemptStatus}</span>
                 <span
                   className={`font-semibold px-2 py-0.5 rounded text-xs ${
                     taxResult.isTaxExempt
-                      ? 'text-emerald-400 bg-emerald-500/15'
-                      : 'text-amber-400 bg-amber-500/15'
+                      ? 'text-[#006B52] bg-[#E3F7F2] dark:text-emerald-400 dark:bg-emerald-500/15'
+                      : 'text-[#92400E] bg-[#FEF7E0] dark:text-amber-400 dark:bg-amber-500/15'
                   }`}
                 >
                   {taxResult.isTaxExempt ? t.tools.darfExemptBadge : t.tools.darfTaxableBadge}
@@ -614,32 +616,32 @@ export const ToolsView: React.FC = () => {
               </div>
 
               <div className="flex justify-between items-center text-xs">
-                <span className="text-slate-400">{t.tools.darfApplicableRate}</span>
-                <span className="font-mono text-slate-200">{taxResult.taxRatePercent}%</span>
+                <span className="text-[#475569] dark:text-slate-400">{t.tools.darfApplicableRate}</span>
+                <span className="font-mono text-[#0F172A] dark:text-slate-200 font-semibold">{taxResult.taxRatePercent}%</span>
               </div>
 
               <div className="flex justify-between items-center text-xs">
-                <span className="text-slate-400">{t.tools.darfEstimatedDue}</span>
-                <span className="text-base font-bold font-mono-numbers text-rose-400">
+                <span className="text-[#475569] dark:text-slate-400">{t.tools.darfEstimatedDue}</span>
+                <span className="text-base font-bold font-mono-numbers text-[#DC2626] dark:text-rose-400">
                   {formatCurrencyValue(taxResult.estimatedTaxDue, 'BRL')}
                 </span>
               </div>
 
-              <div className="flex justify-between items-center text-sm font-bold text-white pt-2 border-t border-slate-800">
+              <div className="flex justify-between items-center text-sm font-bold text-[#0F172A] dark:text-white pt-2 border-t border-[#E2E8F0] dark:border-slate-800">
                 <span>{t.tools.darfNetProfit}</span>
-                <span className="text-lg font-black font-mono-numbers text-emerald-400">
+                <span className="text-lg font-black font-mono-numbers text-[#006B52] dark:text-emerald-400">
                   {formatCurrencyValue(taxResult.netProfit, 'BRL')}
                 </span>
               </div>
             </div>
           </div>
 
-          <div className="rounded-2xl bg-[#0d1627] border border-slate-800 p-5 shadow-xl space-y-4">
-            <h3 className="text-sm font-bold text-white">{t.tools.darfRulesTitle}</h3>
-            <ul className="text-xs text-slate-300 space-y-2 leading-relaxed">
-              <li>• <strong>{t.tools.darfRule1Title}</strong> {t.tools.darfRule1Body}</li>
-              <li>• <strong>{t.tools.darfRule2Title}</strong> {t.tools.darfRule2Body}</li>
-              <li>• <strong>{t.tools.darfRule3Title}</strong> {t.tools.darfRule3Body}</li>
+          <div className="rounded-2xl bg-[#FFFFFF] dark:bg-[#0d1627] border border-[#E2E8F0] dark:border-slate-800 p-5 shadow-xl space-y-4">
+            <h3 className="text-sm font-bold text-[#0F172A] dark:text-white">{t.tools.darfRulesTitle}</h3>
+            <ul className="text-xs text-[#334155] dark:text-slate-300 space-y-2 leading-relaxed">
+              <li>• <strong className="text-[#0F172A] dark:text-white">{t.tools.darfRule1Title}</strong> {t.tools.darfRule1Body}</li>
+              <li>• <strong className="text-[#0F172A] dark:text-white">{t.tools.darfRule2Title}</strong> {t.tools.darfRule2Body}</li>
+              <li>• <strong className="text-[#0F172A] dark:text-white">{t.tools.darfRule3Title}</strong> {t.tools.darfRule3Body}</li>
             </ul>
           </div>
         </div>

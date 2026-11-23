@@ -426,21 +426,21 @@ export const FixedIncomeDerivativesView: React.FC = () => {
   return (
     <div className="space-y-6 animate-in fade-in duration-200">
       {/* Top Banner */}
-      <div className="rounded-2xl bg-gradient-to-br from-[#0c1626] to-[#070e1a] border border-slate-800 p-5 shadow-2xl relative overflow-hidden">
+      <div className="rounded-2xl bg-[#FFFFFF] dark:bg-gradient-to-br dark:from-[#0c1626] dark:to-[#070e1a] border border-[#E2E8F0] dark:border-slate-800 p-5 shadow-2xl relative overflow-hidden">
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
           <div>
             <div className="flex items-center gap-2 mb-2">
-              <span className="p-1.5 rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-emerald-400">
+              <span className="p-1.5 rounded-lg bg-[#E3F7F2] dark:bg-emerald-500/10 border border-[#009B77]/35 dark:border-emerald-500/30 text-[#006B52] dark:text-emerald-400">
                 <Percent className="w-4 h-4" />
               </span>
-              <h1 className="text-xl sm:text-2xl font-black text-white tracking-tight flex items-center gap-2">
+              <h1 className="text-xl sm:text-2xl font-black text-[#0F172A] dark:text-white tracking-tight flex items-center gap-2">
                 {tFi.bannerTitle}
-                <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 uppercase font-mono-numbers font-bold">
+                <span className="text-[10px] px-2 py-0.5 rounded-full bg-[#E3F7F2] dark:bg-emerald-500/20 text-[#006B52] dark:text-emerald-300 border border-[#009B77]/40 dark:border-emerald-500/40 uppercase font-mono-numbers font-bold">
                   {tFi.bannerBadge}
                 </span>
               </h1>
             </div>
-            <p className="text-xs text-slate-400 max-w-2xl">
+            <p className="text-xs text-[#475569] dark:text-slate-400 max-w-2xl">
               {tFi.bannerSubtitle}
             </p>
           </div>
@@ -492,22 +492,22 @@ export const FixedIncomeDerivativesView: React.FC = () => {
         <div className="space-y-6">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
             {/* Left Column: Black Scholes Param Inputs (4 Cols) */}
-            <div className="lg:col-span-4 rounded-2xl bg-[#09111e] border border-slate-800 p-5 shadow-xl space-y-4">
-              <div className="flex items-center justify-between pb-3 border-b border-slate-800">
+            <div className="lg:col-span-4 rounded-2xl bg-[#FFFFFF] dark:bg-[#09111e] border border-[#E2E8F0] dark:border-slate-800 p-5 shadow-xl space-y-4">
+              <div className="flex items-center justify-between pb-3 border-b border-[#E2E8F0] dark:border-slate-800">
                 <div className="flex items-center gap-2">
-                  <Calculator className="w-4 h-4 text-emerald-400" />
-                  <h2 className="text-sm font-bold text-white uppercase tracking-wider">
+                  <Calculator className="w-4 h-4 text-[#006B52] dark:text-emerald-400" />
+                  <h2 className="text-sm font-bold text-[#0F172A] dark:text-white uppercase tracking-wider">
                     {tFi.optionsParamsTitle}
                   </h2>
                 </div>
-                <span className="text-[10px] text-slate-400 font-mono-numbers">
+                <span className="text-[10px] text-[#475569] dark:text-slate-400 font-mono-numbers">
                   Black & Scholes
                 </span>
               </div>
 
               {/* Option Type Selector (Call vs Put) */}
               <div>
-                <label className="text-[11px] font-semibold text-slate-400 block mb-1.5">
+                <label className="text-[11px] font-semibold text-[#475569] dark:text-slate-400 block mb-1.5">
                   {tFi.contractTypeLabel}
                 </label>
                 <div className="grid grid-cols-2 gap-2">
@@ -515,8 +515,8 @@ export const FixedIncomeDerivativesView: React.FC = () => {
                     onClick={() => setOptionType('CALL')}
                     className={`py-2 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer border ${
                       optionType === 'CALL'
-                        ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/50 shadow-md'
-                        : 'bg-slate-900 text-slate-400 border-slate-800 hover:text-white'
+                        ? 'bg-[#E3F7F2] text-[#006B52] border-[#009B77]/50 dark:bg-emerald-500/20 dark:text-emerald-300 dark:border-emerald-500/50 shadow-md'
+                        : 'bg-[#F4F7F9] text-[#475569] border-[#CBD5E1] hover:text-[#0F172A] dark:bg-slate-900 dark:text-slate-400 dark:border-slate-800 dark:hover:text-white'
                     }`}
                   >
                     <ArrowUpRight className="w-3.5 h-3.5" /> {tFi.callBtn}
@@ -525,8 +525,8 @@ export const FixedIncomeDerivativesView: React.FC = () => {
                     onClick={() => setOptionType('PUT')}
                     className={`py-2 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer border ${
                       optionType === 'PUT'
-                        ? 'bg-rose-500/20 text-rose-300 border-rose-500/50 shadow-md'
-                        : 'bg-slate-900 text-slate-400 border-slate-800 hover:text-white'
+                        ? 'bg-[#FEE2E2] text-[#DC2626] border-[#DC2626]/45 dark:bg-rose-500/20 dark:text-rose-300 dark:border-rose-500/50 shadow-md'
+                        : 'bg-[#F4F7F9] text-[#475569] border-[#CBD5E1] hover:text-[#0F172A] dark:bg-slate-900 dark:text-slate-400 dark:border-slate-800 dark:hover:text-white'
                     }`}
                   >
                     <ArrowDownRight className="w-3.5 h-3.5" /> {tFi.putBtn}
@@ -536,39 +536,39 @@ export const FixedIncomeDerivativesView: React.FC = () => {
 
               {/* Spot Price (S) */}
               <div>
-                <div className="flex items-center justify-between text-[11px] font-semibold text-slate-400 mb-1">
+                <div className="flex items-center justify-between text-[11px] font-semibold text-[#475569] dark:text-slate-400 mb-1">
                   <span>{tFi.spotPriceLabel}</span>
-                  <span className="text-white font-mono-numbers">{formatCurrencyValue(spotPrice, 'BRL', 2, locale)}</span>
+                  <span className="text-[#0F172A] dark:text-white font-mono-numbers">{formatCurrencyValue(spotPrice, 'BRL', 2, locale)}</span>
                 </div>
                 <input
                   type="number"
                   step="0.10"
                   value={spotPrice}
                   onChange={(e) => setSpotPrice(Math.max(1, parseFloat(e.target.value) || 1))}
-                  className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs font-bold text-white font-mono-numbers focus:outline-none focus:border-emerald-500"
+                  className="w-full bg-[#F8FAFC] dark:bg-slate-900 border border-[#CBD5E1] dark:border-slate-800 rounded-xl px-3 py-2 text-xs font-bold text-[#0F172A] dark:text-white font-mono-numbers focus:outline-none focus:border-[#003399] dark:focus:border-emerald-500"
                 />
               </div>
 
               {/* Strike Price (K) */}
               <div>
-                <div className="flex items-center justify-between text-[11px] font-semibold text-slate-400 mb-1">
+                <div className="flex items-center justify-between text-[11px] font-semibold text-[#475569] dark:text-slate-400 mb-1">
                   <span>{tFi.strikePriceLabel}</span>
-                  <span className="text-white font-mono-numbers">{formatCurrencyValue(strikePrice, 'BRL', 2, locale)}</span>
+                  <span className="text-[#0F172A] dark:text-white font-mono-numbers">{formatCurrencyValue(strikePrice, 'BRL', 2, locale)}</span>
                 </div>
                 <input
                   type="number"
                   step="0.10"
                   value={strikePrice}
                   onChange={(e) => setStrikePrice(Math.max(1, parseFloat(e.target.value) || 1))}
-                  className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs font-bold text-white font-mono-numbers focus:outline-none focus:border-emerald-500"
+                  className="w-full bg-[#F8FAFC] dark:bg-slate-900 border border-[#CBD5E1] dark:border-slate-800 rounded-xl px-3 py-2 text-xs font-bold text-[#0F172A] dark:text-white font-mono-numbers focus:outline-none focus:border-[#003399] dark:focus:border-emerald-500"
                 />
               </div>
 
               {/* Days to Expiration (T) */}
               <div>
-                <div className="flex items-center justify-between text-[11px] font-semibold text-slate-400 mb-1">
+                <div className="flex items-center justify-between text-[11px] font-semibold text-[#475569] dark:text-slate-400 mb-1">
                   <span>{tFi.daysToExpiryLabel}</span>
-                  <span className="text-white font-mono-numbers">{daysToExpiry} {tFi.daysUnit}</span>
+                  <span className="text-[#0F172A] dark:text-white font-mono-numbers">{daysToExpiry} {tFi.daysUnit}</span>
                 </div>
                 <input
                   type="range"
@@ -576,15 +576,15 @@ export const FixedIncomeDerivativesView: React.FC = () => {
                   max="365"
                   value={daysToExpiry}
                   onChange={(e) => setDaysToExpiry(parseInt(e.target.value) || 1)}
-                  className="w-full accent-emerald-500 cursor-pointer"
+                  className="w-full accent-[#003399] dark:accent-emerald-500 cursor-pointer"
                 />
               </div>
 
               {/* Volatility Implied (Sigma %) */}
               <div>
-                <div className="flex items-center justify-between text-[11px] font-semibold text-slate-400 mb-1">
+                <div className="flex items-center justify-between text-[11px] font-semibold text-[#475569] dark:text-slate-400 mb-1">
                   <span>{tFi.impliedVolLabel}</span>
-                  <span className="text-amber-400 font-mono-numbers">{volatilityPct}{tFi.perYearUnit}</span>
+                  <span className="text-[#B45309] dark:text-amber-400 font-mono-numbers">{volatilityPct}{tFi.perYearUnit}</span>
                 </div>
                 <input
                   type="range"
@@ -592,22 +592,22 @@ export const FixedIncomeDerivativesView: React.FC = () => {
                   max="120"
                   value={volatilityPct}
                   onChange={(e) => setVolatilityPct(parseInt(e.target.value) || 10)}
-                  className="w-full accent-amber-500 cursor-pointer"
+                  className="w-full accent-[#D99B00] dark:accent-amber-500 cursor-pointer"
                 />
               </div>
 
               {/* Interest Rate (r) */}
               <div>
-                <div className="flex items-center justify-between text-[11px] font-semibold text-slate-400 mb-1">
+                <div className="flex items-center justify-between text-[11px] font-semibold text-[#475569] dark:text-slate-400 mb-1">
                   <span>{tFi.riskFreeRateLabel}</span>
-                  <span className="text-sky-400 font-mono-numbers">{interestRatePct}{tFi.perYearUnit}</span>
+                  <span className="text-[#003399] dark:text-sky-400 font-mono-numbers">{interestRatePct}{tFi.perYearUnit}</span>
                 </div>
                 <input
                   type="number"
                   step="0.25"
                   value={interestRatePct}
                   onChange={(e) => setInterestRatePct(parseFloat(e.target.value) || 12)}
-                  className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs font-bold text-white font-mono-numbers focus:outline-none focus:border-emerald-500"
+                  className="w-full bg-[#F8FAFC] dark:bg-slate-900 border border-[#CBD5E1] dark:border-slate-800 rounded-xl px-3 py-2 text-xs font-bold text-[#0F172A] dark:text-white font-mono-numbers focus:outline-none focus:border-[#003399] dark:focus:border-emerald-500"
                 />
               </div>
             </div>
@@ -619,22 +619,22 @@ export const FixedIncomeDerivativesView: React.FC = () => {
                 <div
                   className={`p-5 rounded-2xl border transition shadow-xl ${
                     optionType === 'CALL'
-                      ? 'bg-gradient-to-br from-emerald-950/40 to-slate-900 border-emerald-500/50'
-                      : 'bg-[#09111e] border-slate-800'
+                      ? 'bg-[#E3F7F2]/80 border-[#009B77]/45 dark:bg-gradient-to-br dark:from-emerald-950/40 dark:to-slate-900 dark:border-emerald-500/50'
+                      : 'bg-[#FFFFFF] border-[#E2E8F0] dark:bg-[#09111e] dark:border-slate-800'
                   }`}
                 >
                   <div className="flex items-center justify-between mb-2">
-                    <span className="text-xs font-bold uppercase tracking-wider text-emerald-400 flex items-center gap-1">
+                    <span className="text-xs font-bold uppercase tracking-wider text-[#006B52] dark:text-emerald-400 flex items-center gap-1">
                       <ArrowUpRight className="w-4 h-4" /> {tFi.theoreticalCallTitle}
                     </span>
-                    <span className="text-[10px] text-slate-400 font-mono-numbers">
+                    <span className="text-[10px] text-[#475569] dark:text-slate-400 font-mono-numbers">
                       {spotPrice >= strikePrice ? tFi.itmLabel : tFi.otmLabel}
                     </span>
                   </div>
-                  <div className="text-3xl font-black text-white font-mono-numbers">
+                  <div className="text-3xl font-black text-[#0F172A] dark:text-white font-mono-numbers">
                     {formatCurrencyValue(bsResult.callPrice, 'BRL', 2, locale)}
                   </div>
-                  <p className="text-[11px] text-slate-400 mt-2">
+                  <p className="text-[11px] text-[#475569] dark:text-slate-400 mt-2">
                     {tFi.callDesc}
                   </p>
                 </div>
@@ -642,101 +642,101 @@ export const FixedIncomeDerivativesView: React.FC = () => {
                 <div
                   className={`p-5 rounded-2xl border transition shadow-xl ${
                     optionType === 'PUT'
-                      ? 'bg-gradient-to-br from-rose-950/40 to-slate-900 border-rose-500/50'
-                      : 'bg-[#09111e] border-slate-800'
+                      ? 'bg-[#FEE2E2]/70 border-[#DC2626]/40 dark:bg-gradient-to-br dark:from-rose-950/40 dark:to-slate-900 dark:border-rose-500/50'
+                      : 'bg-[#FFFFFF] border-[#E2E8F0] dark:bg-[#09111e] dark:border-slate-800'
                   }`}
                 >
                   <div className="flex items-center justify-between mb-2">
-                    <span className="text-xs font-bold uppercase tracking-wider text-rose-400 flex items-center gap-1">
+                    <span className="text-xs font-bold uppercase tracking-wider text-[#DC2626] dark:text-rose-400 flex items-center gap-1">
                       <ArrowDownRight className="w-4 h-4" /> {tFi.theoreticalPutTitle}
                     </span>
-                    <span className="text-[10px] text-slate-400 font-mono-numbers">
+                    <span className="text-[10px] text-[#475569] dark:text-slate-400 font-mono-numbers">
                       {spotPrice <= strikePrice ? tFi.itmLabel : tFi.otmLabel}
                     </span>
                   </div>
-                  <div className="text-3xl font-black text-white font-mono-numbers">
+                  <div className="text-3xl font-black text-[#0F172A] dark:text-white font-mono-numbers">
                     {formatCurrencyValue(bsResult.putPrice, 'BRL', 2, locale)}
                   </div>
-                  <p className="text-[11px] text-slate-400 mt-2">
+                  <p className="text-[11px] text-[#475569] dark:text-slate-400 mt-2">
                     {tFi.putDesc}
                   </p>
                 </div>
               </div>
 
               {/* The Greeks Matrix */}
-              <div className="rounded-2xl bg-[#09111e] border border-slate-800 p-5 shadow-xl">
-                <div className="flex items-center justify-between pb-3 border-b border-slate-800 mb-4">
+              <div className="rounded-2xl bg-[#FFFFFF] dark:bg-[#09111e] border border-[#E2E8F0] dark:border-slate-800 p-5 shadow-xl">
+                <div className="flex items-center justify-between pb-3 border-b border-[#E2E8F0] dark:border-slate-800 mb-4">
                   <div className="flex items-center gap-2">
-                    <Sparkles className="w-4 h-4 text-amber-400" />
-                    <h3 className="text-sm font-bold text-white uppercase tracking-wider">
+                    <Sparkles className="w-4 h-4 text-[#B45309] dark:text-amber-400" />
+                    <h3 className="text-sm font-bold text-[#0F172A] dark:text-white uppercase tracking-wider">
                       {tFi.greeksTitle}
                     </h3>
                   </div>
-                  <span className="text-[10px] text-slate-400">{tFi.realTimeTag}</span>
+                  <span className="text-[10px] text-[#475569] dark:text-slate-400">{tFi.realTimeTag}</span>
                 </div>
 
                 <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
                   {/* Delta */}
-                  <div className="p-3 rounded-xl bg-slate-900/80 border border-slate-800">
-                    <span className="text-[10px] font-bold text-slate-400 uppercase block mb-1">
+                  <div className="p-3 rounded-xl bg-[#F4F7F9] dark:bg-slate-900/80 border border-[#E2E8F0] dark:border-slate-800">
+                    <span className="text-[10px] font-bold text-[#475569] dark:text-slate-400 uppercase block mb-1">
                       Delta (Δ)
                     </span>
-                    <div className="text-base font-bold text-white font-mono-numbers">
+                    <div className="text-base font-bold text-[#0F172A] dark:text-white font-mono-numbers">
                       {(optionType === 'CALL' ? bsResult.callDelta : bsResult.putDelta).toFixed(3)}
                     </div>
-                    <span className="text-[9px] text-slate-500 block mt-1">
+                    <span className="text-[9px] text-[#64748B] dark:text-slate-500 block mt-1">
                       {tFi.deltaDesc}
                     </span>
                   </div>
 
                   {/* Gamma */}
-                  <div className="p-3 rounded-xl bg-slate-900/80 border border-slate-800">
-                    <span className="text-[10px] font-bold text-slate-400 uppercase block mb-1">
+                  <div className="p-3 rounded-xl bg-[#F4F7F9] dark:bg-slate-900/80 border border-[#E2E8F0] dark:border-slate-800">
+                    <span className="text-[10px] font-bold text-[#475569] dark:text-slate-400 uppercase block mb-1">
                       Gamma (Γ)
                     </span>
-                    <div className="text-base font-bold text-sky-400 font-mono-numbers">
+                    <div className="text-base font-bold text-[#003399] dark:text-sky-400 font-mono-numbers">
                       {bsResult.gamma.toFixed(4)}
                     </div>
-                    <span className="text-[9px] text-slate-500 block mt-1">
+                    <span className="text-[9px] text-[#64748B] dark:text-slate-500 block mt-1">
                       {tFi.gammaDesc}
                     </span>
                   </div>
 
                   {/* Theta */}
-                  <div className="p-3 rounded-xl bg-slate-900/80 border border-slate-800">
-                    <span className="text-[10px] font-bold text-slate-400 uppercase block mb-1">
+                  <div className="p-3 rounded-xl bg-[#F4F7F9] dark:bg-slate-900/80 border border-[#E2E8F0] dark:border-slate-800">
+                    <span className="text-[10px] font-bold text-[#475569] dark:text-slate-400 uppercase block mb-1">
                       Theta (Θ)
                     </span>
-                    <div className="text-base font-bold text-rose-400 font-mono-numbers">
+                    <div className="text-base font-bold text-[#DC2626] dark:text-rose-400 font-mono-numbers">
                       {(optionType === 'CALL' ? bsResult.callTheta : bsResult.putTheta).toFixed(3)}
                     </div>
-                    <span className="text-[9px] text-slate-500 block mt-1">
+                    <span className="text-[9px] text-[#64748B] dark:text-slate-500 block mt-1">
                       {tFi.thetaDesc}
                     </span>
                   </div>
 
                   {/* Vega */}
-                  <div className="p-3 rounded-xl bg-slate-900/80 border border-slate-800">
-                    <span className="text-[10px] font-bold text-slate-400 uppercase block mb-1">
+                  <div className="p-3 rounded-xl bg-[#F4F7F9] dark:bg-slate-900/80 border border-[#E2E8F0] dark:border-slate-800">
+                    <span className="text-[10px] font-bold text-[#475569] dark:text-slate-400 uppercase block mb-1">
                       Vega (ν)
                     </span>
-                    <div className="text-base font-bold text-amber-400 font-mono-numbers">
+                    <div className="text-base font-bold text-[#B45309] dark:text-amber-400 font-mono-numbers">
                       {bsResult.vega.toFixed(3)}
                     </div>
-                    <span className="text-[9px] text-slate-500 block mt-1">
+                    <span className="text-[9px] text-[#64748B] dark:text-slate-500 block mt-1">
                       {tFi.vegaDesc}
                     </span>
                   </div>
 
                   {/* Rho */}
-                  <div className="p-3 rounded-xl bg-slate-900/80 border border-slate-800 col-span-2 sm:col-span-1">
-                    <span className="text-[10px] font-bold text-slate-400 uppercase block mb-1">
+                  <div className="p-3 rounded-xl bg-[#F4F7F9] dark:bg-slate-900/80 border border-[#E2E8F0] dark:border-slate-800 col-span-2 sm:col-span-1">
+                    <span className="text-[10px] font-bold text-[#475569] dark:text-slate-400 uppercase block mb-1">
                       Rho (ρ)
                     </span>
-                    <div className="text-base font-bold text-indigo-400 font-mono-numbers">
+                    <div className="text-base font-bold text-[#4338CA] dark:text-indigo-400 font-mono-numbers">
                       {(optionType === 'CALL' ? bsResult.callRho : bsResult.putRho).toFixed(3)}
                     </div>
-                    <span className="text-[9px] text-slate-500 block mt-1">
+                    <span className="text-[9px] text-[#64748B] dark:text-slate-500 block mt-1">
                       {tFi.rhoDesc}
                     </span>
                   </div>
@@ -744,17 +744,17 @@ export const FixedIncomeDerivativesView: React.FC = () => {
               </div>
 
               {/* Payoff Curve Visualizer */}
-              <div className="rounded-2xl bg-[#09111e] border border-slate-800 p-5 shadow-xl">
-                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 pb-3 border-b border-slate-800 mb-4">
+              <div className="rounded-2xl bg-[#FFFFFF] dark:bg-[#09111e] border border-[#E2E8F0] dark:border-slate-800 p-5 shadow-xl">
+                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 pb-3 border-b border-[#E2E8F0] dark:border-slate-800 mb-4">
                   <div className="flex items-center gap-2">
-                    <BarChart2 className="w-4 h-4 text-emerald-400" />
-                    <h3 className="text-sm font-bold text-white uppercase tracking-wider">
+                    <BarChart2 className="w-4 h-4 text-[#006B52] dark:text-emerald-400" />
+                    <h3 className="text-sm font-bold text-[#0F172A] dark:text-white uppercase tracking-wider">
                       {tFi.payoffTitle}
                     </h3>
                   </div>
 
                   {/* Strategy Selector */}
-                  <div className="flex items-center gap-1 bg-slate-900 border border-slate-800 rounded-lg p-0.5 text-xs">
+                  <div className="flex items-center gap-1 bg-[#F4F7F9] dark:bg-slate-900 border border-[#E2E8F0] dark:border-slate-800 rounded-lg p-0.5 text-xs">
                     {(
                       [
                         { id: 'BUY_CALL', label: tFi.strategies.BUY_CALL },
@@ -816,9 +816,9 @@ export const FixedIncomeDerivativesView: React.FC = () => {
                   </svg>
                 </div>
 
-                <div className="flex items-center justify-between text-[11px] text-slate-400 pt-2 border-t border-slate-800/80">
+                <div className="flex items-center justify-between text-[11px] text-[#475569] dark:text-slate-400 pt-2 border-t border-[#E2E8F0] dark:border-slate-800/80">
                   <span>{tFi.minPriceLabel} {formatCurrencyValue(spotPrice * 0.7, 'BRL', 2, locale)}</span>
-                  <span className="text-amber-400 font-bold">{tFi.strikeLabel} {formatCurrencyValue(strikePrice, 'BRL', 2, locale)}</span>
+                  <span className="text-[#B45309] dark:text-amber-400 font-bold">{tFi.strikeLabel} {formatCurrencyValue(strikePrice, 'BRL', 2, locale)}</span>
                   <span>{tFi.maxPriceLabel} {formatCurrencyValue(spotPrice * 1.3, 'BRL', 2, locale)}</span>
                 </div>
               </div>
@@ -830,15 +830,15 @@ export const FixedIncomeDerivativesView: React.FC = () => {
       {/* ================= SECTION 2: FUTURES CONTRACTS ================= */}
       {activeSubTab === 'futures' && (
         <div className="space-y-6">
-          <div className="rounded-2xl bg-[#09111e] border border-slate-800 p-5 shadow-xl">
-            <div className="flex items-center justify-between pb-4 border-b border-slate-800 mb-4">
+          <div className="rounded-2xl bg-[#FFFFFF] dark:bg-[#09111e] border border-[#E2E8F0] dark:border-slate-800 p-5 shadow-xl">
+            <div className="flex items-center justify-between pb-4 border-b border-[#E2E8F0] dark:border-slate-800 mb-4">
               <div className="flex items-center gap-2">
-                <BarChart2 className="w-4 h-4 text-emerald-400" />
-                <h2 className="text-sm font-bold text-white uppercase tracking-wider">
+                <BarChart2 className="w-4 h-4 text-[#006B52] dark:text-emerald-400" />
+                <h2 className="text-sm font-bold text-[#0F172A] dark:text-white uppercase tracking-wider">
                   {tFi.futuresTitle}
                 </h2>
               </div>
-              <span className="text-xs text-slate-400">{tFi.futuresSubtitle}</span>
+              <span className="text-xs text-[#475569] dark:text-slate-400">{tFi.futuresSubtitle}</span>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -847,49 +847,49 @@ export const FixedIncomeDerivativesView: React.FC = () => {
                 return (
                   <div
                     key={contract.code}
-                    className="p-4 rounded-xl bg-slate-900/80 border border-slate-800 hover:border-slate-700 transition"
+                    className="p-4 rounded-xl bg-[#F4F7F9] dark:bg-slate-900/80 border border-[#E2E8F0] dark:border-slate-800 hover:border-[#003399]/35 dark:hover:border-slate-700 transition"
                   >
                     <div className="flex items-start justify-between mb-2">
                       <div>
                         <div className="flex items-center gap-2">
-                          <span className="text-sm font-black text-white">{contract.code}</span>
-                          <span className="text-[10px] px-1.5 py-0.5 rounded bg-slate-800 text-slate-400 font-medium">
+                          <span className="text-sm font-black text-[#0F172A] dark:text-white">{contract.code}</span>
+                          <span className="text-[10px] px-1.5 py-0.5 rounded bg-[#E2E8F0] dark:bg-slate-800 text-[#334155] dark:text-slate-400 font-medium">
                             {contract.market}
                           </span>
                         </div>
-                        <p className="text-xs text-slate-400">{contract.name}</p>
+                        <p className="text-xs text-[#475569] dark:text-slate-400">{contract.name}</p>
                       </div>
                       <div
                         className={`text-xs font-bold font-mono-numbers px-2 py-0.5 rounded ${
                           !pctInfo.isNegative
-                            ? 'text-emerald-400 bg-emerald-500/10'
-                            : 'text-rose-400 bg-rose-500/10'
+                            ? 'text-[#006B52] bg-[#E3F7F2] dark:text-emerald-400 dark:bg-emerald-500/10'
+                            : 'text-[#DC2626] bg-[#FEE2E2] dark:text-rose-400 dark:bg-rose-500/10'
                         }`}
                       >
                         {pctInfo.text}
                       </div>
                     </div>
 
-                    <div className="text-xl font-black text-white font-mono-numbers my-2">
+                    <div className="text-xl font-black text-[#0F172A] dark:text-white font-mono-numbers my-2">
                       {contract.price.toLocaleString(locale)}
                     </div>
 
-                    <div className="space-y-1.5 pt-2 border-t border-slate-800/80 text-[11px]">
-                      <div className="flex justify-between text-slate-400">
+                    <div className="space-y-1.5 pt-2 border-t border-[#E2E8F0] dark:border-slate-800/80 text-[11px]">
+                      <div className="flex justify-between text-[#475569] dark:text-slate-400">
                         <span>{tFi.tickValueLabel}</span>
-                        <span className="text-slate-200 font-medium">{contract.tickValue}</span>
+                        <span className="text-[#0F172A] dark:text-slate-200 font-medium">{contract.tickValue}</span>
                       </div>
-                      <div className="flex justify-between text-slate-400">
+                      <div className="flex justify-between text-[#475569] dark:text-slate-400">
                         <span>{tFi.recommendedMarginLabel}</span>
-                        <span className="text-amber-400 font-medium">{contract.marginReq}</span>
+                        <span className="text-[#B45309] dark:text-amber-400 font-medium">{contract.marginReq}</span>
                       </div>
-                      <div className="flex justify-between text-slate-400">
+                      <div className="flex justify-between text-[#475569] dark:text-slate-400">
                         <span>{tFi.maturityLabel}</span>
-                        <span className="text-slate-200 font-medium">{contract.maturity}</span>
+                        <span className="text-[#0F172A] dark:text-slate-200 font-medium">{contract.maturity}</span>
                       </div>
-                      <div className="flex justify-between text-slate-400">
+                      <div className="flex justify-between text-[#475569] dark:text-slate-400">
                         <span>{tFi.volume24hLabel}</span>
-                        <span className="text-emerald-400 font-medium">{contract.volume}</span>
+                        <span className="text-[#006B52] dark:text-emerald-400 font-medium">{contract.volume}</span>
                       </div>
                     </div>
                   </div>
@@ -904,17 +904,17 @@ export const FixedIncomeDerivativesView: React.FC = () => {
       {activeSubTab === 'fixed_income' && (
         <div className="space-y-6">
           {/* Simulator Calculator */}
-          <div className="rounded-2xl bg-gradient-to-br from-[#0c1626] to-[#070e1a] border border-slate-800 p-5 shadow-2xl">
-            <div className="flex items-center gap-2 pb-3 border-b border-slate-800 mb-4">
-              <Calculator className="w-4 h-4 text-emerald-400" />
-              <h2 className="text-sm font-bold text-white uppercase tracking-wider">
+          <div className="rounded-2xl bg-[#FFFFFF] dark:bg-gradient-to-br dark:from-[#0c1626] dark:to-[#070e1a] border border-[#E2E8F0] dark:border-slate-800 p-5 shadow-2xl">
+            <div className="flex items-center gap-2 pb-3 border-b border-[#E2E8F0] dark:border-slate-800 mb-4">
+              <Calculator className="w-4 h-4 text-[#006B52] dark:text-emerald-400" />
+              <h2 className="text-sm font-bold text-[#0F172A] dark:text-white uppercase tracking-wider">
                 {tFi.simTitle}
               </h2>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
               <div>
-                <label className="text-[11px] font-semibold text-slate-400 block mb-1">
+                <label className="text-[11px] font-semibold text-[#475569] dark:text-slate-400 block mb-1">
                   {tFi.initialDepositLabel}
                 </label>
                 <input
@@ -922,12 +922,12 @@ export const FixedIncomeDerivativesView: React.FC = () => {
                   step="500"
                   value={investAmount}
                   onChange={(e) => setInvestAmount(Math.max(100, parseFloat(e.target.value) || 100))}
-                  className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs font-bold text-white font-mono-numbers focus:outline-none focus:border-emerald-500"
+                  className="w-full bg-[#F8FAFC] dark:bg-slate-900 border border-[#CBD5E1] dark:border-slate-800 rounded-xl px-3 py-2 text-xs font-bold text-[#0F172A] dark:text-white font-mono-numbers focus:outline-none focus:border-[#003399] dark:focus:border-emerald-500"
                 />
               </div>
 
               <div>
-                <label className="text-[11px] font-semibold text-slate-400 block mb-1">
+                <label className="text-[11px] font-semibold text-[#475569] dark:text-slate-400 block mb-1">
                   {tFi.termMonthsLabel}
                 </label>
                 <input
@@ -936,12 +936,12 @@ export const FixedIncomeDerivativesView: React.FC = () => {
                   max="120"
                   value={investMonths}
                   onChange={(e) => setInvestMonths(Math.max(1, parseInt(e.target.value) || 1))}
-                  className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs font-bold text-white font-mono-numbers focus:outline-none focus:border-emerald-500"
+                  className="w-full bg-[#F8FAFC] dark:bg-slate-900 border border-[#CBD5E1] dark:border-slate-800 rounded-xl px-3 py-2 text-xs font-bold text-[#0F172A] dark:text-white font-mono-numbers focus:outline-none focus:border-[#003399] dark:focus:border-emerald-500"
                 />
               </div>
 
               <div>
-                <label className="text-[11px] font-semibold text-slate-400 block mb-1">
+                <label className="text-[11px] font-semibold text-[#475569] dark:text-slate-400 block mb-1">
                   {tFi.selicCdiRefLabel}
                 </label>
                 <input
@@ -949,7 +949,7 @@ export const FixedIncomeDerivativesView: React.FC = () => {
                   step="0.25"
                   value={cdiRate}
                   onChange={(e) => setCdiRate(Math.max(1, parseFloat(e.target.value) || 1))}
-                  className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs font-bold text-white font-mono-numbers focus:outline-none focus:border-emerald-500"
+                  className="w-full bg-[#F8FAFC] dark:bg-slate-900 border border-[#CBD5E1] dark:border-slate-800 rounded-xl px-3 py-2 text-xs font-bold text-[#0F172A] dark:text-white font-mono-numbers focus:outline-none focus:border-[#003399] dark:focus:border-emerald-500"
                 />
               </div>
             </div>
@@ -957,21 +957,21 @@ export const FixedIncomeDerivativesView: React.FC = () => {
             {/* Results Grid */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {/* CDI 100% */}
-              <div className="p-4 rounded-xl bg-slate-900/90 border border-slate-800">
-                <span className="text-[10px] uppercase font-bold text-slate-400 block mb-1">
+              <div className="p-4 rounded-xl bg-[#F4F7F9] dark:bg-slate-900/90 border border-[#E2E8F0] dark:border-slate-800">
+                <span className="text-[10px] uppercase font-bold text-[#475569] dark:text-slate-400 block mb-1">
                   {tFi.cdiCardTitle}
                 </span>
-                <div className="text-xl font-black text-emerald-400 font-mono-numbers">
+                <div className="text-xl font-black text-[#006B52] dark:text-emerald-400 font-mono-numbers">
                   {formatCurrencyValue(simResults.cdiNet, 'BRL', 2, locale)}
                 </div>
-                <div className="text-[11px] text-slate-400 mt-2 space-y-1">
+                <div className="text-[11px] text-[#475569] dark:text-slate-400 mt-2 space-y-1">
                   <div className="flex justify-between">
                     <span>{tFi.netProfitLabel}</span>
-                    <span className="text-white font-semibold">
+                    <span className="text-[#0F172A] dark:text-white font-semibold">
                       +{formatCurrencyValue(simResults.cdiProfit, 'BRL', 2, locale)}
                     </span>
                   </div>
-                  <div className="flex justify-between text-[10px] text-slate-500">
+                  <div className="flex justify-between text-[10px] text-[#64748B] dark:text-slate-500">
                     <span>{tFi.irWithheldLabel}</span>
                     <span>{simResults.irPercentageApplied}%</span>
                   </div>
@@ -979,21 +979,21 @@ export const FixedIncomeDerivativesView: React.FC = () => {
               </div>
 
               {/* LCI / LCA Isento */}
-              <div className="p-4 rounded-xl bg-gradient-to-br from-emerald-950/30 to-slate-900 border border-emerald-500/40">
-                <span className="text-[10px] uppercase font-bold text-emerald-400 block mb-1">
+              <div className="p-4 rounded-xl bg-[#E3F7F2]/80 dark:bg-gradient-to-br dark:from-emerald-950/30 dark:to-slate-900 border border-[#009B77]/45 dark:border-emerald-500/40">
+                <span className="text-[10px] uppercase font-bold text-[#006B52] dark:text-emerald-400 block mb-1">
                   {tFi.lciCardTitle}
                 </span>
-                <div className="text-xl font-black text-white font-mono-numbers">
+                <div className="text-xl font-black text-[#0F172A] dark:text-white font-mono-numbers">
                   {formatCurrencyValue(simResults.lciNet, 'BRL', 2, locale)}
                 </div>
-                <div className="text-[11px] text-slate-400 mt-2 space-y-1">
+                <div className="text-[11px] text-[#334155] dark:text-slate-400 mt-2 space-y-1">
                   <div className="flex justify-between">
                     <span>{tFi.netProfitLabel}</span>
-                    <span className="text-emerald-400 font-semibold">
+                    <span className="text-[#006B52] dark:text-emerald-400 font-semibold">
                       +{formatCurrencyValue(simResults.lciProfit, 'BRL', 2, locale)}
                     </span>
                   </div>
-                  <div className="flex justify-between text-[10px] text-emerald-400 font-semibold">
+                  <div className="flex justify-between text-[10px] text-[#006B52] dark:text-emerald-400 font-semibold">
                     <span>{tFi.incomeTaxLabel}</span>
                     <span>{tFi.exemptZeroLabel}</span>
                   </div>
@@ -1001,21 +1001,21 @@ export const FixedIncomeDerivativesView: React.FC = () => {
               </div>
 
               {/* Poupança */}
-              <div className="p-4 rounded-xl bg-slate-900/90 border border-slate-800">
-                <span className="text-[10px] uppercase font-bold text-slate-500 block mb-1">
+              <div className="p-4 rounded-xl bg-[#F4F7F9] dark:bg-slate-900/90 border border-[#E2E8F0] dark:border-slate-800">
+                <span className="text-[10px] uppercase font-bold text-[#64748B] dark:text-slate-500 block mb-1">
                   {tFi.poupancaCardTitle}
                 </span>
-                <div className="text-xl font-black text-slate-300 font-mono-numbers">
+                <div className="text-xl font-black text-[#334155] dark:text-slate-300 font-mono-numbers">
                   {formatCurrencyValue(simResults.poupNet, 'BRL', 2, locale)}
                 </div>
-                <div className="text-[11px] text-slate-400 mt-2 space-y-1">
+                <div className="text-[11px] text-[#475569] dark:text-slate-400 mt-2 space-y-1">
                   <div className="flex justify-between">
                     <span>{tFi.profitLabel}</span>
-                    <span className="text-slate-300 font-semibold">
+                    <span className="text-[#0F172A] dark:text-slate-300 font-semibold">
                       +{formatCurrencyValue(simResults.poupProfit, 'BRL', 2, locale)}
                     </span>
                   </div>
-                  <div className="flex justify-between text-[10px] text-rose-400 font-semibold">
+                  <div className="flex justify-between text-[10px] text-[#DC2626] dark:text-rose-400 font-semibold">
                     <span>{tFi.dinheuroDiffLabel}</span>
                     <span>{tFi.losesPrefix} {formatCurrencyValue(simResults.lciProfit - simResults.poupProfit, 'BRL', 2, locale)}</span>
                   </div>
@@ -1025,21 +1025,21 @@ export const FixedIncomeDerivativesView: React.FC = () => {
           </div>
 
           {/* Fixed Income Instruments Table */}
-          <div className="rounded-2xl bg-[#09111e] border border-slate-800 p-5 shadow-xl">
-            <div className="flex items-center justify-between pb-3 border-b border-slate-800 mb-4">
+          <div className="rounded-2xl bg-[#FFFFFF] dark:bg-[#09111e] border border-[#E2E8F0] dark:border-slate-800 p-5 shadow-xl">
+            <div className="flex items-center justify-between pb-3 border-b border-[#E2E8F0] dark:border-slate-800 mb-4">
               <div className="flex items-center gap-2">
-                <ShieldCheck className="w-4 h-4 text-emerald-400" />
-                <h3 className="text-sm font-bold text-white uppercase tracking-wider">
+                <ShieldCheck className="w-4 h-4 text-[#006B52] dark:text-emerald-400" />
+                <h3 className="text-sm font-bold text-[#0F172A] dark:text-white uppercase tracking-wider">
                   {tFi.catalogTitle}
                 </h3>
               </div>
-              <span className="text-xs text-slate-400">{tFi.catalogSubtitle}</span>
+              <span className="text-xs text-[#475569] dark:text-slate-400">{tFi.catalogSubtitle}</span>
             </div>
 
             <div className="overflow-x-auto no-scrollbar">
               <table className="w-full text-left text-xs">
                 <thead>
-                  <tr className="border-b border-slate-800 text-slate-400 text-[11px] uppercase tracking-wider">
+                  <tr className="border-b border-[#E2E8F0] dark:border-slate-800 text-[#475569] dark:text-slate-400 text-[11px] uppercase tracking-wider">
                     <th className="py-2.5 px-3">{tFi.colTitleAsset}</th>
                     <th className="py-2.5 px-3">{tFi.colIssuer}</th>
                     <th className="py-2.5 px-3">{tFi.colYield}</th>
@@ -1049,7 +1049,7 @@ export const FixedIncomeDerivativesView: React.FC = () => {
                     <th className="py-2.5 px-3">{tFi.colGuarantee}</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-800/60 font-medium text-slate-200">
+                <tbody className="divide-y divide-[#E2E8F0] dark:divide-slate-800/60 font-medium text-[#334155] dark:text-slate-200">
                   {FIXED_INCOME_ASSETS.map((asset) => {
                     const ov = tFi.fixedIncomeOverrides[asset.id];
                     const name = ov?.name || asset.name;
@@ -1061,21 +1061,21 @@ export const FixedIncomeDerivativesView: React.FC = () => {
                     const guarantee = ov?.guarantee || asset.guarantee;
 
                     return (
-                      <tr key={asset.id} className="hover:bg-slate-800/40 transition">
+                      <tr key={asset.id} className="hover:bg-[#F8FAFC] dark:hover:bg-slate-800/40 transition">
                         <td className="py-3 px-3">
-                          <div className="font-bold text-white">{name}</div>
-                          <span className="text-[10px] text-emerald-400 font-normal">{category}</span>
+                          <div className="font-bold text-[#0F172A] dark:text-white">{name}</div>
+                          <span className="text-[10px] text-[#006B52] dark:text-emerald-400 font-normal">{category}</span>
                         </td>
-                        <td className="py-3 px-3 text-slate-300">{issuer}</td>
-                        <td className="py-3 px-3 font-bold text-emerald-400 font-mono-numbers">
+                        <td className="py-3 px-3 text-[#334155] dark:text-slate-300">{issuer}</td>
+                        <td className="py-3 px-3 font-bold text-[#006B52] dark:text-emerald-400 font-mono-numbers">
                           {rateDescription}
                         </td>
-                        <td className="py-3 px-3 text-slate-300">{maturity}</td>
-                        <td className="py-3 px-3 font-mono-numbers text-white">
+                        <td className="py-3 px-3 text-[#334155] dark:text-slate-300">{maturity}</td>
+                        <td className="py-3 px-3 font-mono-numbers text-[#0F172A] dark:text-white">
                           {formatCurrencyValue(asset.minInvestment, 'BRL', 2, locale)}
                         </td>
-                        <td className="py-3 px-3 text-[11px] text-slate-400">{irTax}</td>
-                        <td className="py-3 px-3 text-[11px] text-slate-300">{guarantee}</td>
+                        <td className="py-3 px-3 text-[11px] text-[#475569] dark:text-slate-400">{irTax}</td>
+                        <td className="py-3 px-3 text-[11px] text-[#334155] dark:text-slate-300">{guarantee}</td>
                       </tr>
                     );
                   })}

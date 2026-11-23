@@ -825,26 +825,26 @@ export const BrokersView: React.FC = () => {
   return (
     <div className="space-y-6 pb-12 animate-in fade-in duration-300">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-800 pb-5">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#E2E8F0] dark:border-slate-800 pb-5">
         <div>
-          <h1 className="text-xl sm:text-2xl font-black text-white tracking-tight flex items-center gap-2">
-            <Building2 className="w-6 h-6 text-emerald-400" />
+          <h1 className="text-xl sm:text-2xl font-black text-[#0F172A] dark:text-white tracking-tight flex items-center gap-2">
+            <Building2 className="w-6 h-6 text-[#006B52] dark:text-emerald-400" />
             <span>{tBrokers.title}</span>
           </h1>
-          <p className="text-xs text-slate-400 mt-1">
+          <p className="text-xs text-[#475569] dark:text-slate-400 mt-1">
             {tBrokers.subtitleBeforeCount} {BROKERS_CATALOG.length} {tBrokers.subtitleAfterCount}
           </p>
         </div>
 
         {/* Search input */}
         <div className="relative w-full sm:w-72">
-          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#64748B] dark:text-slate-400" />
           <input
             type="text"
             placeholder={tBrokers.searchPlaceholder}
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full bg-slate-900 border border-slate-700/80 rounded-xl pl-9.5 pr-4 py-2 text-xs text-white placeholder:text-slate-500 focus:outline-none focus:border-emerald-500 transition"
+            className="w-full bg-[#FFFFFF] dark:bg-slate-900 border border-[#CBD5E1] dark:border-slate-700/80 rounded-xl pl-9.5 pr-4 py-2 text-xs text-[#0F172A] dark:text-white placeholder:text-[#64748B] dark:placeholder:text-slate-500 focus:outline-none focus:border-[#003399] dark:focus:border-emerald-500 transition"
           />
         </div>
       </div>
@@ -863,10 +863,11 @@ export const BrokersView: React.FC = () => {
           <button
             key={item.id}
             onClick={() => setFilter(item.id)}
+            data-on-dark={filter === item.id ? 'true' : undefined}
             className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold transition cursor-pointer flex-shrink-0 ${
               filter === item.id
-                ? 'bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-md shadow-emerald-950/40'
-                : 'bg-slate-900 border border-slate-800 text-slate-400 hover:text-white hover:bg-slate-800'
+                ? 'bg-[#003399] hover:bg-[#002266] dark:bg-gradient-to-r dark:from-emerald-600 dark:to-teal-600 text-white shadow-md shadow-blue-950/20 dark:shadow-emerald-950/40'
+                : 'bg-[#FFFFFF] dark:bg-slate-900 border border-[#CBD5E1] dark:border-slate-800 text-[#334155] dark:text-slate-400 hover:text-[#0F172A] dark:hover:text-white hover:bg-[#F1F5F9] dark:hover:bg-slate-800'
             }`}
           >
             {item.label}
@@ -875,22 +876,22 @@ export const BrokersView: React.FC = () => {
       </div>
 
       {/* Security Disclaimer Banner */}
-      <div className="rounded-xl bg-gradient-to-r from-emerald-950/40 via-teal-950/30 to-blue-950/30 border border-emerald-500/30 p-4 flex items-start gap-3 shadow-lg">
-        <ShieldCheck className="w-5 h-5 text-emerald-400 flex-shrink-0 mt-0.5" />
-        <div className="text-xs text-slate-300 leading-relaxed">
-          <strong className="text-white">{tBrokers.disclaimerBold}</strong> {tBrokers.disclaimerText}
+      <div className="rounded-xl bg-[#E3F7F2]/80 dark:bg-gradient-to-r dark:from-emerald-950/40 dark:via-teal-950/30 dark:to-blue-950/30 border border-[#009B77]/35 dark:border-emerald-500/30 p-4 flex items-start gap-3 shadow-lg">
+        <ShieldCheck className="w-5 h-5 text-[#006B52] dark:text-emerald-400 flex-shrink-0 mt-0.5" />
+        <div className="text-xs text-[#334155] dark:text-slate-300 leading-relaxed">
+          <strong className="text-[#0F172A] dark:text-white">{tBrokers.disclaimerBold}</strong> {tBrokers.disclaimerText}
         </div>
       </div>
 
       {/* Results Count */}
-      <div className="flex items-center justify-between text-xs text-slate-400 px-1">
+      <div className="flex items-center justify-between text-xs text-[#475569] dark:text-slate-400 px-1">
         <span>
-          {tBrokers.showingPrefix} <strong>{filteredBrokers.length}</strong> {tBrokers.showingSuffix}
+          {tBrokers.showingPrefix} <strong className="text-[#0F172A] dark:text-white">{filteredBrokers.length}</strong> {tBrokers.showingSuffix}
         </span>
         {searchTerm && (
           <button
             onClick={() => setSearchTerm('')}
-            className="text-emerald-400 hover:underline cursor-pointer"
+            className="text-[#006B52] dark:text-emerald-400 hover:underline cursor-pointer"
           >
             {tBrokers.clearSearch}
           </button>
@@ -902,7 +903,7 @@ export const BrokersView: React.FC = () => {
         {filteredBrokers.map((broker) => (
           <div
             key={broker.id}
-            className="rounded-2xl bg-[#0d1627] border border-slate-800 hover:border-slate-700/80 p-5 shadow-xl transition flex flex-col justify-between space-y-4 group"
+            className="rounded-2xl bg-[#FFFFFF] dark:bg-[#0d1627] border border-[#E2E8F0] dark:border-slate-800 hover:border-[#003399]/30 dark:hover:border-slate-700/80 p-5 shadow-xl transition flex flex-col justify-between space-y-4 group"
           >
             <div>
               {/* Card Header */}
@@ -910,75 +911,75 @@ export const BrokersView: React.FC = () => {
                 <div className="space-y-1">
                   <div className="flex items-center gap-2 flex-wrap">
                     <span className="text-base">{broker.flag}</span>
-                    <h2 className="text-base font-bold text-white group-hover:text-emerald-300 transition">
+                    <h2 className="text-base font-bold text-[#0F172A] dark:text-white group-hover:text-[#003399] dark:group-hover:text-emerald-300 transition">
                       {broker.name}
                     </h2>
                   </div>
 
                   <div className="flex items-center gap-2 flex-wrap pt-0.5">
                     {broker.badge && (
-                      <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-amber-500/15 border border-amber-500/30 text-amber-300">
+                      <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-[#FEF7E0] dark:bg-amber-500/15 border border-[#E5A910]/45 dark:border-amber-500/30 text-[#92400E] dark:text-amber-300">
                         {broker.badge}
                       </span>
                     )}
                     {broker.isZeroFee && (
-                      <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-emerald-500/15 border border-emerald-500/30 text-emerald-400">
+                      <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-[#E3F7F2] dark:bg-emerald-500/15 border border-[#009B77]/35 dark:border-emerald-500/30 text-[#006B52] dark:text-emerald-400">
                         {tBrokers.zeroFeeBadge}
                       </span>
                     )}
                   </div>
 
-                  <div className="flex items-center gap-1.5 mt-1 text-xs text-amber-400 font-semibold">
+                  <div className="flex items-center gap-1.5 mt-1 text-xs text-[#B45309] dark:text-amber-400 font-semibold">
                     <div className="flex items-center">
                       {[...Array(5)].map((_, i) => (
-                        <Star key={i} className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
+                        <Star key={i} className="w-3.5 h-3.5 fill-[#E5A910] text-[#E5A910] dark:fill-amber-400 dark:text-amber-400" />
                       ))}
                     </div>
-                    <span className="text-slate-300 text-[11px]">({broker.rating.toFixed(1)})</span>
-                    <span className="text-slate-500">&bull;</span>
-                    <span className="text-slate-400 text-[11px]">{broker.country}</span>
+                    <span className="text-[#334155] dark:text-slate-300 text-[11px]">({broker.rating.toFixed(1)})</span>
+                    <span className="text-[#94A3B8] dark:text-slate-500">&bull;</span>
+                    <span className="text-[#475569] dark:text-slate-400 text-[11px]">{broker.country}</span>
                   </div>
                 </div>
 
-                <div className="w-11 h-11 rounded-xl bg-slate-800 border border-slate-700 flex items-center justify-center font-black text-xs text-emerald-400 flex-shrink-0 shadow-inner">
+                <div className="w-11 h-11 rounded-xl bg-[#E6EEFF] dark:bg-slate-800 border border-[#CBD5E1] dark:border-slate-700 flex items-center justify-center font-black text-xs text-[#003399] dark:text-emerald-400 flex-shrink-0 shadow-inner">
                   {broker.logoText}
                 </div>
               </div>
 
-              <p className="text-xs text-slate-400 leading-relaxed mt-2 line-clamp-3">
+              <p className="text-xs text-[#475569] dark:text-slate-400 leading-relaxed mt-2 line-clamp-3">
                 {broker.description}
               </p>
 
               {/* Specs Grid */}
-              <div className="mt-4 pt-3 border-t border-slate-800/80 space-y-2 text-xs">
+              <div className="mt-4 pt-3 border-t border-[#E2E8F0] dark:border-slate-800/80 space-y-2 text-xs">
                 <div className="flex justify-between items-center">
-                  <span className="text-slate-400">{tBrokers.specBrokerage}</span>
-                  <span className="font-semibold text-slate-200 text-right">{broker.brokerageFee}</span>
+                  <span className="text-[#475569] dark:text-slate-400">{tBrokers.specBrokerage}</span>
+                  <span className="font-semibold text-[#0F172A] dark:text-slate-200 text-right">{broker.brokerageFee}</span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-slate-400">{tBrokers.specSpread}</span>
-                  <span className="font-semibold text-slate-300 text-right">{broker.spreadCambio}</span>
+                  <span className="text-[#475569] dark:text-slate-400">{tBrokers.specSpread}</span>
+                  <span className="font-semibold text-[#334155] dark:text-slate-300 text-right">{broker.spreadCambio}</span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-slate-400">{tBrokers.specMinDeposit}</span>
-                  <span className="font-semibold text-emerald-400 font-mono-numbers text-right">
+                  <span className="text-[#475569] dark:text-slate-400">{tBrokers.specMinDeposit}</span>
+                  <span className="font-semibold text-[#006B52] dark:text-emerald-400 font-mono-numbers text-right">
                     {broker.minDeposit}
                   </span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-slate-400">{tBrokers.specRegulation}</span>
-                  <span className="font-semibold text-slate-300 text-right text-[11px] truncate max-w-[170px]" title={broker.regulation}>
+                  <span className="text-[#475569] dark:text-slate-400">{tBrokers.specRegulation}</span>
+                  <span className="font-semibold text-[#334155] dark:text-slate-300 text-right text-[11px] truncate max-w-[170px]" title={broker.regulation}>
                     {broker.regulation}
                   </span>
                 </div>
               </div>
 
               {/* Supported Platforms tags */}
-              <div className="mt-3 pt-2.5 border-t border-slate-800/60 flex flex-wrap gap-1">
+              <div className="mt-3 pt-2.5 border-t border-[#E2E8F0] dark:border-slate-800/60 flex flex-wrap gap-1">
                 {broker.platforms.map((p, i) => (
                   <span
                     key={i}
-                    className="text-[10px] px-2 py-0.5 rounded bg-slate-900 border border-slate-800 text-slate-300 font-mono"
+                    className="text-[10px] px-2 py-0.5 rounded bg-[#F4F7F9] dark:bg-slate-900 border border-[#E2E8F0] dark:border-slate-800 text-[#334155] dark:text-slate-300 font-mono"
                   >
                     {p}
                   </span>
@@ -988,8 +989,8 @@ export const BrokersView: React.FC = () => {
               {/* Key Features Bullet points */}
               <div className="mt-3.5 space-y-1.5">
                 {broker.features.map((feat, i) => (
-                  <div key={i} className="flex items-start gap-2 text-[11px] text-slate-300">
-                    <CheckCircle className="w-3.5 h-3.5 text-emerald-400 flex-shrink-0 mt-0.5" />
+                  <div key={i} className="flex items-start gap-2 text-[11px] text-[#334155] dark:text-slate-300">
+                    <CheckCircle className="w-3.5 h-3.5 text-[#009B77] dark:text-emerald-400 flex-shrink-0 mt-0.5" />
                     <span>{feat}</span>
                   </div>
                 ))}
@@ -997,12 +998,13 @@ export const BrokersView: React.FC = () => {
             </div>
 
             {/* Official Link Button (direct URL to broker's website with external safe links) */}
-            <div className="pt-3 border-t border-slate-800/80">
+            <div className="pt-3 border-t border-[#E2E8F0] dark:border-slate-800/80">
               <a
                 href={broker.websiteUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-full py-2.5 rounded-xl bg-slate-800 hover:bg-gradient-to-r hover:from-emerald-600 hover:to-teal-600 text-xs font-bold text-slate-200 hover:text-white transition flex items-center justify-center gap-2 shadow-sm cursor-pointer active:scale-95"
+                data-on-dark="true"
+                className="w-full py-2.5 rounded-xl bg-[#003399] hover:bg-[#002266] dark:bg-slate-800 dark:hover:bg-gradient-to-r dark:hover:from-emerald-600 dark:hover:to-teal-600 text-xs font-bold text-white transition flex items-center justify-center gap-2 shadow-sm cursor-pointer active:scale-95"
                 title={`${tBrokers.officialSiteTitlePrefix} ${broker.name}`}
               >
                 <span>{tBrokers.officialSiteBtn}</span>

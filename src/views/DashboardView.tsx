@@ -363,7 +363,7 @@ export const DashboardView: React.FC = () => {
 
               <button
                 onClick={swapCurrencies}
-                className="p-1.5 rounded-lg bg-[#FEF7E0] dark:bg-slate-800 hover:bg-[#E5A910]/25 dark:hover:bg-slate-700 border border-[#E5A910]/40 dark:border-transparent text-[#D99B00] dark:text-slate-300 hover:text-[#002266] dark:hover:text-white transition cursor-pointer"
+                className="p-1.5 rounded-lg bg-[#FEF7E0] dark:bg-slate-800 hover:bg-[#E5A910]/25 dark:hover:bg-slate-700 border border-[#E5A910]/40 dark:border-slate-700 text-[#B45309] dark:text-slate-200 hover:text-[#002266] dark:hover:text-white transition cursor-pointer"
                 title={t.dashboard.swapTooltip}
                 aria-label={t.dashboard.swapTooltip}
               >
@@ -657,10 +657,10 @@ export const DashboardView: React.FC = () => {
               setActiveTab('ferramentas');
             }}
             data-on-dark="true"
-            className="w-full py-2 rounded-xl bg-[#003399] hover:bg-[#002266] dark:bg-slate-800 dark:hover:bg-slate-700 text-xs font-semibold text-white dark:text-slate-200 transition cursor-pointer flex items-center justify-center gap-1.5"
+            className="w-full py-2.5 rounded-xl bg-[#003399] hover:bg-[#002266] dark:bg-[#009B77] dark:hover:bg-[#006B52] text-xs font-bold text-white shadow-sm transition cursor-pointer flex items-center justify-center gap-1.5"
           >
             <span>{t.dashboard.openFullSimulator}</span>
-            <ChevronRight className="w-3.5 h-3.5" />
+            <ChevronRight className="w-3.5 h-3.5 text-white" />
           </button>
         </div>
 

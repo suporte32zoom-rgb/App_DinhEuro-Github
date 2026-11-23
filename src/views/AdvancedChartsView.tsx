@@ -18,16 +18,16 @@ export const AdvancedChartsView: React.FC = () => {
   return (
     <div className="space-y-6 pb-12 animate-in fade-in duration-300">
       {/* Top Asset Quick Switcher */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-[#0b1322] border border-slate-800 rounded-2xl p-4 sm:p-5 shadow-xl">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-[#FFFFFF] dark:bg-[#0b1322] border border-[#E2E8F0] dark:border-slate-800 rounded-2xl p-4 sm:p-5 shadow-xl">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center text-emerald-400">
+          <div className="w-10 h-10 rounded-xl bg-[#E3F7F2] dark:bg-emerald-500/15 border border-[#009B77]/35 dark:border-emerald-500/30 flex items-center justify-center text-[#006B52] dark:text-emerald-400">
             <BarChart2 className="w-5 h-5" />
           </div>
           <div>
-            <h1 className="text-base sm:text-lg font-black text-white tracking-tight flex items-center gap-2">
+            <h1 className="text-base sm:text-lg font-black text-[#0F172A] dark:text-white tracking-tight flex items-center gap-2">
               <span>{tAdv.title}</span>
             </h1>
-            <p className="text-xs text-slate-400">
+            <p className="text-xs text-[#475569] dark:text-slate-400">
               {tAdv.subtitle}
             </p>
           </div>
@@ -35,13 +35,13 @@ export const AdvancedChartsView: React.FC = () => {
 
         {/* Global Asset Dropdown */}
         <div className="flex items-center gap-2.5">
-          <label className="text-xs font-bold text-slate-400 uppercase tracking-wider">
+          <label className="text-xs font-bold text-[#475569] dark:text-slate-400 uppercase tracking-wider">
             {tAdv.selectAsset}
           </label>
           <select
             value={currentAsset.symbol}
             onChange={(e) => setSelectedSymbol(e.target.value)}
-            className="bg-slate-900 border border-slate-700/80 rounded-xl px-3.5 py-2 text-xs font-bold text-white focus:outline-none focus:border-emerald-500 shadow-md cursor-pointer"
+            className="bg-[#F8FAFC] dark:bg-slate-900 border border-[#CBD5E1] dark:border-slate-700/80 rounded-xl px-3.5 py-2 text-xs font-bold text-[#0F172A] dark:text-white focus:outline-none focus:border-[#003399] dark:focus:border-emerald-500 shadow-md cursor-pointer"
           >
             <optgroup label={tAdv.groupIndices}>
               {assets

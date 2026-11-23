@@ -143,46 +143,59 @@ html.light body {
   color: var(--de-text-primary) !important;
 }
 
-/* Clear legacy dark gradients in light theme, preserving explicit gradient text, brand CTAs, and image overlays */
-html.light [class*="bg-gradient-to-"]:not([class*="bg-clip-text"]):not([data-on-dark]):not([data-on-dark] *):not([data-overlay-dark]):not([data-overlay-dark] *):not([data-brand-gradient]):not(button):not(a) {
+/* Clear legacy dark gradients in light theme, preserving explicit gradient text, brand CTAs, light gradients, and image overlays */
+html.light [class^="bg-gradient-to-"]:is([class*="from-\[\#0"], [class*="from-emerald-950"], [class*="from-rose-950"], [class*="from-red-950"], [class*="from-amber-950"], [class*="from-slate-9"]):not([class*="bg-clip-text"]):not([data-on-dark]):not([data-on-dark] *):not([data-overlay-dark]):not([data-overlay-dark] *):not([data-brand-gradient]):not(button):not(a),
+html.light [class*=" bg-gradient-to-"]:is([class*="from-\[\#0"], [class*="from-emerald-950"], [class*="from-rose-950"], [class*="from-red-950"], [class*="from-amber-950"], [class*="from-slate-9"]):not([class*="bg-clip-text"]):not([data-on-dark]):not([data-on-dark] *):not([data-overlay-dark]):not([data-overlay-dark] *):not([data-brand-gradient]):not(button):not(a) {
   background-image: none !important;
   background-color: var(--de-bg-card) !important;
 }
 
-html.light button[class*="bg-gradient-to-"][class*="from-emerald-600"],
-html.light a[class*="bg-gradient-to-"][class*="from-emerald-600"] {
+html.light button[class^="bg-gradient-to-"][class*=" from-emerald-600"],
+html.light button[class*=" bg-gradient-to-"][class*=" from-emerald-600"],
+html.light a[class^="bg-gradient-to-"][class*=" from-emerald-600"],
+html.light a[class*=" bg-gradient-to-"][class*=" from-emerald-600"] {
   background-image: linear-gradient(to right, #003399, #002266) !important;
   color: #FFFFFF !important;
 }
 
-html.light button[class*="bg-gradient-to-"][class*="from-emerald-500"],
-html.light a[class*="bg-gradient-to-"][class*="from-emerald-500"] {
+html.light button[class^="bg-gradient-to-"][class*=" from-emerald-500"],
+html.light button[class*=" bg-gradient-to-"][class*=" from-emerald-500"],
+html.light a[class^="bg-gradient-to-"][class*=" from-emerald-500"],
+html.light a[class*=" bg-gradient-to-"][class*=" from-emerald-500"] {
   background-image: linear-gradient(to right, #003399, #009B77) !important;
   color: #FFFFFF !important;
 }
 
-/* Card and Container Backgrounds in Light Theme (strictly preserving [data-overlay-dark] & image scrims) */
+/* Card and Container Backgrounds in Light Theme (only unprefixed legacy dark backgrounds; never hijacks dark:bg-*) */
 html.light :is(
-  div[class*="0d1627"],
-  div[class*="0e192c"],
-  div[class*="0b1322"],
-  div[class*="09101d"],
-  div[class*="091120"],
-  div[class*="09111e"],
-  div[class*="091122"],
-  div[class*="0a1120"],
-  div[class*="0a1220"],
-  div[class*="0a1221"],
-  div[class*="0c1a30"],
-  div[class*="0c1626"],
-  div[class*="0c1527"],
-  div[class*="121626"],
-  div[class*="0b1424"],
-  article,
-  .finance-card,
-  [class*="0d1627"],
-  [class*="0b1322"],
-  [class*="0b1320"]
+  [class^="bg-\[\#0d1627"], [class*=" bg-\[\#0d1627"],
+  [class^="bg-\[\#0e192c"], [class*=" bg-\[\#0e192c"],
+  [class^="bg-\[\#0b1322"], [class*=" bg-\[\#0b1322"],
+  [class^="bg-\[\#0b1320"], [class*=" bg-\[\#0b1320"],
+  [class^="bg-\[\#09101d"], [class*=" bg-\[\#09101d"],
+  [class^="bg-\[\#091120"], [class*=" bg-\[\#091120"],
+  [class^="bg-\[\#09111e"], [class*=" bg-\[\#09111e"],
+  [class^="bg-\[\#091122"], [class*=" bg-\[\#091122"],
+  [class^="bg-\[\#091322"], [class*=" bg-\[\#091322"],
+  [class^="bg-\[\#091522"], [class*=" bg-\[\#091522"],
+  [class^="bg-\[\#0a1120"], [class*=" bg-\[\#0a1120"],
+  [class^="bg-\[\#0a1220"], [class*=" bg-\[\#0a1220"],
+  [class^="bg-\[\#0a1221"], [class*=" bg-\[\#0a1221"],
+  [class^="bg-\[\#0c1a30"], [class*=" bg-\[\#0c1a30"],
+  [class^="bg-\[\#0c1626"], [class*=" bg-\[\#0c1626"],
+  [class^="bg-\[\#0c1527"], [class*=" bg-\[\#0c1527"],
+  [class^="bg-\[\#0c172a"], [class*=" bg-\[\#0c172a"],
+  [class^="bg-\[\#0c182c"], [class*=" bg-\[\#0c182c"],
+  [class^="bg-\[\#121626"], [class*=" bg-\[\#121626"],
+  [class^="bg-\[\#0b1424"], [class*=" bg-\[\#0b1424"],
+  [class^="bg-\[\#0b1221"], [class*=" bg-\[\#0b1221"],
+  [class^="bg-\[\#08101e"], [class*=" bg-\[\#08101e"],
+  [class^="bg-\[\#07111e"], [class*=" bg-\[\#07111e"],
+  [class^="bg-\[\#071a1c"], [class*=" bg-\[\#071a1c"],
+  [class^="bg-\[\#1a1207"], [class*=" bg-\[\#1a1207"],
+  [class^="bg-\[\#140e06"], [class*=" bg-\[\#140e06"],
+  [class^="bg-\[\#0a0703"], [class*=" bg-\[\#0a0703"],
+  .finance-card
 ):not([data-overlay-dark]):not([data-overlay-dark] *):not([data-on-dark]):not([data-on-dark] *) {
   background-color: var(--de-bg-card) !important;
   background-image: none !important;
@@ -191,69 +204,68 @@ html.light :is(
 }
 
 html.light :is(
-  div[class*="070d18"],
-  div[class*="070e1b"],
-  div[class*="070e1a"],
-  div[class*="080f1e"],
-  div[class*="050b14"],
-  div[class*="060c18"],
-  [class*="070d18"],
-  [class*="070e1b"],
-  [class*="070e1a"],
-  [class*="050a14"]
+  [class^="bg-\[\#070d18"], [class*=" bg-\[\#070d18"],
+  [class^="bg-\[\#070e1b"], [class*=" bg-\[\#070e1b"],
+  [class^="bg-\[\#070e1a"], [class*=" bg-\[\#070e1a"],
+  [class^="bg-\[\#080f1e"], [class*=" bg-\[\#080f1e"],
+  [class^="bg-\[\#08111e"], [class*=" bg-\[\#08111e"],
+  [class^="bg-\[\#050b14"], [class*=" bg-\[\#050b14"],
+  [class^="bg-\[\#050a14"], [class*=" bg-\[\#050a14"],
+  [class^="bg-\[\#060c18"], [class*=" bg-\[\#060c18"],
+  [class^="bg-\[\#060c17"], [class*=" bg-\[\#060c17"],
+  [class^="bg-\[\#060c16"], [class*=" bg-\[\#060c16"],
+  [class^="bg-\[\#060a12"], [class*=" bg-\[\#060a12"],
+  [class^="bg-\[\#0f1a2e"], [class*=" bg-\[\#0f1a2e"]
 ):not([data-overlay-dark]):not([data-overlay-dark] *):not([data-on-dark]):not([data-on-dark] *) {
   background-color: var(--de-bg-surface) !important;
   border-color: var(--de-border) !important;
 }
 
-html.light [class*="08101e"] {
-  background-color: var(--de-bg-card) !important;
+/* Borders in Light Theme (unprefixed legacy dark borders only) */
+html.light :is(
+  [class^="border-slate-800"], [class*=" border-slate-800"],
+  [class^="border-slate-700"], [class*=" border-slate-700"]
+):not([data-overlay-dark]):not([data-overlay-dark] *):not([data-on-dark]):not([data-on-dark] *) {
   border-color: var(--de-border) !important;
 }
 
-html.light [class*="060c16"],
-html.light [class*="060a12"] {
-  background-color: var(--de-bg-surface) !important;
-}
-
-/* Borders in Light Theme */
-html.light [class*="border-slate-800"],
-html.light [class*="border-slate-700"] {
-  border-color: var(--de-border) !important;
-}
-
-/* Text Hierarchy in Light Theme (preserving white text on dark brand buttons & image scrim overlays) */
-html.light :is(.text-white, .text-slate-100, [class*="text-slate-100"]):not([data-on-dark] *, [data-on-dark], [data-overlay-dark] *, [data-overlay-dark], .bg-\[\#003399\], .bg-\[\#003399\] *, .bg-\[\#002266\], .bg-\[\#002266\] *, .bg-\[\#009B77\], .bg-\[\#009B77\] *, .bg-\[\#006B52\], .bg-\[\#006B52\] *, .bg-emerald-600, .bg-emerald-600 *, .bg-emerald-500, .bg-emerald-500 *, .bg-rose-600, .bg-rose-600 *, .bg-rose-500, .bg-rose-500 *, .bg-blue-600, .bg-blue-600 *, button[class*="from-emerald-600"], button[class*="from-emerald-600"] *, a[class*="from-emerald-600"], a[class*="from-emerald-600"] *) {
+/* Text Hierarchy in Light Theme (preserving white text on dark brand buttons & image scrim overlays; never matches dark:text-slate-*) */
+html.light :is(.text-white, .text-slate-100, [class^="text-slate-100"], [class*=" text-slate-100"]):not([data-on-dark] *, [data-on-dark], [data-overlay-dark] *, [data-overlay-dark], .bg-\[\#003399\], .bg-\[\#003399\] *, .bg-\[\#002266\], .bg-\[\#002266\] *, .bg-\[\#009B77\], .bg-\[\#009B77\] *, .bg-\[\#006B52\], .bg-\[\#006B52\] *, .bg-emerald-600, .bg-emerald-600 *, .bg-emerald-500, .bg-emerald-500 *, .bg-rose-600, .bg-rose-600 *, .bg-rose-500, .bg-rose-500 *, .bg-blue-600, .bg-blue-600 *, button[class*="from-emerald-600"], button[class*="from-emerald-600"] *, a[class*="from-emerald-600"], a[class*="from-emerald-600"] *) {
   color: var(--de-text-primary) !important;
 }
 
-html.light :is(.text-slate-200, [class*="text-slate-200"]):not([data-on-dark] *, [data-overlay-dark] *) {
+html.light :is(.text-slate-200, [class^="text-slate-200"], [class*=" text-slate-200"]):not([data-on-dark], [data-on-dark] *, [data-overlay-dark], [data-overlay-dark] *) {
   color: var(--de-text-body) !important;
 }
 
-html.light :is(.text-slate-300, [class*="text-slate-300"]):not([data-on-dark] *, [data-overlay-dark] *) {
+html.light :is(.text-slate-300, [class^="text-slate-300"], [class*=" text-slate-300"]):not([data-on-dark], [data-on-dark] *, [data-overlay-dark], [data-overlay-dark] *) {
   color: var(--de-text-body) !important;
 }
 
-html.light :is(.text-slate-400, [class*="text-slate-400"]):not([data-on-dark] *, [data-overlay-dark] *) {
+html.light :is(.text-slate-400, [class^="text-slate-400"], [class*=" text-slate-400"]):not([data-on-dark], [data-on-dark] *, [data-overlay-dark], [data-overlay-dark] *) {
   color: var(--de-text-secondary) !important;
 }
 
-html.light :is(.text-slate-500, [class*="text-slate-500"]):not([data-on-dark] *, [data-overlay-dark] *) {
+html.light :is(.text-slate-500, [class^="text-slate-500"], [class*=" text-slate-500"]):not([data-on-dark], [data-on-dark] *, [data-overlay-dark], [data-overlay-dark] *) {
   color: var(--de-text-secondary) !important;
 }
 
-/* Inputs, Pills and Controls in Light Theme */
-html.light [class*="bg-slate-900"],
-html.light [class*="bg-slate-950"] {
+/* Inputs, Pills and Controls in Light Theme (unprefixed legacy bg-slate-900/950/800/700 only) */
+html.light :is(
+  [class^="bg-slate-900"], [class*=" bg-slate-900"],
+  [class^="bg-slate-950"], [class*=" bg-slate-950"]
+):not([data-on-dark]):not([data-on-dark] *):not([data-overlay-dark]):not([data-overlay-dark] *) {
   background-color: var(--de-bg-surface) !important;
   color: var(--de-text-primary) !important;
 }
 
-html.light .bg-slate-800,
-html.light .bg-slate-800\/60,
-html.light .bg-slate-800\/80,
-html.light .bg-slate-800\/90 {
+html.light :is(
+  .bg-slate-800,
+  .bg-slate-800\/60,
+  .bg-slate-800\/80,
+  .bg-slate-800\/90,
+  [class^="bg-slate-700"], [class*=" bg-slate-700"]
+):not([data-on-dark]):not([data-on-dark] *):not([data-overlay-dark]):not([data-overlay-dark] *) {
   background-color: #EDF2F7 !important;
   color: var(--de-text-body) !important;
 }
@@ -291,19 +303,19 @@ html.light .hover\:bg-\[\#121e35\]:hover {
 }
 
 /* Brand Colors: EU Blue (#003399 / #002266 / #E6EEFF), Emerald (#009B77 / #006B52 / #E3F7F2), Gold Accent (#D99B00 / #E5A910) */
-html.light :is(.text-emerald-400, .text-emerald-300, .text-teal-400, .text-teal-300):not([data-overlay-dark] *) {
+html.light :is(.text-emerald-400, .text-emerald-300, .text-teal-400, .text-teal-300):not([data-overlay-dark] *, [data-on-dark], [data-on-dark] *) {
   color: var(--de-emerald-dark) !important;
 }
 
-html.light :is(.text-blue-400, .text-blue-300, .text-sky-400, .text-sky-300, .text-cyan-400, .text-cyan-300):not([data-overlay-dark] *) {
+html.light :is(.text-blue-400, .text-blue-300, .text-sky-400, .text-sky-300, .text-cyan-400, .text-cyan-300):not([data-overlay-dark] *, [data-on-dark], [data-on-dark] *) {
   color: var(--de-eu-blue) !important;
 }
 
-html.light :is(.text-amber-400, .text-amber-300):not([data-overlay-dark] *) {
+html.light :is(.text-amber-400, .text-amber-300):not([data-overlay-dark] *, [data-on-dark], [data-on-dark] *) {
   color: var(--de-gold-dark) !important;
 }
 
-html.light .text-rose-400 {
+html.light .text-rose-400:not([data-overlay-dark] *, [data-on-dark], [data-on-dark] *) {
   color: var(--de-danger) !important;
 }
 

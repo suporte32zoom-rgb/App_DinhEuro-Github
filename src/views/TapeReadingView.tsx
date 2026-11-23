@@ -352,11 +352,11 @@ export const TapeReadingView: React.FC = () => {
   };
 
   return (
-    <div className="w-full flex flex-col h-full min-h-0 text-slate-100 select-none overflow-hidden pb-1">
+    <div className="w-full flex flex-col h-full min-h-0 text-slate-900 dark:text-slate-100 select-none overflow-hidden pb-1">
       {/* =========================================================================
           1. TOP CONTROL & FLOW METRICS STRIP (ULTRA DENSE - 42px)
          ========================================================================= */}
-      <div className="bg-[#09111e] border border-slate-800 rounded-lg px-2.5 py-1 mb-1.5 flex items-center justify-between gap-2 flex-wrap shrink-0">
+      <div className="bg-white dark:bg-[#09111e] border border-[#E2E8F0] dark:border-slate-800 rounded-lg px-2.5 py-1 mb-1.5 flex items-center justify-between gap-2 flex-wrap shrink-0 shadow-sm dark:shadow-none">
         {/* Left: Asset Switcher & Live Price */}
         <div className="flex items-center gap-2 flex-wrap">
           <div className="relative">
@@ -367,7 +367,7 @@ export const TapeReadingView: React.FC = () => {
                 if (found) setSelectedAsset(found);
               }}
               aria-label={tTape.selectAssetAria}
-              className="bg-[#0f1a2e] border border-slate-700 hover:border-emerald-500 rounded-md pl-2 pr-6 py-1 text-xs font-black text-white font-mono-numbers focus:outline-none cursor-pointer"
+              className="bg-[#F8FAFC] dark:bg-[#0f1a2e] border border-[#CBD5E1] dark:border-slate-700 hover:border-[#009B77] dark:hover:border-emerald-500 rounded-md pl-2 pr-6 py-1 text-xs font-black text-slate-900 dark:text-white font-mono-numbers focus:outline-none cursor-pointer"
             >
               {dynamicTapeAssets.map((a) => (
                 <option key={a.symbol} value={a.symbol}>
@@ -375,7 +375,7 @@ export const TapeReadingView: React.FC = () => {
                 </option>
               ))}
             </select>
-            <ChevronDown className="w-3 h-3 text-slate-400 absolute right-1.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+            <ChevronDown className="w-3 h-3 text-slate-500 dark:text-slate-400 absolute right-1.5 top-1/2 -translate-y-1/2 pointer-events-none" />
           </div>
 
           {/* Quick asset tags */}
@@ -386,8 +386,8 @@ export const TapeReadingView: React.FC = () => {
                 onClick={() => setSelectedAsset(a)}
                 className={`px-1.5 py-0.5 rounded text-[10px] font-bold transition cursor-pointer border ${
                   selectedAsset.symbol === a.symbol
-                    ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/50'
-                    : 'bg-slate-900/80 text-slate-400 hover:text-white border-slate-800'
+                    ? 'bg-[#E3F7F2] dark:bg-emerald-500/20 text-[#006B52] dark:text-emerald-300 border-[#009B77]/40 dark:border-emerald-500/50'
+                    : 'bg-[#F1F5F9] dark:bg-slate-900/80 text-slate-700 dark:text-slate-400 hover:text-slate-950 dark:hover:text-white border-[#CBD5E1] dark:border-slate-800'
                 }`}
               >
                 {a.symbol}
@@ -396,11 +396,11 @@ export const TapeReadingView: React.FC = () => {
           </div>
 
           {/* Current Price & Dual Currency Display */}
-          <div className="flex items-center gap-1.5 pl-1.5 border-l border-slate-800 font-mono-numbers">
-            <span className="text-sm font-black text-white">
+          <div className="flex items-center gap-1.5 pl-1.5 border-l border-[#E2E8F0] dark:border-slate-800 font-mono-numbers">
+            <span className="text-sm font-black text-slate-950 dark:text-white">
               {formatPrice(currentPrice)} {selectedAsset.unit}
             </span>
-            <span className="text-[10px] text-emerald-400 font-medium">
+            <span className="text-[10px] text-[#006B52] dark:text-emerald-400 font-semibold dark:font-medium">
               (≈ {selectedAsset.unit === 'R$' || selectedAsset.symbol.includes('WIN') || selectedAsset.symbol.includes('WDO')
                 ? getDualCurrencyDisplay(currentPrice, 'BRL', universalRates, false, locale).secondaryFormatted
                 : getDualCurrencyDisplay(currentPrice, 'USD', universalRates, false, locale).secondaryFormatted})
@@ -411,11 +411,11 @@ export const TapeReadingView: React.FC = () => {
         {/* Center: Live Flow Metrics in Single Row */}
         <div className="hidden lg:flex items-center gap-2 text-[11px] font-mono-numbers">
           {/* CVD */}
-          <div className="bg-[#060c18] border border-slate-800/90 rounded px-2 py-0.5 flex items-center gap-1.5">
-            <span className="text-slate-500 text-[10px]">CVD:</span>
+          <div className="bg-[#F8FAFC] dark:bg-[#060c18] border border-[#E2E8F0] dark:border-slate-800/90 rounded px-2 py-0.5 flex items-center gap-1.5">
+            <span className="text-slate-600 dark:text-slate-500 text-[10px]">CVD:</span>
             <strong
               className={`font-bold flex items-center gap-0.5 ${
-                cvdValue >= 0 ? 'text-emerald-400' : 'text-rose-400'
+                cvdValue >= 0 ? 'text-[#006B52] dark:text-emerald-400' : 'text-[#DC2626] dark:text-rose-400'
               }`}
             >
               {cvdValue >= 0 ? <ArrowUpRight className="w-3 h-3" /> : <ArrowDownRight className="w-3 h-3" />}
@@ -425,13 +425,13 @@ export const TapeReadingView: React.FC = () => {
           </div>
 
           {/* Aggression Ratio */}
-          <div className="bg-[#060c18] border border-slate-800/90 rounded px-2 py-0.5 flex items-center gap-2 min-w-[170px]">
-            <span className="text-emerald-400 font-bold text-[10px]">{tTape.buyLetter} {buyRatio}%</span>
-            <div className="flex-1 h-1.5 rounded-full bg-slate-800 flex overflow-hidden">
-              <div className="bg-emerald-500 h-full transition-all" style={{ width: `${buyRatio}%` }} />
-              <div className="bg-rose-500 h-full transition-all" style={{ width: `${sellRatio}%` }} />
+          <div className="bg-[#F8FAFC] dark:bg-[#060c18] border border-[#E2E8F0] dark:border-slate-800/90 rounded px-2 py-0.5 flex items-center gap-2 min-w-[170px]">
+            <span className="text-[#006B52] dark:text-emerald-400 font-bold text-[10px]">{tTape.buyLetter} {buyRatio}%</span>
+            <div className="flex-1 h-1.5 rounded-full bg-slate-200 dark:bg-slate-800 flex overflow-hidden">
+              <div className="bg-[#009B77] dark:bg-emerald-500 h-full transition-all" style={{ width: `${buyRatio}%` }} />
+              <div className="bg-[#DC2626] dark:bg-rose-500 h-full transition-all" style={{ width: `${sellRatio}%` }} />
             </div>
-            <span className="text-rose-400 font-bold text-[10px]">{tTape.sellLetter} {sellRatio}%</span>
+            <span className="text-[#DC2626] dark:text-rose-400 font-bold text-[10px]">{tTape.sellLetter} {sellRatio}%</span>
           </div>
         </div>
 
@@ -442,8 +442,8 @@ export const TapeReadingView: React.FC = () => {
             onClick={() => setIsPlaying(!isPlaying)}
             className={`px-2 py-1 rounded text-[11px] font-bold flex items-center gap-1 transition cursor-pointer ${
               isPlaying
-                ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40'
-                : 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40'
+                ? 'bg-[#FEF7E0] dark:bg-amber-500/20 text-[#B45309] dark:text-amber-300 border border-[#E5A910]/50 dark:border-amber-500/40'
+                : 'bg-[#E3F7F2] dark:bg-emerald-500/20 text-[#006B52] dark:text-emerald-300 border border-[#009B77]/50 dark:border-emerald-500/40'
             }`}
           >
             {isPlaying ? <Pause className="w-3 h-3" /> : <Play className="w-3 h-3" />}
@@ -451,13 +451,15 @@ export const TapeReadingView: React.FC = () => {
           </button>
 
           {/* Speed */}
-          <div className="flex items-center bg-[#060c18] p-0.5 rounded border border-slate-800 text-[10px] font-bold">
+          <div className="flex items-center bg-[#F1F5F9] dark:bg-[#060c18] p-0.5 rounded border border-[#E2E8F0] dark:border-slate-800 text-[10px] font-bold">
             {[1, 2, 5].map((s) => (
               <button
                 key={s}
                 onClick={() => setSpeedMultiplier(s)}
                 className={`px-1.5 py-0.2 rounded transition cursor-pointer ${
-                  speedMultiplier === s ? 'bg-slate-800 text-emerald-400' : 'text-slate-400 hover:text-white'
+                  speedMultiplier === s
+                    ? 'bg-white dark:bg-slate-800 text-[#006B52] dark:text-emerald-400 shadow-sm dark:shadow-none'
+                    : 'text-slate-600 dark:text-slate-400 hover:text-slate-950 dark:hover:text-white'
                 }`}
               >
                 {s}x
@@ -469,20 +471,25 @@ export const TapeReadingView: React.FC = () => {
           <button
             onClick={() => setAudioFeedback(!audioFeedback)}
             className={`p-1 rounded border transition cursor-pointer ${
-              audioFeedback ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40' : 'bg-slate-900 text-slate-500 border-slate-800'
+              audioFeedback
+                ? 'bg-[#E3F7F2] dark:bg-emerald-500/20 text-[#006B52] dark:text-emerald-300 border-[#009B77]/50 dark:border-emerald-500/40'
+                : 'bg-[#F1F5F9] dark:bg-slate-900 text-slate-600 dark:text-slate-500 border-[#CBD5E1] dark:border-slate-800'
             }`}
           >
             {audioFeedback ? <Volume2 className="w-3 h-3" /> : <VolumeX className="w-3 h-3" />}
           </button>
 
           {/* Lot Filter */}
-          <div className="hidden sm:flex items-center bg-[#060c18] p-0.5 rounded border border-slate-800 text-[10px] font-bold">
+          <div className="hidden sm:flex items-center bg-[#F1F5F9] dark:bg-[#060c18] p-0.5 rounded border border-[#E2E8F0] dark:border-slate-800 text-[10px] font-bold">
             {[0, 10, 50].map((f) => (
               <button
                 key={f}
                 onClick={() => setMinTradeFilter(f)}
+                data-on-dark={minTradeFilter === f ? 'true' : undefined}
                 className={`px-1.5 py-0.2 rounded transition cursor-pointer ${
-                  minTradeFilter === f ? 'bg-blue-600 text-white' : 'text-slate-400 hover:text-white'
+                  minTradeFilter === f
+                    ? 'bg-[#003399] dark:bg-blue-600 text-white'
+                    : 'text-slate-600 dark:text-slate-400 hover:text-slate-950 dark:hover:text-white'
                 }`}
               >
                 {f === 0 ? tTape.allFilter : `≥${f}`}
@@ -495,7 +502,7 @@ export const TapeReadingView: React.FC = () => {
             value={brokerFilter}
             onChange={(e) => setBrokerFilter(e.target.value)}
             aria-label={tTape.filterBrokerAria}
-            className="bg-[#060c18] border border-slate-800 text-slate-300 text-[10px] rounded px-1.5 py-0.5 outline-none"
+            className="bg-[#F8FAFC] dark:bg-[#060c18] border border-[#CBD5E1] dark:border-slate-800 text-slate-800 dark:text-slate-300 text-[10px] rounded px-1.5 py-0.5 outline-none font-semibold"
           >
             <option value="ALL">{tTape.allBrokersOption}</option>
             {BROKERS_LIST.map((b) => (
@@ -509,8 +516,8 @@ export const TapeReadingView: React.FC = () => {
 
       {/* Floating Notification */}
       {lastNotification && (
-        <div className="bg-emerald-950/90 border border-emerald-500/60 text-emerald-200 px-3 py-1 rounded text-xs flex items-center gap-1.5 shadow-lg mb-1 animate-in fade-in shrink-0">
-          <Zap className="w-3 h-3 text-emerald-400" />
+        <div className="bg-[#E3F7F2] dark:bg-emerald-950/90 border border-[#009B77]/50 dark:border-emerald-500/60 text-[#006B52] dark:text-emerald-200 px-3 py-1 rounded text-xs flex items-center gap-1.5 shadow-lg mb-1 animate-in fade-in shrink-0">
+          <Zap className="w-3 h-3 text-[#009B77] dark:text-emerald-400" />
           <span className="font-semibold">{lastNotification}</span>
         </div>
       )}
@@ -522,21 +529,21 @@ export const TapeReadingView: React.FC = () => {
         {/* =====================================================================
             COL 1: LIVRO DE PROFUNDIDADE (DOM LADDER) (4.5 Cols on Desktop)
            ===================================================================== */}
-        <div className="col-span-12 sm:col-span-6 lg:col-span-4 flex flex-col h-full min-h-0 bg-[#09111e] border border-slate-800 rounded-lg p-1.5 overflow-hidden">
-          <div className="flex items-center justify-between pb-1 border-b border-slate-800/80 mb-1 shrink-0 text-xs">
+        <div className="col-span-12 sm:col-span-6 lg:col-span-4 flex flex-col h-full min-h-0 bg-white dark:bg-[#09111e] border border-[#E2E8F0] dark:border-slate-800 rounded-lg p-1.5 overflow-hidden shadow-sm dark:shadow-none">
+          <div className="flex items-center justify-between pb-1 border-b border-[#E2E8F0] dark:border-slate-800/80 mb-1 shrink-0 text-xs">
             <div className="flex items-center gap-1.5">
-              <BarChart3 className="w-3.5 h-3.5 text-emerald-400" />
-              <span className="font-bold text-white uppercase text-[11px] tracking-wider">{tTape.domTitle}</span>
+              <BarChart3 className="w-3.5 h-3.5 text-[#009B77] dark:text-emerald-400" />
+              <span className="font-bold text-slate-900 dark:text-white uppercase text-[11px] tracking-wider">{tTape.domTitle}</span>
             </div>
-            <span className="text-[10px] text-slate-400 font-mono-numbers">{domLevels.length} {tTape.levelsUnit}</span>
+            <span className="text-[10px] text-slate-500 dark:text-slate-400 font-mono-numbers">{domLevels.length} {tTape.levelsUnit}</span>
           </div>
 
           {/* Columns Header */}
-          <div className="grid grid-cols-12 text-[9px] font-bold text-slate-400 uppercase py-0.5 px-1 bg-[#060c18] rounded mb-1 shrink-0">
+          <div className="grid grid-cols-12 text-[9px] font-bold text-slate-600 dark:text-slate-400 uppercase py-0.5 px-1 bg-[#F1F5F9] dark:bg-[#060c18] rounded mb-1 shrink-0">
             <div className="col-span-2 text-left pl-0.5">{tTape.colOrd}</div>
-            <div className="col-span-3 text-right text-sky-400">{tTape.colBid}</div>
-            <div className="col-span-2 text-center text-slate-200">{tTape.colPrice}</div>
-            <div className="col-span-3 text-left text-rose-400 pl-1">{tTape.colAsk}</div>
+            <div className="col-span-3 text-right text-[#003399] dark:text-sky-400">{tTape.colBid}</div>
+            <div className="col-span-2 text-center text-slate-900 dark:text-slate-200">{tTape.colPrice}</div>
+            <div className="col-span-3 text-left text-[#DC2626] dark:text-rose-400 pl-1">{tTape.colAsk}</div>
             <div className="col-span-2 text-right pr-0.5">{tTape.colOrd}</div>
           </div>
 
@@ -550,10 +557,10 @@ export const TapeReadingView: React.FC = () => {
                   onClick={() => handleDomClick(lvl.price, lvl.price <= currentPrice ? 'BUY' : 'SELL')}
                   className={`grid grid-cols-12 items-center py-0.5 px-0.5 rounded transition cursor-pointer select-none relative ${
                     isCurrent
-                      ? 'bg-amber-500/15 border border-amber-500/40 text-amber-300 font-bold'
+                      ? 'bg-[#FEF7E0] dark:bg-amber-500/15 border border-[#E5A910]/60 dark:border-amber-500/40 text-[#B45309] dark:text-amber-300 font-bold'
                       : lvl.isPoc
-                      ? 'bg-indigo-950/40 border border-indigo-700/30'
-                      : 'hover:bg-slate-800/50'
+                      ? 'bg-[#E6EEFF] dark:bg-indigo-950/40 border border-[#003399]/30 dark:border-indigo-700/30'
+                      : 'hover:bg-slate-100 dark:hover:bg-slate-800/50'
                   }`}
                 >
                   <div className="col-span-2 text-[9px] text-slate-500 pl-0.5">
@@ -564,20 +571,20 @@ export const TapeReadingView: React.FC = () => {
                   <div className="col-span-3 text-right pr-1 relative">
                     {lvl.bidQty > 0 && (
                       <div
-                        className="absolute right-0 top-0 bottom-0 bg-sky-500/25 rounded"
+                        className="absolute right-0 top-0 bottom-0 bg-[#003399]/15 dark:bg-sky-500/25 rounded"
                         style={{ width: `${lvl.bidVolPct}%` }}
                       />
                     )}
-                    <span className="relative z-10 text-sky-300 font-bold">
+                    <span className="relative z-10 text-[#003399] dark:text-sky-300 font-bold">
                       {lvl.bidQty > 0 ? lvl.bidQty : ''}
                     </span>
                   </div>
 
                   {/* Preço */}
-                  <div className="col-span-2 text-center font-bold text-white">
+                  <div className="col-span-2 text-center font-bold text-slate-900 dark:text-white">
                     {formatPrice(lvl.price)}
                     {lvl.isPoc && (
-                      <span className="block text-[7px] uppercase tracking-widest text-indigo-400 font-sans font-black">
+                      <span className="block text-[7px] uppercase tracking-widest text-[#003399] dark:text-indigo-400 font-sans font-black">
                         POC
                       </span>
                     )}
@@ -587,11 +594,11 @@ export const TapeReadingView: React.FC = () => {
                   <div className="col-span-3 text-left pl-1 relative">
                     {lvl.askQty > 0 && (
                       <div
-                        className="absolute left-0 top-0 bottom-0 bg-rose-500/25 rounded"
+                        className="absolute left-0 top-0 bottom-0 bg-[#DC2626]/15 dark:bg-rose-500/25 rounded"
                         style={{ width: `${lvl.askVolPct}%` }}
                       />
                     )}
-                    <span className="relative z-10 text-rose-300 font-bold">
+                    <span className="relative z-10 text-[#DC2626] dark:text-rose-300 font-bold">
                       {lvl.askQty > 0 ? lvl.askQty : ''}
                     </span>
                   </div>
@@ -605,16 +612,18 @@ export const TapeReadingView: React.FC = () => {
           </div>
 
           {/* Quick Actions Footer */}
-          <div className="pt-1.5 border-t border-slate-800/80 grid grid-cols-2 gap-1 shrink-0 text-[10px]">
+          <div className="pt-1.5 border-t border-[#E2E8F0] dark:border-slate-800/80 grid grid-cols-2 gap-1 shrink-0 text-[10px]">
             <button
               onClick={() => handleDomClick(currentPrice, 'BUY')}
-              className="py-1 rounded bg-emerald-600 hover:bg-emerald-500 text-white font-bold uppercase transition flex items-center justify-center gap-1 cursor-pointer"
+              data-on-dark="true"
+              className="py-1 rounded bg-[#009B77] hover:bg-[#008263] dark:bg-emerald-600 dark:hover:bg-emerald-500 text-white font-bold uppercase transition flex items-center justify-center gap-1 cursor-pointer"
             >
               <ArrowUpRight className="w-3 h-3" /> {tTape.buyMarketBtn}
             </button>
             <button
               onClick={() => handleDomClick(currentPrice, 'SELL')}
-              className="py-1 rounded bg-rose-600 hover:bg-rose-500 text-white font-bold uppercase transition flex items-center justify-center gap-1 cursor-pointer"
+              data-on-dark="true"
+              className="py-1 rounded bg-[#DC2626] hover:bg-red-700 dark:bg-rose-600 dark:hover:bg-rose-500 text-white font-bold uppercase transition flex items-center justify-center gap-1 cursor-pointer"
             >
               <ArrowDownRight className="w-3 h-3" /> {tTape.sellMarketBtn}
             </button>
@@ -624,22 +633,22 @@ export const TapeReadingView: React.FC = () => {
         {/* =====================================================================
             COL 2: TIMES & TRADES (FITA DE NEGÓCIOS) (4.5 Cols on Desktop)
            ===================================================================== */}
-        <div className="col-span-12 sm:col-span-6 lg:col-span-4 flex flex-col h-full min-h-0 bg-[#09111e] border border-slate-800 rounded-lg p-1.5 overflow-hidden">
-          <div className="flex items-center justify-between pb-1 border-b border-slate-800/80 mb-1 shrink-0 text-xs">
+        <div className="col-span-12 sm:col-span-6 lg:col-span-4 flex flex-col h-full min-h-0 bg-white dark:bg-[#09111e] border border-[#E2E8F0] dark:border-slate-800 rounded-lg p-1.5 overflow-hidden shadow-sm dark:shadow-none">
+          <div className="flex items-center justify-between pb-1 border-b border-[#E2E8F0] dark:border-slate-800/80 mb-1 shrink-0 text-xs">
             <div className="flex items-center gap-1.5">
-              <Activity className="w-3.5 h-3.5 text-sky-400" />
-              <span className="font-bold text-white uppercase text-[11px] tracking-wider">{tTape.tapeTitle}</span>
+              <Activity className="w-3.5 h-3.5 text-[#003399] dark:text-sky-400" />
+              <span className="font-bold text-slate-900 dark:text-white uppercase text-[11px] tracking-wider">{tTape.tapeTitle}</span>
             </div>
-            <span className="text-[10px] text-slate-400 font-mono-numbers">{filteredTape.length} {tTape.tradesCountLabel}</span>
+            <span className="text-[10px] text-slate-500 dark:text-slate-400 font-mono-numbers">{filteredTape.length} {tTape.tradesCountLabel}</span>
           </div>
 
           {/* Tape Header */}
-          <div className="grid grid-cols-12 text-[9px] font-bold text-slate-400 uppercase py-0.5 px-1 bg-[#060c18] rounded mb-1 shrink-0">
+          <div className="grid grid-cols-12 text-[9px] font-bold text-slate-600 dark:text-slate-400 uppercase py-0.5 px-1 bg-[#F1F5F9] dark:bg-[#060c18] rounded mb-1 shrink-0">
             <div className="col-span-3 text-left">{tTape.colTime}</div>
             <div className="col-span-3 text-center">{tTape.colPrice}</div>
             <div className="col-span-2 text-right">{tTape.colLot}</div>
-            <div className="col-span-2 text-center text-sky-400">{tTape.colBuyer}</div>
-            <div className="col-span-2 text-center text-rose-400">{tTape.colSeller}</div>
+            <div className="col-span-2 text-center text-[#003399] dark:text-sky-400">{tTape.colBuyer}</div>
+            <div className="col-span-2 text-center text-[#DC2626] dark:text-rose-400">{tTape.colSeller}</div>
           </div>
 
           {/* Tape Rows */}
@@ -651,24 +660,24 @@ export const TapeReadingView: React.FC = () => {
                   key={trade.id}
                   className={`grid grid-cols-12 items-center py-0.5 px-1 rounded transition border ${
                     trade.isLargeTrade
-                      ? 'bg-amber-500/15 border-amber-500/40'
+                      ? 'bg-[#FEF7E0] dark:bg-amber-500/15 border-[#E5A910]/50 dark:border-amber-500/40'
                       : isBuy
-                      ? 'bg-emerald-950/20 border-emerald-900/20'
-                      : 'bg-rose-950/20 border-rose-900/20'
+                      ? 'bg-[#E3F7F2]/60 dark:bg-emerald-950/20 border-[#009B77]/20 dark:border-emerald-900/20'
+                      : 'bg-[#FEE2E2]/60 dark:bg-rose-950/20 border-[#DC2626]/20 dark:border-rose-900/20'
                   }`}
                 >
-                  <div className="col-span-3 text-[9px] text-slate-400 truncate">{trade.time}</div>
-                  <div className={`col-span-3 text-center font-bold ${isBuy ? 'text-emerald-400' : 'text-rose-400'}`}>
+                  <div className="col-span-3 text-[9px] text-slate-500 dark:text-slate-400 truncate">{trade.time}</div>
+                  <div className={`col-span-3 text-center font-bold ${isBuy ? 'text-[#006B52] dark:text-emerald-400' : 'text-[#DC2626] dark:text-rose-400'}`}>
                     {formatPrice(trade.price)}
                   </div>
-                  <div className="col-span-2 text-right font-bold text-white">
+                  <div className="col-span-2 text-right font-bold text-slate-900 dark:text-white">
                     {trade.qty}
-                    {trade.isLargeTrade && <span className="text-[7px] text-amber-300 ml-0.5 font-sans font-bold">BIG</span>}
+                    {trade.isLargeTrade && <span className="text-[7px] text-[#B45309] dark:text-amber-300 ml-0.5 font-sans font-bold">BIG</span>}
                   </div>
-                  <div className="col-span-2 text-center text-[9px] text-slate-300 truncate px-0.5">
+                  <div className="col-span-2 text-center text-[9px] text-slate-700 dark:text-slate-300 truncate px-0.5">
                     {trade.buyerBroker}
                   </div>
-                  <div className="col-span-2 text-center text-[9px] text-slate-400 truncate px-0.5">
+                  <div className="col-span-2 text-center text-[9px] text-slate-600 dark:text-slate-400 truncate px-0.5">
                     {trade.sellerBroker}
                   </div>
                 </div>
@@ -677,15 +686,15 @@ export const TapeReadingView: React.FC = () => {
           </div>
 
           {/* Tape Legend Footer */}
-          <div className="pt-1.5 border-t border-slate-800/80 flex items-center justify-between text-[9px] text-slate-400 shrink-0">
+          <div className="pt-1.5 border-t border-[#E2E8F0] dark:border-slate-800/80 flex items-center justify-between text-[9px] text-slate-600 dark:text-slate-400 shrink-0">
             <span className="flex items-center gap-1">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> {tTape.aggressorBuy}
+              <span className="w-1.5 h-1.5 rounded-full bg-[#009B77] dark:bg-emerald-400"></span> {tTape.aggressorBuy}
             </span>
             <span className="flex items-center gap-1">
-              <span className="w-1.5 h-1.5 rounded-full bg-rose-400"></span> {tTape.aggressorSell}
+              <span className="w-1.5 h-1.5 rounded-full bg-[#DC2626] dark:bg-rose-400"></span> {tTape.aggressorSell}
             </span>
             <span className="flex items-center gap-1">
-              <span className="w-1.5 h-1.5 rounded-full bg-amber-400"></span> {tTape.bigLotLegend}
+              <span className="w-1.5 h-1.5 rounded-full bg-[#D99B00] dark:bg-amber-400"></span> {tTape.bigLotLegend}
             </span>
           </div>
         </div>
@@ -693,17 +702,17 @@ export const TapeReadingView: React.FC = () => {
         {/* =====================================================================
             COL 3: SALDO DE PLAYERS & MICROESTRUTURA (3 Cols on Desktop)
            ===================================================================== */}
-        <div className="col-span-12 lg:col-span-4 flex flex-col h-full min-h-0 bg-[#09111e] border border-slate-800 rounded-lg p-1.5 overflow-hidden">
-          <div className="flex items-center justify-between pb-1 border-b border-slate-800/80 mb-1 shrink-0 text-xs">
+        <div className="col-span-12 lg:col-span-4 flex flex-col h-full min-h-0 bg-white dark:bg-[#09111e] border border-[#E2E8F0] dark:border-slate-800 rounded-lg p-1.5 overflow-hidden shadow-sm dark:shadow-none">
+          <div className="flex items-center justify-between pb-1 border-b border-[#E2E8F0] dark:border-slate-800/80 mb-1 shrink-0 text-xs">
             <div className="flex items-center gap-1.5">
-              <Shield className="w-3.5 h-3.5 text-amber-400" />
-              <span className="font-bold text-white uppercase text-[11px] tracking-wider">{tTape.playersTitle}</span>
+              <Shield className="w-3.5 h-3.5 text-[#D99B00] dark:text-amber-400" />
+              <span className="font-bold text-slate-900 dark:text-white uppercase text-[11px] tracking-wider">{tTape.playersTitle}</span>
             </div>
-            <span className="text-[10px] text-slate-400">{tTape.institutionalTag}</span>
+            <span className="text-[10px] text-slate-500 dark:text-slate-400">{tTape.institutionalTag}</span>
           </div>
 
           {/* Ranking Header */}
-          <div className="grid grid-cols-12 text-[9px] font-bold text-slate-400 uppercase py-0.5 px-1 bg-[#060c18] rounded mb-1 shrink-0">
+          <div className="grid grid-cols-12 text-[9px] font-bold text-slate-600 dark:text-slate-400 uppercase py-0.5 px-1 bg-[#F1F5F9] dark:bg-[#060c18] rounded mb-1 shrink-0">
             <div className="col-span-5 text-left">{tTape.colBroker}</div>
             <div className="col-span-4 text-right">{tTape.colNetBalance}</div>
             <div className="col-span-3 text-right">{tTape.colVolPct}</div>
@@ -714,19 +723,19 @@ export const TapeReadingView: React.FC = () => {
             {brokerRankings.map((b) => {
               const isLong = b.netQty >= 0;
               return (
-                <div key={b.broker} className="p-1 rounded bg-[#060c18] border border-slate-800/70">
+                <div key={b.broker} className="p-1 rounded bg-[#F8FAFC] dark:bg-[#060c18] border border-[#E2E8F0] dark:border-slate-800/70">
                   <div className="grid grid-cols-12 items-center">
-                    <div className="col-span-5 font-bold text-white truncate text-[10px]">{b.broker}</div>
-                    <div className={`col-span-4 text-right font-bold ${isLong ? 'text-emerald-400' : 'text-rose-400'}`}>
+                    <div className="col-span-5 font-bold text-slate-900 dark:text-white truncate text-[10px]">{b.broker}</div>
+                    <div className={`col-span-4 text-right font-bold ${isLong ? 'text-[#006B52] dark:text-emerald-400' : 'text-[#DC2626] dark:text-rose-400'}`}>
                       {isLong ? '+' : ''}
                       {b.netQty.toLocaleString(locale)}
                     </div>
-                    <div className="col-span-3 text-right text-slate-400">{b.volPercent}%</div>
+                    <div className="col-span-3 text-right text-slate-600 dark:text-slate-400">{b.volPercent}%</div>
                   </div>
-                  <div className="flex items-center gap-1 text-[8px] text-slate-400 pt-0.5">
-                    <span className="text-emerald-400 font-semibold">{b.buyQty} {tTape.buyLetter}</span>
-                    <span className="text-slate-600">/</span>
-                    <span className="text-rose-400 font-semibold">{b.sellQty} {tTape.sellLetter}</span>
+                  <div className="flex items-center gap-1 text-[8px] text-slate-500 dark:text-slate-400 pt-0.5">
+                    <span className="text-[#006B52] dark:text-emerald-400 font-semibold">{b.buyQty} {tTape.buyLetter}</span>
+                    <span className="text-slate-400 dark:text-slate-600">/</span>
+                    <span className="text-[#DC2626] dark:text-rose-400 font-semibold">{b.sellQty} {tTape.sellLetter}</span>
                   </div>
                 </div>
               );
@@ -734,13 +743,13 @@ export const TapeReadingView: React.FC = () => {
           </div>
 
           {/* Compact Educational Tips Dock at bottom */}
-          <div className="pt-1.5 border-t border-slate-800/80 shrink-0 space-y-1 text-[9px] text-slate-400">
-            <div className="bg-[#060c18] p-1.5 rounded border border-slate-800/70">
-              <span className="text-emerald-400 font-bold block">{tTape.tip1Title}</span>
+          <div className="pt-1.5 border-t border-[#E2E8F0] dark:border-slate-800/80 shrink-0 space-y-1 text-[9px] text-slate-600 dark:text-slate-400">
+            <div className="bg-[#F8FAFC] dark:bg-[#060c18] p-1.5 rounded border border-[#E2E8F0] dark:border-slate-800/70">
+              <span className="text-[#006B52] dark:text-emerald-400 font-bold block">{tTape.tip1Title}</span>
               <span>{tTape.tip1Desc}</span>
             </div>
-            <div className="bg-[#060c18] p-1.5 rounded border border-slate-800/70">
-              <span className="text-amber-400 font-bold block">{tTape.tip2Title}</span>
+            <div className="bg-[#F8FAFC] dark:bg-[#060c18] p-1.5 rounded border border-[#E2E8F0] dark:border-slate-800/70">
+              <span className="text-[#B45309] dark:text-amber-400 font-bold block">{tTape.tip2Title}</span>
               <span>{tTape.tip2Desc}</span>
             </div>
           </div>

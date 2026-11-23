@@ -27,27 +27,27 @@ export const TermsOfUseView: React.FC = () => {
         <button
           type="button"
           onClick={() => setActiveTab('dashboard')}
-          className="flex items-center gap-2 text-xs font-bold text-slate-400 hover:text-white transition px-3 py-1.5 rounded-lg bg-slate-900/60 border border-slate-800 hover:border-slate-700 cursor-pointer"
+          className="flex items-center gap-2 text-xs font-bold text-slate-700 dark:text-slate-400 hover:text-slate-950 dark:hover:text-white transition px-3 py-1.5 rounded-lg bg-white dark:bg-slate-900/60 border border-[#CBD5E1] dark:border-slate-800 hover:border-[#003399] dark:hover:border-slate-700 cursor-pointer shadow-sm dark:shadow-none"
         >
           <ArrowLeft className="w-4 h-4" />
           <span>{tLegal.backToHome}</span>
         </button>
-        <span className="text-[11px] font-mono text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2.5 py-1 rounded-md">
+        <span className="text-[11px] font-mono text-[#006B52] dark:text-emerald-400 bg-[#E3F7F2] dark:bg-emerald-500/10 border border-[#009B77]/30 dark:border-emerald-500/20 px-2.5 py-1 rounded-md font-bold">
           {tTerms.badge}
         </span>
       </div>
 
       {/* Main Title Banner */}
-      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#0c182c] via-[#091322] to-[#060c16] border border-slate-700/80 p-6 sm:p-10 shadow-2xl">
+      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#E6EEFF] via-white to-[#F8FAFC] dark:from-[#0c182c] dark:via-[#091322] dark:to-[#060c16] border border-[#003399]/20 dark:border-slate-700/80 p-6 sm:p-10 shadow-lg dark:shadow-2xl">
         <div className="flex items-start gap-4">
-          <div className="w-12 h-12 rounded-xl bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center text-emerald-400 shrink-0">
+          <div className="w-12 h-12 rounded-xl bg-[#009B77]/15 dark:bg-emerald-500/15 border border-[#009B77]/30 dark:border-emerald-500/30 flex items-center justify-center text-[#006B52] dark:text-emerald-400 shrink-0">
             <Scale className="w-6 h-6" />
           </div>
           <div className="space-y-2">
-            <h1 className="text-xl sm:text-3xl font-black text-white tracking-tight">
+            <h1 className="text-xl sm:text-3xl font-black text-slate-900 dark:text-white tracking-tight">
               {tTerms.title}
             </h1>
-            <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
+            <p className="text-xs sm:text-sm text-slate-700 dark:text-slate-300 leading-relaxed">
               {tTerms.subtitle}
             </p>
           </div>
@@ -55,28 +55,28 @@ export const TermsOfUseView: React.FC = () => {
       </div>
 
       {/* Content Blocks */}
-      <div className="space-y-6 text-slate-300 text-xs sm:text-sm leading-relaxed">
+      <div className="space-y-6 text-slate-700 dark:text-slate-300 text-xs sm:text-sm leading-relaxed">
         {/* 1. Natureza da Plataforma */}
-        <div className="rounded-2xl bg-[#0b1322] border border-slate-800 p-6 shadow-xl space-y-3">
-          <h2 className="text-base font-bold text-white flex items-center gap-2">
-            <Building2 className="w-4 h-4 text-emerald-400" />
+        <div className="rounded-2xl bg-white dark:bg-[#0b1322] border border-[#E2E8F0] dark:border-slate-800 p-6 shadow-md dark:shadow-xl space-y-3">
+          <h2 className="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
+            <Building2 className="w-4 h-4 text-[#009B77] dark:text-emerald-400" />
             <span>{tTerms.s1Title}</span>
           </h2>
           <p>
-            {tTerms.s1P1Before ? `${tTerms.s1P1Before} ` : ''}<strong>DinhEuro</strong> (<span className="text-emerald-400 font-mono">dinheuro.com</span> / <span className="text-emerald-400 font-mono">dinheuro.com.br</span>) {tTerms.s1P1Mid}{tTerms.s1P1After ? ` ${tTerms.s1P1After}` : ''}
+            {tTerms.s1P1Before ? `${tTerms.s1P1Before} ` : ''}<strong className="text-slate-900 dark:text-white">DinhEuro</strong> (<span className="text-[#006B52] dark:text-emerald-400 font-mono">dinheuro.com</span> / <span className="text-[#006B52] dark:text-emerald-400 font-mono">dinheuro.com.br</span>) {tTerms.s1P1Mid}{tTerms.s1P1After ? ` ${tTerms.s1P1After}` : ''}
           </p>
           <p>
-            {tTerms.s1P2Before} <strong>{tTerms.s1P2Bold}</strong> {tTerms.s1P2After}
+            {tTerms.s1P2Before} <strong className="text-slate-900 dark:text-white">{tTerms.s1P2Bold}</strong> {tTerms.s1P2After}
           </p>
         </div>
 
         {/* 2. Isenção de Responsabilidade (Disclaimer Financeiro) */}
-        <div className="rounded-2xl bg-amber-500/5 border border-amber-500/20 p-6 shadow-xl space-y-3">
-          <h2 className="text-base font-bold text-amber-400 flex items-center gap-2">
-            <AlertTriangle className="w-4 h-4 text-amber-400" />
+        <div className="rounded-2xl bg-[#FEF7E0]/70 dark:bg-amber-500/5 border border-[#E5A910]/40 dark:border-amber-500/20 p-6 shadow-md dark:shadow-xl space-y-3">
+          <h2 className="text-base font-bold text-[#B45309] dark:text-amber-400 flex items-center gap-2">
+            <AlertTriangle className="w-4 h-4 text-[#B45309] dark:text-amber-400" />
             <span>{tTerms.s2Title}</span>
           </h2>
-          <p className="text-slate-200">
+          <p className="text-slate-900 dark:text-slate-200">
             <strong>{tTerms.s2Warning}</strong>
           </p>
           <p>{tTerms.s2P2}</p>
@@ -84,16 +84,16 @@ export const TermsOfUseView: React.FC = () => {
         </div>
 
         {/* 3. Regras de Navegação e Uso Aceitável */}
-        <div className="rounded-2xl bg-[#0b1322] border border-slate-800 p-6 shadow-xl space-y-3">
-          <h2 className="text-base font-bold text-white flex items-center gap-2">
-            <ShieldCheck className="w-4 h-4 text-emerald-400" />
+        <div className="rounded-2xl bg-white dark:bg-[#0b1322] border border-[#E2E8F0] dark:border-slate-800 p-6 shadow-md dark:shadow-xl space-y-3">
+          <h2 className="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
+            <ShieldCheck className="w-4 h-4 text-[#009B77] dark:text-emerald-400" />
             <span>{tTerms.s3Title}</span>
           </h2>
           <p>{tTerms.s3Intro}</p>
           <ul className="space-y-2 list-none pl-0">
             {tTerms.s3Bullets.map((bullet, idx) => (
               <li key={idx} className="flex items-start gap-2">
-                <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+                <CheckCircle2 className="w-4 h-4 text-[#009B77] dark:text-emerald-400 shrink-0 mt-0.5" />
                 <span>{bullet}</span>
               </li>
             ))}
@@ -101,36 +101,36 @@ export const TermsOfUseView: React.FC = () => {
         </div>
 
         {/* 4. Propriedade Intelectual */}
-        <div className="rounded-2xl bg-[#0b1322] border border-slate-800 p-6 shadow-xl space-y-3">
-          <h2 className="text-base font-bold text-white flex items-center gap-2">
-            <Lock className="w-4 h-4 text-emerald-400" />
+        <div className="rounded-2xl bg-white dark:bg-[#0b1322] border border-[#E2E8F0] dark:border-slate-800 p-6 shadow-md dark:shadow-xl space-y-3">
+          <h2 className="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
+            <Lock className="w-4 h-4 text-[#009B77] dark:text-emerald-400" />
             <span>{tTerms.s4Title}</span>
           </h2>
           <p>
-            {tTerms.s4P1Before} <strong>DinhEuro</strong>{tTerms.s4P1After}
+            {tTerms.s4P1Before} <strong className="text-slate-900 dark:text-white">DinhEuro</strong>{tTerms.s4P1After}
           </p>
           <p>{tTerms.s4P2}</p>
         </div>
 
         {/* 5. Links para Terceiros e Afiliados */}
-        <div className="rounded-2xl bg-[#0b1322] border border-slate-800 p-6 shadow-xl space-y-3">
-          <h2 className="text-base font-bold text-white flex items-center gap-2">
-            <ExternalLink className="w-4 h-4 text-emerald-400" />
+        <div className="rounded-2xl bg-white dark:bg-[#0b1322] border border-[#E2E8F0] dark:border-slate-800 p-6 shadow-md dark:shadow-xl space-y-3">
+          <h2 className="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
+            <ExternalLink className="w-4 h-4 text-[#009B77] dark:text-emerald-400" />
             <span>{tTerms.s5Title}</span>
           </h2>
           <p>{tTerms.s5P1}</p>
         </div>
 
         {/* 6. Modificações e Foro */}
-        <div className="rounded-2xl bg-[#0b1322] border border-slate-800 p-6 shadow-xl space-y-3">
-          <h2 className="text-base font-bold text-white flex items-center gap-2">
-            <FileText className="w-4 h-4 text-emerald-400" />
+        <div className="rounded-2xl bg-white dark:bg-[#0b1322] border border-[#E2E8F0] dark:border-slate-800 p-6 shadow-md dark:shadow-xl space-y-3">
+          <h2 className="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
+            <FileText className="w-4 h-4 text-[#009B77] dark:text-emerald-400" />
             <span>{tTerms.s6Title}</span>
           </h2>
           <p>{tTerms.s6P1}</p>
           <p>{tTerms.s6P2}</p>
-          <p className="text-slate-400 text-xs pt-2 border-t border-slate-800/80">
-            {tTerms.s6Contact} <a href="mailto:admin@dinheuro.com" className="text-emerald-400 hover:underline font-mono">admin@dinheuro.com</a>.
+          <p className="text-slate-600 dark:text-slate-400 text-xs pt-2 border-t border-[#E2E8F0] dark:border-slate-800/80">
+            {tTerms.s6Contact} <a href="mailto:admin@dinheuro.com" className="text-[#006B52] dark:text-emerald-400 hover:underline font-mono font-semibold">admin@dinheuro.com</a>.
           </p>
         </div>
       </div>
