@@ -396,11 +396,26 @@ html.light .recharts-cartesian-axis-tick-value {
    Universal Layout & Responsive Navigation Protection (Mobile, Tablet, Desktop)
    Guarantees no button clipping, no container overflow leakage, smooth touch scrolling
    ========================================================================= */
+nav:not(.hidden),
+.nav-scroll:not(.hidden),
+.universal-nav-container:not(.hidden),
+[role="navigation"]:not(.hidden) {
+  display: flex !important;
+}
+
+@media (min-width: 1024px) {
+  nav.lg\:flex,
+  .nav-scroll.lg\:flex,
+  .universal-nav-container.lg\:flex,
+  [role="navigation"].lg\:flex {
+    display: flex !important;
+  }
+}
+
 nav,
 .nav-scroll,
 .universal-nav-container,
 [role="navigation"] {
-  display: flex !important;
   flex-wrap: nowrap !important;
   overflow-x: auto !important;
   -webkit-overflow-scrolling: touch !important;

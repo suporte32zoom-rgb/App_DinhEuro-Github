@@ -146,21 +146,29 @@ export const Header: React.FC = () => {
     return () => clearInterval(timer);
   }, [lang]);
 
-  // Prevent background scrolling and handle Escape when mobile drawer is open
+  // Prevent background scrolling, handle Escape, and auto-close if resized to desktop
   useEffect(() => {
-    if (isMobileDrawerOpen) {
-      document.body.style.overflow = 'hidden';
-      const handleKeyDown = (e: KeyboardEvent) => {
-        if (e.key === 'Escape') setIsMobileDrawerOpen(false);
-      };
-      window.addEventListener('keydown', handleKeyDown);
-      return () => {
-        document.body.style.overflow = '';
-        window.removeEventListener('keydown', handleKeyDown);
-      };
-    } else {
+    if (!isMobileDrawerOpen) {
       document.body.style.overflow = '';
+      return;
     }
+
+    document.body.style.overflow = 'hidden';
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setIsMobileDrawerOpen(false);
+    };
+    const handleResize = () => {
+      if (window.innerWidth >= 1024) {
+        setIsMobileDrawerOpen(false);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    window.addEventListener('resize', handleResize);
+    return () => {
+      document.body.style.overflow = '';
+      window.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener('resize', handleResize);
+    };
   }, [isMobileDrawerOpen]);
 
   // Market Category options for Top Horizontal Category Selector
@@ -319,7 +327,7 @@ export const Header: React.FC = () => {
     : assets.slice(0, 6);
 
   return (
-    <header className="sticky top-0 z-40 bg-[#FFFFFF]/95 dark:bg-[#0B1320]/95 backdrop-blur-md border-b border-[#E2E8F0] dark:border-slate-800 shadow-sm dark:shadow-xl max-w-[100vw] overflow-x-hidden">
+    <header className="sticky top-0 z-40 bg-[#FFFFFF]/95 dark:bg-[#0B1320]/95 backdrop-blur-md border-b border-[#E2E8F0] dark:border-slate-800 shadow-sm dark:shadow-xl max-w-[100vw] overflow-x-clip">
       {/* Top Utility Bar */}
       <div className="border-b border-[#E2E8F0] dark:border-slate-800/60 bg-[#F4F7F9] dark:bg-[#070e1a]/80 px-3 sm:px-6 py-1.5 text-[11px] text-[#475569] dark:text-slate-400">
         <div className="max-w-7xl mx-auto flex items-center justify-between gap-4">
@@ -362,37 +370,37 @@ export const Header: React.FC = () => {
       </div>
 
       {/* Main Brand & Action Header */}
-      <div className="max-w-7xl mx-auto px-3 sm:px-6 py-2.5 sm:py-3 flex items-center justify-between gap-3 sm:gap-6">
+      <div className="max-w-7xl mx-auto px-2.5 sm:px-6 py-2 sm:py-3 flex items-center justify-between gap-2 sm:gap-4 lg:gap-6 min-w-0">
         {/* Brand Logo & Name */}
         <div
           onClick={() => setActiveTab('dashboard')}
-          className="flex items-center gap-2.5 sm:gap-3 cursor-pointer group flex-shrink-0"
+          className="flex items-center gap-2 sm:gap-3 cursor-pointer group min-w-0 flex-1 md:flex-initial lg:flex-shrink-0"
         >
-          <div className="relative">
+          <div className="relative flex-shrink-0">
             <img
               src="/logo.png"
               alt="DinhEuro Logo"
-              className="w-9 h-9 sm:w-11 sm:h-11 rounded-full object-contain shadow-lg shadow-emerald-950/50 group-hover:scale-105 transition duration-200 border-2 border-amber-400/30 bg-white/5"
+              className="w-8 h-8 sm:w-11 sm:h-11 rounded-full object-contain shadow-lg shadow-emerald-950/50 group-hover:scale-105 transition duration-200 border-2 border-amber-400/30 bg-white/5"
             />
             <span className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 bg-[#009B77] border-2 border-[#FFFFFF] dark:border-[#0B1320] rounded-full"></span>
           </div>
-          <div className="flex flex-col">
+          <div className="flex flex-col min-w-0">
             <div className="flex items-center gap-1.5 leading-none">
-              <span className="text-lg sm:text-2xl font-black tracking-tight text-[#003399] dark:text-white">
+              <span className="text-base sm:text-2xl font-black tracking-tight text-[#003399] dark:text-white truncate">
                 Dinh<span className="text-transparent bg-clip-text bg-gradient-to-r from-[#009B77] via-[#006B52] to-[#009B77] dark:from-emerald-400 dark:via-teal-300 dark:to-amber-400">Euro</span>
               </span>
-              <span className="text-[9px] px-1.5 py-0.5 rounded bg-[#E6EEFF] dark:bg-emerald-500/15 border border-[#6699CC]/40 dark:border-emerald-500/30 text-[#003399] dark:text-emerald-400 font-bold uppercase tracking-wider hidden xs:inline">
+              <span className="text-[9px] px-1.5 py-0.5 rounded bg-[#E6EEFF] dark:bg-emerald-500/15 border border-[#6699CC]/40 dark:border-emerald-500/30 text-[#003399] dark:text-emerald-400 font-bold uppercase tracking-wider hidden sm:inline flex-shrink-0">
                 Global
               </span>
             </div>
-            <span className="text-[10px] sm:text-[11px] font-medium text-[#475569] dark:text-slate-400 tracking-wide">
+            <span className="text-[9.5px] sm:text-[11px] font-medium text-[#475569] dark:text-slate-400 tracking-wide truncate">
               {t.header.hubSubtitle}
             </span>
           </div>
         </div>
 
-        {/* Global Asset Search Bar (Desktop) */}
-        <div className="flex-1 max-w-md hidden md:block">
+        {/* Global Asset Search Bar (Desktop & Tablet) */}
+        <div className="flex-1 min-w-[140px] max-w-md hidden md:block">
           <div className="relative">
             <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#475569] dark:text-slate-400" />
             <input
@@ -415,11 +423,12 @@ export const Header: React.FC = () => {
         </div>
 
         {/* Header Right Actions */}
-        <div className="flex items-center gap-1.5 sm:gap-2.5 flex-shrink-0">
+        <div className="flex items-center gap-1 sm:gap-2 flex-shrink-0">
           {/* Mobile Search trigger */}
           <button
+            type="button"
             onClick={() => setShowSearchModal(true)}
-            className="md:hidden p-2 rounded-xl bg-[#F4F7F9] dark:bg-slate-900 border border-[#E2E8F0] dark:border-slate-800 text-[#1E293B] dark:text-slate-300 hover:text-[#003399] dark:hover:text-white transition cursor-pointer"
+            className="md:hidden w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center rounded-xl bg-[#F4F7F9] dark:bg-slate-900 border border-[#CBD5E1] dark:border-slate-700/80 text-[#0F172A] dark:text-slate-200 hover:text-[#003399] dark:hover:text-white transition cursor-pointer flex-shrink-0"
             aria-label={t.header.openSearchAria}
           >
             <Search className="w-4 h-4" />
@@ -429,13 +438,13 @@ export const Header: React.FC = () => {
           <div
             role="group"
             aria-label={t.header.languageSelectorAria}
-            className="inline-flex items-center rounded-lg border border-[#E2E8F0] dark:border-slate-700/80 bg-[#F4F7F9] dark:bg-slate-900/90 p-0.5 text-[10px] sm:text-[11px] font-bold flex-shrink-0"
+            className="inline-flex items-center rounded-lg border border-[#CBD5E1] dark:border-slate-700/80 bg-[#F4F7F9] dark:bg-slate-900/90 p-0.5 text-[10px] sm:text-[11px] font-bold flex-shrink-0"
           >
             {(['pt', 'en', 'es'] as SupportedLanguage[]).map((code, idx) => {
               const isSelected = lang === code;
               return (
                 <React.Fragment key={code}>
-                  {idx > 0 && <span className="text-[#CBD5E1] dark:text-slate-700 select-none px-0.5" aria-hidden="true">|</span>}
+                  {idx > 0 && <span className="hidden sm:inline text-[#CBD5E1] dark:text-slate-700 select-none px-0.5" aria-hidden="true">|</span>}
                   <button
                     type="button"
                     onClick={() => setLang(code)}
@@ -456,33 +465,39 @@ export const Header: React.FC = () => {
 
           {/* Theme Toggle (Light / Dark) */}
           <button
+            type="button"
             onClick={toggleTheme}
             aria-label={theme === 'dark' ? t.header.themeLight : t.header.themeDark}
             title={theme === 'dark' ? t.header.themeLight : t.header.themeDark}
-            className="p-1.5 sm:px-2.5 sm:py-1.5 rounded-lg border border-[#E2E8F0] dark:border-slate-700/80 bg-[#F4F7F9] dark:bg-slate-900/90 hover:bg-[#E6EEFF] dark:hover:bg-slate-800 text-[#1E293B] dark:text-slate-300 hover:text-[#003399] dark:hover:text-white transition flex items-center gap-1.5 text-xs font-medium cursor-pointer shadow-sm flex-shrink-0"
+            className="w-9 h-9 sm:w-10 sm:h-10 xl:w-auto xl:h-auto xl:px-2.5 xl:py-1.5 rounded-xl border border-[#CBD5E1] dark:border-slate-700/80 bg-[#F4F7F9] dark:bg-slate-900/90 hover:bg-[#E6EEFF] dark:hover:bg-slate-800 text-[#0F172A] dark:text-slate-200 hover:text-[#003399] dark:hover:text-white transition flex items-center justify-center gap-1.5 text-xs font-medium cursor-pointer shadow-sm flex-shrink-0"
           >
             {theme === 'dark' ? (
               <>
-                <Sun className="w-3.5 h-3.5 text-amber-400" />
+                <Sun className="w-4 h-4 text-amber-400" />
                 <span className="hidden xl:inline text-[11px]">{t.header.themeLight}</span>
               </>
             ) : (
               <>
-                <Moon className="w-3.5 h-3.5 text-[#003399]" />
+                <Moon className="w-4 h-4 text-[#003399]" />
                 <span className="hidden xl:inline text-[11px]">{t.header.themeDark}</span>
               </>
             )}
           </button>
 
-          {/* Mobile & Tablet Hamburger Menu Button */}
+          {/* Mobile & Tablet Hamburger Menu Button (visible below desktop lg breakpoint) */}
           <button
             type="button"
-            onClick={() => setIsMobileDrawerOpen(true)}
-            className="lg:hidden p-2 rounded-xl bg-[#F4F7F9] dark:bg-slate-900 border border-[#E2E8F0] dark:border-slate-700/80 hover:border-[#003399]/50 dark:hover:border-emerald-500/50 text-[#003399] dark:text-slate-200 hover:text-[#002266] dark:hover:text-white transition cursor-pointer flex items-center justify-center shadow-sm"
-            aria-label={t.header.openMenuAria}
+            onClick={() => setIsMobileDrawerOpen((prev) => !prev)}
+            className="flex lg:hidden relative z-10 w-11 h-11 min-w-[44px] min-h-[44px] items-center justify-center rounded-xl bg-[#E6EEFF] dark:bg-slate-800 border-2 border-[#003399]/35 dark:border-emerald-400/50 hover:bg-[#D6E4FF] dark:hover:bg-slate-700 hover:border-[#003399]/70 dark:hover:border-emerald-400 text-[#003399] dark:text-emerald-300 transition cursor-pointer shadow-sm flex-shrink-0"
+            aria-label={isMobileDrawerOpen ? t.header.closeMenuAria : t.header.openMenuAria}
             aria-expanded={isMobileDrawerOpen}
+            aria-controls="mobile-navigation-drawer"
           >
-            <Menu className="w-5 h-5 text-[#003399] dark:text-emerald-400" />
+            {isMobileDrawerOpen ? (
+              <X className="w-5 h-5 stroke-[2.5] text-[#003399] dark:text-emerald-300" />
+            ) : (
+              <Menu className="w-5 h-5 stroke-[2.5] text-[#003399] dark:text-emerald-300" />
+            )}
           </button>
         </div>
       </div>
@@ -713,7 +728,8 @@ export const Header: React.FC = () => {
       {/* Mobile & Tablet Drawer (Camada Superior z-[9999]) */}
       {isMobileDrawerOpen && typeof document !== 'undefined' && createPortal(
         <div
-          className="fixed inset-0 z-[9999] flex"
+          id="mobile-navigation-drawer"
+          className="fixed inset-0 z-[9999] flex lg:hidden"
           role="dialog"
           aria-modal="true"
           aria-label={t.header.openMenuAria}
@@ -744,8 +760,9 @@ export const Header: React.FC = () => {
                   </div>
                 </div>
                 <button
+                  type="button"
                   onClick={() => setIsMobileDrawerOpen(false)}
-                  className="p-1.5 rounded-lg text-[#475569] dark:text-slate-400 hover:text-[#003399] dark:hover:text-white hover:bg-[#E6EEFF] dark:hover:bg-slate-800 transition cursor-pointer"
+                  className="min-w-[44px] min-h-[44px] flex items-center justify-center rounded-xl border border-[#CBD5E1] dark:border-slate-700 bg-[#F4F7F9] dark:bg-slate-800/90 text-[#0F172A] dark:text-slate-100 hover:text-[#003399] dark:hover:text-white hover:bg-[#E6EEFF] dark:hover:bg-slate-700 transition cursor-pointer"
                   aria-label={t.header.closeMenuAria}
                 >
                   <X className="w-5 h-5" />
@@ -762,9 +779,10 @@ export const Header: React.FC = () => {
                   return (
                     <button
                       key={item.id}
+                      type="button"
                       onClick={() => handleNavClick(item.id)}
                       data-on-dark={isActive ? 'true' : undefined}
-                      className={`w-full flex items-center justify-between p-2.5 rounded-xl text-xs font-semibold transition cursor-pointer ${
+                      className={`w-full min-h-[44px] flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-semibold transition cursor-pointer ${
                         isActive
                           ? 'bg-[#003399] text-white border border-[#002266] font-bold dark:bg-emerald-500/15 dark:text-emerald-300 dark:border-emerald-500/30'
                           : 'text-[#1E293B] dark:text-slate-300 hover:bg-[#E6EEFF] dark:hover:bg-slate-800/80 hover:text-[#003399] dark:hover:text-white'
