@@ -177,8 +177,8 @@ export const DAILY_INSIGHTS_ITEMS: DailyInsightItem[] = [
         title: 'Entenda as cinco razões que levaram ao fracasso da COP31',
         summary:
           'Conferência do clima mais longa da história terminou neste domingo (22) sem acordo em Antália, na Turquia, minada por falta de ambição, presidência dividida, disputa pela eletrificação, crise energética de guerras e anúncio de Trump, Xi e Putin em Shenzhen.',
-        dateAuthor: '23/11/2026 • Redação DinhEuro',
-        source: 'COP31 Antália • Análise Internacional',
+        dateAuthor: '23/11/2026 • Por Américo Martins',
+        source: 'Américo Martins • Especialista em jornalismo internacional, ex-diretor da BBC de Londres e VP de Conteúdo da CNN',
         readingTime: '5 min',
         keywords: [
           'fracasso cop31 antalia turquia',
@@ -207,6 +207,7 @@ export const DAILY_INSIGHTS_ITEMS: DailyInsightItem[] = [
           '## 5. O anúncio de Shenzhen',
           'O quinto fator, possivelmente o decisivo, veio da China. Na mesma quinta-feira (19) da divulgação do rascunho sem menção aos fósseis, os presidentes Donald Trump, Xi Jinping e Vladimir Putin reuniram-se em Shenzhen e assinaram uma declaração comprometendo-se a "aumentar a produção e o fornecimento de derivados de petróleo".',
           'O gesto conjunto das três maiores potências em plena conferência esvaziou qualquer proposta de abandono dos fósseis em Antália e fortaleceu o veto dos países produtores, impedindo que a COP31 consolidasse as propostas iniciadas na COP de Belém.',
+          'Autor: Américo Martins — Especialista em jornalismo internacional e fascinado pelo mundo desde sempre, foi diretor da BBC de Londres e VP de Conteúdo da CNN.',
         ],
       },
       en: {
@@ -214,8 +215,8 @@ export const DAILY_INSIGHTS_ITEMS: DailyInsightItem[] = [
         title: 'Understanding the five reasons behind the collapse of COP31',
         summary:
           'The longest climate summit in history ended on Sunday (22) without a deal in Antalya, Turkey, undermined by weak ambition, a split presidency, an electrification fixation, war-driven energy shocks, and a Shenzhen oil pledge by the US, China, and Russia.',
-        dateAuthor: 'Nov 23, 2026 • DinhEuro Editorial',
-        source: 'COP31 Antalya • International Analysis',
+        dateAuthor: 'Nov 23, 2026 • By Américo Martins',
+        source: 'Américo Martins • International journalism specialist, former Director at BBC London and VP of Content at CNN',
         readingTime: '5 min read',
         keywords: [
           'cop31 antalya collapse reasons',
@@ -240,6 +241,7 @@ export const DAILY_INSIGHTS_ITEMS: DailyInsightItem[] = [
           '## 5. The Shenzhen announcement',
           'The decisive blow arrived from China on the very same Thursday (19) as the fossil-free draft: U.S. President Donald Trump, Chinese President Xi Jinping, and Russian President Vladimir Putin met in Shenzhen and signed a joint statement pledging to "increase the production and supply of petroleum derivatives."',
           'That synchronized signal from the world’s top powers during the summit emboldened oil-producing states to hold firm on their veto, preventing COP31 from consolidating the implementation roadmap launched at the Belém COP.',
+          'Author: Américo Martins — Specialist in international journalism with a lifelong fascination for global affairs; former Director at BBC London and VP of Content at CNN.',
         ],
       },
       es: {
@@ -247,8 +249,8 @@ export const DAILY_INSIGHTS_ITEMS: DailyInsightItem[] = [
         title: 'Las cinco razones que llevaron al fracaso de la COP31',
         summary:
           'La conferencia climática más larga de la historia terminó el domingo (22) sin acuerdo en Antalya, Turquía, socavada por falta de ambición, presidencia dividida, obsesión por la electrificación, crisis energética bélica y un anuncio petrolero en Shenzhen.',
-        dateAuthor: '23/11/2026 • Redacción DinhEuro',
-        source: 'COP31 Antalya • Análisis Internacional',
+        dateAuthor: '23/11/2026 • Por Américo Martins',
+        source: 'Américo Martins • Especialista en periodismo internacional, exdirector de la BBC de Londres y VP de Contenido de CNN',
         readingTime: '5 min',
         keywords: [
           'fracaso cop31 antalya turquia',
@@ -272,6 +274,7 @@ export const DAILY_INSIGHTS_ITEMS: DailyInsightItem[] = [
           'Las guerras en Ucrania e Irán desataron una crisis energética con el petróleo al alza tras el cierre del estrecho de Ormuz. Lejos de acelerar la transición limpia, varios gobiernos —encabezados por Estados Unidos y naciones productoras— priorizaron asegurar más hidrocarburos y aumentaron la presión sobre el consenso multilateral.',
           '## 5. El anuncio de Shenzhen',
           'El factor decisivo llegó desde China el mismo jueves (19) en que circuló el texto sin mención a los fósiles: Donald Trump, Xi Jinping y Vladimir Putin se reunieron en Shenzhen y firmaron una declaración comprometiéndose a "aumentar la producción y el suministro de derivados del petróleo", debilitando definitivamente cualquier pacto de transición tras la COP de Belém.',
+          'Autor: Américo Martins — Especialista en periodismo internacional y apasionado por el mundo desde siempre; fue director de la BBC de Londres y VP de Contenido de CNN.',
         ],
       },
     },

@@ -161,6 +161,8 @@ test('APEC 2026 and ALADI 2026 editorial insights preserve prior items up to 12 
   assert.equal(idMatches.length, 12);
   assert.ok(source.includes("id: 'nvidia-retorno-jensen-huang-ceo-2026'"));
   assert.ok(source.includes("id: 'cop31-fracasso-antalia-cinco-fatores-2026'"));
+  assert.ok(source.includes("dateAuthor: '23/11/2026 • Por Américo Martins'"));
+  assert.ok(source.includes('foi diretor da BBC de Londres e VP de Conteúdo da CNN'));
   assert.ok(source.includes("id: 'acordo-comercial-ue-mercosul-2026'"));
   assert.ok(source.includes("id: 'mdic-consulta-publica-salvaguardas-bilaterais-2026'"));
   assert.ok(source.includes("id: 'anthropic-ipo-turbulencia-wall-street-2026'"));
