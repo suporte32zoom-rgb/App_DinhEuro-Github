@@ -159,6 +159,8 @@ test('APEC 2026 and ALADI 2026 editorial insights preserve prior items up to 12 
   assert.ok(source.includes('export const MAX_DAILY_INSIGHTS = 12;'));
   const idMatches = source.match(/^\s+id:\s*'[^']+',/gm) || [];
   assert.equal(idMatches.length, 12);
+  assert.ok(source.includes("id: 'nvidia-retorno-jensen-huang-ceo-2026'"));
+  assert.ok(source.includes("id: 'cop31-fracasso-antalia-cinco-fatores-2026'"));
   assert.ok(source.includes("id: 'acordo-comercial-ue-mercosul-2026'"));
   assert.ok(source.includes("id: 'mdic-consulta-publica-salvaguardas-bilaterais-2026'"));
   assert.ok(source.includes("id: 'anthropic-ipo-turbulencia-wall-street-2026'"));
@@ -169,6 +171,8 @@ test('APEC 2026 and ALADI 2026 editorial insights preserve prior items up to 12 
   assert.ok(source.includes("id: 'coinbase-deribit-aquisicao-infraestrutura-2026'"));
   assert.ok(source.includes("id: 'apec-2026-trump-xi-putin-shenzhen'"));
   assert.ok(source.includes("id: 'aladi-cosmeticos-exportacao-brasil-2026'"));
+  assert.ok(source.includes("imageUrl: '/assets/aistudio/image_41c94597.png'"));
+  assert.ok(source.includes("imageUrl: '/assets/aistudio/image_71c949d8.png'"));
   assert.ok(source.includes("imageUrl: '/assets/aistudio/image_0205078f.png'"));
   assert.ok(source.includes('/assets/aistudio/expected-gains-from-redu_9daa9c58.png'));
   assert.ok(source.includes("imageUrl: '/assets/aistudio/image_74407743.png'"));
@@ -190,6 +194,8 @@ test('APEC 2026 and ALADI 2026 editorial insights preserve prior items up to 12 
     path.resolve(process.cwd(), 'src/views/NewsView.tsx'),
     'utf8'
   );
+  assert.ok(newsViewSource.includes("'nvidia-retorno-jensen-huang-ceo-2026'"));
+  assert.ok(newsViewSource.includes("'cop31-fracasso-antalia-cinco-fatores-2026'"));
   assert.ok(newsViewSource.includes("'acordo-comercial-ue-mercosul-2026'"));
   assert.ok(
     newsViewSource.includes("'mdic-consulta-publica-salvaguardas-bilaterais-2026'")

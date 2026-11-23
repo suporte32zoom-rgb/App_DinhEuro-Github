@@ -28,6 +28,8 @@ import {
 } from '../utils/seo';
 
 const FEATURED_NEWS_EDITORIAL_IDS = new Set([
+  'nvidia-retorno-jensen-huang-ceo-2026',
+  'cop31-fracasso-antalia-cinco-fatores-2026',
   'acordo-comercial-ue-mercosul-2026',
   'mdic-consulta-publica-salvaguardas-bilaterais-2026',
   'anthropic-ipo-turbulencia-wall-street-2026',
@@ -95,6 +97,10 @@ export const NewsView: React.FC = () => {
           filterCategory === 'Política & Fiscal') ||
         (item.id === 'terras-raras-disparidade-precos-brasil-china-2026' &&
           filterCategory === 'Mercados & B3') ||
+        (item.id === 'nvidia-retorno-jensen-huang-ceo-2026' &&
+          filterCategory === 'Empresas & Wall St') ||
+        (item.id === 'cop31-fracasso-antalia-cinco-fatores-2026' &&
+          (filterCategory === 'Macro & Câmbio' || filterCategory === 'Política & Fiscal')) ||
         (item.id === 'trump-inteligencia-jensen-huang-nvidia-2026' &&
           filterCategory === 'Empresas & Wall St') ||
         (item.id === 'mdic-acordo-mercosul-ue-exportacoes-21-por-cento-2026' &&

@@ -60,6 +60,223 @@ export const DAILY_INSIGHTS_UI_COPY: Record<
 
 export const DAILY_INSIGHTS_ITEMS: DailyInsightItem[] = [
   {
+    id: 'nvidia-retorno-jensen-huang-ceo-2026',
+    isoDate: '2026-11-23',
+    imageUrl: '/assets/aistudio/image_41c94597.png',
+    translations: {
+      pt: {
+        tag: 'Empresas & Wall St',
+        title: 'Nvidia anuncia retorno de Jensen Huang ao cargo de CEO',
+        summary:
+          'Huang renunciou ao cargo em 12 de novembro após revelação de casos extraconjugais, incluindo envolvimento com suposta espiã chinesa; ações disparam quase 29%, para US$ 161,24, após reintegração unânime pelo Conselho.',
+        dateAuthor: '23/11/2026 • Vitória Gomez, CNN Brasil, São Paulo',
+        source: 'CNN Brasil • São Paulo',
+        readingTime: '4 min',
+        keywords: [
+          'nvidia retorno jensen huang ceo',
+          'jensen huang nvda ações alta',
+          'conselho nvidia colette kress',
+          'megaspeed alice huang espionagem',
+          'trump nvidia controle exportacoes',
+        ],
+        imageAlt:
+          'Jensen Huang, cofundador e CEO da Nvidia, durante apresentação sobre semicondutores e inteligência artificial',
+        fullContent: [
+          'A Nvidia comunicou nesta segunda-feira (23) que Jensen Huang foi reintegrado ao cargo de presidente e diretor executivo. Ele também retorna ao Conselho de Administração da gigante de chips.',
+          'Segundo a empresa, o Conselho decidiu pelo retorno do executivo de forma unânime e com efeito imediato. Cofundador da Nvidia, Jensen Huang havia renunciado ao cargo em 12 de novembro após a revelação de casos extraconjugais, incluindo com uma suposta espiã chinesa.',
+          'Em comunicado, o Conselho afirmou que a decisão veio após uma série de reuniões com o executivo, nas quais ficou satisfeito com a "franqueza" de Huang e com sua capacidade de liderar a companhia. A administração ainda acrescentou que a reintegração do CEO não representa "nenhum risco à segurança nacional".',
+          '"O Conselho acredita que Jensen é a pessoa certa para liderar a NVIDIA e que sua reintegração é do melhor interesse de nossos acionistas, funcionários, parceiros e clientes", escreveu Harvey C. Jones, presidente do Conselho de Administração da Nvidia. Jones também agradeceu Colette Kress, diretora financeira que havia assumido como CEO interina.',
+          'As ações da empresa dispararam após o anúncio, com alta de mais de 30% nas negociações de pré-abertura. Por volta de 11h25 (horário de Brasília), os papéis da companhia tinham alta de quase 29%, negociados a US$ 161,24.',
+          '## Huang destacou "honra" em retornar à Nvidia',
+          'Jensen Huang também se manifestou no comunicado: "É uma honra retornar à NVIDIA e liderar uma das empresas de tecnologia mais importantes do mundo no início de uma nova revolução industrial. Assumo essa responsabilidade com a maior humildade e um renovado compromisso."',
+          'O CEO agradeceu o Conselho da companhia pela "confiança" e aos funcionários pelo "apoio".',
+          '## Investigação sobre espionagem continua',
+          'A Nvidia informou que estabeleceu um comitê formado por diretores independentes para seguir com as investigações relacionadas a uma suposta operação de inteligência estrangeira.',
+          'Isso porque Jensen Huang teria se envolvido com Alice Huang, executiva da empresa Megaspeed, sediada em Singapura, que supostamente estava em contato com serviços de inteligência chinesa. Apesar do sobrenome em comum, os dois não têm parentesco.',
+          '"O Sr. Huang apoia integralmente a investigação e está comprometido em cooperar com ela", escreveu a empresa. O Conselho ainda informou que estabeleceu um Comitê de Segurança Nacional e Controle de Exportações, também formado por diretores independentes, para supervisionar eventuais riscos à segurança nacional.',
+          '## Trump parabenizou retorno de Jensen Huang',
+          'O presidente dos Estados Unidos, Donald Trump, também se pronunciou sobre a reintegração de Huang. Em publicação na rede social Truth Social, o republicano afirmou que o Conselho da Nvidia "tomou a decisão correta e adequada".',
+          'Mesmo assim, Trump defendeu a continuidade das investigações sobre a conformidade da empresa com os controles de exportação dos EUA.',
+        ],
+      },
+      en: {
+        tag: 'Companies & Wall St',
+        title: 'Nvidia announces Jensen Huang’s return as CEO',
+        summary:
+          'Huang stepped down on November 12 following revelations of extramarital affairs, including involvement with an alleged Chinese spy; shares surged nearly 29% to US$ 161.24 after the Board unanimously reinstated him.',
+        dateAuthor: 'Nov 23, 2026 • Vitória Gomez, CNN Brasil, São Paulo',
+        source: 'CNN Brasil • São Paulo',
+        readingTime: '4 min read',
+        keywords: [
+          'nvidia jensen huang returns ceo',
+          'nvda stock surges 29 percent',
+          'nvidia board harvey jones colette kress',
+          'megaspeed alice huang espionage probe',
+          'trump nvidia export controls',
+        ],
+        imageAlt:
+          'Jensen Huang, co-founder and CEO of Nvidia, speaking during a semiconductor and artificial intelligence presentation',
+        fullContent: [
+          'Nvidia announced on Monday (23) that Jensen Huang has been reinstated as president and chief executive officer, also returning to the chip giant’s Board of Directors.',
+          'According to the company, the Board voted unanimously to bring the executive back with immediate effect. Nvidia’s co-founder had resigned on November 12 after revelations of extramarital affairs, including a relationship with an alleged Chinese spy.',
+          'In a statement, the Board said the decision followed a series of meetings with Huang in which directors were satisfied with his "candor" and ability to lead the company, adding that his reinstatement poses "no national security risk."',
+          '"The Board believes Jensen is the right person to lead NVIDIA and that his reinstatement is in the best interests of our shareholders, employees, partners, and customers," wrote Harvey C. Jones, chairman of Nvidia’s Board, who also thanked CFO Colette Kress for serving as interim CEO.',
+          'Nvidia shares rallied sharply on the news, jumping more than 30% in pre-market trading. Around 11:25 a.m. Brasília time, the stock was up nearly 29%, trading at US$ 161.24.',
+          '## Huang highlights "honor" in returning to Nvidia',
+          'Jensen Huang also commented in the release: "It is an honor to return to NVIDIA and lead one of the world’s most important technology companies at the dawn of a new industrial revolution. I take on this responsibility with the greatest humility and a renewed commitment."',
+          'The CEO thanked the company’s Board for its "trust" and employees for their "support."',
+          '## Espionage investigation continues',
+          'Nvidia said it established a committee of independent directors to continue investigations related to an alleged foreign intelligence operation involving Alice Huang, an executive at Singapore-based Megaspeed who was reportedly in contact with Chinese intelligence services. Despite sharing the same surname, the two are unrelated.',
+          '"Mr. Huang fully supports the investigation and is committed to cooperating with it," the company stated. The Board also created an independent National Security and Export Control Committee to oversee potential national security risks.',
+          '## Trump congratulates Jensen Huang’s return',
+          'U.S. President Donald Trump also weighed in on Huang’s reinstatement. Posting on Truth Social, Trump said Nvidia’s Board "made the right and proper decision," while still advocating continued scrutiny into the company’s compliance with U.S. export controls.',
+        ],
+      },
+      es: {
+        tag: 'Empresas y Wall St',
+        title: 'Nvidia anuncia el regreso de Jensen Huang al cargo de CEO',
+        summary:
+          'Huang había renunciado el 12 de noviembre tras revelarse relaciones extramatrimoniales, incluido un vínculo con una presunta espía china; las acciones suben casi un 29%, hasta US$ 161,24, tras su reincorporación unánime.',
+        dateAuthor: '23/11/2026 • Vitória Gomez, CNN Brasil, São Paulo',
+        source: 'CNN Brasil • São Paulo',
+        readingTime: '4 min',
+        keywords: [
+          'nvidia regreso jensen huang ceo',
+          'acciones nvidia nvda alza',
+          'consejo nvidia colette kress',
+          'megaspeed alice huang espionaje',
+          'trump nvidia controles exportacion',
+        ],
+        imageAlt:
+          'Jensen Huang, cofundador y CEO de Nvidia, durante una presentación sobre semiconductores e inteligencia artificial',
+        fullContent: [
+          'Nvidia comunicó este lunes (23) que Jensen Huang fue reincorporado como presidente y director ejecutivo, regresando además al Consejo de Administración del gigante de los semiconductores.',
+          'Según la compañía, el Consejo aprobó por unanimidad el regreso del ejecutivo con efecto inmediato. Cofundador de Nvidia, Jensen Huang había renunciado el 12 de noviembre tras revelarse relaciones extramatrimoniales, incluido un vínculo con una presunta espía china.',
+          'En un comunicado, el Consejo señaló que la decisión se tomó tras una serie de reuniones con el ejecutivo en las que quedó satisfecho con la "franqueza" de Huang y su capacidad para liderar la empresa, añadiendo que su reincorporación no representa "ningún riesgo para la seguridad nacional".',
+          '"El Consejo cree que Jensen es la persona adecuada para dirigir NVIDIA y que su reincorporación responde al mejor interés de nuestros accionistas, empleados, socios y clientes", escribió Harvey C. Jones, presidente del Consejo, quien también agradeció a la directora financiera Colette Kress por su gestión como CEO interina.',
+          'Las acciones de la empresa se dispararon tras el anuncio, con alzas superiores al 30% en las operaciones previas a la apertura. Alrededor de las 11:25 (hora de Brasilia), los títulos avanzaban casi un 29%, cotizando a US$ 161,24.',
+          '## Huang destacó el "honor" de volver a Nvidia',
+          'Jensen Huang también se pronunció en el comunicado: "Es un honor regresar a NVIDIA y liderar una de las empresas tecnológicas más importantes del mundo al comienzo de una nueva revolución industrial. Asumo esta responsabilidad con la mayor humildad y un compromiso renovado."',
+          'El CEO agradeció al Consejo por su "confianza" y a los empleados por su "apoyo".',
+          '## Continúa la investigación sobre espionaje',
+          'Nvidia informó la creación de un comité integrado por directores independientes para continuar las investigaciones vinculadas a una presunta operación de inteligencia extranjera relacionada con Alice Huang, ejecutiva de la firma Megaspeed, con sede en Singapur, quien supuestamente mantenía contacto con servicios de inteligencia chinos. Pese a compartir apellido, no tienen parentesco.',
+          '"El Sr. Huang respalda plenamente la investigación y está comprometido a cooperar con ella", indicó la firma. El Consejo también constituyó un Comité de Seguridad Nacional y Control de Exportaciones de directores independientes.',
+          '## Trump felicitó el regreso de Jensen Huang',
+          'El presidente de Estados Unidos, Donald Trump, también reaccionó a la reincorporación. En una publicación en Truth Social, afirmó que el Consejo de Nvidia "tomó la decisión correcta y adecuada", aunque defendió la continuidad de las investigaciones sobre el cumplimiento de los controles de exportación estadounidenses.',
+        ],
+      },
+    },
+  },
+  {
+    id: 'cop31-fracasso-antalia-cinco-fatores-2026',
+    isoDate: '2026-11-23',
+    imageUrl: '/assets/aistudio/image_71c949d8.png',
+    translations: {
+      pt: {
+        tag: 'Geopolítica, Energia & Clima',
+        title: 'Entenda as cinco razões que levaram ao fracasso da COP31',
+        summary:
+          'Conferência do clima mais longa da história terminou neste domingo (22) sem acordo em Antália, na Turquia, minada por falta de ambição, presidência dividida, disputa pela eletrificação, crise energética de guerras e anúncio de Trump, Xi e Putin em Shenzhen.',
+        dateAuthor: '23/11/2026 • Redação DinhEuro',
+        source: 'COP31 Antália • Análise Internacional',
+        readingTime: '5 min',
+        keywords: [
+          'fracasso cop31 antalia turquia',
+          'eletrificacao combustiveis fosseis cop31',
+          'estreito de ormuz petroleo crise energetica',
+          'shenzhen trump xi putin petroleo',
+          'cop31 australia turquia uniao europeia',
+        ],
+        imageAlt:
+          'Letreiro oficial da Conferência das Nações Unidas sobre Mudanças Climáticas (COP31) na entrada do centro de convenções em Antália, na Turquia',
+        fullContent: [
+          'Pelo menos cinco fatores foram decisivos para o fracasso da COP31, realizada em Antália, na Turquia. A conferência do clima mais longa da história terminou no domingo (22) sem acordo, depois de duas semanas de negociações e dois dias de prorrogação nos corredores da zona azul.',
+          'O que se viu ao longo da preparação e das negociações ajuda a explicar por que a cúpula entra para a história como um fiasco no pior momento possível para a agenda climática global.',
+          '## 1. Falta de ambição',
+          'O primeiro fator foi uma enorme falta de ambição dos líderes da COP. Antes mesmo do início das conversas em Antália, negociadores, governos e a própria presidência sabiam que as expectativas de aprovação de grandes resoluções eram baixas.',
+          'As reuniões preparatórias na sede da UNFCCC, órgão do clima da ONU em Bonn, na Alemanha, em junho, já haviam terminado sem acordo em temas centrais, como a meta global de adaptação — evidenciando pressões crescentes que impedem decisões à altura da emergência climática vista em eventos extremos recentes, como no Nepal e nas enchentes do Rio Grande do Sul.',
+          '## 2. Presidência fraca e dividida',
+          'O segundo fator foi uma presidência fraca e, pela primeira vez, dividida entre dois países: a Turquia sediou a conferência com poder de decisão final, enquanto a Austrália conduziu as negociações.',
+          'Nenhum dos dois países tem tradição de liderança em negociações climáticas, e ambos carregam passivos relevantes na área de energia — dependentes do carvão para gerar eletricidade, com a Austrália entre os maiores exportadores mundiais do combustível. Sem comando firme e unificado, faltou liderança para destravar impasses quando o momento exigia firmeza.',
+          '## 3. Obsessão pela eletrificação',
+          'O terceiro fator foi a obsessão, sobretudo da Turquia, em transformar a conferência na "COP da eletrificação", concentrando esforços na meta de elevar para 35% a participação da eletricidade no consumo final de energia global até 2035 — tendência já impulsionada pelo próprio mercado privado.',
+          'Nos corredores circulava que, para assegurar apoio à meta, os anfitriões teriam aceitado a exigência da Arábia Saudita e de outros produtores de petróleo de retirar do texto final qualquer menção aos combustíveis fósseis. Na quinta-feira (19), um rascunho eliminou todas as referências ao fim do uso de petróleo, gás e carvão, levando à rejeição imediata da União Europeia e de outros países.',
+          '## 4. Guerras e crise energética',
+          'O quarto fator envolveu as fortes pressões geopolíticas sobre o sistema multilateral por consenso das COPs. As guerras na Ucrânia e no Irã desencadearam uma crise energética com disparada do petróleo após o fechamento do Estreito de Ormuz.',
+          'Em vez de acelerar a transição para fontes limpas capazes de ampliar a segurança energética, muitos países — liderados pelos Estados Unidos e por nações produtoras — optaram por buscar mais combustíveis fósseis e elevar a pressão sobre a conferência.',
+          '## 5. O anúncio de Shenzhen',
+          'O quinto fator, possivelmente o decisivo, veio da China. Na mesma quinta-feira (19) da divulgação do rascunho sem menção aos fósseis, os presidentes Donald Trump, Xi Jinping e Vladimir Putin reuniram-se em Shenzhen e assinaram uma declaração comprometendo-se a "aumentar a produção e o fornecimento de derivados de petróleo".',
+          'O gesto conjunto das três maiores potências em plena conferência esvaziou qualquer proposta de abandono dos fósseis em Antália e fortaleceu o veto dos países produtores, impedindo que a COP31 consolidasse as propostas iniciadas na COP de Belém.',
+        ],
+      },
+      en: {
+        tag: 'Geopolitics, Energy & Climate',
+        title: 'Understanding the five reasons behind the collapse of COP31',
+        summary:
+          'The longest climate summit in history ended on Sunday (22) without a deal in Antalya, Turkey, undermined by weak ambition, a split presidency, an electrification fixation, war-driven energy shocks, and a Shenzhen oil pledge by the US, China, and Russia.',
+        dateAuthor: 'Nov 23, 2026 • DinhEuro Editorial',
+        source: 'COP31 Antalya • International Analysis',
+        readingTime: '5 min read',
+        keywords: [
+          'cop31 antalya collapse reasons',
+          'electrification fossil fuels cop31',
+          'strait of hormuz oil energy crisis',
+          'shenzhen trump xi putin oil pledge',
+          'cop31 turkey australia european union',
+        ],
+        imageAlt:
+          'Official United Nations Climate Change Conference (COP31) signage outside the summit venue in Antalya, Turkey',
+        fullContent: [
+          'At least five decisive factors explain the failure of COP31 in Antalya, Turkey. The longest climate conference in history ended without an agreement on Sunday (22) after two weeks of negotiations and two days of overtime inside the Blue Zone.',
+          'Developments from the preparatory talks through the final plenary reveal why the summit will be remembered as a breakdown at a critical moment for global climate action.',
+          '## 1. Lack of ambition',
+          'From the outset, negotiators, governments, and the summit presidency recognized that expectations for major breakthroughs were muted. Preparatory meetings at UNFCCC headquarters in Bonn in June had already ended in deadlock on core issues such as the global adaptation goal, underscoring how geopolitical headwinds continue to stall action matching the scale of recent disasters in Nepal and southern Brazil.',
+          '## 2. Weak and divided presidency',
+          'For the first time, the COP presidency was split between two nations: Turkey hosted with final decision-making authority while Australia chaired negotiations. Neither country has a track record of climate diplomacy leadership, and both rely heavily on coal for power generation—with Australia ranking among the world’s top coal exporters—leaving talks without unified direction when firmness was required.',
+          '## 3. Obsession with electrification',
+          'Turkey focused heavily on branding the summit as the "COP of electrification," rallying behind a target to raise electricity to 35% of global final energy consumption by 2035. Reports inside the talks indicated that to secure backing for that headline goal, hosts yielded to demands from Saudi Arabia and oil producers to scrub all fossil-fuel phaseout language from Thursday’s (19) draft—prompting outright rejection by the European Union and allied nations.',
+          '## 4. Wars and energy crisis',
+          'Geopolitical pressures weighed heavily on the COP’s consensus-based multilateral framework. Wars in Ukraine and Iran triggered a severe energy shock and higher oil prices following disruptions in the Strait of Hormuz, prompting the United States and producer nations to prioritize additional fossil supply rather than accelerating clean-energy transitions.',
+          '## 5. The Shenzhen announcement',
+          'The decisive blow arrived from China on the very same Thursday (19) as the fossil-free draft: U.S. President Donald Trump, Chinese President Xi Jinping, and Russian President Vladimir Putin met in Shenzhen and signed a joint statement pledging to "increase the production and supply of petroleum derivatives."',
+          'That synchronized signal from the world’s top powers during the summit emboldened oil-producing states to hold firm on their veto, preventing COP31 from consolidating the implementation roadmap launched at the Belém COP.',
+        ],
+      },
+      es: {
+        tag: 'Geopolítica, Energía y Clima',
+        title: 'Las cinco razones que llevaron al fracaso de la COP31',
+        summary:
+          'La conferencia climática más larga de la historia terminó el domingo (22) sin acuerdo en Antalya, Turquía, socavada por falta de ambición, presidencia dividida, obsesión por la electrificación, crisis energética bélica y un anuncio petrolero en Shenzhen.',
+        dateAuthor: '23/11/2026 • Redacción DinhEuro',
+        source: 'COP31 Antalya • Análisis Internacional',
+        readingTime: '5 min',
+        keywords: [
+          'fracaso cop31 antalya turquia',
+          'electrificacion combustibles fosiles cop31',
+          'estrecho de ormuz petroleo crisis energetica',
+          'shenzhen trump xi putin petroleo',
+          'cop31 australia turquia union europea',
+        ],
+        imageAlt:
+          'Letrero oficial de la Conferencia de las Naciones Unidas sobre el Cambio Climático (COP31) en Antalya, Turquía',
+        fullContent: [
+          'Al menos cinco factores resultaron decisivos para el fracaso de la COP31 celebrada en Antalya, Turquía. La cumbre climática más larga de la historia concluyó el domingo (22) sin acuerdo tras dos semanas de negociaciones y dos días de prórroga.',
+          'Lo ocurrido desde la fase preparatoria hasta los pasillos de la zona azul explica por qué la cita quedará registrada como un tropiezo en un momento crítico para la agenda ambiental global.',
+          '## 1. Falta de ambición',
+          'Incluso antes de comenzar las conversaciones en Antalya, delegados, gobiernos y la propia presidencia sabían que las expectativas de resoluciones ambiciosas eran bajas. Las reuniones previas de la CMNUCC en Bonn, en junio, ya habían cerrado sin acuerdo en puntos clave como la meta global de adaptación.',
+          '## 2. Presidencia débil y dividida',
+          'Por primera vez, la conducción se dividió entre dos países: Turquía ejerció como sede con decisión final y Australia dirigió las negociaciones. Ninguno cuenta con historial de liderazgo en diplomacia climática y ambos mantienen una fuerte dependencia del carbón, lo que debilitó la conducción en los tramos decisivos.',
+          '## 3. Obsesión por la electrificación',
+          'Turquía centró sus esfuerzos en presentar la cumbre como la "COP de la electrificación", con la meta de llevar la electricidad al 35% del consumo energético final mundial en 2035. Según trascendió en las delegaciones, para lograr apoyo a ese titular se habría aceptado la exigencia de Arabia Saudita y otros productores de eliminar del borrador del jueves (19) toda referencia a los combustibles fósiles, provocando el rechazo de la Unión Europea y otros países.',
+          '## 4. Guerras y crisis energética',
+          'Las guerras en Ucrania e Irán desataron una crisis energética con el petróleo al alza tras el cierre del estrecho de Ormuz. Lejos de acelerar la transición limpia, varios gobiernos —encabezados por Estados Unidos y naciones productoras— priorizaron asegurar más hidrocarburos y aumentaron la presión sobre el consenso multilateral.',
+          '## 5. El anuncio de Shenzhen',
+          'El factor decisivo llegó desde China el mismo jueves (19) en que circuló el texto sin mención a los fósiles: Donald Trump, Xi Jinping y Vladimir Putin se reunieron en Shenzhen y firmaron una declaración comprometiéndose a "aumentar la producción y el suministro de derivados del petróleo", debilitando definitivamente cualquier pacto de transición tras la COP de Belém.',
+        ],
+      },
+    },
+  },
+  {
     id: 'acordo-comercial-ue-mercosul-2026',
     isoDate: '2026-11-21',
     imageUrl: '/assets/aistudio/image_0205078f.png',
@@ -1159,114 +1376,6 @@ export const DAILY_INSIGHTS_ITEMS: DailyInsightItem[] = [
           '3. Seguridad Global y Energía: Además de las gestiones sobre el fin del conflicto en Ucrania —tema abordado previamente entre Xi y Putin—, la agenda incluye la crisis en Medio Oriente con Irán y el control de armas nucleares, factores que influyen directamente en el precio del petróleo y en la demanda de refugio en dólar y oro.',
           '## Impacto para Economías Emergentes y Mercados',
           'La concentración del poder de decisión entre Washington, Pekín y Moscú llevó a observadores a comparar la cita con la histórica Conferencia de Yalta de 1945, generando cautela entre economías medias de Europa y Asia. Para el mercado brasileño y el agronegocio exportador, eventuales acuerdos agrícolas o reajustes arancelarios entre Estados Unidos y China podrían reconfigurar los flujos comerciales globales a lo largo de 2027.',
-        ],
-      },
-    },
-  },
-  {
-    id: 'balancos-3t26-cemig-hapvida-bb-2026',
-    imageUrl: '/assets/aistudio/image_c38b3f81.png',
-    translations: {
-      pt: {
-        tag: 'EMPRESAS & BALANÇOS',
-        title:
-          'Temporada de balanços movimenta a B3 com salto no lucro da Cemig e forte alta de Hapvida',
-        summary:
-          'Enquanto Hapvida liderou os ganhos do Ibovespa subindo quase 10% após resultados trimestrais e a Cemig dobrou seu lucro para R$ 1,72 bilhão, Banco do Brasil recuou após revisar projeções e dividendos.',
-        dateAuthor: '17/11/2026 • Redação DinhEuro',
-        source: 'TradeMap / UOL',
-        imageAlt:
-          'Mesa de operações na B3 acompanhando balanços corporativos do 3T26 de Cemig, Hapvida, XP Inc. e Banco do Brasil',
-        fullContent: [
-          'A reta final da temporada de resultados do terceiro trimestre de 2026 ditou o ritmo das negociações corporativas na Bolsa brasileira nesta terça-feira (17), com forte dispersão entre os papéis listados no Ibovespa.',
-          'Entre os destaques positivos, a Cemig reportou lucro líquido de R$ 1,72 bilhão no período — mais que o dobro do registrado um ano antes —, enquanto a XP Inc. elevou seu lucro em 4%, para R$ 1,4 bilhão, e o PagBank apurou ganho de R$ 611 milhões (+7%). No pregão, as ações da Hapvida dispararam perto de 10%, liderando as altas do índice ao lado de Cosan e CSN.',
-          'Na ponta negativa, o Banco do Brasil sofreu pressão vendedora após reduzir sua projeção de lucro e revisar o fluxo de dividendos, enquanto construtoras e varejistas ligadas ao ciclo doméstico recuaram diante da curva de juros elevada.',
-        ],
-      },
-      en: {
-        tag: 'COMPANIES & EARNINGS',
-        title:
-          'Earnings season drives B3 trading as Cemig profit surges and Hapvida rallies',
-        summary:
-          'While Hapvida led Ibovespa gainers surging nearly 10% after quarterly results and Cemig doubled its profit to BRL 1.72 billion, Banco do Brasil retreated after revising its guidance and dividend outlook.',
-        dateAuthor: 'Nov 17, 2026 • DinhEuro Editorial',
-        source: 'TradeMap / UOL',
-        imageAlt:
-          'B3 trading desk tracking 3Q26 corporate earnings for Cemig, Hapvida, XP Inc., and Banco do Brasil',
-        fullContent: [
-          'The closing stretch of the third-quarter 2026 earnings season set the pace for corporate stock trading on Brazil’s exchange on Tuesday (17), producing sharp dispersion across Ibovespa constituents.',
-          'Among positive standouts, Cemig reported net income of BRL 1.72 billion for the quarter—more than double its figure from a year earlier—while XP Inc. grew profit by 4% to BRL 1.4 billion and PagBank posted net earnings of BRL 611 million (+7%). In equity trading, Hapvida shares jumped nearly 10%, leading index gains alongside Cosan and CSN.',
-          'On the downside, Banco do Brasil faced selling pressure after trimming its profit guidance and revising dividend payouts, while domestic-cycle homebuilders and retailers slipped under elevated interest-rate expectations.',
-        ],
-      },
-      es: {
-        tag: 'EMPRESAS Y BALANCES',
-        title:
-          'La temporada de resultados mueve la bolsa B3 con salto en las ganancias de Cemig y fuerte alza de Hapvida',
-        summary:
-          'Mientras Hapvida lideró las ganancias del Ibovespa al subir casi un 10% tras sus resultados trimestrales y Cemig duplicó su beneficio hasta R$ 1,72 mil millones, Banco do Brasil retrocedió tras revisar proyecciones y dividendos.',
-        dateAuthor: '17/11/2026 • Redacción DinhEuro',
-        source: 'TradeMap / UOL',
-        imageAlt:
-          'Mesa de operaciones en la B3 siguiendo los balances corporativos del 3T26 de Cemig, Hapvida, XP Inc. y Banco do Brasil',
-        fullContent: [
-          'La recta final de la temporada de resultados del tercer trimestre de 2026 marcó el ritmo de las negociaciones corporativas en la bolsa brasileña este martes (17), con fuerte dispersión entre las acciones que integran el Ibovespa.',
-          'Entre los destacados positivos, Cemig reportó una utilidad neta de R$ 1,72 mil millones en el período —más del doble de lo registrado un año atrás—, mientras XP Inc. elevó su beneficio en un 4% hasta R$ 1,4 mil millones y PagBank alcanzó una ganancia de R$ 611 millones (+7%). En la rueda, los títulos de Hapvida se dispararon cerca de un 10%, liderando las subas del índice junto a Cosan y CSN.',
-          'En el lado negativo, Banco do Brasil sufrió presión vendedora tras recortar su proyección de ganancias y revisar el flujo de dividendos, mientras constructoras y minoristas ligadas al ciclo local retrocedieron frente a la elevada curva de tasas de interés.',
-        ],
-      },
-    },
-  },
-  {
-    id: 'fed-juros-inflacao-williams-2026',
-    imageUrl: '/assets/aistudio/image_87b108f6.png',
-    translations: {
-      pt: {
-        tag: 'JUROS & FEDERAL RESERVE',
-        title:
-          'Dirigentes do Fed alertam que inflação nos EUA ainda exige cautela e mercado precifica alta de juros',
-        summary:
-          'Em discurso nesta terça-feira (17), o presidente do Fed de Nova York, John Williams, afirmou que a economia americana segue forte e que o banco central ainda tem trabalho a fazer para levar a inflação à meta, reforçando apostas de aperto monetário em dezembro.',
-        dateAuthor: '17/11/2026 • Redação DinhEuro',
-        source: 'InfoMoney / Dow Jones',
-        imageAlt:
-          'Sede do Federal Reserve (Banco Central dos Estados Unidos) em Washington, D.C.',
-        fullContent: [
-          'Os rumos da taxa básica de juros dos Estados Unidos voltaram ao centro das atenções dos mercados globais nesta terça-feira (17) após declarações de dirigentes do Federal Reserve (Fed) sobre a persistência das pressões inflacionárias.',
-          'Durante evento à tarde, o presidente do Fed de Nova York, John Williams, destacou que a atividade econômica americana permanece robusta, mas avaliou que a inflação ainda não caminha na direção necessária para convergir à meta oficial, indicando que o banco central tem trabalho adicional pela frente.',
-          'De acordo com dados da LSEG, os contratos futuros apontam 96% de probabilidade de um novo aumento de 0,25 ponto percentual na reunião de dezembro do Fed, mantendo os rendimentos dos títulos do Tesouro americano pressionados e exigindo cautela dos mercados emergentes.',
-        ],
-      },
-      en: {
-        tag: 'RATES & FEDERAL RESERVE',
-        title:
-          'Fed officials warn US inflation still warrants caution as markets price in rate hike',
-        summary:
-          'In remarks on Tuesday (17), New York Fed President John Williams said the U.S. economy remains resilient and that the central bank still has work to do to bring inflation back to target, reinforcing bets on monetary tightening in December.',
-        dateAuthor: 'Nov 17, 2026 • DinhEuro Editorial',
-        source: 'InfoMoney / Dow Jones',
-        imageAlt:
-          'Federal Reserve Board headquarters building in Washington, D.C.',
-        fullContent: [
-          'The trajectory of U.S. benchmark interest rates returned to the spotlight across global markets on Tuesday (17) after remarks from Federal Reserve (Fed) officials underscoring the persistence of inflationary pressures.',
-          'Speaking at an afternoon event, New York Fed President John Williams noted that U.S. economic activity remains robust, but cautioned that inflation is not yet moving on the path required to converge toward the official target, signaling the central bank still has more work ahead.',
-          'According to LSEG data, futures contracts reflect a 96% probability of another 0.25-percentage-point rate increase at the Fed’s December policy meeting, keeping U.S. Treasury yields elevated and prompting caution across emerging markets.',
-        ],
-      },
-      es: {
-        tag: 'TASAS Y RESERVA FEDERAL',
-        title:
-          'Directivos de la Fed advierten que la inflación en EE. UU. aún exige cautela y el mercado descuenta alza de tasas',
-        summary:
-          'En un discurso este martes (17), el presidente de la Fed de Nueva York, John Williams, afirmó que la economía estadounidense sigue sólida y que el banco central aún tiene trabajo por hacer para llevar la inflación a la meta, reforzando apuestas de ajuste monetario en diciembre.',
-        dateAuthor: '17/11/2026 • Redacción DinhEuro',
-        source: 'InfoMoney / Dow Jones',
-        imageAlt:
-          'Sede de la Reserva Federal de Estados Unidos en Washington, D.C.',
-        fullContent: [
-          'El rumbo de la tasa de interés de referencia de Estados Unidos volvió al centro de la atención de los mercados globales este martes (17) tras declaraciones de directivos de la Reserva Federal (Fed) sobre la persistencia de las presiones inflacionarias.',
-          'Durante un evento por la tarde, el presidente de la Fed de Nueva York, John Williams, destacó que la actividad económica estadounidense se mantiene sólida, pero evaluó que la inflación aún no avanza en la dirección necesaria para converger hacia la meta oficial, indicando que el banco central tiene tarea pendiente.',
-          'De acuerdo con datos de LSEG, los contratos futuros reflejan una probabilidad del 96% de un nuevo incremento de 0,25 puntos porcentuales en la reunión de diciembre de la Fed, manteniendo presionados los rendimientos de los bonos del Tesoro estadounidense y exigiendo cautela a los mercados emergentes.',
         ],
       },
     },
