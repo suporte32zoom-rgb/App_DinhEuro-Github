@@ -36,3 +36,27 @@ test('Mobile and tablet header displays an accessible high-contrast hamburger me
   assert.ok(headerSource.includes('fixed inset-0 z-[9999] flex lg:hidden'));
   assert.ok(headerSource.includes('window.innerWidth >= 1024'));
 });
+
+test('Initial theme defaults strictly to light for all visitors and only switches to dark on manual toggle', () => {
+  const indexHtml = fs.readFileSync(path.resolve(process.cwd(), 'index.html'), 'utf8');
+  const marketContext = fs.readFileSync(
+    path.resolve(process.cwd(), 'src/context/MarketContext.tsx'),
+    'utf8'
+  );
+  const headerSource = fs.readFileSync(
+    path.resolve(process.cwd(), 'src/components/Header.tsx'),
+    'utf8'
+  );
+
+  assert.ok(indexHtml.includes('<html lang="pt-BR" class="light" data-theme="light"'));
+  assert.ok(indexHtml.includes('<meta name="theme-color" content="#F8FAFC" />'));
+  assert.ok(indexHtml.includes("if (storedTheme === 'dark')"));
+  assert.ok(!indexHtml.includes('prefers-color-scheme'));
+
+  assert.ok(marketContext.includes("if (typeof window === 'undefined') return 'light';"));
+  assert.ok(marketContext.includes("return 'light';"));
+  assert.ok(!marketContext.includes('prefers-color-scheme'));
+
+  assert.ok(headerSource.includes('onClick={toggleTheme}'));
+});
+

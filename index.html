@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="pt-BR" class="dark" data-theme="dark" style="background-color: #0B1320; color: #F8FAFC;">
+<html lang="pt-BR" class="light" data-theme="light" style="background-color: #F8FAFC; color: #0F172A;">
   <head>
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-XS3S97LWQC"></script>
@@ -14,17 +14,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
     <title>DinhEuro | Inteligência Financeira Global, Câmbio EUR/BRL e Radar União Europeia – Mercosul</title>
     <script>
-      // Default to dark on opening; honor light mode only if explicitly chosen by the user
+      // Default to light on opening; honor dark mode only if explicitly chosen by the user
       (function() {
         try {
           var storedTheme = localStorage.getItem('dinheuro_theme');
           var root = document.documentElement;
-          if (storedTheme === 'light') {
-            root.classList.remove('dark');
-            root.classList.add('light');
-            root.setAttribute('data-theme', 'light');
-            root.style.backgroundColor = '#F8FAFC';
-            root.style.color = '#0F172A';
+          if (storedTheme === 'dark') {
+            root.classList.remove('light');
+            root.classList.add('dark');
+            root.setAttribute('data-theme', 'dark');
+            root.style.backgroundColor = '#0B1320';
+            root.style.color = '#F8FAFC';
           }
         } catch (e) {}
       })();
@@ -54,7 +54,7 @@
     <link rel="alternate" hreflang="x-default" href="https://dinheuro.com/" />
     
     <!-- PWA & Mobile Meta Tags -->
-    <meta name="theme-color" content="#0B1320" />
+    <meta name="theme-color" content="#F8FAFC" />
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />

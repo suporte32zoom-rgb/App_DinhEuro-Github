@@ -242,18 +242,18 @@ export const MarketProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     assetsRef.current = assets;
   }, [assets]);
 
-  // Theme State: persisted in localStorage ('dark' default on opening, user can switch to 'light')
+  // Theme State: persisted in localStorage ('light' default on opening, switches to 'dark' only on explicit user toggle)
   const [theme, setThemeState] = useState<ThemeMode>(() => {
-    if (typeof window === 'undefined') return 'dark';
+    if (typeof window === 'undefined') return 'light';
     try {
       const stored = localStorage.getItem(THEME_STORAGE_KEY);
-      if (stored === 'light' || stored === 'dark') {
+      if (stored === 'dark' || stored === 'light') {
         return stored;
       }
     } catch {
       // ignore
     }
-    return 'dark';
+    return 'light';
   });
 
   const setTheme = useCallback((newTheme: ThemeMode) => {
