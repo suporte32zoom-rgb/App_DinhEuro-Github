@@ -17,8 +17,8 @@ import { ErrorBoundary } from './components/ErrorBoundary';
 import { DashboardView } from './views/DashboardView';
 import { MarketsView } from './views/MarketsView';
 import { PortfolioView } from './views/PortfolioView';
-import { DayTradeView } from './views/DayTradeView';
-import { TapeReadingView } from './views/TapeReadingView';
+import { FxRemittanceGuideView } from './views/FxRemittanceGuideView';
+import { MonetaryPolicyView } from './views/MonetaryPolicyView';
 import { FixedIncomeDerivativesView } from './views/FixedIncomeDerivativesView';
 import { NewsView } from './views/NewsView';
 import { BrokersView } from './views/BrokersView';
@@ -34,22 +34,15 @@ import { LgpdConsentBanner } from './components/LgpdConsentBanner';
 
 const MainContent: React.FC = () => {
   const { activeTab } = useMarket();
-  const isTerminalMode = activeTab === 'tape_reading';
 
   return (
-    <main
-      className={`${
-        isTerminalMode
-          ? 'w-full max-w-[1920px] mx-auto px-0 sm:px-1 pt-0 pb-0 flex-1 flex flex-col min-h-0 h-[calc(100vh-66px)] overflow-hidden'
-          : 'max-w-7xl mx-auto px-3 sm:px-6 pt-5 sm:pt-6 flex-1 w-full'
-      }`}
-    >
+    <main className="max-w-7xl mx-auto px-3 sm:px-6 pt-5 sm:pt-6 flex-1 w-full">
       <ErrorBoundary>
         {activeTab === 'dashboard' && <DashboardView />}
         {activeTab === 'mercados' && <MarketsView />}
         {activeTab === 'carteiras' && <PortfolioView />}
-        {activeTab === 'daytrade' && <DayTradeView />}
-        {activeTab === 'tape_reading' && <TapeReadingView />}
+        {activeTab === 'guia_cambio' && <FxRemittanceGuideView />}
+        {activeTab === 'politica_monetaria' && <MonetaryPolicyView />}
         {activeTab === 'renda_fixa' && <FixedIncomeDerivativesView />}
         {activeTab === 'noticias' && <NewsView />}
         {activeTab === 'corretoras' && <BrokersView />}
@@ -69,7 +62,6 @@ const MainContent: React.FC = () => {
 const AppShell: React.FC = () => {
   const { theme, activeTab } = useMarket();
   const { lang } = useI18n();
-  const isTerminalMode = activeTab === 'tape_reading';
 
   const lastTrackedRouteRef = useRef<string | null>(null);
 
@@ -105,9 +97,7 @@ const AppShell: React.FC = () => {
     <div
       className={`min-h-screen ${
         theme === 'dark' ? 'bg-[#0B1320] text-slate-100' : 'bg-[#F8FAFC] text-[#0F172A]'
-      } flex flex-col font-sans selection:bg-[#003399] selection:text-white transition-colors duration-150 ${
-        isTerminalMode ? 'h-screen overflow-hidden' : ''
-      }`}
+      } flex flex-col font-sans selection:bg-[#003399] selection:text-white transition-colors duration-150`}
     >
       {/* Real-time Top Marquee Ribbon */}
       <ErrorBoundary>
@@ -130,9 +120,9 @@ const AppShell: React.FC = () => {
       {/* PWA Offline Mode Indicator */}
       <OfflineIndicator />
 
-      {/* Institutional Footer (Hidden in Terminal Pro mode to eliminate vertical scroll) */}
+      {/* Institutional Footer */}
       <ErrorBoundary>
-        {!isTerminalMode && <Footer />}
+        <Footer />
       </ErrorBoundary>
 
       {/* LGPD & Cookie Consent Persistent Banner */}

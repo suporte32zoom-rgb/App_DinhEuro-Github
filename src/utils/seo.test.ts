@@ -575,14 +575,20 @@ test('Brokers Guide renders comparative editorial guide and 4-item FAQ across PT
   assert.ok(!hypeSuperlatives.test(brokersTranslationsSource), 'brokersTranslations.ts should avoid absolute promotional superlatives');
 });
 
-test('/day-trade educational restructuring, JSON-LD organization email fix, and base HTML integrity', async () => {
+test('/guia-cambio-remessas and /politica-monetaria-juros editorial pages, 301 redirects, sitemap, and HTML integrity', async () => {
   const fs = await import('node:fs');
   const path = await import('node:path');
-  const { FUTURES_EDUCATION_COPY } = await import('../i18n/futuresEducationTranslations.ts');
+  const { FX_GUIDE_TRANSLATIONS, MONETARY_POLICY_TRANSLATIONS } = await import(
+    '../i18n/editorialGuidesTranslations.ts'
+  );
 
   const indexHtml = fs.readFileSync(path.resolve(process.cwd(), 'index.html'), 'utf8');
   const seoSource = fs.readFileSync(path.resolve(process.cwd(), 'src/utils/seo.ts'), 'utf8');
-  const dayTradeSource = fs.readFileSync(path.resolve(process.cwd(), 'src/views/DayTradeView.tsx'), 'utf8');
+  const sitemapXml = fs.readFileSync(path.resolve(process.cwd(), 'public/sitemap.xml'), 'utf8');
+  const serverSource = fs.readFileSync(path.resolve(process.cwd(), 'server.ts'), 'utf8');
+  const publicHtaccess = fs.readFileSync(path.resolve(process.cwd(), 'public/.htaccess'), 'utf8');
+  const fxViewSource = fs.readFileSync(path.resolve(process.cwd(), 'src/views/FxRemittanceGuideView.tsx'), 'utf8');
+  const monetaryViewSource = fs.readFileSync(path.resolve(process.cwd(), 'src/views/MonetaryPolicyView.tsx'), 'utf8');
 
   // 1. Organization JSON-LD email fix
   assert.ok(indexHtml.includes('"email":"admin@dinheuro.com"'), 'index.html organization JSON-LD must use admin@dinheuro.com');
@@ -596,34 +602,62 @@ test('/day-trade educational restructuring, JSON-LD organization email fix, and 
   assert.ok(indexHtml.includes('./manifest.webmanifest'), 'PWA manifest link must remain in index.html');
   assert.ok(indexHtml.includes('serviceWorker'), 'PWA service worker registration must remain in index.html');
 
-  // 3. Educational /day-trade metadata without speculative scalping promises
-  for (const lang of ['pt', 'en', 'es'] as const) {
-    const meta = ROUTE_SEO_METADATA.daytrade[lang];
-    assert.ok(!/scalping|fique rico|lucro garantido|ganhos rápidos/i.test(meta.title), `daytrade title in ${lang} must avoid speculative appeal`);
-    assert.ok(!/scalping|fique rico|lucro garantido|ganhos rápidos/i.test(meta.description), `daytrade description in ${lang} must avoid speculative appeal`);
-    assert.ok(meta.title.length >= 30 && meta.title.length <= 70, `daytrade title length check (${lang}): ${meta.title.length}`);
-    assert.ok(meta.description.length >= 110 && meta.description.length <= 170, `daytrade description length check (${lang}): ${meta.description.length}`);
-  }
+  // 3. Exact PT titles & metadata + sitemap + 301 redirects
+  assert.equal(
+    ROUTE_SEO_METADATA.guia_cambio.pt.title,
+    'Guia Completo de Câmbio Comercial, Spread, IOF e Remessas Internacionais | DinhEuro'
+  );
+  assert.equal(
+    ROUTE_SEO_METADATA.politica_monetaria.pt.title,
+    'Política Monetária: Selic, IPCA, Boletim Focus e Juros do BCE | DinhEuro'
+  );
+  assert.ok(sitemapXml.includes('https://dinheuro.com/guia-cambio-remessas'));
+  assert.ok(sitemapXml.includes('https://dinheuro.com/politica-monetaria-juros'));
+  assert.ok(!sitemapXml.includes('https://dinheuro.com/day-trade'));
+  assert.ok(!sitemapXml.includes('https://dinheuro.com/fluxo-tape-reading'));
+  assert.ok(serverSource.includes("res.redirect(301, '/guia-cambio-remessas')"));
+  assert.ok(serverSource.includes("res.redirect(301, '/politica-monetaria-juros')"));
+  assert.ok(publicHtaccess.includes('/guia-cambio-remessas [R=301,L,NC]'));
+  assert.ok(publicHtaccess.includes('/politica-monetaria-juros [R=301,L,NC]'));
 
-  // 4. Editorial content, FAQ, and risk disclaimer across PT/EN/ES
+  // 4. Word count >= 700 words in PT, 5 FAQs, glossary, steps, and zero forbidden technical terms
+  const countWords = (text: string) => text.trim().split(/\s+/).filter(Boolean).length;
+  const fxPtText = [
+    FX_GUIDE_TRANSLATIONS.pt.title,
+    FX_GUIDE_TRANSLATIONS.pt.subtitle,
+    FX_GUIDE_TRANSLATIONS.pt.noticeBody,
+    ...FX_GUIDE_TRANSLATIONS.pt.sections.flatMap((s) => [s.title, ...s.paragraphs]),
+    FX_GUIDE_TRANSLATIONS.pt.stepsTitle,
+    ...FX_GUIDE_TRANSLATIONS.pt.steps.flatMap((st) => [st.title, st.description]),
+    ...FX_GUIDE_TRANSLATIONS.pt.faqItems.flatMap((f) => [f.question, f.answer]),
+  ].join(' ');
+  const monetaryPtText = [
+    MONETARY_POLICY_TRANSLATIONS.pt.title,
+    MONETARY_POLICY_TRANSLATIONS.pt.subtitle,
+    MONETARY_POLICY_TRANSLATIONS.pt.noticeBody,
+    ...MONETARY_POLICY_TRANSLATIONS.pt.sections.flatMap((s) => [s.title, ...s.paragraphs]),
+    MONETARY_POLICY_TRANSLATIONS.pt.glossaryTitle,
+    ...MONETARY_POLICY_TRANSLATIONS.pt.glossaryItems.flatMap((g) => [g.term, g.definition]),
+    ...MONETARY_POLICY_TRANSLATIONS.pt.faqItems.flatMap((f) => [f.question, f.answer]),
+  ].join(' ');
+
+  assert.ok(countWords(fxPtText) >= 700, `Expected >= 700 words in FX Guide PT, got ${countWords(fxPtText)}`);
+  assert.ok(countWords(monetaryPtText) >= 700, `Expected >= 700 words in Monetary Policy PT, got ${countWords(monetaryPtText)}`);
+
   const forbiddenTerms = /\b(recharts|finnhub|awesomeapi|coingecko|brapi|yahoo\s*finance|vite|github|cloudflare)\b/i;
   for (const lang of ['pt', 'en', 'es'] as const) {
-    const copy = FUTURES_EDUCATION_COPY[lang];
-    assert.equal(copy.sections.length, 4, `Expected 4 educational sections in ${lang}`);
-    assert.equal(copy.faqItems.length, 5, `Expected 5 FAQ items in ${lang}`);
-    assert.ok(copy.topWarningBody.length >= 80, `Top educational risk notice missing or too short in ${lang}`);
-    assert.ok(copy.footerDisclaimerBody.length >= 120, `Bottom disclaimer missing or too short in ${lang}`);
-    for (const sec of copy.sections) {
-      assert.ok(sec.title.length >= 15, `Futures section title too short in ${lang}`);
-      assert.ok(sec.body.join(' ').length >= 180, `Futures section content too short in ${lang}`);
-      assert.ok(!forbiddenTerms.test(sec.body.join(' ')), `Forbidden technical term in futures section (${lang})`);
-    }
-    for (const item of copy.faqItems) {
-      assert.ok(item.question.length >= 20, `Futures FAQ question too short in ${lang}`);
-      assert.ok(item.answer.length >= 80, `Futures FAQ answer too short in ${lang}`);
-      assert.ok(!forbiddenTerms.test(item.answer), `Forbidden technical term in futures FAQ (${lang})`);
-    }
+    const fxCopy = FX_GUIDE_TRANSLATIONS[lang];
+    const monCopy = MONETARY_POLICY_TRANSLATIONS[lang];
+    assert.equal(fxCopy.sections.length, 4, `Expected 4 FX sections in ${lang}`);
+    assert.equal(fxCopy.steps.length, 4, `Expected 4 FX calculator steps in ${lang}`);
+    assert.equal(fxCopy.faqItems.length, 5, `Expected 5 FX FAQ items in ${lang}`);
+    assert.equal(monCopy.sections.length, 3, `Expected 3 Monetary sections in ${lang}`);
+    assert.ok(monCopy.glossaryItems.length >= 8, `Expected >= 8 Monetary glossary items in ${lang}`);
+    assert.equal(monCopy.faqItems.length, 5, `Expected 5 Monetary FAQ items in ${lang}`);
+    assert.ok(!forbiddenTerms.test(JSON.stringify(fxCopy)), `Forbidden term in FX guide (${lang})`);
+    assert.ok(!forbiddenTerms.test(JSON.stringify(monCopy)), `Forbidden term in Monetary guide (${lang})`);
   }
 
-  assert.ok(!forbiddenTerms.test(dayTradeSource), 'DayTradeView.tsx must not expose technical providers or build tools');
+  assert.ok(!forbiddenTerms.test(fxViewSource), 'FxRemittanceGuideView.tsx must not expose technical providers or build tools');
+  assert.ok(!forbiddenTerms.test(monetaryViewSource), 'MonetaryPolicyView.tsx must not expose technical providers or build tools');
 });

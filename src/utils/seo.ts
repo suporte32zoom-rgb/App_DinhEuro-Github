@@ -136,50 +136,50 @@ export const ROUTE_SEO_METADATA: Record<NavigationTab, Record<SupportedLanguage,
         'grafico d3 v7 analisis tecnico, acciones americanas y europeas en tiempo real, velas japonesas, medias moviles, grafico dolar euro',
     },
   },
-  daytrade: {
+  guia_cambio: {
     pt: {
-      title: 'Mercados Futuros, Volatilidade e Gestão de Risco | DinhEuro',
+      title: 'Guia Completo de Câmbio Comercial, Spread, IOF e Remessas Internacionais | DinhEuro',
       description:
-        'Guia educativo e analítico sobre contratos futuros (Mini-Índice, Mini-Dólar e S&P 500), liquidez, horário de pregão, câmbio, juros e controle de risco.',
+        'Entenda a diferença prática entre câmbio comercial e turismo, spread cambial, alíquotas de IOF, fatores do EUR/BRL e USD/BRL e como simular remessas internacionais.',
       keywords:
-        'mercados futuros educação, mini índice win, mini dólar wdo, s&p 500 volatilidade, gestão de risco financeiro, liquidez e horário de pregão, câmbio e juros futuros',
+        'câmbio comercial vs turismo, spread cambial e iof, remessas internacionais, eur brl e usd brl, valor efetivo total vet, calculadora de câmbio universal, taxa ptax banco central',
     },
     en: {
-      title: 'Futures Markets, Volatility & Risk Management | DinhEuro',
+      title: 'Complete Guide to Commercial FX, Bank Spread, IOF & International Transfers | DinhEuro',
       description:
-        'Educational and analytical guide to futures contracts (Mini-Index, Mini-Dollar, and S&P 500), market liquidity, macro drivers, and capital risk management.',
+        'Understand commercial vs. tourism exchange rates, FX spreads, Brazilian IOF rules, EUR/BRL and USD/BRL macro drivers, and how to compare transfer costs.',
       keywords:
-        'futures markets education, volatility and liquidity, index futures s&p 500, fx futures, capital risk management, macro interest rate impact',
+        'commercial vs tourism exchange rate, fx spread and iof tax, international money transfers brazil, eur brl usd brl drivers, total effective cost vet, currency calculator guide',
     },
     es: {
-      title: 'Mercados de Futuros, Volatilidad y Gestión de Riesgo | DinhEuro',
+      title: 'Guía Completa de Cambio Comercial, Spread, IOF y Remesas Internacionales | DinhEuro',
       description:
-        'Guía educativa y analítica sobre contratos de futuros (Mini-Índice, Mini-Dólar y S&P 500), liquidez, horarios de sesión, divisas, tasas y control de riesgo.',
+        'Comprende la diferencia entre cambio comercial y turismo, spread cambiario, alícuotas de IOF, factores del EUR/BRL y USD/BRL y cómo simular remesas internacionales.',
       keywords:
-        'mercados de futuros educación, volatilidad y liquidez, futuros s&p 500, divisas y tasas, gestión de riesgo financiero',
+        'cambio comercial vs turismo, spread cambiario e iof, remesas internacionales, factores eur brl usd brl, valor efectivo total vet, calculadora de cambio universal',
     },
   },
-  tape_reading: {
+  politica_monetaria: {
     pt: {
-      title: 'Fluxo de Ordens, Tape Reading, Livro de Ofertas (DOM) e Times & Trades | DinhEuro',
+      title: 'Política Monetária: Selic, IPCA, Boletim Focus e Juros do BCE | DinhEuro',
       description:
-        'Acompanhe o livro de ofertas (DOM), saldo de agressão compradora e vendedora e fluxo institucional em tempo real no terminal DinhEuro.',
+        'Entenda como o Copom define a Taxa Selic, o papel do Boletim Focus, decisões do BCE e Fed, relação entre IPCA, juros reais, Tesouro Direto e câmbio, e glossário monetário.',
       keywords:
-        'tape reading ao vivo, fluxo de ordens, livro de ofertas dom, times and trades, agressão institucional, ações da b3',
+        'política monetária selic ipca, boletim focus banco central, juros do bce e federal reserve, copom taxa selic, juros reais tesouro selic ipca+, glossário de indicadores monetários',
     },
     en: {
-      title: 'Order Flow, Tape Reading, Depth of Market (DOM) & Time and Sales | DinhEuro',
+      title: 'Monetary Policy: Selic, IPCA, Focus Report & ECB Interest Rates | DinhEuro',
       description:
-        'Monitor institutional Depth of Market (DOM), aggressive buyer/seller volume delta, and real-time Time & Sales microstructure.',
+        'Learn how Copom sets the Selic rate, how the Focus Report guides expectations, ECB and Fed rate decisions, real yields, sovereign bonds, FX, and a practical glossary.',
       keywords:
-        'order flow terminal, tape reading, depth of market dom, time and sales, liquidity delta',
+        'brazil monetary policy selic ipca, focus report central bank, ecb and federal reserve interest rates, real yields sovereign bonds, monetary policy glossary',
     },
     es: {
-      title: 'Flujo de Órdenes, Tape Reading, Libro de Ofertas (DOM) y Times & Trades | DinhEuro',
+      title: 'Política Monetaria: Selic, IPCA, Boletín Focus y Tasas del BCE | DinhEuro',
       description:
-        'Supervisa el libro de ofertas (DOM), saldo de agresión institucional y flujo de operaciones en tiempo real.',
+        'Descubre cómo el Copom define la tasa Selic, el papel del Boletín Focus, decisiones del BCE y la Fed, relación entre IPCA, tasas reales, bonos y cambio, y glosario.',
       keywords:
-        'tape reading, flujo de ordenes, libro de ofertas dom, times and trades',
+        'politica monetaria selic ipca, boletin focus banco central, tasas bce y reserva federal, tasas reales tesouro direto, glosario de indicadores monetarios',
     },
   },
   renda_fixa: {

@@ -152,14 +152,14 @@ export const UnifiedAssetDetailView: React.FC<UnifiedAssetDetailViewProps> = ({
             <span>{tDetail.backToOverview}</span>
           </button>
 
-          {/* Action Buttons: Day Trade Pro, Seguir Ativo, Adicionar Alerta, Adicionar ao Portfólio */}
+          {/* Action Buttons: Guia de Câmbio, Seguir Ativo, Adicionar Alerta, Adicionar ao Portfólio */}
           <div className="flex items-center gap-2 flex-wrap">
-            {/* Operar no Day Trade Pro */}
+            {/* Guia de Câmbio & Spread */}
             <button
               onClick={() => {
                 setSelectedAsset(asset);
                 if (onBack) onBack();
-                setActiveTab('daytrade');
+                setActiveTab('guia_cambio');
               }}
               className="flex items-center gap-1.5 text-xs font-bold px-3 py-2 rounded-xl bg-[#E3F7F2] hover:bg-[#009B77] text-[#006B52] hover:text-white dark:bg-emerald-500/15 dark:text-emerald-300 dark:hover:bg-emerald-500/25 border border-[#009B77]/40 dark:border-emerald-500/40 shadow-sm cursor-pointer transition active:scale-95"
             >

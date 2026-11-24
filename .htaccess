@@ -14,6 +14,10 @@
   RewriteCond %{HTTP_HOST} !^127\.0\.0\.1
   RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
+  # 1b. Redirecionamento permanente 301 de rotas antigas para guias editoriais
+  RewriteRule ^(?:day-trade|daytrade)/?$ /guia-cambio-remessas [R=301,L,NC]
+  RewriteRule ^(?:fluxo-tape-reading|tape-reading)/?$ /politica-monetaria-juros [R=301,L,NC]
+
   # 2. Tipos MIME para módulos JS e PWA
   <IfModule mod_mime.c>
     AddType application/javascript .js .mjs

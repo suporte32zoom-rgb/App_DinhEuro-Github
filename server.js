@@ -1611,6 +1611,12 @@ async function startServer() {
   app.get("/api/health", (_req, res) => {
     res.json({ status: "ok", time: (/* @__PURE__ */ new Date()).toISOString() });
   });
+  app.get(["/day-trade", "/day-trade/", "/daytrade", "/daytrade/"], (_req, res) => {
+    res.redirect(301, "/guia-cambio-remessas");
+  });
+  app.get(["/fluxo-tape-reading", "/fluxo-tape-reading/", "/tape-reading", "/tape-reading/"], (_req, res) => {
+    res.redirect(301, "/politica-monetaria-juros");
+  });
   const isDev = process.env.NODE_ENV === "development";
   if (isDev) {
     const { createServer: createViteServer } = await import("vite");

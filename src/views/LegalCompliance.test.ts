@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
-import { ROUTE_TAB_MAP, TAB_ROUTE_MAP, NavigationTab } from '../context/MarketContext';
+import { ROUTE_TAB_MAP, TAB_ROUTE_MAP, LEGACY_ROUTE_REDIRECTS } from '../context/MarketContext';
 
 test('ROUTE_TAB_MAP correctly routes legal and institutional paths', () => {
   assert.equal(ROUTE_TAB_MAP['/termos-de-uso'], 'termos');
@@ -10,20 +10,24 @@ test('ROUTE_TAB_MAP correctly routes legal and institutional paths', () => {
   assert.equal(ROUTE_TAB_MAP['/politica-de-cookies'], 'cookies');
   assert.equal(ROUTE_TAB_MAP['/disclaimer'], 'disclaimer');
   assert.equal(ROUTE_TAB_MAP['/sobre'], 'sobre');
-  assert.equal(ROUTE_TAB_MAP['/day-trade'], 'daytrade');
-  assert.equal(ROUTE_TAB_MAP['/fluxo-tape-reading'], 'tape_reading');
+  assert.equal(ROUTE_TAB_MAP['/guia-cambio-remessas'], 'guia_cambio');
+  assert.equal(ROUTE_TAB_MAP['/politica-monetaria-juros'], 'politica_monetaria');
+  assert.equal(ROUTE_TAB_MAP['/day-trade'], 'guia_cambio');
+  assert.equal(ROUTE_TAB_MAP['/fluxo-tape-reading'], 'politica_monetaria');
   assert.equal(ROUTE_TAB_MAP['/renda-fixa-derivativos'], 'renda_fixa');
 });
 
-test('TAB_ROUTE_MAP produces clean SEO-friendly URLs', () => {
+test('TAB_ROUTE_MAP produces clean SEO-friendly URLs and LEGACY_ROUTE_REDIRECTS maps deprecated URLs', () => {
   assert.equal(TAB_ROUTE_MAP['termos'], '/termos-de-uso');
   assert.equal(TAB_ROUTE_MAP['privacidade'], '/politica-de-privacidade');
   assert.equal(TAB_ROUTE_MAP['cookies'], '/politica-de-cookies');
   assert.equal(TAB_ROUTE_MAP['disclaimer'], '/disclaimer');
   assert.equal(TAB_ROUTE_MAP['sobre'], '/sobre');
-  assert.equal(TAB_ROUTE_MAP['daytrade'], '/day-trade');
-  assert.equal(TAB_ROUTE_MAP['tape_reading'], '/fluxo-tape-reading');
+  assert.equal(TAB_ROUTE_MAP['guia_cambio'], '/guia-cambio-remessas');
+  assert.equal(TAB_ROUTE_MAP['politica_monetaria'], '/politica-monetaria-juros');
   assert.equal(TAB_ROUTE_MAP['renda_fixa'], '/renda-fixa-derivativos');
+  assert.equal(LEGACY_ROUTE_REDIRECTS['/day-trade'], '/guia-cambio-remessas');
+  assert.equal(LEGACY_ROUTE_REDIRECTS['/fluxo-tape-reading'], '/politica-monetaria-juros');
 });
 
 test('LGPD consent payload structure conforms to legal auditing schema', () => {

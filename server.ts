@@ -104,6 +104,14 @@ async function startServer() {
     res.json({ status: 'ok', time: new Date().toISOString() });
   });
 
+  // HTTP 301 Permanent Redirects for legacy operational routes
+  app.get(['/day-trade', '/day-trade/', '/daytrade', '/daytrade/'], (_req: Request, res: Response) => {
+    res.redirect(301, '/guia-cambio-remessas');
+  });
+  app.get(['/fluxo-tape-reading', '/fluxo-tape-reading/', '/tape-reading', '/tape-reading/'], (_req: Request, res: Response) => {
+    res.redirect(301, '/politica-monetaria-juros');
+  });
+
   const isDev = process.env.NODE_ENV === 'development';
 
   if (isDev) {

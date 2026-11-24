@@ -36,8 +36,8 @@ export type NavigationTab =
   | 'dashboard'
   | 'mercados'
   | 'carteiras'
-  | 'daytrade'
-  | 'tape_reading'
+  | 'guia_cambio'
+  | 'politica_monetaria'
   | 'renda_fixa'
   | 'noticias'
   | 'corretoras'
@@ -54,8 +54,8 @@ export const TAB_ROUTE_MAP: Record<NavigationTab, string> = {
   dashboard: '/',
   mercados: '/mercados',
   carteiras: '/carteiras',
-  daytrade: '/day-trade',
-  tape_reading: '/fluxo-tape-reading',
+  guia_cambio: '/guia-cambio-remessas',
+  politica_monetaria: '/politica-monetaria-juros',
   renda_fixa: '/renda-fixa-derivativos',
   noticias: '/noticias',
   corretoras: '/corretoras',
@@ -69,14 +69,23 @@ export const TAB_ROUTE_MAP: Record<NavigationTab, string> = {
   disclaimer: '/disclaimer',
 };
 
+export const LEGACY_ROUTE_REDIRECTS: Record<string, string> = {
+  '/day-trade': '/guia-cambio-remessas',
+  '/daytrade': '/guia-cambio-remessas',
+  '/fluxo-tape-reading': '/politica-monetaria-juros',
+  '/tape-reading': '/politica-monetaria-juros',
+};
+
 export const ROUTE_TAB_MAP: Record<string, NavigationTab> = {
   '/': 'dashboard',
   '/mercados': 'mercados',
   '/carteiras': 'carteiras',
-  '/day-trade': 'daytrade',
-  '/daytrade': 'daytrade',
-  '/fluxo-tape-reading': 'tape_reading',
-  '/tape-reading': 'tape_reading',
+  '/guia-cambio-remessas': 'guia_cambio',
+  '/politica-monetaria-juros': 'politica_monetaria',
+  '/day-trade': 'guia_cambio',
+  '/daytrade': 'guia_cambio',
+  '/fluxo-tape-reading': 'politica_monetaria',
+  '/tape-reading': 'politica_monetaria',
   '/renda-fixa-derivativos': 'renda_fixa',
   '/renda-fixa': 'renda_fixa',
   '/noticias': 'noticias',
@@ -306,21 +315,48 @@ export const MarketProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     }
   }, [portfolio]);
 
-  // Dynamically synchronize <link rel="canonical"> in <head> whenever route changes
+  // Dynamically synchronize <link rel="canonical"> in <head> and redirect legacy paths whenever route changes
   useEffect(() => {
     const routePath = TAB_ROUTE_MAP[activeTab] || '/';
     syncCanonicalLink(routePath);
+    if (typeof window !== 'undefined') {
+      const currentPath = normalizeRoutePath(window.location.pathname);
+      const redirectTarget = LEGACY_ROUTE_REDIRECTS[currentPath];
+      if (redirectTarget && window.location.pathname !== redirectTarget) {
+        try {
+          window.history.replaceState(null, '', redirectTarget);
+        } catch {
+          // ignore in restricted environments
+        }
+      }
+    }
   }, [activeTab]);
 
   // Listen to popstate for browser back/forward buttons
   useEffect(() => {
     const handlePopState = () => {
       const path = normalizeRoutePath(window.location.pathname);
+      const redirectTarget = LEGACY_ROUTE_REDIRECTS[path];
+      if (redirectTarget) {
+        try {
+          window.history.replaceState(null, '', redirectTarget);
+        } catch {
+          // ignore
+        }
+      }
       if (ROUTE_TAB_MAP[path]) {
         setActiveTabState(ROUTE_TAB_MAP[path]);
       } else {
         const hash = normalizeRoutePath('/' + window.location.hash.replace('#', ''));
         if (hash && ROUTE_TAB_MAP[hash]) {
+          const hashRedirect = LEGACY_ROUTE_REDIRECTS[hash];
+          if (hashRedirect) {
+            try {
+              window.history.replaceState(null, '', hashRedirect);
+            } catch {
+              // ignore
+            }
+          }
           setActiveTabState(ROUTE_TAB_MAP[hash]);
         }
       }

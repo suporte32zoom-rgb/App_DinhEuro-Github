@@ -670,7 +670,7 @@ export const ACADEMY_COURSES: AcademyCourse[] = [
       'Livro de ofertas (DOM), agressão institucional, contratos futuros WIN/WDO e gregas de opções.',
     objective:
       'Executar leituras precisas de microestrutura de mercado, gerenciar alavancagem futura e precificar proteção com derivativos.',
-    targetTab: 'tape_reading',
+    targetTab: 'renda_fixa',
     modules: [
       {
         id: 'fl-m1',
@@ -714,10 +714,10 @@ export const ACADEMY_COURSES: AcademyCourse[] = [
               'Ordem institucional fracionada que exibe apenas pequena fração de seu tamanho total no book para não alertar o mercado.',
           },
         ],
-        targetTab: 'tape_reading',
-        targetButtonLabel: 'Observar Fluxo no Terminal DOM',
+        targetTab: 'graficos',
+        targetButtonLabel: 'Analisar Liquidez nos Gráficos',
         targetDescription:
-          'Acompanhe o livro de ofertas dinâmico, saldo de agressão e Times & Trades no DinhEuro.',
+          'Acompanhe amplitude intraday, volume e leitura gráfica em tempo real no DinhEuro.',
       },
       {
         id: 'fl-m2',
@@ -761,10 +761,10 @@ export const ACADEMY_COURSES: AcademyCourse[] = [
               'Colateral (Tesouro Selic, CDB ou saldo) retido pela B3/corretora para garantir o cumprimento do ajuste diário.',
           },
         ],
-        targetTab: 'daytrade',
-        targetButtonLabel: 'Praticar no Terminal Day Trade Pro',
+        targetTab: 'renda_fixa',
+        targetButtonLabel: 'Explorar Renda Fixa & Derivativos',
         targetDescription:
-          'Teste leitura de gráfico intraday, boleta e gestão de pontos no módulo Day Trade & Scalping.',
+          'Explore a curva de juros, títulos públicos e precificação de derivativos no módulo Renda Fixa & Derivativos.',
       },
       {
         id: 'fl-m3',
@@ -891,7 +891,7 @@ export const ACADEMY_FAQ: AcademyFaqItem[] = [
     id: 'faq-5',
     question: 'Como praticar os cálculos aprendidos nos módulos?',
     answer:
-      'Ao final de cada módulo existe um atalho contextual direto para a ferramenta correspondente do DinhEuro, incluindo a Calculadora de Câmbio Universal em tempo real, Simuladores de Juros Compostos/DARF, Terminal Gráfico D3 v7, Fluxo & Tape Reading e Renda Fixa & Derivativos.',
+      'Ao final de cada módulo existe um atalho contextual direto para a ferramenta correspondente do DinhEuro, incluindo a Calculadora de Câmbio Universal em tempo real, Guia de Câmbio & Remessas, Política Monetária & Juros, Simuladores de Juros Compostos/DARF, Terminal Gráfico D3 v7 e Renda Fixa & Derivativos.',
   },
   {
     id: 'faq-6',

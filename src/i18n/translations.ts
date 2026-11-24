@@ -51,8 +51,8 @@ export interface AppTranslations {
       | 'carteiras'
       | 'noticias'
       | 'corretoras'
-      | 'daytrade'
-      | 'tape_reading'
+      | 'guia_cambio'
+      | 'politica_monetaria'
       | 'renda_fixa'
       | 'graficos'
       | 'ferramentas'
@@ -477,8 +477,8 @@ export const TRANSLATIONS: Record<SupportedLanguage, AppTranslations> = {
         carteiras: 'Carteiras',
         noticias: 'Notícias & Macro',
         corretoras: 'Corretoras Globais',
-        daytrade: 'Futuros & Risco',
-        tape_reading: 'Fluxo & Tape Reading',
+        guia_cambio: 'Guia de Câmbio',
+        politica_monetaria: 'Política Monetária',
         renda_fixa: 'Renda Fixa & Derivativos',
         graficos: 'Gráficos Avançados',
         ferramentas: 'Ferramentas',
@@ -1035,8 +1035,8 @@ export const TRANSLATIONS: Record<SupportedLanguage, AppTranslations> = {
         carteiras: 'Portfolios',
         noticias: 'News & Macro',
         corretoras: 'Global Brokers',
-        daytrade: 'Futures & Risk',
-        tape_reading: 'Order Flow & DOM',
+        guia_cambio: 'FX & Transfers',
+        politica_monetaria: 'Monetary Policy',
         renda_fixa: 'Fixed Income & Options',
         graficos: 'Advanced Charts',
         ferramentas: 'Tools',
@@ -1593,8 +1593,8 @@ export const TRANSLATIONS: Record<SupportedLanguage, AppTranslations> = {
         carteiras: 'Carteras',
         noticias: 'Noticias & Macro',
         corretoras: 'Brókeres Globales',
-        daytrade: 'Futuros y Riesgo',
-        tape_reading: 'Flujo & Tape Reading',
+        guia_cambio: 'Guía de Cambio',
+        politica_monetaria: 'Política Monetaria',
         renda_fixa: 'Renta Fija & Derivados',
         graficos: 'Gráficos Avanzados',
         ferramentas: 'Herramientas',
