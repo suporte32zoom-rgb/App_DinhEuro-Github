@@ -440,37 +440,37 @@ export const VIEWS_TRANSLATIONS: Record<SupportedLanguage, ViewsTranslations> = 
       brandTagline: 'dinheuro.com • Hub Financeiro Global & Mercados',
       heroDescPrefix: 'O',
       heroDescSuffix:
-        'nasceu com a missão primordial de democratizar a informação econômica em tempo real e derrubar barreiras cambiais para quem investe, viaja, empreende ou constrói patrimônio entre o Brasil e o exterior.',
+        'nasceu com o propósito de democratizar a informação econômica em tempo real e ampliar a compreensão cambial e macroeconômica para quem acompanha mercados entre o eixo União Europeia – Mercosul, o Brasil e o restante do mundo.',
       exploreMarkets: 'Explorar Mercados',
-      d3TerminalBtn: 'Terminal Gráfico D3 v7',
+      d3TerminalBtn: 'Terminal de Análise Gráfica',
       missionTitle: 'Nossa Missão',
       missionDesc:
         'Democratizar a inteligência econômica global através de ferramentas analíticas, simulações instantâneas e cotações transparentes sem paywall ou jargões inacessíveis.',
       visionTitle: 'Visão Global',
       visionDesc:
-        'Ser a principal referência em paridade Euro-Real e acompanhamento de carteiras multinacionais para brasileiros em qualquer lugar do mundo.',
+        'Consolidar o acompanhamento econômico, cambial e de mercados globais com foco central no eixo União Europeia – Mercosul, integrando análises sobre Brasil, Europa, Estados Unidos e demais praças internacionais com clareza.',
       valuesTitle: 'Valores & Compliance',
       valuesDesc:
-        'Transparência regulatória irrestrita, respeito à LGPD e integridade tecnológica em conformidade com as diretrizes do Banco Central do Brasil.',
-      techTitle: 'Infraestrutura Tecnológica e Arquitetura PWA',
-      techIntroPrefix: 'O DinhEuro é construído sob arquitetura',
-      techIntroBold: 'Progressive Web App (PWA)',
+        'Compromisso integral com a LGPD, transparência editorial e uso de fontes públicas e de mercado. O DinhEuro possui caráter estritamente informativo e educativo, sem prestar consultoria financeira nem atuar como instituição financeira.',
+      techTitle: 'Como o DinhEuro Funciona: Acesso Aberto, Dados e Privacidade',
+      techIntroPrefix: 'O DinhEuro foi estruturado como um portal de',
+      techIntroBold: 'acesso aberto e funcionamento contínuo',
       techIntroSuffix:
-        'de alta performance, projetado para operação contínua e resiliente em infraestrutura global em nuvem. Ele combina:',
-      pillar1Title: '• Motor Gráfico Institucional D3 v7',
+        'para consultas ágeis em qualquer navegador, reunindo dados de mercado e conteúdo educativo sem exigir cadastro ou assinatura:',
+      pillar1Title: '• Gráficos Interativos e Leitura Histórica',
       pillar1Desc:
-        'Renderização vetorial SVG sem trepidação, médias móveis SMA 20/50, volume e velas japonesas de alta precisão.',
-      pillar2Title: '• Caching Inteligente & Modo Offline',
+        'Visualização clara de cotações, médias móveis, volume negociado e séries históricas para estudo técnico e acompanhamento de mercados.',
+      pillar2Title: '• Acesso Aberto e Carregamento Ágil',
       pillar2Desc:
-        'Service workers Workbox para acesso instantâneo ao aplicativo mesmo em conexões lentas ou instáveis.',
-      pillar3Title: '• Agregação Multiprovedor em Tempo Real',
+        'Navegação gratuita, sem barreiras de entrada ou paywalls, desenhada para responder com rapidez em computadores e celulares.',
+      pillar3Title: '• Atualização Contínua de Cotações e Análises',
       pillar3Desc:
-        'Sincronização contínua com feeds consolidados de bolsas internacionais, mesas de câmbio e redes globais de liquidez para cobertura 360º de mercados.',
-      pillar4Title: '• Privacidade Local (Zero Tracking de Carteira)',
+        'Acompanhamento frequente de moedas, bolsas, commodities e análises macroeconômicas com destaque para o corredor União Europeia – Mercosul e praças globais.',
+      pillar4Title: '• Privacidade Sem Cadastro Obrigatório',
       pillar4Desc:
-        'As carteiras e ativos do usuário permanecem exclusivamente gravados no localStorage do dispositivo.',
+        'Simulações, preferências visuais e carteiras registradas permanecem apenas no próprio dispositivo do usuário, sem criação de conta nem coleta invasiva de dados pessoais.',
       pressTitle: 'Canal Institucional & Imprensa',
-      pressDesc: 'Para parcerias, sugestões de integração ou questões regulatórias:',
+      pressDesc: 'Para parcerias, sugestões de melhoria ou questões regulatórias:',
     },
     advancedCharts: {
       title: 'Terminal de Análise Técnica & Gráficos Avançados',
@@ -764,37 +764,37 @@ export const VIEWS_TRANSLATIONS: Record<SupportedLanguage, ViewsTranslations> = 
       brandTagline: 'dinheuro.com • Global Financial & Markets Hub',
       heroDescPrefix: '',
       heroDescSuffix:
-        'was built with the core mission of democratizing real-time economic intelligence and removing currency barriers for anyone who invests, travels, builds a business, or grows wealth across borders.',
+        'was built to democratize real-time economic intelligence and expand currency and macroeconomic clarity for readers tracking markets across the European Union – Mercosur axis, Brazil, and global financial centers.',
       exploreMarkets: 'Explore Markets',
-      d3TerminalBtn: 'D3 v7 Charting Terminal',
+      d3TerminalBtn: 'Technical Charts Terminal',
       missionTitle: 'Our Mission',
       missionDesc:
         'Democratize global economic intelligence through analytical tools, instant simulations, and transparent quotes without paywalls or inaccessible jargon.',
       visionTitle: 'Global Vision',
       visionDesc:
-        'Be the benchmark reference for Euro–Real parity and multi-currency portfolio tracking for global investors anywhere in the world.',
+        'Serve as a global reference for economic, foreign exchange, and market monitoring with a central focus on the European Union – Mercosur axis, alongside Brazil, Europe, the United States, and major international centers.',
       valuesTitle: 'Values & Compliance',
       valuesDesc:
-        'Unrestricted regulatory transparency, strict LGPD & GDPR privacy compliance, and technological integrity aligned with central bank standards.',
-      techTitle: 'Technology Infrastructure & PWA Architecture',
-      techIntroPrefix: 'DinhEuro is built on a high-performance',
-      techIntroBold: 'Progressive Web App (PWA)',
+        'Full commitment to LGPD privacy standards, editorial transparency, and public and market data sources. DinhEuro is strictly informational and educational, providing no financial advisory and not operating as a financial institution.',
+      techTitle: 'How DinhEuro Works: Open Access, Data & Privacy',
+      techIntroPrefix: 'DinhEuro is designed as an',
+      techIntroBold: 'open-access, always-available portal',
       techIntroSuffix:
-        'architecture engineered for continuous, resilient operation on global cloud infrastructure. It combines:',
-      pillar1Title: '• D3 v7 Institutional Charting Engine',
+        'for smooth browsing across devices, combining market data and educational resources without registration or paywalls:',
+      pillar1Title: '• Interactive Charts & Historical Analysis',
       pillar1Desc:
-        'Jitter-free SVG vector rendering, SMA 20/50 moving averages, volume bars, and high-precision Japanese candlesticks.',
-      pillar2Title: '• Smart Caching & Offline Mode',
+        'Clear visualization of price series, moving averages, trading volume, and historical ranges for educational market study.',
+      pillar2Title: '• Open Access & Fast Performance',
       pillar2Desc:
-        'Workbox service workers for instant app loading even on slow or unstable connections.',
-      pillar3Title: '• Real-Time Multi-Provider Aggregation',
+        'Free browsing with no paywalls or gatekeeping, structured to load smoothly across desktop and mobile connections.',
+      pillar3Title: '• Continuous Quote & Analysis Updates',
       pillar3Desc:
-        'Continuous synchronization with consolidated feeds from international exchanges, FX desks, and global liquidity networks for 360° market coverage.',
-      pillar4Title: '• Local Privacy (Zero Portfolio Tracking)',
+        'Ongoing tracking of currencies, global equities, commodities, and macroeconomic analyses centered on the EU–Mercosur corridor and major global markets.',
+      pillar4Title: '• Privacy Without Mandatory Registration',
       pillar4Desc:
-        'User portfolios and watchlists remain stored exclusively in the device’s localStorage.',
+        'Simulations, display preferences, and saved portfolios stay solely on the user’s own device, with no account sign-up or intrusive personal data collection.',
       pressTitle: 'Institutional & Press Contact',
-      pressDesc: 'For partnerships, integration inquiries, or regulatory matters:',
+      pressDesc: 'For partnerships, improvement suggestions, or regulatory matters:',
     },
     advancedCharts: {
       title: 'Technical Analysis & Advanced Charts Terminal',
@@ -1088,37 +1088,37 @@ export const VIEWS_TRANSLATIONS: Record<SupportedLanguage, ViewsTranslations> = 
       brandTagline: 'dinheuro.com • Hub Financiero Global & Mercados',
       heroDescPrefix: '',
       heroDescSuffix:
-        'nació con la misión primordial de democratizar la información económica en tiempo real y derribar barreras cambiarias para quienes invierten, viajan, emprenden o construyen patrimonio internacional.',
+        'nació con el propósito de democratizar la información económica en tiempo real y ampliar la claridad cambiaria y macroeconómica para quienes siguen los mercados entre el eje Unión Europea – Mercosur, Brasil y el resto del mundo.',
       exploreMarkets: 'Explorar Mercados',
-      d3TerminalBtn: 'Terminal Gráfico D3 v7',
+      d3TerminalBtn: 'Terminal de Análisis Gráfico',
       missionTitle: 'Nuestra Misión',
       missionDesc:
         'Democratizar la inteligencia económica global mediante herramientas analíticas, simulaciones instantáneas y cotizaciones transparentes sin muros de pago ni jerga inaccesible.',
       visionTitle: 'Visión Global',
       visionDesc:
-        'Ser la referencia principal en paridad Euro–Real y seguimiento de carteras multinacionales para inversores en cualquier lugar del mundo.',
+        'Consolidar el seguimiento económico, cambiario y de mercados globales con enfoque central en el eje Unión Europea – Mercosur, integrando análisis sobre Brasil, Europa, Estados Unidos y las principales plazas internacionales.',
       valuesTitle: 'Valores & Cumplimiento',
       valuesDesc:
-        'Transparencia regulatoria irrestricta, respeto a la LGPD y GDPR e integridad tecnológica alineada con las directrices de bancos centrales.',
-      techTitle: 'Infraestructura Tecnológica y Arquitectura PWA',
-      techIntroPrefix: 'DinhEuro está construido bajo una arquitectura',
-      techIntroBold: 'Progressive Web App (PWA)',
+        'Compromiso integral con la LGPD, transparencia editorial y uso de fuentes públicas y de mercado. DinhEuro tiene carácter estrictamente informativo y educativo, sin brindar asesoría financiera ni operar como institución financiera.',
+      techTitle: 'Cómo Funciona DinhEuro: Acceso Abierto, Datos y Privacidad',
+      techIntroPrefix: 'DinhEuro está concebido como un portal de',
+      techIntroBold: 'acceso abierto y disponibilidad continua',
       techIntroSuffix:
-        'de alto rendimiento, diseñada para operar de forma continua y resiliente en infraestructura global en la nube. Combina:',
-      pillar1Title: '• Motor Gráfico Institucional D3 v7',
+        'para consultas ágiles desde cualquier navegador, reuniendo datos de mercado y contenido educativo sin exigir registro ni suscripción:',
+      pillar1Title: '• Gráficos Interactivos y Lectura Histórica',
       pillar1Desc:
-        'Renderizado vectorial SVG sin parpadeos, medias móviles SMA 20/50, volumen y velas japonesas de alta precisión.',
-      pillar2Title: '• Caché Inteligente & Modo Offline',
+        'Visualización clara de cotizaciones, medias móviles, volumen negociado y series históricas para estudio técnico y seguimiento de mercados.',
+      pillar2Title: '• Acceso Abierto y Carga Ágil',
       pillar2Desc:
-        'Service workers Workbox para acceso instantáneo a la aplicación incluso con conexiones lentas o inestables.',
-      pillar3Title: '• Agregación Multiproveedor en Tiempo Real',
+        'Navegación gratuita, sin muros de pago ni barreras de entrada, diseñada para responder con fluidez en computadoras y dispositivos móviles.',
+      pillar3Title: '• Actualización Continua de Cotizaciones y Análisis',
       pillar3Desc:
-        'Sincronización continua con feeds consolidados de bolsas internacionales, mesas de cambio y redes globales de liquidez para cobertura 360° de mercados.',
-      pillar4Title: '• Privacidad Local (Cero Rastreo de Cartera)',
+        'Seguimiento frecuente de divisas, bolsas, materias primas y análisis macroeconómicos con foco en el corredor Unión Europea – Mercosur y plazas globales.',
+      pillar4Title: '• Privacidad Sin Registro Obligatorio',
       pillar4Desc:
-        'Las carteras y activos del usuario permanecen almacenados exclusivamente en el localStorage del dispositivo.',
+        'Simulaciones, preferencias visuales y carteras registradas permanecen únicamente en el dispositivo del usuario, sin creación de cuentas ni recolección invasiva de datos personales.',
       pressTitle: 'Canal Institucional & Prensa',
-      pressDesc: 'Para alianzas, sugerencias de integración o consultas regulatorias:',
+      pressDesc: 'Para alianzas, sugerencias de mejora o consultas regulatorias:',
     },
     advancedCharts: {
       title: 'Terminal de Análisis Técnico & Gráficos Avanzados',

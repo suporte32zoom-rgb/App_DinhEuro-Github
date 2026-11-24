@@ -860,5 +860,45 @@ test('Simuladores e Ferramentas page renders 4-block EU-Mercosur editorial guide
   );
 });
 
+test('About DinhEuro page highlights EU-Mercosur global vision, LGPD & non-advisory compliance, and hides technical jargon across PT/EN/ES', async () => {
+  const fs = await import('node:fs');
+  const path = await import('node:path');
+  const { VIEWS_TRANSLATIONS } = await import('../i18n/viewsTranslations.ts');
+
+  const aboutViewSource = fs.readFileSync(
+    path.resolve(process.cwd(), 'src/views/AboutView.tsx'),
+    'utf8'
+  );
+
+  assert.ok(aboutViewSource.includes("setActiveTab('mercados')"));
+  assert.ok(aboutViewSource.includes("setActiveTab('graficos')"));
+  assert.ok(aboutViewSource.includes('admin@dinheuro.com'));
+  assert.ok(aboutViewSource.includes('tAbout.exploreMarkets'));
+  assert.ok(aboutViewSource.includes('tAbout.d3TerminalBtn'));
+
+  const forbiddenAboutTerms =
+    /\b(d3\s*v7|workbox|localstorage|pwa|svg|recharts|finnhub|awesomeapi|coingecko|brapi|yahoo\s*finance|vite|github|cloudflare)\b/i;
+
+  for (const lang of ['pt', 'en', 'es'] as const) {
+    const about = VIEWS_TRANSLATIONS[lang].about;
+    assert.ok(/(Mercosul|Mercosur)/i.test(about.visionDesc), `visionDesc (${lang}) must mention EU-Mercosur axis`);
+    assert.ok(/LGPD/i.test(about.valuesDesc), `valuesDesc (${lang}) must cite LGPD`);
+    assert.ok(
+      /(informativo|informational)/i.test(about.valuesDesc) && /(educativo|educational)/i.test(about.valuesDesc),
+      `valuesDesc (${lang}) must clarify informational and educational scope`
+    );
+    assert.ok(
+      !forbiddenAboutTerms.test(JSON.stringify(about)),
+      `About translations (${lang}) must not expose D3 v7, Workbox, localStorage, or technical stack names`
+    );
+  }
+
+  assert.ok(
+    !forbiddenAboutTerms.test(aboutViewSource),
+    'AboutView.tsx must not expose technical libraries, storage APIs, or provider names'
+  );
+});
+
+
 
 
