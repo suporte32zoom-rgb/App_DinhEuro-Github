@@ -50,11 +50,10 @@ test('Initial theme defaults strictly to light for all visitors and only switche
 
   assert.ok(indexHtml.includes('<html lang="pt-BR" class="light" data-theme="light"'));
   assert.ok(indexHtml.includes('<meta name="theme-color" content="#F8FAFC" />'));
-  assert.ok(indexHtml.includes("if (storedTheme === 'dark')"));
+  assert.ok(indexHtml.includes("root.classList.remove('dark');"));
   assert.ok(!indexHtml.includes('prefers-color-scheme'));
 
-  assert.ok(marketContext.includes("if (typeof window === 'undefined') return 'light';"));
-  assert.ok(marketContext.includes("return 'light';"));
+  assert.ok(marketContext.includes("useState<ThemeMode>('light')"));
   assert.ok(!marketContext.includes('prefers-color-scheme'));
 
   assert.ok(headerSource.includes('onClick={toggleTheme}'));

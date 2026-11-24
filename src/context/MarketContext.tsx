@@ -242,39 +242,15 @@ export const MarketProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     assetsRef.current = assets;
   }, [assets]);
 
-  // Theme State: persisted in localStorage ('light' default on opening, switches to 'dark' only on explicit user toggle)
-  const [theme, setThemeState] = useState<ThemeMode>(() => {
-    if (typeof window === 'undefined') return 'light';
-    try {
-      const stored = localStorage.getItem(THEME_STORAGE_KEY);
-      if (stored === 'dark' || stored === 'light') {
-        return stored;
-      }
-    } catch {
-      // ignore
-    }
-    return 'light';
-  });
+  // Theme State: Light is the mandatory opening theme; Dark mode activates only on manual header toggle
+  const [theme, setThemeState] = useState<ThemeMode>('light');
 
   const setTheme = useCallback((newTheme: ThemeMode) => {
     setThemeState(newTheme);
-    try {
-      localStorage.setItem(THEME_STORAGE_KEY, newTheme);
-    } catch {
-      // ignore
-    }
   }, []);
 
   const toggleTheme = useCallback(() => {
-    setThemeState((prev) => {
-      const nextTheme = prev === 'dark' ? 'light' : 'dark';
-      try {
-        localStorage.setItem(THEME_STORAGE_KEY, nextTheme);
-      } catch {
-        // ignore
-      }
-      return nextTheme;
-    });
+    setThemeState((prev) => (prev === 'dark' ? 'light' : 'dark'));
   }, []);
 
   // Sync theme with HTML document element and meta theme-color
