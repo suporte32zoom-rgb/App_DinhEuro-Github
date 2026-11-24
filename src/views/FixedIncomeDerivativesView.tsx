@@ -17,12 +17,15 @@ import {
   ArrowUpRight,
   ArrowDownRight,
   HelpCircle,
+  BookOpen,
+  Globe2,
 } from 'lucide-react';
 import { useMarket } from '../context/MarketContext';
 import { formatCurrencyValue, formatSignedPercentChange } from '../utils/finance';
 import { useI18n } from '../i18n/I18nContext';
 import { getNumberLocale } from '../i18n/translations';
 import { TRADING_TRANSLATIONS } from '../i18n/tradingTranslations';
+import { FIXED_INCOME_GUIDE_TRANSLATIONS } from '../i18n/fixedIncomeGuideTranslations';
 
 // ================= BLACK-SCHOLES HELPER FUNCTIONS =================
 // Standard Normal Cumulative Distribution Function (CDF) approximation
@@ -1085,6 +1088,107 @@ export const FixedIncomeDerivativesView: React.FC = () => {
           </div>
         </div>
       )}
+
+      {/* ================= EDITORIAL GUIDE & FAQ (BELOW PAYOFF / CALCULATORS) ================= */}
+      {(() => {
+        const guide = FIXED_INCOME_GUIDE_TRANSLATIONS[lang];
+        return (
+          <section className="space-y-6 pt-2">
+            {/* Guide Header & 4 Original Blocks */}
+            <div className="rounded-2xl bg-[#FFFFFF] dark:bg-[#09111e] border border-[#E2E8F0] dark:border-slate-800 p-5 sm:p-7 shadow-xl space-y-6">
+              <div className="border-b border-[#E2E8F0] dark:border-slate-800 pb-4 space-y-1.5">
+                <span className="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider text-[#003399] dark:text-emerald-400">
+                  <Globe2 className="w-3.5 h-3.5" />
+                  <span>{guide.eyebrow}</span>
+                </span>
+                <h2 className="text-lg sm:text-xl font-extrabold text-[#0F172A] dark:text-white tracking-tight">
+                  {guide.title}
+                </h2>
+                <p className="text-xs sm:text-sm text-[#475569] dark:text-slate-400 leading-relaxed max-w-4xl">
+                  {guide.subtitle}
+                </p>
+              </div>
+
+              <div className="space-y-5">
+                {guide.sections.map((section) => (
+                  <article
+                    key={section.id}
+                    className="rounded-xl bg-[#F8FAFC] dark:bg-slate-900/60 border border-[#E2E8F0] dark:border-slate-800 p-4 sm:p-5 space-y-3"
+                  >
+                    <span className="inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-[#006B52] dark:text-emerald-400">
+                      <BookOpen className="w-3.5 h-3.5" />
+                      <span>{section.badge}</span>
+                    </span>
+                    <h3 className="text-base sm:text-lg font-bold text-[#0F172A] dark:text-white leading-snug">
+                      {section.title}
+                    </h3>
+                    <div className="space-y-2.5 text-xs sm:text-sm text-[#334155] dark:text-slate-300 leading-relaxed">
+                      {section.paragraphs.map((paragraph, pIdx) => (
+                        <p key={pIdx}>{paragraph}</p>
+                      ))}
+                    </div>
+
+                    {section.highlights && section.highlights.length > 0 && (
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-3 pt-1">
+                        {section.highlights.map((hl) => (
+                          <div
+                            key={hl.label}
+                            className="rounded-lg bg-[#FFFFFF] dark:bg-[#0b1322] border border-[#E2E8F0] dark:border-slate-800 p-3 space-y-1"
+                          >
+                            <div className="text-[10px] font-bold uppercase tracking-wider text-[#475569] dark:text-slate-400">
+                              {hl.label}
+                            </div>
+                            <div className="text-xs sm:text-sm font-extrabold text-[#003399] dark:text-emerald-300">
+                              {hl.value}
+                            </div>
+                            <p className="text-[11px] text-[#475569] dark:text-slate-400 leading-relaxed">
+                              {hl.note}
+                            </p>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </article>
+                ))}
+              </div>
+            </div>
+
+            {/* FAQ Section (4 Items) */}
+            <div className="rounded-2xl bg-[#FFFFFF] dark:bg-[#09111e] border border-[#E2E8F0] dark:border-slate-800 p-5 sm:p-7 shadow-xl space-y-4">
+              <div className="space-y-1">
+                <span className="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider text-[#006B52] dark:text-emerald-400">
+                  <HelpCircle className="w-3.5 h-3.5" />
+                  <span>{guide.faqEyebrow}</span>
+                </span>
+                <h2 className="text-lg sm:text-xl font-bold text-[#0F172A] dark:text-white">
+                  {guide.faqTitle}
+                </h2>
+              </div>
+
+              <dl className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {guide.faqItems.map((item, fIdx) => (
+                  <div
+                    key={fIdx}
+                    className="rounded-xl bg-[#F8FAFC] dark:bg-slate-900/70 border border-[#E2E8F0] dark:border-slate-800 p-4 space-y-1.5"
+                  >
+                    <dt className="text-sm font-bold text-[#0F172A] dark:text-white flex items-start gap-2">
+                      <CheckCircle2 className="w-4 h-4 text-[#006B52] dark:text-emerald-400 shrink-0 mt-0.5" />
+                      <span>{item.question}</span>
+                    </dt>
+                    <dd className="text-xs text-[#334155] dark:text-slate-300 leading-relaxed pl-6">
+                      {item.answer}
+                    </dd>
+                  </div>
+                ))}
+              </dl>
+
+              <p className="text-[11px] text-[#475569] dark:text-slate-400 pt-2 border-t border-[#E2E8F0] dark:border-slate-800 leading-relaxed">
+                {guide.educationalNote}
+              </p>
+            </div>
+          </section>
+        );
+      })()}
     </div>
   );
 };

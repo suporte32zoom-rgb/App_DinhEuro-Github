@@ -661,3 +661,59 @@ test('/guia-cambio-remessas and /politica-monetaria-juros editorial pages, 301 r
   assert.ok(!forbiddenTerms.test(fxViewSource), 'FxRemittanceGuideView.tsx must not expose technical providers or build tools');
   assert.ok(!forbiddenTerms.test(monetaryViewSource), 'MonetaryPolicyView.tsx must not expose technical providers or build tools');
 });
+
+test('Fixed Income & Derivatives page adds 4-block educational guide (>=700 words) and 4-item FAQ below Payoff without altering math or exposing providers', async () => {
+  const fs = await import('node:fs');
+  const path = await import('node:path');
+  const { FIXED_INCOME_GUIDE_TRANSLATIONS } = await import(
+    '../i18n/fixedIncomeGuideTranslations.ts'
+  );
+
+  const fiViewSource = fs.readFileSync(
+    path.resolve(process.cwd(), 'src/views/FixedIncomeDerivativesView.tsx'),
+    'utf8'
+  );
+
+  assert.equal(
+    FIXED_INCOME_GUIDE_TRANSLATIONS.pt.title,
+    'Guia Educacional de Renda Fixa Global, Contratos Futuros e Precificação de Opções'
+  );
+  assert.equal(
+    FIXED_INCOME_GUIDE_TRANSLATIONS.pt.faqTitle,
+    'Perguntas Frequentes sobre Renda Fixa e Derivativos'
+  );
+
+  // Verify Black-Scholes & Payoff functions remain intact
+  assert.ok(fiViewSource.includes('function calculateBlackScholes('));
+  assert.ok(fiViewSource.includes('function normalCDF('));
+  assert.ok(fiViewSource.includes('function normalPDF('));
+  assert.ok(fiViewSource.includes('FIXED_INCOME_GUIDE_TRANSLATIONS[lang]'));
+
+  const countWords = (text: string) => text.trim().split(/\s+/).filter(Boolean).length;
+  const ptText = [
+    FIXED_INCOME_GUIDE_TRANSLATIONS.pt.title,
+    FIXED_INCOME_GUIDE_TRANSLATIONS.pt.subtitle,
+    ...FIXED_INCOME_GUIDE_TRANSLATIONS.pt.sections.flatMap((s) => [s.title, ...s.paragraphs]),
+    FIXED_INCOME_GUIDE_TRANSLATIONS.pt.faqTitle,
+    ...FIXED_INCOME_GUIDE_TRANSLATIONS.pt.faqItems.flatMap((f) => [f.question, f.answer]),
+    FIXED_INCOME_GUIDE_TRANSLATIONS.pt.educationalNote,
+  ].join(' ');
+  assert.ok(
+    countWords(ptText) >= 700,
+    `Expected >= 700 words in Fixed Income & Derivatives Guide PT, got ${countWords(ptText)}`
+  );
+
+  const forbiddenTerms = /\b(recharts|finnhub|awesomeapi|coingecko|brapi|yahoo\s*finance|vite|github|cloudflare)\b/i;
+  for (const lang of ['pt', 'en', 'es'] as const) {
+    const guide = FIXED_INCOME_GUIDE_TRANSLATIONS[lang];
+    assert.equal(guide.sections.length, 4, `Expected 4 guide sections in ${lang}`);
+    assert.equal(guide.faqItems.length, 4, `Expected 4 FAQ items in ${lang}`);
+    assert.ok(!forbiddenTerms.test(JSON.stringify(guide)), `Forbidden technical term in ${lang}`);
+  }
+
+  assert.ok(
+    !forbiddenTerms.test(fiViewSource),
+    'FixedIncomeDerivativesView.tsx must not expose technical providers or build tools'
+  );
+});
+
