@@ -229,6 +229,24 @@ export interface AppTranslations {
     loadMore: string;
     loadAll: string;
     categoryBadges: Record<string, string>;
+    editorialGuide: {
+      eyebrow: string;
+      title: string;
+      intro: string;
+      sections: Array<{
+        id: string;
+        title: string;
+        body: string;
+      }>;
+    };
+    faq: {
+      eyebrow: string;
+      title: string;
+      items: Array<{
+        question: string;
+        answer: string;
+      }>;
+    };
   };
   tools: {
     title: string;
@@ -706,6 +724,64 @@ export const TRANSLATIONS: Record<SupportedLanguage, AppTranslations> = {
         forex: 'Câmbio',
         crypto: 'Cripto',
         commodities: 'Commodities',
+      },
+      editorialGuide: {
+        eyebrow: 'Guia Editorial de Mercados',
+        title: 'Como Interpretar os Mercados Globais, Câmbio, Commodities e B3',
+        intro:
+          'Entenda a dinâmica entre fusos horários das bolsas, paridades cambiais, liquidez diária e indicadores gráficos para acompanhar ativos nacionais e internacionais com clareza.',
+        sections: [
+          {
+            id: 'global-vs-b3',
+            title: 'Ações Globais (Wall Street, Europa, Ásia-Pacífico) vs. B3',
+            body:
+              'Os mercados acionários operam em janelas regionais complementares: Tóquio e Hong Kong abrem o ciclo na sessão asiática, seguidos por Frankfurt, Londres e Paris na Europa, até a sobreposição entre Nova York (NYSE/Nasdaq) e o pregão regular da B3 no Brasil. Ao comparar papéis internacionais e brasileiros, observe sempre o Volume 24h — que mede a profundidade de liquidez e a facilidade de formação de preço — e a dupla conversão cambial (Dólar/Euro para Real), pois oscilações no câmbio podem ampliar ou compensar o retorno em moeda local.',
+          },
+          {
+            id: 'world-indices',
+            title: 'Índices Mundiais como Termômetro Macroeconômico',
+            body:
+              'Os grandes índices funcionam como painéis sintéticos do ciclo econômico global. O S&P 500 reúne as maiores companhias americanas em múltiplos setores, o Nasdaq concentra tecnologia e crescimento, o Dow Jones acompanha grandes nomes industriais e de consumo, enquanto o Russell 2000 mede a sensibilidade de empresas menores ao crédito doméstico dos EUA. Já o Ibovespa reflete o peso de commodities, bancos e estatais no Brasil. Leituras conjuntas ajudam a identificar apetite por risco, sensibilidade às taxas de juros globais e movimentos de rotação setorial.',
+          },
+          {
+            id: 'fx-crypto-commodities',
+            title: 'Câmbio, Criptoativos e Commodities (Ouro e Prata)',
+            body:
+              'No mercado de câmbio interbancário, as cotações refletem preços de compra (Bid) e venda (Ask) influenciados por fluxos comerciais e diferenciais de juros entre bancos centrais. Metais preciosos como Ouro (XAU) e Prata (XAG) atuam tradicionalmente como reserva de valor e proteção em períodos de aversão ao risco ou pressão inflacionária. Já os criptoativos negociam de forma contínua (24 horas por dia, 7 dias por semana) em bolsas globais digitais, exibindo volatilidade constante e reação imediata a eventos de liquidez mesmo fora do horário bancário.',
+          },
+          {
+            id: 'terminal-indicators',
+            title: 'Como Utilizar o Terminal Gráfico e os Indicadores de Variação',
+            body:
+              'Na tabela, a faixa Máx / Mín (24h) mostra a amplitude de negociação alcançada pelo ativo no ciclo recente, permitindo avaliar se o preço atual opera próximo ao suporte ou à resistência diária. A variação percentual de 24h indica a direção e a intensidade do movimento em relação à referência anterior. Ao clicar em um ativo ou no botão do Terminal Gráfico, você acessa séries de preços, médias móveis e histórico de volume exclusivamente para acompanhamento educacional de tendências.',
+          },
+        ],
+      },
+      faq: {
+        eyebrow: 'Dúvidas Frequentes',
+        title: 'Perguntas Frequentes sobre Cotações e Mercados Globais',
+        items: [
+          {
+            question: 'O que significa a dupla conversão de moeda exibida na tabela?',
+            answer:
+              'Ativos negociados originalmente em Dólar (USD), Euro (EUR) ou outras divisas internacionais exibem o preço oficial na moeda de origem acompanhado do valor equivalente convertido para o Real (BRL) pela taxa de câmbio vigente. Isso facilita a comparação direta de poder de compra entre mercados sem alterar a cotação original da bolsa de referência.',
+          },
+          {
+            question: 'Por que criptoativos oscilam aos fins de semana enquanto as bolsas fecham?',
+            answer:
+              'As bolsas de valores tradicionais (como B3, NYSE, Nasdaq e bolsas europeias e asiáticas) seguem calendários oficiais de pregão e liquidação bancária em dias úteis, mantendo o último preço de fechamento até a abertura seguinte. Já o mercado de criptoativos opera em redes descentralizadas e plataformas globais sem pausa (24/7), permitindo negociação contínua inclusive aos sábados, domingos e feriados.',
+          },
+          {
+            question: 'Como interpretar a variação percentual diária junto ao volume negociado?',
+            answer:
+              'A variação de 24h mostra quanto o preço subiu ou caiu em termos percentuais, enquanto o Volume 24h revela a quantidade financeira ou de contratos que sustentou esse movimento. Oscilações relevantes acompanhadas de alto volume costumam indicar participação ampla de mercado, ao passo que movimentos bruscos com volume reduzido podem refletir menor liquidez momentânea.',
+          },
+          {
+            question: 'As cotações e análises exibidas têm caráter de recomendação de investimento?',
+            answer:
+              'Não. Todas as cotações, indicadores de variação, gráficos e guias explicativos apresentados nesta página possuem caráter estritamente informativo e educacional, destinados à leitura macroeconômica e ao acompanhamento de mercados, não constituindo oferta, recomendação ou consultoria financeira.',
+          },
+        ],
       },
     },
     tools: {
@@ -1207,6 +1283,64 @@ export const TRANSLATIONS: Record<SupportedLanguage, AppTranslations> = {
         crypto: 'Crypto',
         commodities: 'Commodities',
       },
+      editorialGuide: {
+        eyebrow: 'Editorial Market Guide',
+        title: 'How to Read Global Markets, FX, Commodities, and B3',
+        intro:
+          'Understand how regional trading sessions, currency conversions, daily liquidity, and price indicators fit together when tracking domestic and international markets.',
+        sections: [
+          {
+            id: 'global-vs-b3',
+            title: 'Global Equities (Wall Street, Europe, Asia-Pacific) vs. B3',
+            body:
+              'Global stock exchanges trade across staggered regional windows: Tokyo and Hong Kong open the cycle in Asia-Pacific, followed by Frankfurt, London, and Paris in Europe, before New York (NYSE/Nasdaq) overlaps with Brazil’s B3 regular session. When comparing foreign and Brazilian stocks, pay attention to 24h Volume—which signals liquidity depth and price discovery—and dual currency conversion (USD/EUR into BRL), as exchange-rate swings can amplify or offset local-currency returns.',
+          },
+          {
+            id: 'world-indices',
+            title: 'World Indices as Macroeconomic Barometers',
+            body:
+              'Benchmark indices condense broad economic sentiment into a single reading. The S&P 500 tracks leading US large caps across sectors, the Nasdaq leans toward technology and growth, the Dow Jones follows blue-chip industrials and consumer leaders, and the Russell 2000 gauges smaller domestic companies sensitive to US credit conditions. Brazil’s Ibovespa reflects heavy weights in commodities, banks, and state-linked firms, helping observers track risk appetite, global interest rates, and sector rotation.',
+          },
+          {
+            id: 'fx-crypto-commodities',
+            title: 'Forex, Crypto Assets, and Commodities (Gold & Silver)',
+            body:
+              'Interbank FX quotes reflect Bid and Ask pricing shaped by cross-border trade flows and central-bank interest-rate differentials. Precious metals such as Gold (XAU) and Silver (XAG) traditionally act as stores of value and hedges during risk-off episodes or inflation uncertainty. Cryptocurrencies, by contrast, trade continuously (24/7) across global digital venues, displaying ongoing volatility and instant reaction to liquidity shifts outside banking hours.',
+          },
+          {
+            id: 'terminal-indicators',
+            title: 'Using the Chart Terminal and Variation Indicators',
+            body:
+              'In the table, the 24h High / Low range shows the intraday trading band reached over the latest cycle, indicating whether current pricing sits near daily support or resistance. The 24h percentage change measures direction and momentum relative to the prior reference level. Selecting any asset or opening the Chart Terminal provides price series, moving averages, and volume bars strictly for educational trend tracking.',
+          },
+        ],
+      },
+      faq: {
+        eyebrow: 'Frequently Asked Questions',
+        title: 'FAQ on Quotes and Global Markets',
+        items: [
+          {
+            question: 'What does the dual currency conversion shown in the table mean?',
+            answer:
+              'Assets primarily priced in US Dollars (USD), Euros (EUR), or other foreign currencies display their official native exchange quote alongside the converted equivalent in Brazilian Reais (BRL) at the prevailing exchange rate, making cross-market purchasing power comparisons straightforward without altering the underlying reference quote.',
+          },
+          {
+            question: 'Why do crypto assets move on weekends while stock exchanges are closed?',
+            answer:
+              'Traditional equity exchanges—such as B3, NYSE, Nasdaq, European, and Asian bourses—follow official weekday trading calendars and banking settlement hours, holding their closing price until the next open. Cryptocurrency markets run 24/7 on decentralized networks and global digital venues, enabling continuous price discovery on weekends and holidays.',
+          },
+          {
+            question: 'How should daily percentage change be read alongside traded volume?',
+            answer:
+              'Daily percentage change shows how much an asset moved up or down, whereas 24h Volume reflects the financial turnover supporting that move. Sharp moves backed by heavy volume usually point to broad market participation, while big swings on thin volume may simply reflect temporary illiquidity.',
+          },
+          {
+            question: 'Are the displayed quotes and guides intended as investment advice?',
+            answer:
+              'No. All quotes, change metrics, charts, and explanatory guides on this page are strictly informational and educational tools for tracking macroeconomic trends and market behavior, and do not constitute financial advice or investment recommendations.',
+          },
+        ],
+      },
     },
     tools: {
       title: 'Universal Currency Calculator: Real-Time Euro & Dollar Conversion',
@@ -1706,6 +1840,64 @@ export const TRANSLATIONS: Record<SupportedLanguage, AppTranslations> = {
         forex: 'Divisas',
         crypto: 'Cripto',
         commodities: 'Materias Primas',
+      },
+      editorialGuide: {
+        eyebrow: 'Guía Editorial de Mercados',
+        title: 'Cómo Interpretar los Mercados Globales, Divisas, Materias Primas y B3',
+        intro:
+          'Comprende la relación entre horarios bursátiles internacionales, conversiones cambiarias, liquidez diaria e indicadores de variación para seguir activos locales y globales con claridad.',
+        sections: [
+          {
+            id: 'global-vs-b3',
+            title: 'Acciones Globales (Wall Street, Europa, Asia-Pacífico) vs. B3',
+            body:
+              'Las bolsas mundiales operan en franjas regionales escalonadas: Tokio y Hong Kong inician el ciclo en Asia-Pacífico, seguidos por Fráncfort, Londres y París en Europa, hasta el cruce entre Nueva York (NYSE/Nasdaq) y la sesión regular de la B3 en Brasil. Al comparar acciones internacionales y brasileñas, conviene revisar el Volumen 24h —que refleja la profundidad de liquidez— y la doble conversión cambiaria (Dólar/Euro a Real), ya que el tipo de cambio puede amplificar o moderar el retorno en moneda local.',
+          },
+          {
+            id: 'world-indices',
+            title: 'Índices Mundiales como Termómetro Macroeconómico',
+            body:
+              'Los principales índices sintetizan el pulso de la economía global. El S&P 500 agrupa a las mayores compañías estadounidenses de diversos sectores, el Nasdaq concentra tecnología y crecimiento, el Dow Jones sigue grandes referentes industriales y de consumo, y el Russell 2000 mide empresas medianas y pequeñas sensibles al crédito interno de EE. UU. El Ibovespa refleja el peso de materias primas, bancos y estatales en Brasil, ayudando a observar apetito por riesgo, tasas globales y rotación sectorial.',
+          },
+          {
+            id: 'fx-crypto-commodities',
+            title: 'Divisas, Criptoactivos y Materias Primas (Oro y Plata)',
+            body:
+              'En el mercado cambiario interbancario, las cotizaciones reflejan precios de compra (Bid) y venta (Ask) influidos por flujos comerciales y diferenciales de tasas de interés. Metales preciosos como el Oro (XAU) y la Plata (XAG) funcionan habitualmente como resguardo de valor ante episodios de aversión al riesgo o inflación. En contraste, los criptoactivos operan de forma continua (24/7) en plataformas digitales globales, mostrando volatilidad constante y reacción inmediata fuera del horario bancario.',
+          },
+          {
+            id: 'terminal-indicators',
+            title: 'Cómo Utilizar el Terminal Gráfico y los Indicadores de Variación',
+            body:
+              'En la tabla, el rango Máx / Mín (24h) muestra la amplitud de negociación reciente, ayudando a identificar si el precio actual se acerca a soportes o resistencias diarias. La variación porcentual de 24h refleja la dirección e intensidad frente a la referencia previa. Al abrir el Terminal Gráfico de un activo se accede a series de precios, medias móviles y volumen exclusivamente para el seguimiento educativo de tendencias.',
+          },
+        ],
+      },
+      faq: {
+        eyebrow: 'Preguntas Frecuentes',
+        title: 'Preguntas Frecuentes sobre Cotizaciones y Mercados Globales',
+        items: [
+          {
+            question: '¿Qué significa la doble conversión de moneda mostrada en la tabla?',
+            answer:
+              'Los activos negociados originalmente en Dólares (USD), Euros (EUR) u otras divisas extranjeras presentan su precio oficial en la moneda de origen junto al valor equivalente convertido a Reales (BRL) al tipo de cambio vigente, facilitando comparaciones directas de poder adquisitivo sin alterar la cotización original.',
+          },
+          {
+            question: '¿Por qué los criptoactivos oscilan los fines de semana mientras las bolsas cierran?',
+            answer:
+              'Las bolsas tradicionales (como B3, NYSE, Nasdaq y plazas europeas o asiáticas) operan según calendarios hábiles y horarios de liquidación bancaria, conservando el último cierre hasta la siguiente apertura. Los criptoactivos, en cambio, funcionan de manera continua 24/7 en redes descentralizadas y mercados digitales globales.',
+          },
+          {
+            question: '¿Cómo interpretar la variación porcentual diaria junto al volumen negociado?',
+            answer:
+              'La variación de 24h indica cuánto subió o bajó el precio en términos porcentuales, mientras que el Volumen 24h muestra el monto financiero que respaldó ese movimiento. Alzas o bajas acompañadas de alto volumen suelen reflejar mayor participación de mercado, frente a movimientos bruscos con poca liquidez.',
+          },
+          {
+            question: '¿Las cotizaciones e información exhibidas constituyen recomendación de inversión?',
+            answer:
+              'No. Todas las cotizaciones, indicadores de variación, gráficos y guías explicativas de esta página tienen carácter estrictamente informativo y educativo para el seguimiento macroeconómico de mercados, sin constituir asesoría ni recomendación financiera.',
+          },
+        ],
       },
     },
     tools: {

@@ -397,3 +397,46 @@ test('Home editorial FAQ block and both institutional dossiers have complete con
   assert.ok(!forbiddenTerms.test(insightsSource), 'dailyInsights.ts must not expose technical providers or build tools');
 });
 
+test('Markets editorial reading guide and FAQ contain complete PT/EN/ES sections without exposing technical provider names', async () => {
+  const fs = await import('node:fs');
+  const path = await import('node:path');
+  const { TRANSLATIONS } = await import('../i18n/translations.ts');
+
+  assert.equal(
+    TRANSLATIONS.pt.markets.editorialGuide.title,
+    'Como Interpretar os Mercados Globais, Câmbio, Commodities e B3'
+  );
+  assert.equal(
+    TRANSLATIONS.pt.markets.faq.title,
+    'Perguntas Frequentes sobre Cotações e Mercados Globais'
+  );
+
+  const forbiddenTerms = /\b(finnhub|awesomeapi|coingecko|brapi|yahoo\s*finance|vite|github|cloudflare)\b/i;
+
+  for (const lang of ['pt', 'en', 'es'] as const) {
+    const guide = TRANSLATIONS[lang].markets.editorialGuide;
+    const faq = TRANSLATIONS[lang].markets.faq;
+    assert.equal(guide.sections.length, 4, `Expected 4 market guide subsections in ${lang}`);
+    assert.equal(faq.items.length, 4, `Expected 4 market FAQ items in ${lang}`);
+
+    for (const sec of guide.sections) {
+      assert.ok(sec.title.length >= 15, `Guide section title too short in ${lang}`);
+      assert.ok(sec.body.length >= 120, `Guide section body too short in ${lang}`);
+      assert.ok(!forbiddenTerms.test(sec.body), `Forbidden technical name in markets guide (${lang})`);
+    }
+    for (const item of faq.items) {
+      assert.ok(item.question.length >= 20, `Markets FAQ question too short in ${lang}`);
+      assert.ok(item.answer.length >= 80, `Markets FAQ answer too short in ${lang}`);
+      assert.ok(!forbiddenTerms.test(item.answer), `Forbidden technical name in markets FAQ (${lang})`);
+    }
+  }
+
+  const marketsViewSource = fs.readFileSync(
+    path.resolve(process.cwd(), 'src/views/MarketsView.tsx'),
+    'utf8'
+  );
+  assert.ok(marketsViewSource.includes('t.markets.editorialGuide.title'));
+  assert.ok(marketsViewSource.includes('t.markets.faq.title'));
+  assert.ok(!forbiddenTerms.test(marketsViewSource), 'MarketsView.tsx must not expose technical providers or build tools');
+});
+

@@ -13,6 +13,12 @@ import {
   ChevronDown,
   ChevronUp,
   CheckCircle2,
+  BookOpen,
+  Globe2,
+  Activity,
+  Coins,
+  LineChart,
+  HelpCircle,
 } from 'lucide-react';
 import { useMarket, MarketCategoryFilter } from '../context/MarketContext';
 import { useI18n } from '../i18n/I18nContext';
@@ -530,6 +536,79 @@ export const MarketsView: React.FC = () => {
           </div>
         </div>
       )}
+
+      {/* Editorial Market Reading Guide & FAQ */}
+      <section
+        aria-labelledby="markets-editorial-guide-heading"
+        className="rounded-2xl bg-[#FFFFFF] dark:bg-[#0d1627] border border-[#E2E8F0] dark:border-slate-800/90 p-5 sm:p-6 shadow-xl space-y-6"
+      >
+        <div className="border-b border-[#E2E8F0] dark:border-slate-800/80 pb-4 space-y-2">
+          <span className="inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-[#003399] dark:text-emerald-400">
+            <BookOpen className="w-3.5 h-3.5" aria-hidden="true" />
+            <span>{t.markets.editorialGuide.eyebrow}</span>
+          </span>
+          <h2
+            id="markets-editorial-guide-heading"
+            className="text-base sm:text-lg font-extrabold text-[#0F172A] dark:text-white tracking-tight"
+          >
+            {t.markets.editorialGuide.title}
+          </h2>
+          <p className="text-xs sm:text-[13px] text-[#1E293B] dark:text-slate-300 leading-relaxed max-w-4xl">
+            {t.markets.editorialGuide.intro}
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {t.markets.editorialGuide.sections.map((section, idx) => {
+            const SectionIcon = [Globe2, Activity, Coins, LineChart][idx] || BookOpen;
+            return (
+              <article
+                key={section.id}
+                className="rounded-xl bg-[#F4F7F9] dark:bg-[#070e1b] border border-[#E2E8F0] dark:border-slate-800/80 p-4 space-y-2"
+              >
+                <h3 className="text-xs sm:text-sm font-bold text-[#002266] dark:text-white leading-snug flex items-start gap-2">
+                  <SectionIcon
+                    className="w-4 h-4 text-[#003399] dark:text-emerald-400 flex-shrink-0 mt-0.5"
+                    aria-hidden="true"
+                  />
+                  <span>{section.title}</span>
+                </h3>
+                <p className="text-[11px] sm:text-xs text-[#1E293B] dark:text-slate-300 leading-relaxed">
+                  {section.body}
+                </p>
+              </article>
+            );
+          })}
+        </div>
+
+        <div className="border-t border-[#E2E8F0] dark:border-slate-800/80 pt-5 space-y-3">
+          <div className="space-y-1">
+            <span className="inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-[#003399] dark:text-emerald-400">
+              <HelpCircle className="w-3.5 h-3.5" aria-hidden="true" />
+              <span>{t.markets.faq.eyebrow}</span>
+            </span>
+            <h2 className="text-base sm:text-lg font-extrabold text-[#0F172A] dark:text-white tracking-tight">
+              {t.markets.faq.title}
+            </h2>
+          </div>
+
+          <dl className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {t.markets.faq.items.map((item) => (
+              <div
+                key={item.question}
+                className="rounded-xl bg-[#F4F7F9] dark:bg-[#070e1b] border border-[#E2E8F0] dark:border-slate-800/80 p-4 space-y-2"
+              >
+                <dt className="text-xs sm:text-sm font-bold text-[#002266] dark:text-white leading-snug">
+                  {item.question}
+                </dt>
+                <dd className="text-[11px] sm:text-xs text-[#1E293B] dark:text-slate-300 leading-relaxed">
+                  {item.answer}
+                </dd>
+              </div>
+            ))}
+          </dl>
+        </div>
+      </section>
     </div>
   );
 };
