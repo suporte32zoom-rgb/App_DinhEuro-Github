@@ -899,6 +899,46 @@ test('About DinhEuro page highlights EU-Mercosur global vision, LGPD & non-advis
   );
 });
 
+test('public/sitemap.xml lists strictly the active canonical routes from TAB_ROUTE_MAP with valid lastmod dates and no redirect/error paths', async () => {
+  const fs = await import('node:fs');
+  const path = await import('node:path');
+
+  const sitemapXml = fs.readFileSync(
+    path.resolve(process.cwd(), 'public/sitemap.xml'),
+    'utf8'
+  );
+
+  const locs = [...sitemapXml.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1]);
+  const lastmods = [...sitemapXml.matchAll(/<lastmod>([^<]+)<\/lastmod>/g)].map((m) => m[1]);
+
+  const expectedCanonicalUrls = Object.values(TAB_ROUTE_MAP)
+    .map((route) => buildCanonicalUrl(route))
+    .sort();
+
+  assert.equal(locs.length, expectedCanonicalUrls.length);
+  assert.equal(lastmods.length, expectedCanonicalUrls.length);
+  assert.deepEqual([...locs].sort(), expectedCanonicalUrls);
+
+  for (const dateStr of lastmods) {
+    assert.match(dateStr, /^\d{4}-\d{2}-\d{2}$/, `Invalid lastmod date format: ${dateStr}`);
+  }
+
+  const excludedPaths = [
+    '/day-trade',
+    '/daytrade',
+    '/fluxo-tape-reading',
+    '/tape-reading',
+    '/renda-fixa<',
+    '/aviso-legal',
+    '/404',
+    '/api/',
+  ];
+  for (const forbidden of excludedPaths) {
+    assert.ok(!sitemapXml.includes(forbidden), `Sitemap must exclude obsolete/redirect/error path: ${forbidden}`);
+  }
+});
+
+
 
 
 
