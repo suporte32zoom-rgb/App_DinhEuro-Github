@@ -87,3 +87,54 @@ test('Terms of Use sets effective date to Vigência: Novembro/2026 and removes c
   assert.ok(LEGAL_TRANSLATIONS.pt.terms.s1P2Before.includes('simuladores financeiros'));
 });
 
+test('Privacy Policy section 4 includes exact Google AdSense third item while preserving prior items', async () => {
+  const { LEGAL_TRANSLATIONS } = await import('../i18n/legalTranslations.ts');
+
+  for (const lang of ['pt', 'en', 'es'] as const) {
+    assert.equal(
+      LEGAL_TRANSLATIONS[lang].privacy.s4Items.length,
+      3,
+      `Expected 3 items in privacy.s4Items for ${lang}`
+    );
+  }
+
+  const thirdPt = LEGAL_TRANSLATIONS.pt.privacy.s4Items[2];
+  assert.equal(thirdPt.strong, 'Serviços de Publicidade e Mensuração (Google AdSense):');
+  assert.equal(
+    thirdPt.text,
+    'fornecedores terceiros, incluindo o Google, podem utilizar cookies e identificadores de navegador para veicular anúncios com base em visitas anteriores a este portal ou a outros sites na internet. O usuário pode gerenciar suas preferências de cookies no portal ou desativar a publicidade personalizada diretamente nas Configurações de Anúncios do Google.'
+  );
+});
+
+test('Cookie Policy section 2 includes exact Google AdSense Category D block after Category C', async () => {
+  const { LEGAL_TRANSLATIONS } = await import('../i18n/legalTranslations.ts');
+  const cookieViewSource = fs.readFileSync(
+    path.resolve(process.cwd(), 'src/views/CookiePolicyView.tsx'),
+    'utf8'
+  );
+
+  assert.equal(
+    LEGAL_TRANSLATIONS.pt.cookies.catDTitle,
+    'D. Cookies de Publicidade e Terceiros (Google AdSense)'
+  );
+  assert.equal(LEGAL_TRANSLATIONS.pt.cookies.catDBadge, 'Publicidade');
+  assert.equal(
+    LEGAL_TRANSLATIONS.pt.cookies.catDDesc,
+    "Quando habilitados mediante consentimento, parceiros de publicidade como o Google podem utilizar cookies para exibir anúncios relevantes com base em visitas anteriores a este portal ou a outros sites, além de limitar a frequência de exibição e medir o desempenho das campanhas. O usuário pode revogar esse consentimento a qualquer momento no botão 'Redefinir Preferências de Cookies' ou nas Configurações de Anúncios do Google."
+  );
+
+  for (const lang of ['pt', 'en', 'es'] as const) {
+    assert.ok(LEGAL_TRANSLATIONS[lang].cookies.catDTitle.length > 0);
+    assert.ok(LEGAL_TRANSLATIONS[lang].cookies.catDBadge.length > 0);
+    assert.ok(LEGAL_TRANSLATIONS[lang].cookies.catDDesc.length > 0);
+  }
+
+  assert.ok(cookieViewSource.includes('tCookies.catDTitle'));
+  assert.ok(cookieViewSource.includes('tCookies.catDBadge'));
+  assert.ok(cookieViewSource.includes('tCookies.catDDesc'));
+  assert.ok(
+    cookieViewSource.indexOf('tCookies.catCDesc') < cookieViewSource.indexOf('tCookies.catDTitle'),
+    'Category D must appear after Category C'
+  );
+});
+

@@ -149,6 +149,18 @@ export const CookiePolicyView: React.FC = () => {
               </div>
               <p className="text-xs text-slate-600 dark:text-slate-400">{tCookies.catCDesc}</p>
             </div>
+
+            {/* Categoria 4: Publicidade e Terceiros */}
+            <div className="p-4 rounded-xl bg-[#F8FAFC] dark:bg-slate-900/80 border border-[#E2E8F0] dark:border-slate-800 space-y-2">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-bold text-[#003399] dark:text-cyan-400 flex items-center gap-1.5">
+                  <CheckCircle2 className="w-4 h-4" />
+                  <span>{tCookies.catDTitle}</span>
+                </span>
+                <span className="text-[10px] font-mono text-[#003399] dark:text-cyan-400 bg-[#E6EEFF] dark:bg-cyan-500/10 px-2 py-0.5 rounded font-bold">{tCookies.catDBadge}</span>
+              </div>
+              <p className="text-xs text-slate-600 dark:text-slate-400">{tCookies.catDDesc}</p>
+            </div>
           </div>
         </div>
 

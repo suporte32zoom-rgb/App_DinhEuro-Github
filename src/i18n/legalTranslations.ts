@@ -81,6 +81,9 @@ export interface LegalTranslations {
     catCTitle: string;
     catCBadge: string;
     catCDesc: string;
+    catDTitle: string;
+    catDBadge: string;
+    catDDesc: string;
     s3Title: string;
     s3Desc: string;
     browsers: Array<{ name: string; steps: string }>;
@@ -202,6 +205,10 @@ export const LEGAL_TRANSLATIONS: Record<SupportedLanguage, LegalTranslations> = 
           strong: 'Provedores de Feeds de Mercado Financeiro:',
           text: 'consultas de cotações e taxas interbancárias realizadas via canais anônimos sem qualquer vinculação à identidade civil do usuário.',
         },
+        {
+          strong: 'Serviços de Publicidade e Mensuração (Google AdSense):',
+          text: 'fornecedores terceiros, incluindo o Google, podem utilizar cookies e identificadores de navegador para veicular anúncios com base em visitas anteriores a este portal ou a outros sites na internet. O usuário pode gerenciar suas preferências de cookies no portal ou desativar a publicidade personalizada diretamente nas Configurações de Anúncios do Google.',
+        },
       ],
       s5Title: '5. Direitos do Titular de Dados Pessoais',
       s5Intro:
@@ -262,6 +269,10 @@ export const LEGAL_TRANSLATIONS: Record<SupportedLanguage, LegalTranslations> = 
       catCBadge: 'Otimização',
       catCDesc:
         'Métricas anônimas e agregadas de latência na renderização de gráficos D3 e tempos de resposta de cotações em tempo real para prevenção de falhas sistêmicas. Não identificam o usuário pessoalmente.',
+      catDTitle: 'D. Cookies de Publicidade e Terceiros (Google AdSense)',
+      catDBadge: 'Publicidade',
+      catDDesc:
+        "Quando habilitados mediante consentimento, parceiros de publicidade como o Google podem utilizar cookies para exibir anúncios relevantes com base em visitas anteriores a este portal ou a outros sites, além de limitar a frequência de exibição e medir o desempenho das campanhas. O usuário pode revogar esse consentimento a qualquer momento no botão 'Redefinir Preferências de Cookies' ou nas Configurações de Anúncios do Google.",
       s3Title: '3. Como Gerenciar ou Desativar Cookies no seu Navegador',
       s3Desc:
         'Você pode bloquear ou excluir cookies a qualquer momento nas opções de privacidade do seu navegador. Note que a desativação de cookies essenciais ou do localStorage pode desativar recursos essenciais, como a retenção das suas carteiras e o modo offline do PWA.',
@@ -423,6 +434,10 @@ export const LEGAL_TRANSLATIONS: Record<SupportedLanguage, LegalTranslations> = 
           strong: 'Financial Market Feed Providers:',
           text: 'anonymous market-quote and interbank FX rate queries with zero linkage to user identity.',
         },
+        {
+          strong: 'Advertising & Measurement Services (Google AdSense):',
+          text: 'third-party vendors, including Google, may use cookies and browser identifiers to serve ads based on prior visits to this portal or other websites on the internet. Users may manage their cookie preferences on the portal or opt out of personalized advertising directly in Google Ads Settings.',
+        },
       ],
       s5Title: '5. Data Subject Rights',
       s5Intro:
@@ -483,6 +498,10 @@ export const LEGAL_TRANSLATIONS: Record<SupportedLanguage, LegalTranslations> = 
       catCBadge: 'Optimization',
       catCDesc:
         'Aggregated, anonymous latency metrics for D3 chart rendering and real-time quote responses used to prevent system failures. They never identify individual users.',
+      catDTitle: 'D. Advertising & Third-Party Cookies (Google AdSense)',
+      catDBadge: 'Advertising',
+      catDDesc:
+        "When enabled upon consent, advertising partners such as Google may use cookies to display relevant ads based on previous visits to this portal or other websites, as well as to cap ad frequency and measure campaign performance. Users can revoke this consent at any time using the 'Reset Cookie Preferences' button or in Google Ads Settings.",
       s3Title: '3. How to Manage or Disable Cookies in Your Browser',
       s3Desc:
         'You may block or clear cookies anytime in your browser privacy settings. Please note that disabling essential storage or localStorage may disable portfolio persistence and PWA offline mode.',
@@ -644,6 +663,10 @@ export const LEGAL_TRANSLATIONS: Record<SupportedLanguage, LegalTranslations> = 
           strong: 'Proveedores de Feeds Financieros:',
           text: 'consultas anónimas de cotizaciones y tasas interbancarias sin vínculo con la identidad civil del usuario.',
         },
+        {
+          strong: 'Servicios de Publicidad y Medición (Google AdSense):',
+          text: 'proveedores externos, incluido Google, pueden utilizar cookies e identificadores de navegador para mostrar anuncios basados en visitas anteriores a este portal o a otros sitios web en internet. El usuario puede gestionar sus preferencias de cookies en el portal o desactivar la publicidad personalizada directamente en la Configuración de Anuncios de Google.',
+        },
       ],
       s5Title: '5. Derechos del Titular de Datos Personales',
       s5Intro:
@@ -704,6 +727,10 @@ export const LEGAL_TRANSLATIONS: Record<SupportedLanguage, LegalTranslations> = 
       catCBadge: 'Optimización',
       catCDesc:
         'Métricas anónimas y agregadas de latencia en el renderizado de gráficos D3 y tiempos de respuesta de cotizaciones para prevenir fallos técnicos.',
+      catDTitle: 'D. Cookies de Publicidad y Terceros (Google AdSense)',
+      catDBadge: 'Publicidad',
+      catDDesc:
+        "Cuando se habilitan mediante consentimiento, socios publicitarios como Google pueden utilizar cookies para mostrar anuncios relevantes basados en visitas anteriores a este portal o a otros sitios web, además de limitar la frecuencia de visualización y medir el rendimiento de las campañas. El usuario puede revocar este consentimiento en cualquier momento mediante el botón 'Restablecer Preferencias de Cookies' o en la Configuración de Anuncios de Google.",
       s3Title: '3. Cómo Gestionar o Desactivar Cookies en su Navegador',
       s3Desc:
         'Puede bloquear o eliminar cookies en cualquier momento en la configuración de privacidad de su navegador. Desactivar el almacenamiento local puede impedir el guardado de carteras y el modo offline de la PWA.',
