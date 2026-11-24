@@ -1,6 +1,12 @@
 import { MarketAsset } from '../services/marketData';
 import type { SupportedLanguage } from '../i18n/translations';
 import { getLocalizedAssetName } from '../i18n/marketDataTranslations';
+import {
+  formatCurrencyValue,
+  formatPointsValue,
+  getAssetPriceDecimals,
+  roundToDecimals,
+} from './finance';
 
 export interface AssetMetadata {
   ticker: string;
@@ -40,12 +46,36 @@ export function getAssetMetadata(
   lang: SupportedLanguage = 'pt'
 ): AssetMetadata {
   const price = asset.price;
-  const openPrice = Number((price - asset.changeValue).toFixed(2));
-  const week52High = Number((price * 1.24).toFixed(2));
-  const week52Low = Number((price * 0.78).toFixed(2));
-  const supportLevel = Number((price * 0.965).toFixed(2));
-  const resistanceLevel = Number((price * 1.042).toFixed(2));
+  const locale = lang === 'en' ? 'en-US' : lang === 'es' ? 'es-ES' : 'pt-BR';
+  const isIndex =
+    asset.category === 'indices' ||
+    asset.currency === 'PTS' ||
+    asset.currency === 'PONTOS' ||
+    asset.currency === 'POINTS';
+  const priceDecimals = getAssetPriceDecimals(price, asset.currency, asset.category);
+  const levelDecimals = isIndex ? 2 : priceDecimals;
+  const openPrice = roundToDecimals(price - asset.changeValue, levelDecimals);
+  const week52High = roundToDecimals(price * 1.24, levelDecimals);
+  const week52Low = roundToDecimals(price * 0.78, levelDecimals);
+  const supportLevel = roundToDecimals(price * 0.965, levelDecimals);
+  const resistanceLevel = roundToDecimals(price * 1.042, levelDecimals);
   const localizedName = getLocalizedAssetName(asset, lang);
+
+  const fmtLevel = (val: number): string => {
+    if (isIndex) {
+      return formatPointsValue(val, locale);
+    }
+    if (asset.category === 'forex') {
+      return val.toLocaleString(locale, {
+        minimumFractionDigits: priceDecimals,
+        maximumFractionDigits: priceDecimals,
+      });
+    }
+    return formatCurrencyValue(val, asset.currency || 'USD', priceDecimals, locale);
+  };
+
+  const fmtSupport = fmtLevel(supportLevel);
+  const fmtResistance = fmtLevel(resistanceLevel);
 
   // 1. Brazilian B3 Equities
   if (asset.category === 'stocks_br') {
@@ -71,7 +101,7 @@ export function getAssetMetadata(
             foundation: '1953',
           },
           aiDiagnosis: {
-            scenarioSummary: `PETR4 maintains solid operating cash generation supported by international Brent crude prices. Shares trade at an attractive valuation discount versus global peers, with strong technical support at R$ ${supportLevel} and resistance at R$ ${resistanceLevel}.`,
+            scenarioSummary: `PETR4 maintains solid operating cash generation supported by international Brent crude prices. Shares trade at an attractive valuation discount versus global peers, with strong technical support at ${fmtSupport} and resistance at ${fmtResistance}.`,
             supportLevel,
             resistanceLevel,
             liquidityAnalysis: 'Extremely High (most actively traded equity on B3, daily turnover > R$ 1.5B).',
@@ -109,7 +139,7 @@ export function getAssetMetadata(
             foundation: '1953',
           },
           aiDiagnosis: {
-            scenarioSummary: `PETR4 mantiene sólida generación de caja operativa respaldada por los precios internacionales del crudo Brent. Cotiza con descuento atractivo frente a pares globales, con soporte sólido en R$ ${supportLevel} y resistencia técnica en R$ ${resistanceLevel}.`,
+            scenarioSummary: `PETR4 mantiene sólida generación de caja operativa respaldada por los precios internacionales del crudo Brent. Cotiza con descuento atractivo frente a pares globales, con soporte sólido en ${fmtSupport} y resistencia técnica en ${fmtResistance}.`,
             supportLevel,
             resistanceLevel,
             liquidityAnalysis: 'Extremadamente Alta (activo más negociado de B3, volumen diario > R$ 1.5B).',
@@ -146,12 +176,7 @@ export function getAssetMetadata(
           foundation: '1953',
         },
         aiDiagnosis: {
-          scenarioSummary:
-            'PETR4 mantém sólida geração de caixa operacional com sustentação nos preços internacionais do petróleo Brent. O papel negocia com desconto atrativo em relação aos pares globais, com suporte forte em R$ ' +
-            supportLevel +
-            ' e resistência técnica em R$ ' +
-            resistanceLevel +
-            '.',
+          scenarioSummary: `PETR4 mantém sólida geração de caixa operacional com sustentação nos preços internacionais do petróleo Brent. O papel negocia com desconto atrativo em relação aos pares globais, com suporte forte em ${fmtSupport} e resistência técnica em ${fmtResistance}.`,
           supportLevel,
           resistanceLevel,
           liquidityAnalysis: 'Extremamente Alta (ativo mais negociado da B3, giro diário > R$ 1.5B).',
@@ -191,7 +216,7 @@ export function getAssetMetadata(
             foundation: '1942',
           },
           aiDiagnosis: {
-            scenarioSummary: `VALE3 reflects Chinese port iron-ore inventory dynamics and Asian property-sector stimulus. The company retains a quality premium for 65% Fe ore with technical support around R$ ${supportLevel}.`,
+            scenarioSummary: `VALE3 reflects Chinese port iron-ore inventory dynamics and Asian property-sector stimulus. The company retains a quality premium for 65% Fe ore with technical support around ${fmtSupport}.`,
             supportLevel,
             resistanceLevel,
             liquidityAnalysis: 'Leading foreign institutional liquidity equity on B3.',
@@ -229,7 +254,7 @@ export function getAssetMetadata(
             foundation: '1942',
           },
           aiDiagnosis: {
-            scenarioSummary: `VALE3 refleja la dinámica de inventarios portuarios de mineral en China y los estímulos al sector inmobiliario asiático. Mantiene prima de calidad por el mineral de 65% Fe con soporte en R$ ${supportLevel}.`,
+            scenarioSummary: `VALE3 refleja la dinámica de inventarios portuarios de mineral en China y los estímulos al sector inmobiliario asiático. Mantiene prima de calidad por el mineral de 65% Fe con soporte en ${fmtSupport}.`,
             supportLevel,
             resistanceLevel,
             liquidityAnalysis: 'Líder en liquidez institucional extranjera en B3.',
@@ -266,10 +291,7 @@ export function getAssetMetadata(
           foundation: '1942',
         },
         aiDiagnosis: {
-          scenarioSummary:
-            'VALE3 reflete a dinâmica dos estoques portuários de minério na China e estímulos do setor imobiliário asiático. Mantém prêmio de qualidade pelo minério de 65% Fe com suporte em R$ ' +
-            supportLevel +
-            '.',
+          scenarioSummary: `VALE3 reflete a dinâmica dos estoques portuários de minério na China e estímulos do setor imobiliário asiático. Mantém prêmio de qualidade pelo minério de 65% Fe com suporte em ${fmtSupport}.`,
           supportLevel,
           resistanceLevel,
           liquidityAnalysis: 'Líder de liquidez institucional estrangeira na B3.',
@@ -306,7 +328,7 @@ export function getAssetMetadata(
           governance: 'Novo Mercado / Level 1',
         },
         aiDiagnosis: {
-          scenarioSummary: `Asset consolidating technically with dynamic support projected at ${asset.currency} ${supportLevel} and resistance at ${asset.currency} ${resistanceLevel}. Adequate liquidity for balanced portfolio allocation.`,
+          scenarioSummary: `Asset consolidating technically with dynamic support projected at ${fmtSupport} and resistance at ${fmtResistance}. Adequate liquidity for balanced portfolio allocation.`,
           supportLevel,
           resistanceLevel,
           liquidityAnalysis: 'High order-book liquidity on B3.',
@@ -341,7 +363,7 @@ export function getAssetMetadata(
           governance: 'Novo Mercado / Nivel 1',
         },
         aiDiagnosis: {
-          scenarioSummary: `Activo en consolidación técnica con soporte dinámico proyectado en ${asset.currency} ${supportLevel} y resistencia en ${asset.currency} ${resistanceLevel}. Liquidez adecuada para carteras equilibradas.`,
+          scenarioSummary: `Activo en consolidación técnica con soporte dinámico proyectado en ${fmtSupport} y resistencia en ${fmtResistance}. Liquidez adecuada para carteras equilibradas.`,
           supportLevel,
           resistanceLevel,
           liquidityAnalysis: 'Elevada liquidez en el libro de órdenes de B3.',
@@ -376,7 +398,7 @@ export function getAssetMetadata(
         governance: 'Novo Mercado / Nível 1',
       },
       aiDiagnosis: {
-        scenarioSummary: `Ativo em consolidação técnica com suporte dinâmico projetado em ${asset.currency} ${supportLevel} e resistência em ${asset.currency} ${resistanceLevel}. Liquidez satisfatória para alocação de carteiras equilibradas.`,
+        scenarioSummary: `Ativo em consolidação técnica com suporte dinâmico projetado em ${fmtSupport} e resistência em ${fmtResistance}. Liquidez satisfatória para alocação de carteiras equilibradas.`,
         supportLevel,
         resistanceLevel,
         liquidityAnalysis: 'Elevada liquidez no livro de ofertas da B3.',
@@ -417,7 +439,7 @@ export function getAssetMetadata(
           governance: 'SEC Standard / NASDAQ Compliance',
         },
         aiDiagnosis: {
-          scenarioSummary: `${asset.symbol} shows strong institutional momentum on Wall Street, backed by durable economic moats and cloud computing expansion. Technical support sits at US$ ${supportLevel} with resistance near US$ ${resistanceLevel}.`,
+          scenarioSummary: `${asset.symbol} shows strong institutional momentum on Wall Street, backed by durable economic moats and cloud computing expansion. Technical support sits at ${fmtSupport} with resistance near ${fmtResistance}.`,
           supportLevel,
           resistanceLevel,
           liquidityAnalysis: 'Peak global liquidity across U.S. equity venues.',
@@ -455,7 +477,7 @@ export function getAssetMetadata(
           governance: 'Estándar SEC / Cumplimiento NASDAQ',
         },
         aiDiagnosis: {
-          scenarioSummary: `${asset.symbol} presenta sólido impulso institucional en Wall Street, respaldado por ventajas competitivas duraderas y expansión en computación en la nube. Soporte técnico en US$ ${supportLevel} y resistencia en US$ ${resistanceLevel}.`,
+          scenarioSummary: `${asset.symbol} presenta sólido impulso institucional en Wall Street, respaldado por ventajas competitivas duraderas y expansión en computación en la nube. Soporte técnico en ${fmtSupport} y resistencia en ${fmtResistance}.`,
           supportLevel,
           resistanceLevel,
           liquidityAnalysis: 'Liquidez global máxima en el mercado accionario estadounidense.',
@@ -493,7 +515,7 @@ export function getAssetMetadata(
         governance: 'SEC Standard / NASDAQ Compliance',
       },
       aiDiagnosis: {
-        scenarioSummary: `${asset.symbol} apresenta forte momentum institucional em Wall Street, suportado por vantagens competitivas (economic moats) e expansão em computação em nuvem. Nível de suporte em US$ ${supportLevel} e teto de resistência técnica em US$ ${resistanceLevel}.`,
+        scenarioSummary: `${asset.symbol} apresenta forte momentum institucional em Wall Street, suportado por vantagens competitivas (economic moats) e expansão em computação em nuvem. Nível de suporte em ${fmtSupport} e teto de resistência técnica em ${fmtResistance}.`,
         supportLevel,
         resistanceLevel,
         liquidityAnalysis: 'Liquidez global máxima no mercado acionário americano.',
@@ -532,7 +554,7 @@ export function getAssetMetadata(
           governance: 'IFRS / EU Corporate Governance Code',
         },
         aiDiagnosis: {
-          scenarioSummary: `${asset.symbol} maintains solid institutional sponsorship across European equity desks, combining global export revenues with resilient dividend distributions. Technical support sits at ${asset.currency} ${supportLevel} and resistance at ${asset.currency} ${resistanceLevel}.`,
+          scenarioSummary: `${asset.symbol} maintains solid institutional sponsorship across European equity desks, combining global export revenues with resilient dividend distributions. Technical support sits at ${fmtSupport} and resistance at ${fmtResistance}.`,
           supportLevel,
           resistanceLevel,
           liquidityAnalysis: 'Deep order-book liquidity on European primary venues.',
@@ -567,7 +589,7 @@ export function getAssetMetadata(
           governance: 'Normativa IFRS / Código de Gobernanza UE',
         },
         aiDiagnosis: {
-          scenarioSummary: `${asset.symbol} mantiene sólido respaldo institucional en las mesas europeas, combinando ingresos globales por exportación con pagos consistentes de dividendos. Soporte en ${asset.currency} ${supportLevel} y resistencia en ${asset.currency} ${resistanceLevel}.`,
+          scenarioSummary: `${asset.symbol} mantiene sólido respaldo institucional en las mesas europeas, combinando ingresos globales por exportación con pagos consistentes de dividendos. Soporte en ${fmtSupport} y resistencia en ${fmtResistance}.`,
           supportLevel,
           resistanceLevel,
           liquidityAnalysis: 'Amplia liquidez en el libro de órdenes de los mercados europeos.',
@@ -602,7 +624,7 @@ export function getAssetMetadata(
         governance: 'IFRS Standard / Governança Corporativa UE',
       },
       aiDiagnosis: {
-        scenarioSummary: `${asset.symbol} apresenta sólido acompanhamento institucional nas mesas europeias, unindo receitas globais de exportação com distribuição recorrente de dividendos. Suporte técnico em ${asset.currency} ${supportLevel} e resistência em ${asset.currency} ${resistanceLevel}.`,
+        scenarioSummary: `${asset.symbol} apresenta sólido acompanhamento institucional nas mesas europeias, unindo receitas globais de exportação com distribuição recorrente de dividendos. Suporte técnico em ${fmtSupport} e resistência em ${fmtResistance}.`,
         supportLevel,
         resistanceLevel,
         liquidityAnalysis: 'Alta liquidez diária nos livros de ofertas das principais praças europeias.',
@@ -640,7 +662,7 @@ export function getAssetMetadata(
           governance: 'Regional Exchange Listing & Audit Standards',
         },
         aiDiagnosis: {
-          scenarioSummary: `${asset.symbol} captures structural Asia-Pacific growth and global supply-chain leadership. Technical support sits at ${asset.currency} ${supportLevel} and resistance at ${asset.currency} ${resistanceLevel}.`,
+          scenarioSummary: `${asset.symbol} captures structural Asia-Pacific growth and global supply-chain leadership. Technical support sits at ${fmtSupport} and resistance at ${fmtResistance}.`,
           supportLevel,
           resistanceLevel,
           liquidityAnalysis: 'Institutional benchmark liquidity during Asian trading hours.',
@@ -675,7 +697,7 @@ export function getAssetMetadata(
           governance: 'Estándares Bursátiles Regionales de Asia-Pacífico',
         },
         aiDiagnosis: {
-          scenarioSummary: `${asset.symbol} refleja el crecimiento estructural de Asia-Pacífico y el liderazgo en cadenas globales de suministro. Soporte en ${asset.currency} ${supportLevel} y resistencia en ${asset.currency} ${resistanceLevel}.`,
+          scenarioSummary: `${asset.symbol} refleja el crecimiento estructural de Asia-Pacífico y el liderazgo en cadenas globales de suministro. Soporte en ${fmtSupport} y resistencia en ${fmtResistance}.`,
           supportLevel,
           resistanceLevel,
           liquidityAnalysis: 'Liquidez institucional de referencia en la sesión asiática.',
@@ -710,7 +732,7 @@ export function getAssetMetadata(
         governance: 'Padrões Regulatórios das Bolsas da Ásia-Pacífico',
       },
       aiDiagnosis: {
-        scenarioSummary: `${asset.symbol} captura o dinamismo econômico da Ásia-Pacífico e a liderança industrial e tecnológica global. Nível de suporte em ${asset.currency} ${supportLevel} e resistência técnica em ${asset.currency} ${resistanceLevel}.`,
+        scenarioSummary: `${asset.symbol} captura o dinamismo econômico da Ásia-Pacífico e a liderança industrial e tecnológica global. Nível de suporte em ${fmtSupport} e resistência técnica em ${fmtResistance}.`,
         supportLevel,
         resistanceLevel,
         liquidityAnalysis: 'Alta liquidez institucional durante o pregão asiático.',
@@ -751,7 +773,7 @@ export function getAssetMetadata(
           governance: 'Official Quarterly / Semi-Annual Rebalancing Methodology',
         },
         aiDiagnosis: {
-          scenarioSummary: `${asset.symbol} reflects global risk appetite and central bank monetary policy expectations. Immediate support sits at ${asset.currency === 'BRL' ? 'R$' : '$'} ${supportLevel} and resistance at ${asset.currency === 'BRL' ? 'R$' : '$'} ${resistanceLevel}.`,
+          scenarioSummary: `${asset.symbol} reflects global risk appetite and central bank monetary policy expectations. Immediate support sits at ${fmtSupport} and resistance at ${fmtResistance}.`,
           supportLevel,
           resistanceLevel,
           liquidityAnalysis: 'Maximum depth via index futures contracts and tracked ETFs.',
@@ -788,7 +810,7 @@ export function getAssetMetadata(
           governance: 'Metodología Oficial de Rebalanceo Trimestral / Semestral',
         },
         aiDiagnosis: {
-          scenarioSummary: `${asset.symbol} refleja el apetito por riesgo global y los ciclos de política monetaria de los bancos centrales. Soporte inmediato en ${asset.currency === 'BRL' ? 'R$' : '$'} ${supportLevel} y resistencia en ${asset.currency === 'BRL' ? 'R$' : '$'} ${resistanceLevel}.`,
+          scenarioSummary: `${asset.symbol} refleja el apetito por riesgo global y los ciclos de política monetaria de los bancos centrales. Soporte inmediato en ${fmtSupport} y resistencia en ${fmtResistance}.`,
           supportLevel,
           resistanceLevel,
           liquidityAnalysis: 'Profundidad máxima mediante contratos de futuros y ETFs indexados.',
@@ -825,7 +847,7 @@ export function getAssetMetadata(
         governance: 'Metodologia Oficial de Rebalanceamento Trimestral / Semestral',
       },
       aiDiagnosis: {
-        scenarioSummary: `${asset.symbol} reflete o apetite por risco global e a precificação de ciclos de política monetária dos bancos centrais. Suporte imediato em ${asset.currency === 'BRL' ? 'R$' : '$'} ${supportLevel} e resistência em ${asset.currency === 'BRL' ? 'R$' : '$'} ${resistanceLevel}.`,
+        scenarioSummary: `${asset.symbol} reflete o apetite por risco global e a precificação de ciclos de política monetária dos bancos centrais. Suporte imediato em ${fmtSupport} e resistência em ${fmtResistance}.`,
         supportLevel,
         resistanceLevel,
         liquidityAnalysis: 'Profundidade máxima de liquidez via contratos futuros e ETFs indexados.',
@@ -863,7 +885,7 @@ export function getAssetMetadata(
           benchmark: 'Commercial FX / PTAX / Interbank Parity',
         },
         aiDiagnosis: {
-          scenarioSummary: `${asset.symbol} trades in a floating regime driven by interest-rate differentials across major central banks and commercial FX flows. Technical support sits at ${supportLevel} and resistance at ${resistanceLevel}.`,
+          scenarioSummary: `${asset.symbol} trades in a floating regime driven by interest-rate differentials across major central banks and commercial FX flows. Technical support sits at ${fmtSupport} and resistance at ${fmtResistance}.`,
           supportLevel,
           resistanceLevel,
           liquidityAnalysis: 'World’s deepest financial market (US$ 7.5 trillion daily turnover).',
@@ -898,7 +920,7 @@ export function getAssetMetadata(
           benchmark: 'Dólar Comercial / PTAX / Cambio Interbancario',
         },
         aiDiagnosis: {
-          scenarioSummary: `${asset.symbol} opera en régimen de flotación influenciado por el diferencial de tasas entre las principales autoridades monetarias y flujos comerciales. Soporte técnico en ${supportLevel} y resistencia en ${resistanceLevel}.`,
+          scenarioSummary: `${asset.symbol} opera en régimen de flotación influenciado por el diferencial de tasas entre las principales autoridades monetarias y flujos comerciales. Soporte técnico en ${fmtSupport} y resistencia en ${fmtResistance}.`,
           supportLevel,
           resistanceLevel,
           liquidityAnalysis: 'Mercado de mayor liquidez mundial (US$ 7.5 billones diarios).',
@@ -933,7 +955,7 @@ export function getAssetMetadata(
         benchmark: 'Dólar Comercial / PTAX / Câmbio Interbancário',
       },
       aiDiagnosis: {
-        scenarioSummary: `${asset.symbol} opera em regime de flutuação limpa influenciado pelo diferencial de juros entre as principais autoridades monetárias e fluxo cambial comercial. Níveis de suporte técnico em ${supportLevel} e resistência em ${resistanceLevel}.`,
+        scenarioSummary: `${asset.symbol} opera em regime de flutuação limpa influenciado pelo diferencial de juros entre as principais autoridades monetárias e fluxo cambial comercial. Níveis de suporte técnico em ${fmtSupport} e resistência em ${fmtResistance}.`,
         supportLevel,
         resistanceLevel,
         liquidityAnalysis: 'Mercado de maior liquidez mundial (US$ 7.5 trilhões diários).',
@@ -970,7 +992,7 @@ export function getAssetMetadata(
           benchmark: 'Bitcoin Dominance (BTC.D) & Hashrate',
         },
         aiDiagnosis: {
-          scenarioSummary: `${asset.symbol} shows accumulation consolidation backed by spot ETF demand and regulated institutional custody. Support sits at US$ ${supportLevel} with resistance at US$ ${resistanceLevel}.`,
+          scenarioSummary: `${asset.symbol} shows accumulation consolidation backed by spot ETF demand and regulated institutional custody. Support sits at ${fmtSupport} with resistance at ${fmtResistance}.`,
           supportLevel,
           resistanceLevel,
           liquidityAnalysis: '24/7 global trading across spot venues and perpetual derivatives.',
@@ -1004,7 +1026,7 @@ export function getAssetMetadata(
           benchmark: 'Dominancia de Bitcoin (BTC.D) & Hashrate',
         },
         aiDiagnosis: {
-          scenarioSummary: `${asset.symbol} presenta consolidación de acumulación con respaldo institucional de ETFs al contado y custodios regulados. Soporte en US$ ${supportLevel} y resistencia en US$ ${resistanceLevel}.`,
+          scenarioSummary: `${asset.symbol} presenta consolidación de acumulación con respaldo institucional de ETFs al contado y custodios regulados. Soporte en ${fmtSupport} y resistencia en ${fmtResistance}.`,
           supportLevel,
           resistanceLevel,
           liquidityAnalysis: 'Negociación global 24/7 con liquidez en spot y derivados perpetuos.',
@@ -1038,7 +1060,7 @@ export function getAssetMetadata(
         benchmark: 'Bitcoin Dominance (BTC.D) & Hashrate',
       },
       aiDiagnosis: {
-        scenarioSummary: `${asset.symbol} apresenta consolidação de acumulação com suporte institucional formado por ETFs à vista e custodiantes regulados. Suporte em US$ ${supportLevel} e resistência em US$ ${resistanceLevel}.`,
+        scenarioSummary: `${asset.symbol} apresenta consolidação de acumulação com suporte institucional formado por ETFs à vista e custodiantes regulados. Suporte em ${fmtSupport} e resistência em ${fmtResistance}.`,
         supportLevel,
         resistanceLevel,
         liquidityAnalysis: 'Negociação global 24/7 com liquidez em spot e derivativos perpétuos.',
@@ -1074,7 +1096,7 @@ export function getAssetMetadata(
         benchmark: 'CRB Commodity Index',
       },
       aiDiagnosis: {
-        scenarioSummary: `${asset.symbol} responds to global physical supply-and-demand balances, shipping-route geopolitics, and storage costs. Technical support sits at US$ ${supportLevel} and resistance at US$ ${resistanceLevel}.`,
+        scenarioSummary: `${asset.symbol} responds to global physical supply-and-demand balances, shipping-route geopolitics, and storage costs. Technical support sits at ${fmtSupport} and resistance at ${fmtResistance}.`,
         supportLevel,
         resistanceLevel,
         liquidityAnalysis: 'High liquidity across Chicago and London futures venues.',
@@ -1108,7 +1130,7 @@ export function getAssetMetadata(
         benchmark: 'Índice CRB de Commodities',
       },
       aiDiagnosis: {
-        scenarioSummary: `${asset.symbol} responde a la dinámica global de oferta y demanda física, tensiones geopolíticas en rutas logísticas y costos de almacenamiento. Soporte técnico en US$ ${supportLevel} y resistencia en US$ ${resistanceLevel}.`,
+        scenarioSummary: `${asset.symbol} responde a la dinámica global de oferta y demanda física, tensiones geopolíticas en rutas logísticas y costos de almacenamiento. Soporte técnico en ${fmtSupport} y resistencia en ${fmtResistance}.`,
         supportLevel,
         resistanceLevel,
         liquidityAnalysis: 'Elevada liquidez en los mercados de futuros de Chicago y Londres.',
@@ -1142,7 +1164,7 @@ export function getAssetMetadata(
       benchmark: 'Índice CRB de Commodities',
     },
     aiDiagnosis: {
-      scenarioSummary: `${asset.symbol} responde à dinâmica de oferta e demanda física global, tensões geopolíticas em rotas de escoamento e custos de estocagem. Suporte técnico em US$ ${supportLevel} e resistência em US$ ${resistanceLevel}.`,
+      scenarioSummary: `${asset.symbol} responde à dinâmica de oferta e demanda física global, tensões geopolíticas em rotas de escoamento e custos de estocagem. Suporte técnico em ${fmtSupport} e resistência em ${fmtResistance}.`,
       supportLevel,
       resistanceLevel,
       liquidityAnalysis: 'Elevada liquidez nos mercados de futuros de Chicago e Londres.',

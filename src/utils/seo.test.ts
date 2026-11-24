@@ -717,3 +717,87 @@ test('Fixed Income & Derivatives page adds 4-block educational guide (>=700 word
   );
 });
 
+test('Advanced Charts Terminal formats index support/resistance in pts, removes Day Trade button, hides third-party engine names, and renders EU-Mercosur guide & 4-item FAQ', async () => {
+  const fs = await import('node:fs');
+  const path = await import('node:path');
+  const { getAssetMetadata } = await import('./assetProfiles.ts');
+  const { VIEWS_TRANSLATIONS } = await import('../i18n/viewsTranslations.ts');
+  const { CHARTS_EDITORIAL_TRANSLATIONS } = await import('../i18n/chartsEditorialTranslations.ts');
+
+  const ibovAsset = {
+    id: 'ibovespa',
+    symbol: 'IBOVESPA',
+    name: 'Ibovespa (Brasil B3)',
+    category: 'indices' as const,
+    price: 164796.05,
+    currency: 'PTS',
+    change24h: 0.72,
+    changeValue: 1178.15,
+    high24h: 165400.0,
+    low24h: 163900.0,
+    volume: 'R$ 24,5B',
+    sparkline: [163900, 164796.05],
+  };
+
+  const metaPt = getAssetMetadata(ibovAsset, 'pt');
+  assert.ok(
+    metaPt.aiDiagnosis.scenarioSummary.includes('159.028,19 pts'),
+    `Expected pt-BR support in pts, got: ${metaPt.aiDiagnosis.scenarioSummary}`
+  );
+  assert.ok(
+    metaPt.aiDiagnosis.scenarioSummary.includes('171.717,48 pts'),
+    `Expected pt-BR resistance in pts, got: ${metaPt.aiDiagnosis.scenarioSummary}`
+  );
+  assert.ok(
+    !/\$|R\$|US\$/.test(metaPt.aiDiagnosis.scenarioSummary),
+    `Index scenarioSummary must never display currency symbols: ${metaPt.aiDiagnosis.scenarioSummary}`
+  );
+
+  const unifiedViewSource = fs.readFileSync(
+    path.resolve(process.cwd(), 'src/components/UnifiedAssetDetailView.tsx'),
+    'utf8'
+  );
+  const advChartsViewSource = fs.readFileSync(
+    path.resolve(process.cwd(), 'src/views/AdvancedChartsView.tsx'),
+    'utf8'
+  );
+  const d3ChartSource = fs.readFileSync(
+    path.resolve(process.cwd(), 'src/components/D3AdvancedChart.tsx'),
+    'utf8'
+  );
+
+  assert.ok(!unifiedViewSource.includes('tradeDayTradePro'));
+  assert.ok(!unifiedViewSource.includes('Operar Day Trade Pro'));
+  assert.ok(unifiedViewSource.includes('tDetail.followAsset'));
+  assert.ok(unifiedViewSource.includes('tDetail.addAlert'));
+  assert.ok(unifiedViewSource.includes('tDetail.addToPortfolio'));
+  assert.ok(unifiedViewSource.includes('tDetail.backToOverview'));
+  assert.ok(advChartsViewSource.includes('CHARTS_EDITORIAL_TRANSLATIONS[lang]'));
+
+  assert.equal(
+    CHARTS_EDITORIAL_TRANSLATIONS.pt.title,
+    'Leitura de Gráficos, Tendências e Eixo União Europeia – Mercosul'
+  );
+
+  const forbiddenVisibleTerms =
+    /\b(d3\s*v7|recharts|finnhub|awesomeapi|coingecko|brapi|yahoo\s*finance|vite|github|cloudflare)\b/i;
+
+  for (const lang of ['pt', 'en', 'es'] as const) {
+    const tSet = VIEWS_TRANSLATIONS[lang];
+    assert.ok(!forbiddenVisibleTerms.test(JSON.stringify(tSet.advancedCharts)), `Forbidden term in advancedCharts (${lang})`);
+    assert.ok(!forbiddenVisibleTerms.test(JSON.stringify(tSet.assetDetail)), `Forbidden term in assetDetail (${lang})`);
+    assert.ok(!forbiddenVisibleTerms.test(JSON.stringify(tSet.d3Chart)), `Forbidden term in d3Chart (${lang})`);
+
+    const editorial = CHARTS_EDITORIAL_TRANSLATIONS[lang];
+    assert.equal(editorial.sections.length, 4, `Expected 4 editorial sections in ${lang}`);
+    assert.equal(editorial.faqItems.length, 4, `Expected 4 FAQ items in ${lang}`);
+    assert.ok(!forbiddenVisibleTerms.test(JSON.stringify(editorial)), `Forbidden term in chartsEditorial (${lang})`);
+  }
+
+  assert.ok(!forbiddenVisibleTerms.test(advChartsViewSource), 'AdvancedChartsView.tsx must not expose third-party engine/provider names');
+  assert.ok(!forbiddenVisibleTerms.test(unifiedViewSource), 'UnifiedAssetDetailView.tsx must not expose third-party engine/provider names');
+  // D3AdvancedChart uses d3 library internally via import, so verify JSX visible labels use tD3.* rather than literal D3 v7
+  assert.ok(!/D3 v7/.test(d3ChartSource), 'D3AdvancedChart.tsx must not contain visible D3 v7 text');
+});
+
+

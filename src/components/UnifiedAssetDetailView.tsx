@@ -7,17 +7,11 @@ import {
   TrendingUp,
   TrendingDown,
   Sparkles,
-  ShieldAlert,
-  ShieldCheck,
   Building2,
   Layers,
   Activity,
   CheckCircle2,
   AlertTriangle,
-  Info,
-  DollarSign,
-  Maximize2,
-  Share2,
 } from 'lucide-react';
 import { MarketAsset } from '../services/marketData';
 import { useMarket } from '../context/MarketContext';
@@ -47,7 +41,7 @@ export const UnifiedAssetDetailView: React.FC<UnifiedAssetDetailViewProps> = ({
   onBack,
   isModal = false,
 }) => {
-  const { assets, universalRates, addPortfolioPosition, setActiveTab, setSelectedAsset } = useMarket();
+  const { assets, universalRates, addPortfolioPosition, setActiveTab } = useMarket();
   const { lang } = useI18n();
   const locale = getNumberLocale(lang);
   const tDetail = VIEWS_TRANSLATIONS[lang].assetDetail;
@@ -152,20 +146,8 @@ export const UnifiedAssetDetailView: React.FC<UnifiedAssetDetailViewProps> = ({
             <span>{tDetail.backToOverview}</span>
           </button>
 
-          {/* Action Buttons: Guia de Câmbio, Seguir Ativo, Adicionar Alerta, Adicionar ao Portfólio */}
+          {/* Action Buttons: Seguir Ativo, Adicionar Alerta, Adicionar ao Portfólio */}
           <div className="flex items-center gap-2 flex-wrap">
-            {/* Guia de Câmbio & Spread */}
-            <button
-              onClick={() => {
-                setSelectedAsset(asset);
-                if (onBack) onBack();
-                setActiveTab('guia_cambio');
-              }}
-              className="flex items-center gap-1.5 text-xs font-bold px-3 py-2 rounded-xl bg-[#E3F7F2] hover:bg-[#009B77] text-[#006B52] hover:text-white dark:bg-emerald-500/15 dark:text-emerald-300 dark:hover:bg-emerald-500/25 border border-[#009B77]/40 dark:border-emerald-500/40 shadow-sm cursor-pointer transition active:scale-95"
-            >
-              <Activity className="w-3.5 h-3.5 text-current" />
-              <span>{tDetail.tradeDayTradePro}</span>
-            </button>
             {/* Seguir Ativo */}
             <button
               onClick={() => setIsFollowing((prev) => !prev)}
@@ -307,7 +289,7 @@ export const UnifiedAssetDetailView: React.FC<UnifiedAssetDetailViewProps> = ({
           >
             {pctInfo.isNegative ? <TrendingDown className="w-5 h-5" /> : <TrendingUp className="w-5 h-5" />}
             <span>
-              {formatSignedCurrencyChange(asset.changeValue, asset.currency, priceDecimals, locale)}{' '}
+              {formatSignedCurrencyChange(asset.changeValue, isIndex ? 'PTS' : asset.currency, priceDecimals, locale)}{' '}
               ({pctInfo.text})
             </span>
           </div>
@@ -318,7 +300,7 @@ export const UnifiedAssetDetailView: React.FC<UnifiedAssetDetailViewProps> = ({
         </div>
       </div>
 
-      {/* 3. Motor Gráfico Avançado (Motor Gráfico D3 v7) */}
+      {/* 3. Terminal Gráfico Interativo DinhEuro */}
       <div className="space-y-3">
         <div className="flex items-center justify-between px-1">
           <div className="flex items-center gap-2">
@@ -329,7 +311,7 @@ export const UnifiedAssetDetailView: React.FC<UnifiedAssetDetailViewProps> = ({
           </div>
         </div>
 
-        {/* D3 v7 Chart Surface */}
+        {/* Interactive Chart Surface */}
         <D3AdvancedChart
           asset={asset}
           comparisonAssets={assets}

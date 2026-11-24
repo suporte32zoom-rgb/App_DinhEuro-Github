@@ -519,10 +519,10 @@ export const D3AdvancedChart: React.FC<D3AdvancedChartProps> = ({
         {hoveredPoint ? (
           <div className="flex items-center gap-3 text-xs bg-[#F4F7F9] dark:bg-slate-900/90 border border-[#E2E8F0] dark:border-slate-700/80 px-3 py-1 rounded-lg text-[#0F172A] dark:text-white">
             <span className="text-[#475569] dark:text-slate-400">{hoveredPoint.time}</span>
-            <span>{tD3.openShort} <strong>{isIndex ? `${hoveredPoint.open.toFixed(priceDecimals)} pts` : hoveredPoint.open.toFixed(priceDecimals)}</strong></span>
-            <span>{tD3.highShort} <strong className="text-[#006B52] dark:text-emerald-400">{isIndex ? `${hoveredPoint.high.toFixed(priceDecimals)} pts` : hoveredPoint.high.toFixed(priceDecimals)}</strong></span>
-            <span>{tD3.lowShort} <strong className="text-[#DC2626] dark:text-rose-400">{isIndex ? `${hoveredPoint.low.toFixed(priceDecimals)} pts` : hoveredPoint.low.toFixed(priceDecimals)}</strong></span>
-            <span>{tD3.closeShort} <strong>{isIndex ? `${hoveredPoint.close.toFixed(priceDecimals)} pts` : hoveredPoint.close.toFixed(priceDecimals)}</strong></span>
+            <span>{tD3.openShort} <strong>{isIndex ? formatPointsValue(hoveredPoint.open, locale) : hoveredPoint.open.toLocaleString(locale, { minimumFractionDigits: priceDecimals, maximumFractionDigits: priceDecimals })}</strong></span>
+            <span>{tD3.highShort} <strong className="text-[#006B52] dark:text-emerald-400">{isIndex ? formatPointsValue(hoveredPoint.high, locale) : hoveredPoint.high.toLocaleString(locale, { minimumFractionDigits: priceDecimals, maximumFractionDigits: priceDecimals })}</strong></span>
+            <span>{tD3.lowShort} <strong className="text-[#DC2626] dark:text-rose-400">{isIndex ? formatPointsValue(hoveredPoint.low, locale) : hoveredPoint.low.toLocaleString(locale, { minimumFractionDigits: priceDecimals, maximumFractionDigits: priceDecimals })}</strong></span>
+            <span>{tD3.closeShort} <strong>{isIndex ? formatPointsValue(hoveredPoint.close, locale) : hoveredPoint.close.toLocaleString(locale, { minimumFractionDigits: priceDecimals, maximumFractionDigits: priceDecimals })}</strong></span>
             {showVolume && <span className="text-[#475569] dark:text-slate-400">{tD3.volShort} {hoveredPoint.volume.toLocaleString(locale)}</span>}
           </div>
         ) : (
