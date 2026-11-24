@@ -97,18 +97,26 @@ export interface ViewsTranslations {
     searchPlaceholder: string;
     refreshTitle: string;
     allNews: string;
-    catPolicyFiscal: string;
-    catMarketsB3: string;
     catMacroFx: string;
     catCentralBanks: string;
-    catCrypto: string;
-    catWallSt: string;
+    catPolicyFiscal: string;
+    catMarketsB3: string;
+    catDigitalInfra: string;
     showingPrefix: string;
     showingSuffix: string;
     clearSearch: string;
-    nowFallback: string;
-    readFull: string;
-    readFullTitlePrefix: string;
+    emptyTitle: string;
+    emptyDesc: string;
+    editorialCriteria: {
+      eyebrow: string;
+      title: string;
+      intro: string;
+      points: Array<{
+        title: string;
+        body: string;
+      }>;
+      disclaimer: string;
+    };
   };
   about: {
     logoAlt: string;
@@ -380,24 +388,53 @@ export const VIEWS_TRANSLATIONS: Record<SupportedLanguage, ViewsTranslations> = 
     },
     news: {
       title: 'Notícias & Cenário Político-Financeiro',
-      liveBadge: 'Ao Vivo',
+      liveBadge: 'Editorial DinhEuro',
       subtitle:
-        'Cobertura em tempo real dos bastidores de Brasília, Congresso, Banco Central (Copom), Wall Street, bolsas europeias e mercado cripto, com redirecionamento direto aos veículos oficiais de imprensa.',
-      searchPlaceholder: 'Buscar por termo, fonte ou político...',
-      refreshTitle: 'Atualizar feed de notícias',
-      allNews: 'Todas as Notícias',
-      catPolicyFiscal: 'Política & Fiscal',
-      catMarketsB3: 'Mercados & B3',
+        'O DinhEuro publica análises macroeconômicas originais elaboradas pela nossa redação a partir de dados públicos do Banco Central do Brasil, MDIC, Banco Central Europeu (BCE) e relatórios institucionais de mercado, conectando política monetária, comércio exterior e câmbio.',
+      searchPlaceholder: 'Buscar por tema, instituição ou palavra-chave...',
+      refreshTitle: 'Sincronizar cotações e análises',
+      allNews: 'Todas as Análises',
       catMacroFx: 'Macro & Câmbio',
       catCentralBanks: 'Bancos Centrais',
-      catCrypto: 'Criptoativos',
-      catWallSt: 'Empresas & Wall St',
+      catPolicyFiscal: 'Política & Comércio',
+      catMarketsB3: 'Mercados & B3',
+      catDigitalInfra: 'Real Digital & Drex',
       showingPrefix: 'Mostrando',
-      showingSuffix: 'matérias em ordem cronológica (mais recentes primeiro)',
+      showingSuffix: 'análises originais em ordem cronológica (mais recentes primeiro)',
       clearSearch: 'Limpar filtro de busca',
-      nowFallback: 'Agora',
-      readFull: 'Ler matéria completa',
-      readFullTitlePrefix: 'Abrir matéria original completa em',
+      emptyTitle: 'Nenhuma análise encontrada para este filtro',
+      emptyDesc:
+        'Ajuste os termos da busca ou selecione outra categoria temática para explorar todas as publicações editoriais disponíveis.',
+      editorialCriteria: {
+        eyebrow: 'Transparência Metodológica',
+        title: 'Critérios Editoriais e Fontes de Referência',
+        intro:
+          'Cada estudo publicado nesta seção é redigido originalmente pela Redação DinhEuro com foco na leitura prática de impactos sobre câmbio (EUR/BRL e USD/BRL), fluxos de comércio exterior e dinâmica dos mercados globais e da B3.',
+        points: [
+          {
+            title: 'Fontes Institucionais Primárias',
+            body:
+              'Os textos partem de estatísticas oficiais, atas e notas técnicas divulgadas pelo Banco Central do Brasil (Copom, Boletim Focus e Agenda BC#), Ministério do Desenvolvimento, Indústria, Comércio e Serviços (MDIC/SECEX), Banco Central Europeu (BCE), Comissão Europeia, B3, Aladi e relatórios setoriais de referência.',
+          },
+          {
+            title: 'Estrutura Analítica e Contextualização Cambial',
+            body:
+              'Em vez de reproduzir despachos externos ou manchetes isoladas, cada análise explica mecanismos de transmissão econômica — como diferenciais de juros, saldos da balança comercial, tarifas aduaneiras e fluxos de capital influenciam preços e poder de compra.',
+          },
+          {
+            title: 'Finalidade Educativa e Informativa',
+            body:
+              'Todo o conteúdo tem caráter estritamente informativo e educacional, destinado a estudantes, profissionais de comércio exterior, viajantes e investidores que buscam compreender o cenário macroeconômico sem barreiras de acesso.',
+          },
+          {
+            title: 'Ausência de Recomendações de Investimento',
+            body:
+              'As análises do DinhEuro não constituem consultoria financeira, indicação de compra ou venda de ativos, nem oferta de produtos regulados. Decisões patrimoniais devem considerar o perfil individual de risco e fontes regulatórias oficiais.',
+          },
+        ],
+        disclaimer:
+          'Conteúdo editorial original • Acesso aberto e gratuito • Consulte sempre as publicações originais dos órgãos oficiais citados em cada artigo.',
+      },
     },
     about: {
       logoAlt: 'Logo Oficial DinhEuro',
@@ -676,24 +713,53 @@ export const VIEWS_TRANSLATIONS: Record<SupportedLanguage, ViewsTranslations> = 
     },
     news: {
       title: 'News & Political-Financial Desk',
-      liveBadge: 'Live',
+      liveBadge: 'DinhEuro Editorial',
       subtitle:
-        'Real-time coverage of Brasília fiscal policy, Congress, Central Bank (Copom), Wall Street, European exchanges, and crypto markets, with direct links to official press outlets.',
-      searchPlaceholder: 'Search by keyword, source, or policymaker...',
-      refreshTitle: 'Refresh news feed',
-      allNews: 'All News',
-      catPolicyFiscal: 'Policy & Fiscal',
-      catMarketsB3: 'Markets & B3',
+        'DinhEuro publishes original macroeconomic analyses prepared by our editorial desk from public data released by the Central Bank of Brazil, MDIC, the European Central Bank (ECB), and institutional market reports—connecting monetary policy, foreign trade, and FX.',
+      searchPlaceholder: 'Search by topic, institution, or keyword...',
+      refreshTitle: 'Refresh market quotes and analyses',
+      allNews: 'All Analyses',
       catMacroFx: 'Macro & FX',
       catCentralBanks: 'Central Banks',
-      catCrypto: 'Crypto Assets',
-      catWallSt: 'Equities & Wall St',
+      catPolicyFiscal: 'Policy & Trade',
+      catMarketsB3: 'Markets & B3',
+      catDigitalInfra: 'Digital Real & Drex',
       showingPrefix: 'Showing',
-      showingSuffix: 'articles in chronological order (most recent first)',
+      showingSuffix: 'original analyses in chronological order (most recent first)',
       clearSearch: 'Clear search filter',
-      nowFallback: 'Now',
-      readFull: 'Read full story',
-      readFullTitlePrefix: 'Open full original article on',
+      emptyTitle: 'No analyses matched this filter',
+      emptyDesc:
+        'Adjust your search terms or switch topic filters to explore all available original editorial briefings.',
+      editorialCriteria: {
+        eyebrow: 'Methodological Transparency',
+        title: 'Editorial Criteria & Reference Sources',
+        intro:
+          'Every report published in this section is authored originally by DinhEuro Editorial with an emphasis on practical implications for EUR/BRL and USD/BRL exchange rates, foreign trade flows, and global and B3 market dynamics.',
+        points: [
+          {
+            title: 'Primary Institutional Sources',
+            body:
+              'Briefings draw directly on official statistics, policy minutes, and technical notes released by the Central Bank of Brazil (Copom, Boletim Focus, and Agenda BC#), Brazil’s Ministry of Development, Industry, Trade and Services (MDIC/SECEX), the European Central Bank (ECB), the European Commission, B3, ALADI, and established sector benchmarks.',
+          },
+          {
+            title: 'Analytical Context Over Wire Aggregation',
+            body:
+              'Rather than republishing third-party headlines or external wire dispatches, each article examines economic transmission channels—showing how rate spreads, trade balances, tariffs, and capital flows shape pricing and purchasing power.',
+          },
+          {
+            title: 'Educational & Informational Purpose',
+            body:
+              'All editorial material is strictly educational and informational, built for students, trade practitioners, travelers, and global market observers seeking clear macro context without paywalls or registration.',
+          },
+          {
+            title: 'No Investment Advice',
+            body:
+              'DinhEuro analyses do not constitute personalized financial advice, buy or sell recommendations, or solicitation of regulated financial products. Allocation choices remain the sole responsibility of each reader.',
+          },
+        ],
+        disclaimer:
+          'Original editorial analysis • Free open access • Always consult primary releases from the official institutions cited in each briefing.',
+      },
     },
     about: {
       logoAlt: 'Official DinhEuro Logo',
@@ -972,24 +1038,53 @@ export const VIEWS_TRANSLATIONS: Record<SupportedLanguage, ViewsTranslations> = 
     },
     news: {
       title: 'Noticias & Escenario Político-Financiero',
-      liveBadge: 'En Vivo',
+      liveBadge: 'Editorial DinhEuro',
       subtitle:
-        'Cobertura en tiempo real de Brasilia, Congreso, Banco Central (Copom), Wall Street, bolsas europeas y mercado cripto, con redirección directa a medios oficiales de prensa.',
-      searchPlaceholder: 'Buscar por término, fuente o funcionario...',
-      refreshTitle: 'Actualizar feed de noticias',
-      allNews: 'Todas las Noticias',
-      catPolicyFiscal: 'Política & Fiscal',
-      catMarketsB3: 'Mercados & B3',
+        'DinhEuro publica análisis macroeconómicos originales elaborados por nuestra redacción a partir de datos públicos del Banco Central de Brasil, MDIC, el Banco Central Europeo (BCE) e informes institucionales de mercado, conectando política monetaria, comercio exterior y divisas.',
+      searchPlaceholder: 'Buscar por tema, institución o palabra clave...',
+      refreshTitle: 'Sincronizar cotizaciones y análisis',
+      allNews: 'Todos los Análisis',
       catMacroFx: 'Macro & Divisas',
       catCentralBanks: 'Bancos Centrales',
-      catCrypto: 'Criptoactivos',
-      catWallSt: 'Empresas & Wall St',
+      catPolicyFiscal: 'Política & Comercio',
+      catMarketsB3: 'Mercados & B3',
+      catDigitalInfra: 'Real Digital & Drex',
       showingPrefix: 'Mostrando',
-      showingSuffix: 'artículos en orden cronológico (más recientes primero)',
+      showingSuffix: 'análisis originales en orden cronológico (más recientes primero)',
       clearSearch: 'Limpiar filtro de búsqueda',
-      nowFallback: 'Ahora',
-      readFull: 'Leer nota completa',
-      readFullTitlePrefix: 'Abrir artículo original completo en',
+      emptyTitle: 'No se encontraron análisis para este filtro',
+      emptyDesc:
+        'Modifica los términos de búsqueda o cambia la categoría temática para consultar todas las publicaciones editoriales disponibles.',
+      editorialCriteria: {
+        eyebrow: 'Transparencia Metodológica',
+        title: 'Criterios Editoriales y Fuentes de Referencia',
+        intro:
+          'Cada estudio publicado en esta sección es redactado originalmente por la Redacción DinhEuro con foco en el impacto práctico sobre los tipos de cambio EUR/BRL y USD/BRL, el comercio exterior y la dinámica de los mercados globales y B3.',
+        points: [
+          {
+            title: 'Fuentes Institucionales Primarias',
+            body:
+              'Los artículos se apoyan en estadísticas oficiales, actas y notas técnicas divulgadas por el Banco Central de Brasil (Copom, Boletín Focus y Agenda BC#), el Ministerio de Desarrollo, Industria, Comercio y Servicios (MDIC/SECEX), el Banco Central Europeo (BCE), la Comisión Europea, B3, Aladi e informes sectoriales de referencia.',
+          },
+          {
+            title: 'Enfoque Analítico y Transmisión Cambiaria',
+            body:
+              'En lugar de reproducir cables externos o titulares aislados, cada texto explica mecanismos de transmisión económica —cómo diferenciales de tasas, balanzas comerciales, aranceles y flujos de capital inciden en precios y poder adquisitivo.',
+          },
+          {
+            title: 'Finalidad Educativa e Informativa',
+            body:
+              'Todo el contenido tiene carácter estrictamente informativo y educativo, pensado para estudiantes, operadores de comercio exterior, viajeros e inversores que buscan comprender la coyuntura macroeconómica con acceso abierto.',
+          },
+          {
+            title: 'Ausencia de Recomendaciones de Inversión',
+            body:
+              'Los análisis de DinhEuro no constituyen asesoría financiera personalizada, recomendación de compra o venta de activos ni oferta de productos regulados. Cada lector asume sus propias decisiones patrimoniales.',
+          },
+        ],
+        disclaimer:
+          'Contenido editorial original • Acceso libre y gratuito • Consulta siempre las publicaciones primarias de los organismos oficiales citados en cada análisis.',
+      },
     },
     about: {
       logoAlt: 'Logotipo Oficial DinhEuro',

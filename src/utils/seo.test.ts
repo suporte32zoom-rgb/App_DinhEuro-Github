@@ -196,22 +196,59 @@ test('APEC 2026 and ALADI 2026 editorial insights preserve prior items up to 12 
     path.resolve(process.cwd(), 'src/views/NewsView.tsx'),
     'utf8'
   );
-  assert.ok(newsViewSource.includes("'nvidia-retorno-jensen-huang-ceo-2026'"));
-  assert.ok(newsViewSource.includes("'cop31-fracasso-antalia-cinco-fatores-2026'"));
-  assert.ok(newsViewSource.includes("'acordo-comercial-ue-mercosul-2026'"));
-  assert.ok(
-    newsViewSource.includes("'mdic-consulta-publica-salvaguardas-bilaterais-2026'")
-  );
-  assert.ok(
-    newsViewSource.includes("'anthropic-ipo-turbulencia-wall-street-2026'")
-  );
-  assert.ok(
-    newsViewSource.includes("'mdic-acordo-mercosul-ue-exportacoes-21-por-cento-2026'")
-  );
-  assert.ok(newsViewSource.includes("'trump-inteligencia-jensen-huang-nvidia-2026'"));
-  assert.ok(newsViewSource.includes("'terras-raras-disparidade-precos-brasil-china-2026'"));
-  assert.ok(newsViewSource.includes("'greves-jovens-europa-custo-vida-2026'"));
-  assert.ok(newsViewSource.includes("'coinbase-deribit-aquisicao-infraestrutura-2026'"));
+  assert.ok(!newsViewSource.includes('nvidia-retorno-jensen-huang-ceo-2026'));
+  assert.ok(!newsViewSource.includes('anthropic-ipo-turbulencia-wall-street-2026'));
+  assert.ok(!newsViewSource.includes('trump-inteligencia-jensen-huang-nvidia-2026'));
+  assert.ok(!newsViewSource.includes('INITIAL_NEWS'));
+  assert.ok(!newsViewSource.includes('tNews.readFull'));
+  assert.ok(newsViewSource.includes('NEWS_EDITORIAL_ARTICLES'));
+  assert.ok(newsViewSource.includes('tNews.editorialCriteria.title'));
+
+  const { NEWS_EDITORIAL_ARTICLES } = await import('../data/newsEditorialArticles.ts');
+  assert.equal(NEWS_EDITORIAL_ARTICLES.length, 9);
+  const expectedNewsIds = [
+    'bcb-selic-focus-vs-bce-politica-monetaria-2026',
+    'dinamica-cambio-comercial-eur-usd-comercio-exterior-2026',
+    'fluxo-estrangeiro-b3-commodities-brent-minerio-2026',
+    'infraestrutura-digital-real-digital-drex-2026',
+    'acordo-comercial-ue-mercosul-2026',
+    'mdic-acordo-mercosul-ue-exportacoes-21-por-cento-2026',
+    'mdic-consulta-publica-salvaguardas-bilaterais-2026',
+    'terras-raras-disparidade-precos-brasil-china-2026',
+    'aladi-cosmeticos-exportacao-brasil-2026',
+  ];
+  for (const expectedId of expectedNewsIds) {
+    assert.ok(
+      NEWS_EDITORIAL_ARTICLES.some((article) => article.id === expectedId),
+      `Missing expected news editorial article: ${expectedId}`
+    );
+  }
+  const forbiddenTechTerms = /finnhub|awesomeapi|coingecko|brapi|yahoo\s*finance|vite|github|cloudflare|recharts/i;
+  for (const article of NEWS_EDITORIAL_ARTICLES) {
+    for (const locale of ['pt', 'en', 'es'] as const) {
+      const content = article.translations[locale];
+      const plainText = content.fullContent
+        .join(' ')
+        .replace(/!\[[^\]]*\]\([^)]+\)/g, ' ')
+        .trim();
+      const wordCount = plainText.split(/\s+/).filter(Boolean).length;
+      assert.ok(
+        wordCount >= 450,
+        `Article ${article.id} (${locale}) must have at least 450 words, found ${wordCount}`
+      );
+      assert.ok(content.source.length > 10, `Article ${article.id} (${locale}) must cite official sources`);
+      assert.ok(!forbiddenTechTerms.test(plainText), `Forbidden term in ${article.id} (${locale})`);
+    }
+  }
+
+  const { VIEWS_TRANSLATIONS } = await import('../i18n/viewsTranslations.ts');
+  for (const locale of ['pt', 'en', 'es'] as const) {
+    const newsT = VIEWS_TRANSLATIONS[locale].news;
+    assert.ok(!/veículos oficiais de imprensa|official press outlets|medios de prensa oficiales/i.test(newsT.subtitle));
+    assert.equal(newsT.editorialCriteria.points.length, 4);
+    assert.ok(newsT.editorialCriteria.intro.length > 40);
+    assert.ok(newsT.editorialCriteria.disclaimer.length > 20);
+  }
 
   const schema = buildEditorialArticlesSchema('pt', [], {
     id: 'acordo-comercial-ue-mercosul-2026',
@@ -240,7 +277,7 @@ test('APEC 2026 and ALADI 2026 editorial insights preserve prior items up to 12 
     path.resolve(process.cwd(), 'src/components/EditorialInsightModal.tsx'),
     'utf8'
   );
-  assert.ok(newsViewSource.includes('data-overlay-dark="true"\n                  className="pointer-events-none absolute inset-0'));
+  assert.ok(/data-overlay-dark="true"\s+className="pointer-events-none absolute inset-0/.test(newsViewSource));
   assert.ok(modalSource.includes('data-overlay-dark="true"\n            className="pointer-events-none absolute inset-0'));
 });
 
