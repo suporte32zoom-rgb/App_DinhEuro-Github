@@ -348,7 +348,7 @@ export const INITIAL_NEWS: NewsItem[] = [
   {
     id: 'news_1',
     title: 'Copom & Política Monetária: Mercado recalibra projeções para a taxa Selic após ata do Banco Central e dados de inflação',
-    summary: 'Analistas do mercado financeiro e economistas-chefe projetam trajetória da política monetária e reflexos nos juros futuros (DI) da B3.',
+    summary: 'Síntese DinhEuro: A reprecificação da curva de juros futuros (DI) na B3 afeta diretamente o diferencial de retorno frente aos EUA e ao Euro, influenciando o fluxo cambial no curto prazo.',
     source: 'Valor Econômico',
     url: 'https://valor.globo.com/financas/',
     category: 'Política & Fiscal',
@@ -359,7 +359,7 @@ export const INITIAL_NEWS: NewsItem[] = [
   {
     id: 'news_2',
     title: 'Congresso Nacional: Lideranças debatem medidas de contenção de gastos públicos e metas do arcabouço fiscal',
-    summary: 'Negociações em Brasília entre Ministério da Fazenda e Congresso buscam equilibrar contas públicas e garantir sustentabilidade da dívida.',
+    summary: 'Síntese DinhEuro: O ritmo de convergência das contas públicas condiciona o prêmio de risco soberano, impactando o dólar comercial, os juros longos e o apetite por ativos brasileiros.',
     source: 'CNN Brasil Economia',
     url: 'https://www.cnnbrasil.com.br/economia/',
     category: 'Política & Fiscal',
@@ -370,7 +370,7 @@ export const INITIAL_NEWS: NewsItem[] = [
   {
     id: 'news_3',
     title: 'Ibovespa opera com fluxo estrangeiro: Ações de Petrobras (PETR4) e Vale (VALE3) lideram volume na B3',
-    summary: 'Entrada de capital não-residente e repique das commodities no mercado internacional impulsionam ações de alta liquidez.',
+    summary: 'Síntese DinhEuro: A combinação de capital externo e cotações firmes de petróleo e minério sustenta os papéis de maior peso no índice e amplia a liquidez de entrada de divisas no país.',
     source: 'InfoMoney',
     url: 'https://www.infomoney.com.br/mercados/',
     category: 'Mercados & B3',
@@ -381,7 +381,7 @@ export const INITIAL_NEWS: NewsItem[] = [
   {
     id: 'news_4',
     title: 'Câmbio Comercial: Dólar e Euro operam com foco nas remessas corporativas e diferencial de juros Brasil-EUA',
-    summary: 'Mesas de câmbio interbancárias acompanham liquidez spot e leilões de linha do Banco Central em meio à volatilidade global.',
+    summary: 'Síntese DinhEuro: Fluxos sazonais de remessas e atuações pontuais do Banco Central via leilões de linha calibram a liquidez no câmbio pronto e a formação da PTAX.',
     source: 'Reuters Brasil',
     url: 'https://www.reuters.com/markets/currencies/',
     category: 'Macro & Câmbio',
@@ -392,7 +392,7 @@ export const INITIAL_NEWS: NewsItem[] = [
   {
     id: 'news_5',
     title: 'Inflação e CPI dos EUA: Federal Reserve sinaliza cautela nos cortes de juros diante da resiliência do mercado de trabalho',
-    summary: 'Discursos de dirigentes do Fed apontam manutenção de postura dependente de dados macroeconômicos antes de novas decisões.',
+    summary: 'Síntese DinhEuro: Taxas dos Treasuries sustentadas em patamar restritivo mantêm o dólar fortalecido globalmente e exigem seletividade maior em moedas emergentes.',
     source: 'Bloomberg Línea',
     url: 'https://www.bloomberglinea.com.br/mercados/',
     category: 'Macro & Bancos Centrais',
@@ -403,7 +403,7 @@ export const INITIAL_NEWS: NewsItem[] = [
   {
     id: 'news_6',
     title: 'Balanços da B3: Grandes bancos (Itaú, Bradesco, BB) superam estimativas com controle de inadimplência e crédito',
-    summary: 'Temporada de resultados trimestrais confirma rentabilidade sobre o patrimônio (ROE) elevada e expansão da carteira consignada.',
+    summary: 'Síntese DinhEuro: Margens financeiras estáveis e menor provisão para devedores sustentam o setor financeiro no Ibovespa e reforçam a atratividade por dividendos na B3.',
     source: 'Exame Invest',
     url: 'https://exame.com/invest/',
     category: 'Mercados & B3',
@@ -414,7 +414,7 @@ export const INITIAL_NEWS: NewsItem[] = [
   {
     id: 'news_7',
     title: 'Mercado de Criptoativos: Bitcoin sustenta liquidez robusta com influxo líquido contínuo em ETFs institucionais',
-    summary: 'Gestoras globais como BlackRock e Fidelity registram volumes diários consistentes de compra em produtos listados.',
+    summary: 'Síntese DinhEuro: Captações consistentes em ETFs regulados reduzem a oferta circulante e aumentam a correlação tática dos criptoativos com índices de tecnologia.',
     source: 'CoinDesk',
     url: 'https://www.coindesk.com/',
     category: 'Criptoativos',
@@ -425,7 +425,7 @@ export const INITIAL_NEWS: NewsItem[] = [
   {
     id: 'news_8',
     title: 'Reforma Tributária e Regulamentação: Ministério da Fazenda conclui minutas de regulamentação do IBS e CBS',
-    summary: 'Texto complementar detalha regras do comitê gestor e período de transição dos tributos sobre o consumo no país.',
+    summary: 'Síntese DinhEuro: A definição das regras de transição para o IVA dual amplia a previsibilidade para cadeias exportadoras e reduz custos cumulativos no comércio exterior.',
     source: 'G1 Economia',
     url: 'https://g1.globo.com/economia/',
     category: 'Política & Fiscal',
@@ -436,7 +436,7 @@ export const INITIAL_NEWS: NewsItem[] = [
   {
     id: 'news_9',
     title: 'Wall Street: S&P 500 e Nasdaq registram ganhos impulsionados por semicondutores e big techs (NVDA, MSFT)',
-    summary: 'Demanda contínua por infraestrutura de computação de alta performance e inteligência artificial sustenta o rali em Nova York.',
+    summary: 'Síntese DinhEuro: O avanço das empresas ligadas à infraestrutura de IA eleva o apetite por risco em Nova York e apoia ações globais de tecnologia.',
     source: 'CNBC Markets',
     url: 'https://www.cnbc.com/markets/',
     category: 'Empresas & Wall St',
@@ -447,7 +447,7 @@ export const INITIAL_NEWS: NewsItem[] = [
   {
     id: 'news_10',
     title: 'Treasuries & Renda Fixa Global: Rendimento dos títulos de 10 anos atrai fluxo de gestores internacionais',
-    summary: 'Taxas soberanas norte-americanas e spreads de risco de crédito soberano de mercados emergentes mostram acomodação.',
+    summary: 'Síntese DinhEuro: A estabilização dos rendimentos soberanos dos EUA alivia pressões sobre moedas emergentes e reduz a volatilidade nas curvas de juros globais.',
     source: 'The Wall Street Journal',
     url: 'https://www.wsj.com/finance',
     category: 'Macro & Bancos Centrais',
@@ -458,7 +458,7 @@ export const INITIAL_NEWS: NewsItem[] = [
   {
     id: 'news_11',
     title: 'Zona do Euro: Banco Central Europeu (BCE) monitora custos de energia e balança comercial do bloco europeu',
-    summary: 'Presidente do BCE reitera vigilância sobre a transmissão monetária na Alemanha e França para conter pressões residuais de preços.',
+    summary: 'Síntese DinhEuro: Decisões do BCE diante da inflação de serviços e custos energéticos redefinem o patamar do Euro frente ao Dólar (EUR/USD) e ao Real (EUR/BRL).',
     source: 'Financial Times',
     url: 'https://www.ft.com/markets',
     category: 'Macro & Câmbio',
@@ -469,7 +469,7 @@ export const INITIAL_NEWS: NewsItem[] = [
   {
     id: 'news_12',
     title: 'Agronegócio & Balança Comercial: Exportações de soja e milho mantêm superávit recorde na balança comercial brasileira',
-    summary: 'Receita cambial gerada pelo setor produtivo rural fortalece as reservas internacionais do Banco Central e sustenta o PIB.',
+    summary: 'Síntese DinhEuro: O saldo comercial positivo amplia a entrada líquida de divisas estrangeiras, atuando como amortecedor estrutural para o Real em cenários de estresse externo.',
     source: 'Investing.com Brasil',
     url: 'https://br.investing.com/news/',
     category: 'Mercados & B3',
@@ -480,7 +480,7 @@ export const INITIAL_NEWS: NewsItem[] = [
   {
     id: 'news_13',
     title: 'Dívida Pública e Tesouro Nacional: Emissões de títulos indexados ao IPCA batem recorde de demanda no Tesouro Direto',
-    summary: 'Pessoas físicas aumentam alocação em Tesouro IPCA+ e RendA+ buscando taxas reais atrativas para aposentadoria.',
+    summary: 'Síntese DinhEuro: Juros reais elevados nos papéis públicos atraem poupança doméstica de longo prazo e competem diretamente com alocações em renda variável local.',
     source: 'Valor Econômico',
     url: 'https://valor.globo.com/financas/',
     category: 'Política & Fiscal',
@@ -491,7 +491,7 @@ export const INITIAL_NEWS: NewsItem[] = [
   {
     id: 'news_14',
     title: 'Ethereum e Solana: Volume diário em finanças descentralizadas (DeFi) cresce com adoção de stablecoins lastreadas em dólar',
-    summary: 'Protocolos de empréstimos e liquidez descentralizada registram valor total bloqueado (TVL) em expansão acelerada.',
+    summary: 'Síntese DinhEuro: A expansão das liquidações em stablecoins reforça a utilidade de redes de contratos inteligentes e amplia a velocidade de remessas globais.',
     source: 'CoinDesk',
     url: 'https://www.coindesk.com/',
     category: 'Criptoativos',
@@ -502,7 +502,7 @@ export const INITIAL_NEWS: NewsItem[] = [
   {
     id: 'news_15',
     title: 'Commodities de Energia: Petróleo Brent oscila no mercado internacional diante de tensões geopolíticas no Oriente Médio',
-    summary: 'Cartel da OPEP+ reafirma política de cortes graduais de oferta enquanto produção nos Estados Unidos atinge pico histórico.',
+    summary: 'Síntese DinhEuro: Variações no Brent afetam diretamente as expectativas de inflação global, o custo de fretes marítimos e as ações do setor de óleo e gás na B3.',
     source: 'Bloomberg Línea',
     url: 'https://www.bloomberglinea.com.br/mercados/',
     category: 'Mercados & B3',
@@ -513,7 +513,7 @@ export const INITIAL_NEWS: NewsItem[] = [
   {
     id: 'news_16',
     title: 'Inteligência Artificial: Gigantes de tecnologia anunciam investimentos recordes em data centers e semicondutores para 2026',
-    summary: 'Microsoft, Alphabet, Meta e Amazon projetam capex conjunto superior a 200 bilhões de dólares voltado a clusters de IA.',
+    summary: 'Síntese DinhEuro: A escala de capex das big techs sustenta cadeias globais de chips, energia e equipamentos elétricos, impactando exportadores industriais.',
     source: 'Reuters Brasil',
     url: 'https://www.reuters.com/markets/',
     category: 'Empresas & Wall St',
@@ -524,7 +524,7 @@ export const INITIAL_NEWS: NewsItem[] = [
   {
     id: 'news_17',
     title: 'Setor Imobiliário & FIIs: IFIX registra estabilidade e fundos de tijolo atraem investidores com contratos atípicos',
-    summary: 'Galpões logísticos e lajes corporativas premium mantêm vacância baixa nas regiões metropolitanas de São Paulo e Rio.',
+    summary: 'Síntese DinhEuro: Vacância reduzida em galpões logísticos e lajes corporativas sustenta rendimentos isentos no Brasil mesmo sob juros restritivos.',
     source: 'InfoMoney',
     url: 'https://www.infomoney.com.br/mercados/',
     category: 'Mercados & B3',
@@ -535,7 +535,7 @@ export const INITIAL_NEWS: NewsItem[] = [
   {
     id: 'news_18',
     title: 'Política Fiscal dos EUA: Discussões sobre teto da dívida e despesas obrigatórias movimentam o Congresso americano',
-    summary: 'Comitês orçamentários em Washington avaliam impactos da trajetória do déficit federal na credibilidade das notas do Tesouro.',
+    summary: 'Síntese DinhEuro: Impasses fiscais em Washington costumam elevar a volatilidade dos Treasuries e gerar ajustes rápidos na precificação do dólar frente a moedas globais.',
     source: 'The Wall Street Journal',
     url: 'https://www.wsj.com/finance',
     category: 'Política & Fiscal',
@@ -546,7 +546,7 @@ export const INITIAL_NEWS: NewsItem[] = [
   {
     id: 'news_19',
     title: 'Setor Elétrico Nacional: Eletrobras, Equatorial e CPFL avançam em leilões de transmissão e transição energética',
-    summary: 'Novas linhas para escoamento de energia solar e eólica do Nordeste consolidam investimentos multibilionários em infraestrutura.',
+    summary: 'Síntese DinhEuro: Receitas reguladas corrigidas pela inflação mantêm o setor elétrico como porto defensivo em carteiras expostas à B3.',
     source: 'Exame Invest',
     url: 'https://exame.com/invest/',
     category: 'Mercados & B3',
@@ -557,7 +557,7 @@ export const INITIAL_NEWS: NewsItem[] = [
   {
     id: 'news_20',
     title: 'Bolsas Asiáticas: Nikkei no Japão e Hang Seng em Hong Kong fecham pregão com apetite a risco em ações de tecnologia',
-    summary: 'Estabilidade cambial do Iene e medidas de apoio ao mercado de capitais na China impulsionam índices da região asiática.',
+    summary: 'Síntese DinhEuro: Sinais de estabilidade na Ásia melhoram o humor global antes da abertura europeia e americana, favorecendo commodities metálicas.',
     source: 'Financial Times',
     url: 'https://www.ft.com/markets',
     category: 'Macro & Bancos Centrais',
@@ -568,7 +568,7 @@ export const INITIAL_NEWS: NewsItem[] = [
   {
     id: 'news_21',
     title: 'Varejo Brasileiro: Black Friday e fim de ano impulsionam vendas no e-commerce e crédito parcelado',
-    summary: 'Grandes varejistas listadas na B3 (Magazine Luiza, Mercado Livre, Assaí) reportam aumento no tíquete médio e fidelização.',
+    summary: 'Síntese DinhEuro: O desempenho das vendas sazonais serve de termômetro para o consumo das famílias e para as margens das varejistas listadas na B3.',
     source: 'CNN Brasil Economia',
     url: 'https://www.cnnbrasil.com.br/economia/',
     category: 'Mercados & B3',
@@ -579,7 +579,7 @@ export const INITIAL_NEWS: NewsItem[] = [
   {
     id: 'news_22',
     title: 'Regulamentação Cripto no Brasil: Banco Central avança na consulta pública sobre regras de custódia e stablecoins',
-    summary: 'Marco regulatório de prestadoras de serviços de ativos virtuais (VASPs) entra na fase de implementação das diretrizes finais.',
+    summary: 'Síntese DinhEuro: Regras claras de segregação patrimonial e câmbio para ativos virtuais aproximam o mercado cripto brasileiro de fluxos institucionais.',
     source: 'InfoMoney',
     url: 'https://www.infomoney.com.br/mercados/',
     category: 'Política & Fiscal',
@@ -590,7 +590,7 @@ export const INITIAL_NEWS: NewsItem[] = [
   {
     id: 'news_23',
     title: 'Minério de Ferro: Cotações em Dalian e Cingapura reagem a novos estímulos de infraestrutura urbana na China',
-    summary: 'Aço chinês e demanda de siderúrgicas locais sustentam preços da commodity e apoiam receitas de exportação da Vale (VALE3).',
+    summary: 'Síntese DinhEuro: A reposição de estoques siderúrgicos na China sustenta os preços do minério, impactando diretamente a geração de caixa da Vale e a balança brasileira.',
     source: 'Investing.com Brasil',
     url: 'https://br.investing.com/news/',
     category: 'Mercados & B3',
@@ -601,7 +601,7 @@ export const INITIAL_NEWS: NewsItem[] = [
   {
     id: 'news_24',
     title: 'Fusões & Aquisições (M&A): Empresas brasileiras de tecnologia e agritech lideram rodadas de consolidação de mercado',
-    summary: 'Bancos de investimento registram retomada de mandatos de fusão com valuations mais atrativos e busca por sinergias operacionais.',
+    summary: 'Síntese DinhEuro: Valuations descontados e busca por ganhos de escala reativam operações estratégicas em setores exportadores e de tecnologia no Brasil.',
     source: 'Valor Econômico',
     url: 'https://valor.globo.com/financas/',
     category: 'Mercados & B3',

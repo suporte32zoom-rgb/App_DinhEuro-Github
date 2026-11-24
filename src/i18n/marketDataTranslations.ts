@@ -274,197 +274,197 @@ const INITIAL_NEWS_TRANSLATIONS: Record<
   en: {
     news_1: {
       title: 'Copom & Monetary Policy: Markets recalibrate Selic rate bets after Central Bank minutes and inflation data',
-      summary: 'Chief economists and fixed-income desks reassess Brazil’s monetary policy path and impacts on B3 DI interest-rate futures.',
+      summary: 'DinhEuro Synthesis: Repricing across B3 DI interest-rate futures directly alters Brazil’s yield differential versus the US and Eurozone, shaping short-term FX flows.',
     },
     news_2: {
       title: 'National Congress debates public spending containment and fiscal framework targets',
-      summary: 'Negotiations in Brasília between the Ministry of Finance and lawmakers seek budget balance and long-term debt sustainability.',
+      summary: 'DinhEuro Synthesis: Fiscal consolidation signals in Brasília anchor sovereign risk premia, influencing commercial USD/BRL pricing, long yields, and local equity appetite.',
     },
     news_3: {
       title: 'Ibovespa tracks foreign inflows as Petrobras (PETR4) and Vale (VALE3) lead B3 turnover',
-      summary: 'Non-resident capital inflows and firmer global commodity prices lift blue-chip Brazilian equities.',
+      summary: 'DinhEuro Synthesis: Non-resident equity inflows paired with firmer global commodities lift heavyweight B3 benchmarks and boost FX export liquidity.',
     },
     news_4: {
       title: 'Commercial FX: Dollar and Euro track corporate remittances and Brazil–US rate differentials',
-      summary: 'Interbank FX desks monitor spot liquidity and Central Bank FX credit-line auctions amid global volatility.',
+      summary: 'DinhEuro Synthesis: Seasonal corporate remittance flows and Central Bank FX credit-line auctions guide spot liquidity and daily PTAX formation.',
     },
     news_5: {
       title: 'US Inflation & CPI: Federal Reserve signals caution on rate cuts amid resilient labor market',
-      summary: 'Fed officials emphasize a strictly data-dependent stance before committing to further policy easing.',
+      summary: 'DinhEuro Synthesis: Restrictive Treasury yields keep the US dollar supported globally, requiring greater selectivity toward emerging-market currencies.',
     },
     news_6: {
       title: 'B3 Earnings: Major Brazilian banks beat consensus on delinquency control and credit growth',
-      summary: 'Quarterly results confirm strong return on equity (ROE) and expanding payroll-deductible loan books.',
+      summary: 'DinhEuro Synthesis: Stable net interest margins and lower credit provisions underpin banking weights on the Ibovespa and dividend appeal on B3.',
     },
     news_7: {
       title: 'Crypto Markets: Bitcoin holds deep liquidity supported by steady institutional ETF inflows',
-      summary: 'Global asset managers including BlackRock and Fidelity post consistent daily net creations across listed spot products.',
+      summary: 'DinhEuro Synthesis: Consistent net creations in regulated spot ETFs tighten circulating supply and strengthen tactical correlation with US tech benchmarks.',
     },
     news_8: {
       title: 'Tax Reform Regulation: Ministry of Finance finalizes draft rules for IBS and CBS',
-      summary: 'Complementary legislation outlines governance committee powers and the multi-year consumption tax transition.',
+      summary: 'DinhEuro Synthesis: Clearer transition rules for Brazil’s dual VAT improve long-term predictability for exporters and trim cascading tax costs.',
     },
     news_9: {
       title: 'Wall Street: S&P 500 and Nasdaq advance on semiconductor and mega-cap tech momentum',
-      summary: 'Sustained demand for high-performance computing infrastructure keeps New York equity benchmarks bid.',
+      summary: 'DinhEuro Synthesis: Sustained AI-infrastructure spending lifts New York equity indices and reinforces broader global risk appetite.',
     },
     news_10: {
       title: 'Treasuries & Global Bonds: 10-year yields draw demand from international institutional allocators',
-      summary: 'US sovereign yields and emerging-market credit spreads stabilize as global bond buyers lock in carry.',
+      summary: 'DinhEuro Synthesis: Stabilizing US sovereign yields ease pressure on emerging-market currencies and dampen volatility across global bond curves.',
     },
     news_11: {
       title: 'Eurozone: European Central Bank monitors energy costs and regional trade balance',
-      summary: 'ECB leadership reiterates vigilance on monetary transmission in Germany and France to contain residual price pressures.',
+      summary: 'DinhEuro Synthesis: ECB policy guidance on services inflation and energy costs sets the tone for EUR/USD and EUR/BRL cross-rate pricing.',
     },
     news_12: {
       title: 'Agribusiness & Trade: Soybean and corn exports sustain record Brazilian trade surplus',
-      summary: 'FX inflows from agricultural shipments bolster Central Bank reserves and support domestic GDP.',
+      summary: 'DinhEuro Synthesis: Strong agricultural export receipts bolster net FX inflows, acting as a structural cushion for the Brazilian real during global volatility.',
     },
     news_13: {
       title: 'Public Debt & Treasury: IPCA-linked bond issuances hit record retail demand on Tesouro Direto',
-      summary: 'Individual investors step up allocations to Tesouro IPCA+ and RendA+ to lock in real yields for retirement.',
+      summary: 'DinhEuro Synthesis: High real yields on inflation-linked sovereign notes capture long-term domestic savings and compete with local equity allocations.',
     },
     news_14: {
       title: 'Ethereum & Solana: Daily DeFi volume expands alongside dollar-backed stablecoin adoption',
-      summary: 'Decentralized lending and liquidity protocols record accelerating growth in total value locked (TVL).',
+      summary: 'DinhEuro Synthesis: Rising stablecoin settlement velocity expands smart-contract network usage and lowers friction for cross-border transfers.',
     },
     news_15: {
       title: 'Energy Commodities: Brent crude swings on Middle East geopolitical tensions',
-      summary: 'OPEC+ reaffirms gradual supply discipline while US domestic output holds near historical highs.',
+      summary: 'DinhEuro Synthesis: Brent price swings feed directly into global inflation expectations, maritime freight costs, and B3 oil-and-gas equities.',
     },
     news_16: {
       title: 'Cloud & Chips: Tech giants announce record 2026 capex for data centers and semiconductors',
-      summary: 'Microsoft, Alphabet, Meta, and Amazon project combined infrastructure spending above $200 billion.',
+      summary: 'DinhEuro Synthesis: Mega-cap infrastructure spending sustains global demand for chips, power grids, and industrial electrical equipment exporters.',
     },
     news_17: {
       title: 'Real Estate & REITs: IFIX holds steady as brick-and-mortar funds draw demand with long leases',
-      summary: 'Logistics parks and prime office towers sustain low vacancy rates across São Paulo and Rio de Janeiro.',
+      summary: 'DinhEuro Synthesis: Low vacancy in logistics parks and prime offices supports tax-exempt income yields in Brazil despite tight monetary conditions.',
     },
     news_18: {
       title: 'US Fiscal Policy: Debt ceiling and mandatory spending talks drive debate in Congress',
-      summary: 'Washington budget committees weigh federal deficit trajectories and long-term Treasury supply.',
+      summary: 'DinhEuro Synthesis: Fiscal standoffs in Washington frequently amplify Treasury yield volatility and trigger rapid repricing across dollar pairs.',
     },
     news_19: {
       title: 'Brazilian Utilities: Eletrobras, Equatorial, and CPFL advance in power transmission auctions',
-      summary: 'New high-voltage lines connecting Northeastern solar and wind hubs anchor multi-billion-real grid investments.',
+      summary: 'DinhEuro Synthesis: Inflation-indexed regulated transmission revenues keep Brazilian utilities positioned as defensive anchors on B3.',
     },
     news_20: {
       title: 'Asian Markets: Japan’s Nikkei and Hong Kong’s Hang Seng close higher on tech risk appetite',
-      summary: 'Yen stability and capital-market support measures in China lift regional equity benchmarks.',
+      summary: 'DinhEuro Synthesis: Constructive Asian equity sessions improve global sentiment ahead of European and US trading, supporting industrial metals.',
     },
     news_21: {
       title: 'Brazilian Retail: Seasonal promotions lift e-commerce sales and installment credit demand',
-      summary: 'B3-listed retailers including Magazine Luiza, Mercado Livre, and Assaí report higher average ticket sizes.',
+      summary: 'DinhEuro Synthesis: Seasonal retail turnover serves as a real-time gauge of household demand and margin resilience for B3-listed retailers.',
     },
     news_22: {
       title: 'Crypto Regulation in Brazil: Central Bank advances public rules on custody and stablecoins',
-      summary: 'Virtual asset service provider (VASP) framework enters final implementation phase under BCB supervision.',
+      summary: 'DinhEuro Synthesis: Clear asset-segregation and FX compliance standards bring Brazil’s digital-asset market closer to institutional capital.',
     },
     news_23: {
       title: 'Iron Ore: Dalian and Singapore contracts rebound on fresh Chinese urban infrastructure stimulus',
-      summary: 'Chinese steel mill restocking supports benchmark ore pricing and export revenues for Vale (VALE3).',
+      summary: 'DinhEuro Synthesis: Chinese steel mill restocking supports benchmark ore pricing, directly boosting Vale’s cash flow and Brazil’s trade surplus.',
     },
     news_24: {
       title: 'M&A Activity: Brazilian tech and agritech companies lead wave of market consolidation',
-      summary: 'Investment banks report renewed deal pipelines driven by attractive valuations and operational synergies.',
+      summary: 'DinhEuro Synthesis: Discounted valuations and operational scale synergies are reviving strategic dealmaking across Brazilian export and tech sectors.',
     },
   },
   es: {
     news_1: {
       title: 'Copom & Política Monetaria: El mercado recalibra apuestas para la tasa Selic tras actas del BCB e inflación',
-      summary: 'Economistas y mesas de renta fija ajustan sus proyecciones sobre el ciclo monetario y los futuros de tasas (DI) en B3.',
+      summary: 'Síntesis DinhEuro: El reajuste en la curva de futuros de tasas (DI) en B3 altera el diferencial de rendimiento frente a EE. UU. y la Eurozona, impactando el flujo cambiario.',
     },
     news_2: {
       title: 'Congreso Nacional debate contención del gasto público y metas del marco fiscal',
-      summary: 'Negociaciones en Brasilia entre el Ministerio de Hacienda y legisladores buscan equilibrar las cuentas y la deuda pública.',
+      summary: 'Síntesis DinhEuro: Las señales fiscales en Brasilia condicionan la prima de riesgo soberano e inciden sobre el dólar comercial, las tasas largas y los activos locales.',
     },
     news_3: {
       title: 'Ibovespa avanza con flujo extranjero: Petrobras (PETR4) y Vale (VALE3) lideran el volumen en B3',
-      summary: 'La entrada de capital no residente y el repunte de materias primas impulsan las acciones brasileñas más líquidas.',
+      summary: 'Síntesis DinhEuro: La entrada de capital no residente junto a materias primas firmes impulsa las principales acciones brasileñas y fortalece la liquidez de divisas.',
     },
     news_4: {
       title: 'Cambio Comercial: Dólar y Euro atentos a envíos corporativos y diferencial de tasas Brasil–EE. UU.',
-      summary: 'Mesas cambiarias interbancarias siguen la liquidez spot y subastas de línea del Banco Central ante la volatilidad global.',
+      summary: 'Síntesis DinhEuro: Remesas corporativas estacionales y subastas de línea del Banco Central guían la liquidez spot y la formación diaria de la PTAX.',
     },
     news_5: {
       title: 'Inflación e IPC en EE. UU.: La Reserva Federal pide cautela en recortes de tasas por solidez laboral',
-      summary: 'Directivos de la Fed reiteran una postura dependiente de los datos macroeconómicos antes de nuevos movimientos.',
+      summary: 'Síntesis DinhEuro: Rendimientos restrictivos de los Treasuries sostienen al dólar global y exigen mayor selectividad hacia divisas emergentes.',
     },
     news_6: {
       title: 'Balances en B3: Grandes bancos brasileños superan estimaciones con control de morosidad y crédito',
-      summary: 'Los resultados trimestrales confirman sólida rentabilidad sobre el patrimonio (ROE) y expansión crediticia.',
+      summary: 'Síntesis DinhEuro: Márgenes financieros estables y menor morosidad respaldan al sector bancario en el Ibovespa y su atractivo por dividendos.',
     },
     news_7: {
       title: 'Mercado Cripto: Bitcoin mantiene sólida liquidez con flujo continuo en ETFs institucionales',
-      summary: 'Gestoras globales como BlackRock y Fidelity registran volúmenes diarios constantes de compra en productos listados.',
+      summary: 'Síntesis DinhEuro: Las suscripciones netas constantes en ETFs regulados reducen la oferta circulante y elevan la correlación táctica con acciones tecnológicas.',
     },
     news_8: {
       title: 'Reforma Tributaria: Ministerio de Hacienda concluye borradores de reglamentación del IBS y CBS',
-      summary: 'El texto detalla las reglas del comité gestor y el período de transición de los tributos al consumo.',
+      summary: 'Síntesis DinhEuro: Reglas más claras para la transición hacia el IVA dual aportan previsibilidad a exportadores y reducen costos acumulativos.',
     },
     news_9: {
       title: 'Wall Street: S&P 500 y Nasdaq suben impulsados por semiconductores y grandes tecnológicas',
-      summary: 'La demanda sostenida por infraestructura de cómputo de alto rendimiento respalda el impulso en Nueva York.',
+      summary: 'Síntesis DinhEuro: La inversión sostenida en infraestructura de IA impulsa las bolsas de Nueva York y mejora el apetito global por riesgo.',
     },
     news_10: {
       title: 'Treasuries & Renta Fija Global: Rendimientos a 10 años atraen flujo de gestores internacionales',
-      summary: 'Las tasas soberanas estadounidenses y los spreads emergentes muestran estabilidad ante la demanda institucional.',
+      summary: 'Síntesis DinhEuro: La estabilización de las tasas soberanas de EE. UU. alivia presiones sobre divisas emergentes y modera la volatilidad en renta fija.',
     },
     news_11: {
       title: 'Zona Euro: El Banco Central Europeo monitorea costos energéticos y balanza comercial del bloque',
-      summary: 'El BCE reitera vigilancia sobre la transmisión monetaria en Alemania y Francia para contener presiones de precios.',
+      summary: 'Síntesis DinhEuro: Las señales del BCE ante la inflación de servicios y energía redefinen la cotización del Euro frente al Dólar (EUR/USD) y al Real (EUR/BRL).',
     },
     news_12: {
       title: 'Agronegocio & Balanza: Exportaciones de soja y maíz sostienen superávit comercial récord en Brasil',
-      summary: 'Los ingresos de divisas del sector agropecuario fortalecen las reservas internacionales y respaldan el PIB.',
+      summary: 'Síntesis DinhEuro: Los ingresos exportadores del agro fortalecen la entrada neta de divisas y actúan como amortiguador estructural para el real brasileño.',
     },
     news_13: {
       title: 'Deuda Pública & Tesoro: Emisiones indexadas al IPCA baten récord de demanda en Tesouro Direto',
-      summary: 'Inversores minoristas aumentan su asignación en Tesouro IPCA+ y RendA+ buscando tasas reales atractivas.',
+      summary: 'Síntesis DinhEuro: Las tasas reales elevadas en bonos públicos captan ahorro doméstico de largo plazo y compiten directamente con la renta variable local.',
     },
     news_14: {
       title: 'Ethereum y Solana: El volumen diario en DeFi crece con la adopción de stablecoins en dólares',
-      summary: 'Protocolos de préstamos y liquidez descentralizada registran expansión acelerada del valor total bloqueado (TVL).',
+      summary: 'Síntesis DinhEuro: El mayor uso de stablecoins amplía la actividad en redes de contratos inteligentes y agiliza las liquidaciones transfronterizas.',
     },
     news_15: {
       title: 'Materias Primas Energéticas: El petróleo Brent oscila ante tensiones geopolíticas en Medio Oriente',
-      summary: 'La OPEP+ reafirma recortes graduales de oferta mientras la producción estadounidense alcanza máximos históricos.',
+      summary: 'Síntesis DinhEuro: Las oscilaciones del Brent repercuten en las expectativas de inflación global, los fletes marítimos y las petroleras en B3.',
     },
     news_16: {
       title: 'Centros de Datos & Chips: Gigantes tecnológicos anuncian inversión récord para 2026',
-      summary: 'Microsoft, Alphabet, Meta y Amazon proyectan un capex conjunto superior a 200 mil millones de dólares.',
+      summary: 'Síntesis DinhEuro: El despliegue masivo de capex sostiene la demanda global de semiconductores, redes eléctricas y fabricantes industriales exportadores.',
     },
     news_17: {
       title: 'Sector Inmobiliario & FIIs: IFIX registra estabilidad y fondos logísticos atraen contratos atípicos',
-      summary: 'Naves logísticas y oficinas prime mantienen baja vacancia en las áreas metropolitanas de São Paulo y Río.',
+      summary: 'Síntesis DinhEuro: La baja vacancia en naves logísticas y oficinas prime respalda rentas exentas en Brasil pese al escenario de tasas restrictivas.',
     },
     news_18: {
       title: 'Política Fiscal de EE. UU.: Debate sobre techo de deuda y gasto obligatorio agita al Congreso',
-      summary: 'Comités presupuestarios en Washington evalúan el impacto del déficit federal en la oferta de bonos del Tesoro.',
+      summary: 'Síntesis DinhEuro: Las discusiones presupuestarias en Washington suelen elevar la volatilidad de los Treasuries y provocar ajustes rápidos en el dólar.',
     },
     news_19: {
       title: 'Sector Eléctrico: Eletrobras, Equatorial y CPFL avanzan en subastas de transmisión eléctrica',
-      summary: 'Nuevas líneas para energía solar y eólica del Nordeste consolidan inversiones multimillonarias en infraestructura.',
+      summary: 'Síntesis DinhEuro: Los ingresos regulados indexados a la inflación mantienen al sector eléctrico brasileño como ancla defensiva en B3.',
     },
     news_20: {
       title: 'Bolsas Asiáticas: Nikkei en Japón y Hang Seng en Hong Kong cierran al alza por apetito tecnológico',
-      summary: 'La estabilidad cambiaria del yen y estímulos bursátiles en China impulsan los índices de la región.',
+      summary: 'Síntesis DinhEuro: El cierre constructivo en Asia mejora el ánimo global antes de las aperturas de Europa y EE. UU., apoyando a los metales.',
     },
     news_21: {
       title: 'Comercio Brasileño: Campañas estacionales impulsan ventas de e-commerce y crédito al consumo',
-      summary: 'Grandes minoristas de B3 como Magazine Luiza, Mercado Livre y Assaí reportan mayor ticket promedio.',
+      summary: 'Síntesis DinhEuro: El dinamismo estacional funciona como termómetro del consumo de los hogares y de los márgenes minoristas en B3.',
     },
     news_22: {
       title: 'Regulación Cripto en Brasil: Banco Central avanza en normas de custodia y stablecoins',
-      summary: 'El marco regulatorio para proveedores de servicios de activos virtuales (VASPs) entra en su fase final.',
+      summary: 'Síntesis DinhEuro: Reglas claras de segregación patrimonial y reporte cambiario acercan al ecosistema cripto brasileño al capital institucional.',
     },
     news_23: {
       title: 'Mineral de Hierro: Contratos en Dalian y Singapur reaccionan a estímulos urbanos en China',
-      summary: 'La reposición de inventarios siderúrgicos sostiene los precios y apoya los ingresos de exportación de Vale (VALE3).',
+      summary: 'Síntesis DinhEuro: La reposición siderúrgica en China respalda los precios del mineral, fortaleciendo la caja de Vale y el superávit brasileño.',
     },
     news_24: {
       title: 'Fusiones & Adquisiciones (M&A): Tecnológicas y agritechs brasileñas lideran consolidación',
-      summary: 'Bancos de inversión registran reactivación de mandatos de fusión con valuaciones atractivas y sinergias.',
+      summary: 'Síntesis DinhEuro: Valuaciones atractivas y búsqueda de sinergias de escala reactivan operaciones estratégicas en tecnología y agroexportación.',
     },
   },
 };

@@ -130,15 +130,6 @@ export const Footer: React.FC = () => {
                   {t.footer.navNews}
                 </button>
               </li>
-              <li>
-                <button
-                  type="button"
-                  onClick={() => setActiveTab('corretoras')}
-                  className="hover:text-[#003399] dark:hover:text-emerald-400 transition cursor-pointer text-left"
-                >
-                  {t.footer.navBrokers}
-                </button>
-              </li>
             </ul>
           </div>
 

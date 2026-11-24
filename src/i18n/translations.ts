@@ -398,7 +398,6 @@ export interface AppTranslations {
     navMarkets: string;
     navPortfolios: string;
     navNews: string;
-    navBrokers: string;
     resCharts: string;
     resTools: string;
     resAcademy: string;
@@ -416,9 +415,10 @@ export interface AppTranslations {
     eyebrow: string;
     heading: string;
     lead: string;
-    cards: {
-      title: string;
-      body: string;
+    faqTitle: string;
+    faqItems: {
+      question: string;
+      answer: string;
     }[];
   };
 }
@@ -881,7 +881,6 @@ export const TRANSLATIONS: Record<SupportedLanguage, AppTranslations> = {
       navMarkets: 'Mercados Mundiais',
       navPortfolios: 'Minhas Carteiras',
       navNews: 'Notícias & Análises',
-      navBrokers: 'Guia de Corretoras',
       resCharts: 'Terminal Gráfico D3 v7',
       resTools: 'Simuladores & Câmbio',
       resAcademy: 'Academy & Glossário',
@@ -896,22 +895,31 @@ export const TRANSLATIONS: Record<SupportedLanguage, AppTranslations> = {
       shortDisclaimer: 'Disclaimer',
     },
     seoBlock: {
-      eyebrow: 'Posicionamento Global • Corredor União Europeia – Mercosul & Acesso Aberto',
-      heading: 'Cotação Euro Comercial, Câmbio EUR/BRL e Radar Econômico União Europeia – Mercosul',
+      eyebrow: 'Portal Aberto de Inteligência Econômica',
+      heading: 'Sobre o Portal DinhEuro & Perguntas Frequentes (FAQ)',
       lead:
-        'O DinhEuro conecta investidores, exportadores, importadores e leitores a cotações de fontes públicas em tempo real (EUR/BRL e USD/BRL), comparativos BCE vs. Selic, bolsas europeias e B3 e análises sobre o acordo comercial União Europeia – Mercosul — 100% gratuito, anônimo, sem login e sem coleta de dados pessoais.',
-      cards: [
+        'O DinhEuro reúne em uma única interface dados públicos de câmbio (Euro, Dólar e pares globais), diferenciais de juros entre o Banco Central Europeu (BCE) e a Taxa Selic, cotações das bolsas da Europa e do Mercosul e análises macroeconômicas. Todo o conteúdo, os painéis e os simuladores operam com acesso livre, gratuito e sem necessidade de cadastro ou login.',
+      faqTitle: 'Perguntas Frequentes',
+      faqItems: [
         {
-          title: 'Cotação Euro Comercial Tempo Real, Câmbio EUR/BRL & Remessas',
-          body: 'Acompanhe o câmbio Euro Real hoje (EUR/BRL) e o dólar comercial em tempo real para decisões de câmbio, importação e exportação no corredor Europa–América do Sul. Simule remessa internacional, spread bancário e IOF sem exigir cadastro ou dados pessoais.',
+          question: 'Qual é a diferença entre câmbio comercial e câmbio turismo?',
+          answer:
+            'O câmbio comercial é a referência interbancária utilizada em operações de comércio exterior, remessas empresariais e liquidação financeira. Já o câmbio turismo aplica-se à compra de papel-moeda ou cartões de viagem no varejo, incorporando custos de logística, custódia, margem da instituição (spread) e tributos incidentes como o IOF.',
         },
         {
-          title: 'Comércio Exterior Mercosul–União Europeia, Bolsas Europeias & B3',
-          body: 'Monitore o fechamento do Ibovespa, ações da B3 com dividendos e os principais índices da Europa (DAX, Euro Stoxx, FTSE) em tempo real, com gráficos técnicos D3 v7 e acompanhamento setorial de exportação entre Mercosul e União Europeia.',
+          question: 'Como acompanhar o eixo comercial União Europeia–Mercosul pelo portal?',
+          answer:
+            'Na própria página inicial, é possível monitorar a cotação do Euro frente ao Real, os índices europeus (como DAX, Euro Stoxx 50 e FTSE 100), as ações brasileiras e o Dossiê capítulo a capítulo do Acordo MERCOSUL–União Europeia, complementado pelas sínteses editoriais sobre tarifas, cotas e regras da SECEX/MDIC.',
         },
         {
-          title: 'Indicadores Financeiros BCE vs. Selic, Boletim Focus & Acesso Livre',
-          body: 'Compare a política monetária do Banco Central Europeu (BCE) com a Taxa Selic e a inflação IPCA no Boletim Focus, consulte o dossiê do Drex e navegue de forma 100% anônima, sem cadastro, login ou paywall.',
+          question: 'Como interpretar a relação entre Taxa Selic, IPCA e câmbio no Boletim Focus?',
+          answer:
+            'O Boletim Focus consolida as medianas semanais de mercado coletadas pelo Banco Central. Quando as expectativas de inflação (IPCA) sobem, o mercado tende a projetar uma Taxa Selic mais alta para ancorar os preços; esse diferencial de juros frente ao exterior influencia o fluxo de capitais e o comportamento do dólar e do euro frente ao real.',
+        },
+        {
+          question: 'Como utilizar os simuladores e a DinhEuro Academy?',
+          answer:
+            'Os simuladores de conversão de moedas, remessas internacionais (com cálculo de spread e IOF), juros compostos e renda fixa ficam disponíveis gratuitamente no menu Simuladores & Câmbio e Renda Fixa & Derivativos. Na DinhEuro Academy, você encontra trilhas educativas completas sobre câmbio, análise técnica e economia global diretamente no navegador, sem cadastro.',
         },
       ],
     },
@@ -1373,7 +1381,6 @@ export const TRANSLATIONS: Record<SupportedLanguage, AppTranslations> = {
       navMarkets: 'World Markets',
       navPortfolios: 'My Portfolios',
       navNews: 'News & Analysis',
-      navBrokers: 'Brokers Directory',
       resCharts: 'D3 v7 Chart Terminal',
       resTools: 'FX & Calculators',
       resAcademy: 'Academy & Glossary',
@@ -1388,22 +1395,31 @@ export const TRANSLATIONS: Record<SupportedLanguage, AppTranslations> = {
       shortDisclaimer: 'Disclaimer',
     },
     seoBlock: {
-      eyebrow: 'Global Positioning • European Union – Mercosur Corridor & Open Access',
-      heading: 'Commercial Euro Quote, EUR/BRL FX & European Union – Mercosur Economic Radar',
+      eyebrow: 'Open Financial Intelligence Portal',
+      heading: 'About DinhEuro & Frequently Asked Questions (FAQ)',
       lead:
-        'DinhEuro connects investors, exporters, importers, and readers to public-source live quotes (EUR/BRL and USD/BRL), ECB vs. Selic rate comparisons, European and B3 equities, and analysis on the European Union – Mercosur trade agreement — 100% free, anonymous, with no login and zero personal data collection.',
-      cards: [
+        'DinhEuro consolidates public-source exchange rates (Euro, Dollar, and global currency pairs), policy-rate comparisons between the European Central Bank (ECB) and Brazil’s Selic, European and Mercosur stock market quotes, and macroeconomic analyses in one streamlined dashboard—with 100% free, open access and no registration or login required.',
+      faqTitle: 'Frequently Asked Questions',
+      faqItems: [
         {
-          title: 'Live Commercial Euro Quote, EUR/BRL FX & International Transfers',
-          body: 'Track EUR to BRL live rate and USD/BRL exchange rates in real time across the Europe–South America trade corridor. Model international money transfer fees, bank spread, and IOF taxes with zero sign-up or personal data collection.',
+          question: 'What is the difference between commercial FX and tourist FX?',
+          answer:
+            'Commercial FX is the interbank benchmark used in foreign trade, corporate remittances, and institutional settlement. Tourist FX applies to physical banknotes and retail travel cards, adding cash-handling logistics, retail bank spread, and applicable taxes such as Brazil’s IOF.',
         },
         {
-          title: 'Mercosur–European Union Trade, European Equities & B3 Markets',
-          body: 'Monitor Ibovespa close, B3 dividend stocks, and European benchmark indices (DAX, Euro Stoxx, FTSE) in real time alongside D3 v7 technical charts and Mercosur–EU foreign trade sector coverage.',
+          question: 'How can I track the European Union–Mercosur trade corridor on the portal?',
+          answer:
+            'Right on the Home page, you can monitor live EUR/BRL quotes, major European equity indices (DAX, Euro Stoxx 50, FTSE 100), Brazilian B3 stocks, and the chapter-by-chapter EU–Mercosur Dossier alongside editorial syntheses on tariffs, quotas, and bilateral trade rules.',
         },
         {
-          title: 'ECB vs. Selic Financial Indicators, Focus Report & Open Access',
-          body: 'Compare European Central Bank (ECB) monetary policy against Brazil’s Selic rate and IPCA inflation in the Focus Report, read the Drex CBDC dossier, and browse 100% anonymously with no registration, login, or paywall.',
+          question: 'How should I interpret the link between Selic, IPCA, and FX in the Focus Report?',
+          answer:
+            'The Central Bank of Brazil Focus Report compiles weekly market medians. When inflation expectations (IPCA) rise, markets typically price a tighter Selic policy path; the resulting interest-rate differential against global benchmarks influences capital inflows and the trajectory of the Real against the Dollar and Euro.',
+        },
+        {
+          question: 'How do I use the calculators and DinhEuro Academy?',
+          answer:
+            'All currency, cross-border remittance (spread and IOF), compound-interest, fixed-income, and Black-Scholes options calculators are available free of charge under FX & Calculators and Fixed Income & Derivatives. DinhEuro Academy offers structured guides on FX, technical analysis, and global macro directly in your browser without sign-up.',
         },
       ],
     },
@@ -1865,7 +1881,6 @@ export const TRANSLATIONS: Record<SupportedLanguage, AppTranslations> = {
       navMarkets: 'Mercados Mundiales',
       navPortfolios: 'Mis Carteras',
       navNews: 'Noticias & Análisis',
-      navBrokers: 'Guía de Brókeres',
       resCharts: 'Terminal Gráfico D3 v7',
       resTools: 'Simuladores & Divisas',
       resAcademy: 'Academy & Glosario',
@@ -1880,22 +1895,31 @@ export const TRANSLATIONS: Record<SupportedLanguage, AppTranslations> = {
       shortDisclaimer: 'Aviso Legal',
     },
     seoBlock: {
-      eyebrow: 'Posicionamiento Global • Corredor Unión Europea – Mercosur & Acceso Abierto',
-      heading: 'Cotización Euro Comercial, Cambio EUR/BRL y Radar Económico Unión Europea – Mercosur',
+      eyebrow: 'Portal Abierto de Inteligencia Económica',
+      heading: 'Sobre el Portal DinhEuro y Preguntas Frecuentes (FAQ)',
       lead:
-        'DinhEuro conecta a inversores, exportadores, importadores y lectores con cotizaciones de fuentes públicas en tiempo real (EUR/BRL y USD/BRL), comparativas BCE vs. Selic, bolsas europeas y B3 y análisis sobre el acuerdo comercial Unión Europea – Mercosur — 100% gratuito, anónimo, sin login y sin recopilación de datos personales.',
-      cards: [
+        'DinhEuro reúne en una sola interfaz datos públicos de tipo de cambio (Euro, Dólar y pares globales), diferenciales de tasas entre el Banco Central Europeo (BCE) y la Tasa Selic, cotizaciones bursátiles de Europa y del Mercosur y análisis macroeconómicos — con acceso 100% libre, gratuito y sin necesidad de registro ni inicio de sesión.',
+      faqTitle: 'Preguntas Frecuentes',
+      faqItems: [
         {
-          title: 'Cotización Euro Comercial en Tiempo Real, Cambio EUR/BRL & Remesas',
-          body: 'Sigue el cambio Euro a Real hoy (EUR/BRL) y el dólar comercial en tiempo real para operaciones de divisas y comercio exterior entre Europa y Sudamérica. Simula remesas, spread bancario e IOF sin exigir registro ni datos personales.',
+          question: '¿Cuál es la diferencia entre el tipo de cambio comercial y el de turismo?',
+          answer:
+            'El cambio comercial es la referencia interbancaria empleada en operaciones de comercio exterior, remesas corporativas y liquidación financiera. El cambio turismo corresponde a la compra de billetes físicos o tarjetas de viaje minoristas, incorporando logística, custodia, margen bancario (spread) e impuestos aplicables como el IOF.',
         },
         {
-          title: 'Comercio Exterior Mercosur–Unión Europea, Bolsas Europeas & B3',
-          body: 'Monitorea el cierre del Ibovespa, acciones de B3 con dividendos y los principales índices europeos (DAX, Euro Stoxx, FTSE) en tiempo real con gráficos técnicos D3 v7 y seguimiento sectorial de exportación Mercosur–UE.',
+          question: '¿Cómo seguir el eje comercial Unión Europea–Mercosur desde el portal?',
+          answer:
+            'En la página inicial puedes monitorear la cotización del Euro frente al Real, los principales índices europeos (DAX, Euro Stoxx 50 y FTSE 100), las acciones de la bolsa brasileña y el Dossier capítulo por capítulo del Acuerdo MERCOSUR–Unión Europea, junto con síntesis editoriales sobre aranceles y cuotas.',
         },
         {
-          title: 'Indicadores Financieros BCE vs. Selic, Boletín Focus & Acceso Libre',
-          body: 'Compara la política monetaria del Banco Central Europeo (BCE) con la tasa Selic y la inflación IPCA en el Boletín Focus, consulta el dossier del Drex y navega de forma 100% anónima, sin registro, login ni muro de pago.',
+          question: '¿Cómo interpretar la relación entre Tasa Selic, IPCA y tipo de cambio en el Boletín Focus?',
+          answer:
+            'El Boletín Focus compila las medianas semanales del mercado recopiladas por el Banco Central de Brasil. Cuando las expectativas de inflación (IPCA) suben, el mercado suele descontar una Selic más alta; ese diferencial de tasas frente al exterior influye en el flujo de capitales y en la evolución del dólar y del euro frente al real.',
+        },
+        {
+          question: '¿Cómo utilizar los simuladores y DinhEuro Academy?',
+          answer:
+            'Los simuladores de conversión de divisas, envíos internacionales (con cálculo de spread e IOF), interés compuesto y renta fija están disponibles gratis en Simuladores & Divisas y Renta Fija & Derivados. En DinhEuro Academy encontrarás rutas educativas sobre divisas, análisis técnico y macroeconomía global sin registro.',
         },
       ],
     },

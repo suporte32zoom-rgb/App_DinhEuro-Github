@@ -338,3 +338,62 @@ test('syncHreflangLinks maintains global pt-BR, en, es, and x-default alternate 
   );
   assert.ok(sidebarSource.includes("isMobileVariant ? 'block lg:hidden' : 'hidden lg:block lg:mt-6'"));
 });
+
+test('Home editorial FAQ block and both institutional dossiers have complete content across PT, EN, and ES', async () => {
+  const fs = await import('node:fs');
+  const path = await import('node:path');
+  const { TRANSLATIONS } = await import('../i18n/translations.ts');
+  const { MERCOSUL_EU_DOSSIER_DATA, DREX_DOSSIER_DATA } = await import('../i18n/dossiers.ts');
+
+  assert.equal(
+    TRANSLATIONS.pt.seoBlock.heading,
+    'Sobre o Portal DinhEuro & Perguntas Frequentes (FAQ)'
+  );
+
+  for (const lang of ['pt', 'en', 'es'] as const) {
+    const seoBlock = TRANSLATIONS[lang].seoBlock;
+    assert.ok(seoBlock.lead.length >= 120, `seoBlock.lead too short in ${lang}`);
+    assert.equal(seoBlock.faqItems.length, 4, `Expected 4 FAQ items in ${lang}`);
+    for (const faq of seoBlock.faqItems) {
+      assert.ok(faq.question.length >= 20, `FAQ question too short in ${lang}`);
+      assert.ok(faq.answer.length >= 80, `FAQ answer too short in ${lang}`);
+    }
+
+    const mercosul = MERCOSUL_EU_DOSSIER_DATA[lang];
+    assert.equal(mercosul.sections.length, 17, `Expected 17 sections in Mercosul dossier (${lang})`);
+    for (const sec of mercosul.sections) {
+      assert.ok(
+        sec.paragraphs.length >= 2,
+        `Mercosul section ${sec.id} (${lang}) should have multi-paragraph explanation`
+      );
+      for (const p of sec.paragraphs) {
+        assert.ok(p.trim().length >= 40, `Empty/short paragraph in ${sec.id} (${lang})`);
+      }
+    }
+
+    const drex = DREX_DOSSIER_DATA[lang];
+    assert.equal(drex.sections.length, 3, `Expected 3 sections in Drex dossier (${lang})`);
+    for (const sec of drex.sections) {
+      assert.ok(
+        sec.paragraphs.length >= 2,
+        `Drex section ${sec.id} (${lang}) should have multi-paragraph explanation`
+      );
+      for (const p of sec.paragraphs) {
+        assert.ok(p.trim().length >= 40, `Empty/short paragraph in ${sec.id} (${lang})`);
+      }
+    }
+  }
+
+  const forbiddenTerms = /\b(finnhub|awesomeapi|coingecko|brapi|vite|github|cloudflare)\b/i;
+  const homeFaqSource = fs.readFileSync(
+    path.resolve(process.cwd(), 'src/components/HomeSeoEditorialSection.tsx'),
+    'utf8'
+  );
+  const insightsSource = fs.readFileSync(
+    path.resolve(process.cwd(), 'src/data/dailyInsights.ts'),
+    'utf8'
+  );
+  assert.ok(!forbiddenTerms.test(homeFaqSource), 'HomeSeoEditorialSection must not expose technical providers or build tools');
+  assert.ok(!forbiddenTerms.test(insightsSource), 'dailyInsights.ts must not expose technical providers or build tools');
+});
+

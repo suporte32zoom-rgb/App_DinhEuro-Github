@@ -60,3 +60,14 @@ test('Visible footer and institutional pages use official admin@dinheuro.com ema
   }
 });
 
+test('Footer Hub Navigation excludes removed Guia de Corretoras link', () => {
+  const footerSource = fs.readFileSync(
+    path.resolve(process.cwd(), 'src/components/Footer.tsx'),
+    'utf8'
+  );
+  assert.ok(!footerSource.includes('navBrokers'), 'Footer.tsx must not reference navBrokers');
+  assert.ok(
+    !footerSource.includes('Guia de Corretoras'),
+    'Footer.tsx must not render Guia de Corretoras'
+  );
+});

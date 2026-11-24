@@ -1,5 +1,5 @@
 import React from 'react';
-import { Globe, Coins, TrendingUp } from 'lucide-react';
+import { HelpCircle, BookOpen } from 'lucide-react';
 import { useI18n } from '../i18n/I18nContext';
 import { getNumberLocale } from '../i18n/translations';
 import { useMarket } from '../context/MarketContext';
@@ -22,21 +22,16 @@ export const HomeSeoEditorialSection: React.FC = () => {
     maximumFractionDigits: 4,
   });
 
-  const icons = [
-    <Coins key="eur" className="w-4 h-4 text-[#009B77] dark:text-emerald-400 flex-shrink-0" />,
-    <TrendingUp key="usd" className="w-4 h-4 text-[#003399] dark:text-sky-400 flex-shrink-0" />,
-    <Globe key="global" className="w-4 h-4 text-[#D99B00] dark:text-amber-400 flex-shrink-0" />,
-  ];
-
   return (
     <section
       aria-labelledby="home-seo-editorial-heading"
       className="rounded-2xl bg-[#FFFFFF] dark:bg-[#0d1627] border border-[#E2E8F0] dark:border-slate-800/90 p-5 sm:p-6 shadow-xl space-y-5"
     >
-      <div className="border-b border-[#E2E8F0] dark:border-slate-800/80 pb-4 space-y-1.5">
+      <div className="border-b border-[#E2E8F0] dark:border-slate-800/80 pb-4 space-y-2">
         <div className="flex flex-wrap items-center justify-between gap-2">
-          <span className="text-[10px] font-bold uppercase tracking-wider text-[#003399] dark:text-emerald-400">
-            {t.seoBlock.eyebrow}
+          <span className="inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-[#003399] dark:text-emerald-400">
+            <BookOpen className="w-3.5 h-3.5" aria-hidden="true" />
+            <span>{t.seoBlock.eyebrow}</span>
           </span>
           <div className="flex flex-wrap items-center gap-3 text-[11px] font-mono-numbers text-[#475569] dark:text-slate-300">
             <span>
@@ -57,26 +52,32 @@ export const HomeSeoEditorialSection: React.FC = () => {
         >
           {t.seoBlock.heading}
         </h2>
-        <p className="text-xs text-[#475569] dark:text-slate-300 leading-relaxed max-w-4xl">
+        <p className="text-xs sm:text-[13px] text-[#1E293B] dark:text-slate-300 leading-relaxed max-w-4xl">
           {t.seoBlock.lead}
         </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        {t.seoBlock.cards.map((card, idx) => (
-          <article
-            key={card.title}
-            className="rounded-xl bg-[#F4F7F9] dark:bg-[#070e1b] border border-[#E2E8F0] dark:border-slate-800/80 p-4 space-y-2"
-          >
-            <h3 className="text-xs sm:text-sm font-bold text-[#002266] dark:text-white flex items-center gap-2">
-              {icons[idx % icons.length]}
-              <span>{card.title}</span>
-            </h3>
-            <p className="text-[11px] sm:text-xs text-[#1E293B] dark:text-slate-400 leading-relaxed">
-              {card.body}
-            </p>
-          </article>
-        ))}
+      <div className="space-y-3">
+        <h3 className="text-xs font-bold uppercase tracking-wider text-[#003399] dark:text-emerald-400 flex items-center gap-1.5">
+          <HelpCircle className="w-3.5 h-3.5 flex-shrink-0" aria-hidden="true" />
+          <span>{t.seoBlock.faqTitle}</span>
+        </h3>
+
+        <dl className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {t.seoBlock.faqItems.map((item) => (
+            <div
+              key={item.question}
+              className="rounded-xl bg-[#F4F7F9] dark:bg-[#070e1b] border border-[#E2E8F0] dark:border-slate-800/80 p-4 space-y-2"
+            >
+              <dt className="text-xs sm:text-sm font-bold text-[#002266] dark:text-white leading-snug">
+                {item.question}
+              </dt>
+              <dd className="text-[11px] sm:text-xs text-[#1E293B] dark:text-slate-300 leading-relaxed">
+                {item.answer}
+              </dd>
+            </div>
+          ))}
+        </dl>
       </div>
     </section>
   );
