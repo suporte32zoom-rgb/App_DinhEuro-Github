@@ -654,9 +654,32 @@ test('/guia-cambio-remessas and /politica-monetaria-juros editorial pages, 301 r
     assert.equal(monCopy.sections.length, 3, `Expected 3 Monetary sections in ${lang}`);
     assert.ok(monCopy.glossaryItems.length >= 8, `Expected >= 8 Monetary glossary items in ${lang}`);
     assert.equal(monCopy.faqItems.length, 5, `Expected 5 Monetary FAQ items in ${lang}`);
+    assert.equal(
+      monCopy.euMercosurIndicators.cards.length,
+      2,
+      `Expected 2 static EU-Mercosur comparative cards in ${lang}`
+    );
+    assert.ok(
+      monCopy.euMercosurIndicators.correlationBody.length > 80,
+      `Expected educational bloc correlation note in ${lang}`
+    );
     assert.ok(!forbiddenTerms.test(JSON.stringify(fxCopy)), `Forbidden term in FX guide (${lang})`);
     assert.ok(!forbiddenTerms.test(JSON.stringify(monCopy)), `Forbidden term in Monetary guide (${lang})`);
   }
+
+  assert.equal(
+    MONETARY_POLICY_TRANSLATIONS.pt.euMercosurIndicators.title,
+    'Indicadores do Eixo União Europeia – Mercosul'
+  );
+  const euMercosurJson = JSON.stringify(MONETARY_POLICY_TRANSLATIONS.pt.euMercosurIndicators);
+  assert.ok(euMercosurJson.includes('13,75%'), 'Must include Copom Selic 13,75% rate');
+  assert.ok(euMercosurJson.includes('2,50%'), 'Must include ECB deposit facility 2,50% rate');
+  assert.ok(euMercosurJson.includes('5,15%'), 'Must include Focus IPCA 2026 projection 5,15%');
+  assert.ok(euMercosurJson.includes('3,0%'), 'Must include ECB HICP 2026 projection 3,0%');
+  assert.ok(
+    monetaryViewSource.includes('copy.euMercosurIndicators.title'),
+    'MonetaryPolicyView.tsx must render copy.euMercosurIndicators'
+  );
 
   assert.ok(!forbiddenTerms.test(fxViewSource), 'FxRemittanceGuideView.tsx must not expose technical providers or build tools');
   assert.ok(!forbiddenTerms.test(monetaryViewSource), 'MonetaryPolicyView.tsx must not expose technical providers or build tools');

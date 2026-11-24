@@ -9,6 +9,7 @@ import {
   Landmark,
   Newspaper,
   Percent,
+  Scale,
   ShieldCheck,
 } from 'lucide-react';
 import { useMarket } from '../context/MarketContext';
@@ -144,6 +145,89 @@ export const MonetaryPolicyView: React.FC = () => {
               </p>
             </div>
           ))}
+        </div>
+      </section>
+
+      {/* Indicadores do Eixo União Europeia – Mercosul (Static Official Comparative Panel) */}
+      <section
+        aria-labelledby="eu-mercosur-indicators-heading"
+        className="bg-[#FFFFFF] dark:bg-[#0b1322] border border-[#E2E8F0] dark:border-slate-800 rounded-2xl p-5 sm:p-7 shadow-sm space-y-5"
+      >
+        <div className="space-y-1.5">
+          <span className="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider text-[#006B52] dark:text-emerald-400">
+            <Scale className="w-3.5 h-3.5" />
+            <span>{copy.euMercosurIndicators.eyebrow}</span>
+          </span>
+          <h2
+            id="eu-mercosur-indicators-heading"
+            className="text-lg sm:text-xl font-bold text-[#0F172A] dark:text-white leading-snug"
+          >
+            {copy.euMercosurIndicators.title}
+          </h2>
+          <p className="text-xs sm:text-sm text-[#334155] dark:text-slate-300 leading-relaxed max-w-4xl">
+            {copy.euMercosurIndicators.subtitle}
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          {copy.euMercosurIndicators.cards.map((card) => (
+            <div
+              key={card.id}
+              className="bg-[#F8FAFC] dark:bg-slate-900/70 border border-[#E2E8F0] dark:border-slate-800 rounded-xl p-4 sm:p-5 flex flex-col justify-between gap-4"
+            >
+              <div className="space-y-3.5">
+                <div className="space-y-1">
+                  <span className="inline-block text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded bg-[#E6EEFF] text-[#003399] dark:bg-cyan-500/15 dark:text-cyan-300">
+                    {card.badge}
+                  </span>
+                  <h3 className="text-sm sm:text-base font-bold text-[#0F172A] dark:text-white">
+                    {card.title}
+                  </h3>
+                </div>
+
+                <div className="space-y-2.5">
+                  {card.metrics.map((row) => (
+                    <div
+                      key={row.label}
+                      className="bg-[#FFFFFF] dark:bg-[#0b1322] border border-[#E2E8F0] dark:border-slate-800 rounded-lg p-3 space-y-1"
+                    >
+                      <div className="flex flex-wrap items-baseline justify-between gap-2">
+                        <span className="text-xs font-semibold text-[#334155] dark:text-slate-300">
+                          {row.label}
+                        </span>
+                        <span className="text-sm font-extrabold font-mono-numbers text-[#003399] dark:text-cyan-300">
+                          {row.value}
+                        </span>
+                      </div>
+                      <p className="text-[11px] text-[#475569] dark:text-slate-400 leading-relaxed">
+                        {row.detail}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+
+                <p className="text-xs text-[#334155] dark:text-slate-300 leading-relaxed">
+                  {card.takeaway}
+                </p>
+              </div>
+
+              <div className="pt-2 border-t border-[#E2E8F0] dark:border-slate-800 text-[11px] font-medium text-[#475569] dark:text-slate-400">
+                {card.source}
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div className="bg-[#F4F7F9] dark:bg-slate-900/80 border border-[#CBD5E1] dark:border-slate-700/80 rounded-xl p-4 space-y-1.5">
+          <h3 className="text-xs sm:text-sm font-bold text-[#0F172A] dark:text-white">
+            {copy.euMercosurIndicators.correlationTitle}
+          </h3>
+          <p className="text-xs text-[#334155] dark:text-slate-300 leading-relaxed">
+            {copy.euMercosurIndicators.correlationBody}
+          </p>
+          <p className="text-[11px] text-[#475569] dark:text-slate-400 pt-1">
+            {copy.euMercosurIndicators.staticNote}
+          </p>
         </div>
       </section>
 

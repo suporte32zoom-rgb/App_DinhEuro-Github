@@ -56,6 +56,31 @@ export interface MonetaryGlossaryItem {
   definition: string;
 }
 
+export interface EuMercosurMetricRow {
+  label: string;
+  value: string;
+  detail: string;
+}
+
+export interface EuMercosurIndicatorCard {
+  id: string;
+  badge: string;
+  title: string;
+  metrics: EuMercosurMetricRow[];
+  source: string;
+  takeaway: string;
+}
+
+export interface EuMercosurIndicatorsSection {
+  eyebrow: string;
+  title: string;
+  subtitle: string;
+  correlationTitle: string;
+  correlationBody: string;
+  cards: EuMercosurIndicatorCard[];
+  staticNote: string;
+}
+
 export interface MonetaryPolicyCopy {
   badge: string;
   title: string;
@@ -71,6 +96,7 @@ export interface MonetaryPolicyCopy {
     institution: string;
     role: string;
   }[];
+  euMercosurIndicators: EuMercosurIndicatorsSection;
   sections: GuideEditorialSection[];
   glossaryEyebrow: string;
   glossaryTitle: string;
@@ -656,6 +682,69 @@ export const MONETARY_POLICY_TRANSLATIONS: Record<SupportedLanguage, MonetaryPol
         role: 'Taxa livre de risco global que dita liquidez internacional, Treasuries e apetite por emergentes.',
       },
     ],
+    euMercosurIndicators: {
+      eyebrow: 'Referência Estática Oficial • Novembro/2026',
+      title: 'Indicadores do Eixo União Europeia – Mercosul',
+      subtitle:
+        'Comparativo estático de taxas básicas de juros e projeções oficiais de inflação entre a Zona do Euro (BCE) e o Brasil (BCB / Mercosul), evidenciando como os ciclos monetários dos dois blocos interagem no câmbio e no comércio exterior.',
+      cards: [
+        {
+          id: 'juros-bce-selic',
+          badge: 'Taxas Básicas de Juros',
+          title: 'BCE (Zona do Euro) vs. Selic (Brasil / Mercosul)',
+          metrics: [
+            {
+              label: 'Taxa Selic Meta (Copom)',
+              value: '13,75% a.a.',
+              detail: 'Mantida na 282ª reunião do Copom (04/11/2026); Focus projeta 13,00% a.a. ao fim de 2027.',
+            },
+            {
+              label: 'Taxa de Depósito do BCE',
+              value: '2,50% a.a.',
+              detail: 'Deposit Facility Rate vigente (set.–nov./2026); MRO em 2,65% e empréstimo marginal em 2,90%.',
+            },
+            {
+              label: 'Diferencial Nominal (Selic − BCE)',
+              value: '11,25 p.p.',
+              detail: 'Amplitude entre os juros básicos que baliza o custo de hedge cambial e o carrego em EUR/BRL.',
+            },
+          ],
+          source: 'Fontes: Banco Central do Brasil (Copom/Focus nov./2026) e Banco Central Europeu (BCE).',
+          takeaway:
+            'Diferenciais elevados de juros tendem a sustentar a atratividade da renda fixa brasileira em moeda local, ao passo que ajustes restritivos no BCE encarecem o custo de captação em Euro e reduzem a folga de liquidez global.',
+        },
+        {
+          id: 'inflacao-ipca-hicp',
+          badge: 'Projeções de Inflação',
+          title: 'IPCA (Boletim Focus) vs. HICP (Projeções BCE)',
+          metrics: [
+            {
+              label: 'IPCA Brasil — 2026 (Focus)',
+              value: '5,15% a.a.',
+              detail: 'Mediana do Boletim Focus (23/11/2026), com projeções de 5,12% para 2027 e 4,00% para 2028.',
+            },
+            {
+              label: 'HICP Zona do Euro — 2026 (BCE)',
+              value: '3,0% a.a.',
+              detail: 'Projeção de inflação cheia do BCE (núcleo em 2,5%), recuando para 2,5% em 2027 rumo à meta de 2,0%.',
+            },
+            {
+              label: 'Diferencial Inflacionário Projetado (2026)',
+              value: '2,15 p.p.',
+              detail: 'Diferença entre o IPCA estimado e o HICP europeu usada para leitura comparada de juro real.',
+            },
+          ],
+          source: 'Fontes: Boletim Focus / BCB (23/11/2026) e Projeções Macroeconômicas do Staff do BCE.',
+          takeaway:
+            'Comparar a inflação esperada em cada bloco permite calcular o juro real ex-ante de cada moeda e compreender pressões de paridade de poder de compra sobre bens industriais, insumos agrícolas e contratos bilaterais.',
+        },
+      ],
+      correlationTitle: 'Leitura Educativa: Correlação entre os Blocos União Europeia e Mercosul',
+      correlationBody:
+        'A interação entre a política monetária do BCE e do Banco Central do Brasil afeta diretamente o corredor econômico União Europeia–Mercosul por três vias complementares: (1) Fluxo financeiro e carry, pois o diferencial entre Selic e taxa de depósito do BCE influencia a entrada e saída de capitais em títulos soberanos; (2) Formação do par EUR/BRL e custo de hedge, já que a diferença de juros determina o prêmio dos contratos futuros de Euro usados por exportadores de commodities do Mercosul e importadores de bens de capital europeus; e (3) Repasse inflacionário bilateral, em que oscilações no Euro e nos preços globais de energia modulam tanto o HICP europeu quanto os custos de insumos importados no IPCA.',
+      staticNote:
+        'Painel estático de referência educacional baseado em comunicados e boletins públicos oficiais de novembro de 2026. Os números não representam cotações em tempo real nem recomendação de investimento.',
+    },
     sections: [
       {
         id: 'copom-selic-focus',
@@ -864,6 +953,69 @@ export const MONETARY_POLICY_TRANSLATIONS: Record<SupportedLanguage, MonetaryPol
         role: 'Global risk-free benchmark driving US Treasury yields, global credit spreads, and emerging-market inflows.',
       },
     ],
+    euMercosurIndicators: {
+      eyebrow: 'Official Static Reference • November 2026',
+      title: 'EU–Mercosur Axis Macroeconomic Indicators',
+      subtitle:
+        'Static comparison of policy interest rates and official inflation projections across the Eurozone (ECB) and Brazil (BCB / Mercosur), illustrating how monetary cycles in both blocs interact across FX and bilateral trade.',
+      cards: [
+        {
+          id: 'juros-bce-selic',
+          badge: 'Policy Interest Rates',
+          title: 'ECB (Eurozone) vs. Selic (Brazil / Mercosur)',
+          metrics: [
+            {
+              label: 'Selic Target Rate (Copom)',
+              value: '13.75% p.a.',
+              detail: 'Held steady at the 282nd Copom meeting (Nov 4, 2026); Focus consensus sees 13.00% by end-2027.',
+            },
+            {
+              label: 'ECB Deposit Facility Rate',
+              value: '2.50% p.a.',
+              detail: 'Prevailing rate (Sep–Nov 2026), with Main Refinancing at 2.65% and Marginal Lending at 2.90%.',
+            },
+            {
+              label: 'Nominal Rate Spread (Selic − ECB)',
+              value: '11.25 pp',
+              detail: 'Policy rate gap shaping EUR/BRL forward hedging costs and cross-border yield differentials.',
+            },
+          ],
+          source: 'Sources: Central Bank of Brazil (Copom/Focus Nov 2026) and European Central Bank (ECB).',
+          takeaway:
+            'Wide policy rate differentials support local-currency fixed-income carry in Brazil, while tighter ECB conditions raise Euro funding costs and temper global risk appetite.',
+        },
+        {
+          id: 'inflacao-ipca-hicp',
+          badge: 'Inflation Projections',
+          title: 'IPCA (Focus Survey) vs. HICP (ECB Projections)',
+          metrics: [
+            {
+              label: 'Brazil IPCA — 2026 (Focus)',
+              value: '5.15% p.a.',
+              detail: 'Focus market median (Nov 23, 2026), followed by 5.12% in 2027 and 4.00% in 2028.',
+            },
+            {
+              label: 'Eurozone HICP — 2026 (ECB)',
+              value: '3.0% p.a.',
+              detail: 'ECB staff headline projection (core HICP 2.5%), moderating to 2.5% in 2027 toward the 2.0% goal.',
+            },
+            {
+              label: 'Projected Inflation Gap (2026)',
+              value: '2.15 pp',
+              detail: 'Spread between expected Brazilian IPCA and Eurozone HICP used to evaluate relative real yields.',
+            },
+          ],
+          source: 'Sources: BCB Focus Market Readout (Nov 23, 2026) and ECB Staff Macroeconomic Projections.',
+          takeaway:
+            'Discounting expected inflation in each currency reveals ex-ante real returns and explains long-term purchasing-power shifts affecting EU–Mercosur trade contracts.',
+        },
+      ],
+      correlationTitle: 'Educational Note: Economic Correlation Between the European Union and Mercosur',
+      correlationBody:
+        'Monetary policy alignment or divergence between the ECB and the Central Bank of Brazil influences the EU–Mercosur corridor through three channels: (1) Capital flows and carry, as the Selic–ECB spread affects foreign appetite for sovereign debt; (2) EUR/BRL hedging costs, since interest differentials determine forward premiums for Mercosur agricultural exporters and European capital-goods importers; and (3) Bilateral inflation pass-through, where Euro moves and energy costs affect both HICP and imported input prices inside Brazil’s IPCA.',
+      staticNote:
+        'Static educational reference panel compiled from official November 2026 central bank publications. Figures do not represent live quotes or investment advice.',
+    },
     sections: [
       {
         id: 'copom-selic-focus',
@@ -1063,6 +1215,69 @@ export const MONETARY_POLICY_TRANSLATIONS: Record<SupportedLanguage, MonetaryPol
         role: 'Referencia global libre de riesgo que condiciona los Treasuries y los flujos hacia emergentes.',
       },
     ],
+    euMercosurIndicators: {
+      eyebrow: 'Referencia Estática Oficial • Noviembre/2026',
+      title: 'Indicadores del Eje Unión Europea – Mercosur',
+      subtitle:
+        'Comparativa estática de tasas de interés de referencia y proyecciones oficiales de inflación entre la Eurozona (BCE) y Brasil (BCB / Mercosur), destacando la correlación macroeconómica y comercial entre ambos bloques.',
+      cards: [
+        {
+          id: 'juros-bce-selic',
+          badge: 'Tasas Básicas de Interés',
+          title: 'BCE (Eurozona) vs. Selic (Brasil / Mercosur)',
+          metrics: [
+            {
+              label: 'Tasa Selic Meta (Copom)',
+              value: '13,75% anual',
+              detail: 'Mantenida en la 282ª reunión del Copom (04/11/2026); el Focus proyecta 13,00% al cierre de 2027.',
+            },
+            {
+              label: 'Tasa de Depósito del BCE',
+              value: '2,50% anual',
+              detail: 'Tasa vigente (sep.–nov. 2026); refinanciación principal en 2,65% y crédito marginal en 2,90%.',
+            },
+            {
+              label: 'Diferencial Nominal (Selic − BCE)',
+              value: '11,25 p.p.',
+              detail: 'Brecha de tasas que determina el costo de cobertura futura (hedge) y el diferencial en EUR/BRL.',
+            },
+          ],
+          source: 'Fuentes: Banco Central de Brasil (Copom/Focus nov. 2026) y Banco Central Europeo (BCE).',
+          takeaway:
+            'Diferenciales amplios de tasas sostienen el atractivo relativo de la renta fija brasileña, mientras condiciones más restrictivas del BCE elevan el costo del financiamiento en euros.',
+        },
+        {
+          id: 'inflacao-ipca-hicp',
+          badge: 'Proyecciones de Inflación',
+          title: 'IPCA (Boletín Focus) vs. HICP (Proyecciones BCE)',
+          metrics: [
+            {
+              label: 'IPCA Brasil — 2026 (Focus)',
+              value: '5,15% anual',
+              detail: 'Mediana del Boletín Focus (23/11/2026), con previsiones de 5,12% para 2027 y 4,00% para 2028.',
+            },
+            {
+              label: 'HICP Eurozona — 2026 (BCE)',
+              value: '3,0% anual',
+              detail: 'Previsión general del equipo del BCE (subyacente 2,5%), bajando a 2,5% en 2027 hacia la meta del 2,0%.',
+            },
+            {
+              label: 'Diferencial Inflacionario Proyectado (2026)',
+              value: '2,15 p.p.',
+              detail: 'Brecha entre IPCA esperado y HICP europeo empleada para comparar rendimientos reales entre monedas.',
+            },
+          ],
+          source: 'Fuentes: Boletín Focus / BCB (23/11/2026) y Proyecciones Macroeconómicas del BCE.',
+          takeaway:
+            'Descontar la inflación esperada de cada moneda permite estimar la tasa real ex-ante y comprender ajustes de poder adquisitivo en contratos comerciales UE–Mercosur.',
+        },
+      ],
+      correlationTitle: 'Lectura Educativa: Correlación Económica entre la Unión Europea y el Mercosur',
+      correlationBody:
+        'La interacción entre el BCE y el Banco Central de Brasil incide en el eje Unión Europea–Mercosur por tres vías: (1) Flujos de capital y carry, ya que el diferencial Selic–BCE orienta asignaciones hacia deuda soberana; (2) Costo de cobertura en EUR/BRL para exportadores de materias primas del Mercosur e importadores de bienes industriales europeos; y (3) Traslado inflacionario bilateral mediante precios energéticos e insumos transables.',
+      staticNote:
+        'Panel estático de referencia educativa basado en boletines oficiales públicos de noviembre de 2026. No constituye cotización en vivo ni recomendación de inversión.',
+    },
     sections: [
       {
         id: 'copom-selic-focus',
