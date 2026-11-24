@@ -10,6 +10,12 @@ import {
   Briefcase,
   X,
   Check,
+  BookOpen,
+  Coins,
+  Calculator,
+  Globe2,
+  ShieldCheck,
+  HelpCircle,
 } from 'lucide-react';
 import { useMarket } from '../context/MarketContext';
 import { formatCurrencyValue, formatSignedCurrencyChange, formatSignedPercentChange, getAssetPriceDecimals } from '../utils/finance';
@@ -269,7 +275,7 @@ export const PortfolioView: React.FC = () => {
         </div>
       </div>
 
-      {/* Historical Portfolio Performance Line Charts (Recharts) */}
+      {/* Historical Portfolio Performance Line Charts */}
       <PortfolioPerformanceChart
         positions={positionsWithLiveMetrics}
         universalRates={universalRates}
@@ -395,6 +401,79 @@ export const PortfolioView: React.FC = () => {
           </div>
         )}
       </div>
+
+      {/* Editorial Multi-Currency Portfolio Guide & FAQ */}
+      <section
+        aria-labelledby="portfolio-editorial-guide-heading"
+        className="rounded-2xl bg-[#FFFFFF] dark:bg-[#0d1627] border border-[#E2E8F0] dark:border-slate-800/90 p-5 sm:p-6 shadow-xl space-y-6"
+      >
+        <div className="border-b border-[#E2E8F0] dark:border-slate-800/80 pb-4 space-y-2">
+          <span className="inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-[#003399] dark:text-emerald-400">
+            <BookOpen className="w-3.5 h-3.5" aria-hidden="true" />
+            <span>{tPort.editorialGuide.eyebrow}</span>
+          </span>
+          <h2
+            id="portfolio-editorial-guide-heading"
+            className="text-base sm:text-lg font-extrabold text-[#0F172A] dark:text-white tracking-tight"
+          >
+            {tPort.editorialGuide.title}
+          </h2>
+          <p className="text-xs sm:text-[13px] text-[#1E293B] dark:text-slate-300 leading-relaxed max-w-4xl">
+            {tPort.editorialGuide.intro}
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {tPort.editorialGuide.sections.map((section, idx) => {
+            const SectionIcon = [Coins, Calculator, Globe2, ShieldCheck][idx] || BookOpen;
+            return (
+              <article
+                key={section.id}
+                className="rounded-xl bg-[#F4F7F9] dark:bg-[#070e1b] border border-[#E2E8F0] dark:border-slate-800/80 p-4 space-y-2"
+              >
+                <h3 className="text-xs sm:text-sm font-bold text-[#002266] dark:text-white leading-snug flex items-start gap-2">
+                  <SectionIcon
+                    className="w-4 h-4 text-[#003399] dark:text-emerald-400 flex-shrink-0 mt-0.5"
+                    aria-hidden="true"
+                  />
+                  <span>{section.title}</span>
+                </h3>
+                <p className="text-[11px] sm:text-xs text-[#1E293B] dark:text-slate-300 leading-relaxed">
+                  {section.body}
+                </p>
+              </article>
+            );
+          })}
+        </div>
+
+        <div className="border-t border-[#E2E8F0] dark:border-slate-800/80 pt-5 space-y-3">
+          <div className="space-y-1">
+            <span className="inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-[#003399] dark:text-emerald-400">
+              <HelpCircle className="w-3.5 h-3.5" aria-hidden="true" />
+              <span>{tPort.faq.eyebrow}</span>
+            </span>
+            <h2 className="text-base sm:text-lg font-extrabold text-[#0F172A] dark:text-white tracking-tight">
+              {tPort.faq.title}
+            </h2>
+          </div>
+
+          <dl className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {tPort.faq.items.map((item) => (
+              <div
+                key={item.question}
+                className="rounded-xl bg-[#F4F7F9] dark:bg-[#070e1b] border border-[#E2E8F0] dark:border-slate-800/80 p-4 space-y-2"
+              >
+                <dt className="text-xs sm:text-sm font-bold text-[#002266] dark:text-white leading-snug">
+                  {item.question}
+                </dt>
+                <dd className="text-[11px] sm:text-xs text-[#1E293B] dark:text-slate-300 leading-relaxed">
+                  {item.answer}
+                </dd>
+              </div>
+            ))}
+          </dl>
+        </div>
+      </section>
 
       {/* Modal Add Position */}
       {showAddModal && (

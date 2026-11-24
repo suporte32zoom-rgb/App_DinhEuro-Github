@@ -440,3 +440,50 @@ test('Markets editorial reading guide and FAQ contain complete PT/EN/ES sections
   assert.ok(!forbiddenTerms.test(marketsViewSource), 'MarketsView.tsx must not expose technical providers or build tools');
 });
 
+test('Portfolio page removes Recharts visible reference and renders complete multi-currency editorial guide and FAQ across PT/EN/ES', async () => {
+  const fs = await import('node:fs');
+  const path = await import('node:path');
+  const { VIEWS_TRANSLATIONS } = await import('../i18n/viewsTranslations.ts');
+
+  assert.equal(
+    VIEWS_TRANSLATIONS.pt.portfolio.perfSectionSubtitle,
+    'Curva de evolução patrimonial, custo investido e comparativo percentual por ativo em tempo real.'
+  );
+  assert.equal(
+    VIEWS_TRANSLATIONS.pt.portfolio.editorialGuide.title,
+    'Guia Prático de Gestão de Carteira Global e Avaliação Patrimonial'
+  );
+  assert.equal(
+    VIEWS_TRANSLATIONS.pt.portfolio.faq.title,
+    'Perguntas Frequentes sobre o Gerenciador de Carteiras'
+  );
+
+  const forbiddenTerms = /\b(recharts|finnhub|awesomeapi|coingecko|brapi|yahoo\s*finance|vite|github|cloudflare|localstorage)\b/i;
+
+  for (const lang of ['pt', 'en', 'es'] as const) {
+    const port = VIEWS_TRANSLATIONS[lang].portfolio;
+    assert.ok(!forbiddenTerms.test(port.perfSectionSubtitle), `perfSectionSubtitle must not expose Recharts in ${lang}`);
+    assert.equal(port.editorialGuide.sections.length, 4, `Expected 4 portfolio guide blocks in ${lang}`);
+    assert.equal(port.faq.items.length, 4, `Expected 4 portfolio FAQ items in ${lang}`);
+
+    for (const sec of port.editorialGuide.sections) {
+      assert.ok(sec.title.length >= 15, `Portfolio guide block title too short in ${lang}`);
+      assert.ok(sec.body.length >= 120, `Portfolio guide block body too short in ${lang}`);
+      assert.ok(!forbiddenTerms.test(sec.body), `Forbidden technical name in portfolio guide (${lang})`);
+    }
+    for (const item of port.faq.items) {
+      assert.ok(item.question.length >= 20, `Portfolio FAQ question too short in ${lang}`);
+      assert.ok(item.answer.length >= 80, `Portfolio FAQ answer too short in ${lang}`);
+      assert.ok(!forbiddenTerms.test(item.answer), `Forbidden technical name in portfolio FAQ (${lang})`);
+    }
+  }
+
+  const portfolioViewSource = fs.readFileSync(
+    path.resolve(process.cwd(), 'src/views/PortfolioView.tsx'),
+    'utf8'
+  );
+  assert.ok(portfolioViewSource.includes('tPort.editorialGuide.title'));
+  assert.ok(portfolioViewSource.includes('tPort.faq.title'));
+  assert.ok(!forbiddenTerms.test(portfolioViewSource), 'PortfolioView.tsx must not expose technical libraries or providers');
+});
+

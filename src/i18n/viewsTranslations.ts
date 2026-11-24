@@ -71,6 +71,24 @@ export interface ViewsTranslations {
     perfEmptyChartTitle: string;
     perfEmptyChartDesc: string;
     perfSyncedBadge: string;
+    editorialGuide: {
+      eyebrow: string;
+      title: string;
+      intro: string;
+      sections: Array<{
+        id: string;
+        title: string;
+        body: string;
+      }>;
+    };
+    faq: {
+      eyebrow: string;
+      title: string;
+      items: Array<{
+        question: string;
+        answer: string;
+      }>;
+    };
   };
   news: {
     title: string;
@@ -286,7 +304,7 @@ export const VIEWS_TRANSLATIONS: Record<SupportedLanguage, ViewsTranslations> = 
       cancel: 'Cancelar',
       addToPortfolio: 'Adicionar à Carteira',
       perfSectionTitle: 'Performance Histórica da Carteira',
-      perfSectionSubtitle: 'Curva de evolução patrimonial, custo investido e comparativo percentual por ativo via Recharts.',
+      perfSectionSubtitle: 'Curva de evolução patrimonial, custo investido e comparativo percentual por ativo em tempo real.',
       perfPeriodLabel: 'Período:',
       perfEquityChartTitle: 'Evolução Patrimonial vs. Capital Investido',
       perfAssetChartTitle: 'Rentabilidade Comparativa por Ativo (%)',
@@ -301,6 +319,64 @@ export const VIEWS_TRANSLATIONS: Record<SupportedLanguage, ViewsTranslations> = 
       perfEmptyChartTitle: 'Gráficos de performance prontos para sua carteira',
       perfEmptyChartDesc: 'Adicione seu primeiro ativo para acompanhar a evolução histórica em linha, comparativo contra o custo médio e desempenho individual.',
       perfSyncedBadge: 'Série Histórica Sincronizada',
+      editorialGuide: {
+        eyebrow: 'Educação Financeira & Patrimônio',
+        title: 'Guia Prático de Gestão de Carteira Global e Avaliação Patrimonial',
+        intro:
+          'Entenda os conceitos essenciais para consolidar posições em múltiplas moedas, comparar rentabilidade real, equilibrar riscos geográficos e utilizar o simulador com privacidade.',
+        sections: [
+          {
+            id: 'multi-currency-wealth',
+            title: 'Consolidando Patrimônio em Real (BRL), Euro (EUR) e Dólar (USD)',
+            body:
+              'Acompanhar o portfólio simultaneamente em Real, Euro e Dólar permite medir o poder de compra real do patrimônio além da variação nominal em uma única moeda. Quando um investidor detém ativos brasileiros e internacionais, oscilações na taxa de câmbio alteram o valor consolidado: uma valorização do Dólar ou do Euro amplia o patrimônio expresso em reais, enquanto a apreciação do Real aumenta o equivalente em moeda forte dos ativos domésticos.',
+          },
+          {
+            id: 'avg-cost-pnl',
+            title: 'Preço Médio, Capital Investido e Lucro/Prejuízo (P&L)',
+            body:
+              'O capital investido representa o custo histórico de aquisição calculado pela multiplicação entre quantidade e preço médio de compra de cada ativo. Já o valor de mercado reflete a cotação corrente em tempo real. A diferença entre ambos forma o Lucro/Prejuízo (P&L) financeiro e o retorno percentual acumulado — permitindo avaliar de forma objetiva o desempenho de ações da B3, papéis globais e criptoativos frente ao custo inicial.',
+          },
+          {
+            id: 'diversification-geography',
+            title: 'Diversificação por Classe de Ativo e Geografia',
+            body:
+              'Distribuir posições entre renda variável brasileira, mercados desenvolvidos dos Estados Unidos e da Europa, moedas fortes e ativos digitais ajuda a reduzir a concentração de risco em um único ciclo econômico ou jurisdição. As barras de alocação do painel mostram visualmente o peso proporcional de cada classe na carteira, facilitando identificar excessos de exposição antes de planejar novos aportes.',
+          },
+          {
+            id: 'local-privacy',
+            title: 'Privacidade e Armazenamento Local sem Cadastro',
+            body:
+              'Todas as posições adicionadas, quantidades e preços médios permanecem armazenados exclusivamente no próprio navegador do usuário, sem criação de conta, exigência de senha ou envio de dados patrimoniais pessoais para servidores externos. Isso garante sigilo total nas simulações e acesso imediato sempre que retornar no mesmo dispositivo.',
+          },
+        ],
+      },
+      faq: {
+        eyebrow: 'Dúvidas Frequentes',
+        title: 'Perguntas Frequentes sobre o Gerenciador de Carteiras',
+        items: [
+          {
+            question: 'Como o câmbio em tempo real afeta o patrimônio convertido em EUR e USD?',
+            answer:
+              'O painel calcula primeiro o valor atualizado de cada posição em reais com base nas taxas vigentes de Dólar e Euro e, em seguida, converte o total consolidado para EUR e USD. Assim, mesmo que seus ativos na B3 permaneçam estáveis em reais, variações cambiais alteram imediatamente o poder de compra equivalente em Euro e Dólar.',
+          },
+          {
+            question: 'Qual a diferença entre rentabilidade nominal em reais e rentabilidade em dólar ou euro?',
+            answer:
+              'A rentabilidade nominal em reais mede o ganho exclusivamente na moeda brasileira, sem descontar eventual desvalorização cambial. Já a leitura em dólar ou euro mostra quanto o portfólio cresceu de fato em moedas fortes globais, revelando se o retorno dos ativos superou ou não a variação do câmbio no período.',
+          },
+          {
+            question: 'Como registrar múltiplas compras do mesmo ativo para acompanhar o preço médio?',
+            answer:
+              'Você pode somar a quantidade total adquirida e informar o preço médio ponderado das operações em uma única posição consolidada, ou registrar aportes separados pelo botão "Nova Posição" para visualizar o impacto individual de cada entrada no retorno total.',
+          },
+          {
+            question: 'Os resultados e gráficos do gerenciador constituem recomendação financeira?',
+            answer:
+              'Não. O Gerenciador de Carteiras Globais é uma ferramenta exclusivamente educativa e de simulação patrimonial, desenhada para estudo de alocação multimoeda e acompanhamento informativo de cotações, sem caráter de consultoria ou recomendação de compra ou venda.',
+          },
+        ],
+      },
     },
     news: {
       title: 'Notícias & Cenário Político-Financeiro',
@@ -524,7 +600,7 @@ export const VIEWS_TRANSLATIONS: Record<SupportedLanguage, ViewsTranslations> = 
       cancel: 'Cancel',
       addToPortfolio: 'Add to Portfolio',
       perfSectionTitle: 'Historical Portfolio Performance',
-      perfSectionSubtitle: 'Wealth trajectory curve, invested cost basis, and per-asset percentage return powered by Recharts.',
+      perfSectionSubtitle: 'Wealth trajectory curve, invested cost basis, and per-asset percentage return in real time.',
       perfPeriodLabel: 'Period:',
       perfEquityChartTitle: 'Portfolio Value vs. Cost Basis',
       perfAssetChartTitle: 'Comparative Asset Performance (%)',
@@ -539,6 +615,64 @@ export const VIEWS_TRANSLATIONS: Record<SupportedLanguage, ViewsTranslations> = 
       perfEmptyChartTitle: 'Performance line charts ready for your portfolio',
       perfEmptyChartDesc: 'Add your first holding to track historical equity curves, compare against cost basis, and inspect per-asset returns.',
       perfSyncedBadge: 'Historical Series Synced',
+      editorialGuide: {
+        eyebrow: 'Wealth Education & Multi-Currency Tracking',
+        title: 'Practical Guide to Global Portfolio Management and Valuation',
+        intro:
+          'Understand the core principles behind multi-currency wealth consolidation, cost-basis P&L tracking, geographic diversification, and private browser-local simulations.',
+        sections: [
+          {
+            id: 'multi-currency-wealth',
+            title: 'Consolidating Wealth in BRL, EUR, and USD',
+            body:
+              'Tracking your portfolio across Real, Euro, and US Dollar simultaneously measures real purchasing power beyond nominal local-currency gains. When holding both domestic and international assets, FX fluctuations directly reshape consolidated wealth: a stronger Dollar or Euro lifts BRL-denominated totals, whereas BRL appreciation raises the hard-currency equivalent of local holdings.',
+          },
+          {
+            id: 'avg-cost-pnl',
+            title: 'Average Price, Invested Capital, and Profit/Loss (P&L)',
+            body:
+              'Invested capital reflects historical acquisition cost calculated from quantity multiplied by average purchase price, while market value tracks live exchange quotes. Comparing both yields cumulative financial Profit/Loss (P&L) and percentage return across Brazilian B3 equities, US stocks, and crypto assets.',
+          },
+          {
+            id: 'diversification-geography',
+            title: 'Diversification by Asset Class and Geography',
+            body:
+              'Spreading exposure across Brazilian equities, developed markets in the US and Europe, hard currencies, and digital assets helps curb concentration risk tied to any single economic cycle. Allocation bars summarize each category’s share so overweights stand out clearly before planning new contributions.',
+          },
+          {
+            id: 'local-privacy',
+            title: 'Privacy and Local Browser Storage Without Sign-Up',
+            body:
+              'Every position, quantity, and average entry price stays saved locally inside your own browser without account registration, passwords, or transmission of personal wealth records to external servers—preserving full privacy across simulations on your device.',
+          },
+        ],
+      },
+      faq: {
+        eyebrow: 'Frequently Asked Questions',
+        title: 'FAQ on the Portfolio Manager',
+        items: [
+          {
+            question: 'How do real-time exchange rates affect wealth converted into EUR and USD?',
+            answer:
+              'The dashboard values each holding using current USD and EUR exchange rates and expresses the consolidated portfolio across BRL, EUR, and USD. Even when local B3 share prices stay flat in reais, FX movements immediately update your equivalent purchasing power in Euros and US Dollars.',
+          },
+          {
+            question: 'What is the difference between nominal BRL return and USD/EUR-adjusted return?',
+            answer:
+              'Nominal return in reais measures gains purely in Brazilian currency without adjusting for currency depreciation. Viewing returns in USD or EUR reveals whether underlying asset performance outpaced exchange-rate movements in hard global currencies.',
+          },
+          {
+            question: 'How can I log multiple purchases of the same asset to track average price?',
+            answer:
+              'You can enter total combined shares at your weighted average purchase price as one consolidated holding, or record separate lots via "New Position" to observe each entry’s individual impact on total return.',
+          },
+          {
+            question: 'Do portfolio metrics and charts represent investment advice?',
+            answer:
+              'No. The Global Portfolio Manager is strictly an educational and simulation tool for exploring multi-currency allocation and quote tracking, and does not provide financial advice or buy/sell recommendations.',
+          },
+        ],
+      },
     },
     news: {
       title: 'News & Political-Financial Desk',
@@ -762,7 +896,7 @@ export const VIEWS_TRANSLATIONS: Record<SupportedLanguage, ViewsTranslations> = 
       cancel: 'Cancelar',
       addToPortfolio: 'Agregar a la Cartera',
       perfSectionTitle: 'Rendimiento Histórico de la Cartera',
-      perfSectionSubtitle: 'Curva de evolución patrimonial, capital invertido y comparativa porcentual por activo con Recharts.',
+      perfSectionSubtitle: 'Curva de evolución patrimonial, capital invertido y comparativa porcentual por activo en tiempo real.',
       perfPeriodLabel: 'Período:',
       perfEquityChartTitle: 'Evolución Patrimonial vs. Capital Invertido',
       perfAssetChartTitle: 'Rendimiento Comparativo por Activo (%)',
@@ -777,6 +911,64 @@ export const VIEWS_TRANSLATIONS: Record<SupportedLanguage, ViewsTranslations> = 
       perfEmptyChartTitle: 'Gráficos de rendimiento listos para tu cartera',
       perfEmptyChartDesc: 'Agrega tu primer activo para seguir la evolución histórica en línea, comparar contra el costo promedio y ver el desempeño individual.',
       perfSyncedBadge: 'Serie Histórica Sincronizada',
+      editorialGuide: {
+        eyebrow: 'Educación Financiera & Patrimonio',
+        title: 'Guía Práctica de Gestión de Cartera Global y Valoración Patrimonial',
+        intro:
+          'Conoce los conceptos clave para consolidar posiciones multidivisa, medir el rendimiento real frente al costo invertido, diversificar por geografía y simular escenarios con total privacidad.',
+        sections: [
+          {
+            id: 'multi-currency-wealth',
+            title: 'Consolidando Patrimonio en Real (BRL), Euro (EUR) y Dólar (USD)',
+            body:
+              'Seguir la cartera simultáneamente en Real, Euro y Dólar permite evaluar el poder adquisitivo real más allá de la variación nominal en una sola moneda. Al combinar activos locales e internacionales, el tipo de cambio modifica el valor consolidado: una suba del Dólar o del Euro eleva el total expresado en reales, mientras la apreciación del Real aumenta el equivalente en divisas fuertes de las posiciones domésticas.',
+          },
+          {
+            id: 'avg-cost-pnl',
+            title: 'Precio Promedio, Capital Invertido y Ganancia/Pérdida (P&L)',
+            body:
+              'El capital invertido refleja el costo histórico de compra obtenido al multiplicar cantidad por precio promedio de entrada, mientras el valor de mercado sigue la cotización vigente en tiempo real. La diferencia arroja la Ganancia o Pérdida (P&L) y el retorno porcentual acumulado en acciones de B3, acciones globales y criptoactivos.',
+          },
+          {
+            id: 'diversification-geography',
+            title: 'Diversificación por Clase de Activo y Geografía',
+            body:
+              'Equilibrar exposición entre renta variable brasileña, mercados desarrollados de EE. UU. y Europa, divisas fuertes y activos digitales ayuda a reducir la concentración de riesgo en un único ciclo económico. Las barras de asignación muestran el peso de cada categoría para detectar desbalances antes de realizar nuevos aportes.',
+          },
+          {
+            id: 'local-privacy',
+            title: 'Privacidad y Almacenamiento Local sin Registro',
+            body:
+              'Todas las simulaciones, cantidades y precios promedio ingresados se guardan localmente en tu propio navegador, sin registro de cuenta, solicitud de contraseñas ni envío de datos patrimoniales personales a servidores externos, garantizando privacidad absoluta en cada sesión.',
+          },
+        ],
+      },
+      faq: {
+        eyebrow: 'Preguntas Frecuentes',
+        title: 'Preguntas Frecuentes sobre el Gestor de Carteras',
+        items: [
+          {
+            question: '¿Cómo afecta el tipo de cambio en tiempo real al patrimonio convertido en EUR y USD?',
+            answer:
+              'El panel valora cada posición según las cotizaciones vigentes del Dólar y del Euro y expresa el patrimonio consolidado en BRL, EUR y USD. Incluso si tus acciones en B3 permanecen estables en reales, las variaciones cambiarias actualizan de inmediato su equivalente en Euros y Dólares.',
+          },
+          {
+            question: '¿Qué diferencia hay entre rentabilidad nominal en reales y rentabilidad en dólares o euros?',
+            answer:
+              'La rentabilidad nominal en reales mide la ganancia exclusivamente en moneda brasileña, sin descontar eventuales depreciaciones cambiarias. En cambio, medir el retorno en dólares o euros muestra si la cartera realmente creció frente a divisas internacionales de referencia.',
+          },
+          {
+            question: '¿Cómo registrar múltiples compras del mismo activo para seguir el precio promedio?',
+            answer:
+              'Puedes sumar la cantidad total e ingresar el precio promedio ponderado de tus compras en una posición única, o cargar lotes separados mediante el botón "Nueva Posición" para observar el aporte individual de cada entrada.',
+          },
+          {
+            question: '¿Las métricas y gráficos del gestor constituyen asesoría o recomendación financiera?',
+            answer:
+              'No. El Gestor de Carteras Globales es una herramienta exclusivamente educativa y de simulación patrimonial orientada al análisis de asignación multidivisa y seguimiento informativo de cotizaciones, sin constituir recomendación de inversión.',
+          },
+        ],
+      },
     },
     news: {
       title: 'Noticias & Escenario Político-Financiero',
