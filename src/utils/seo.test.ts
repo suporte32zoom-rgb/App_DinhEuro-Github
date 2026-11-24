@@ -575,3 +575,55 @@ test('Brokers Guide renders comparative editorial guide and 4-item FAQ across PT
   assert.ok(!hypeSuperlatives.test(brokersTranslationsSource), 'brokersTranslations.ts should avoid absolute promotional superlatives');
 });
 
+test('/day-trade educational restructuring, JSON-LD organization email fix, and base HTML integrity', async () => {
+  const fs = await import('node:fs');
+  const path = await import('node:path');
+  const { FUTURES_EDUCATION_COPY } = await import('../i18n/futuresEducationTranslations.ts');
+
+  const indexHtml = fs.readFileSync(path.resolve(process.cwd(), 'index.html'), 'utf8');
+  const seoSource = fs.readFileSync(path.resolve(process.cwd(), 'src/utils/seo.ts'), 'utf8');
+  const dayTradeSource = fs.readFileSync(path.resolve(process.cwd(), 'src/views/DayTradeView.tsx'), 'utf8');
+
+  // 1. Organization JSON-LD email fix
+  assert.ok(indexHtml.includes('"email":"admin@dinheuro.com"'), 'index.html organization JSON-LD must use admin@dinheuro.com');
+  assert.ok(!indexHtml.includes('admin@dinheiro.com'), 'index.html must not contain admin@dinheiro.com');
+  assert.ok(seoSource.includes("email: 'admin@dinheuro.com'"), 'seo.ts organization schema must use admin@dinheuro.com');
+  assert.ok(!seoSource.includes('admin@dinheiro.com'), 'seo.ts must not contain admin@dinheiro.com');
+
+  // 2. Preserve AdSense, GA4, and PWA manifest in index.html
+  assert.ok(indexHtml.includes('ca-pub-7845011898892939'), 'Google AdSense client ID must remain in index.html');
+  assert.ok(indexHtml.includes('G-XS3S97LWQC'), 'Google Analytics ID must remain in index.html');
+  assert.ok(indexHtml.includes('./manifest.webmanifest'), 'PWA manifest link must remain in index.html');
+  assert.ok(indexHtml.includes('serviceWorker'), 'PWA service worker registration must remain in index.html');
+
+  // 3. Educational /day-trade metadata without speculative scalping promises
+  for (const lang of ['pt', 'en', 'es'] as const) {
+    const meta = ROUTE_SEO_METADATA.daytrade[lang];
+    assert.ok(!/scalping|fique rico|lucro garantido|ganhos rápidos/i.test(meta.title), `daytrade title in ${lang} must avoid speculative appeal`);
+    assert.ok(!/scalping|fique rico|lucro garantido|ganhos rápidos/i.test(meta.description), `daytrade description in ${lang} must avoid speculative appeal`);
+    assert.ok(meta.title.length >= 30 && meta.title.length <= 70, `daytrade title length check (${lang}): ${meta.title.length}`);
+    assert.ok(meta.description.length >= 110 && meta.description.length <= 170, `daytrade description length check (${lang}): ${meta.description.length}`);
+  }
+
+  // 4. Editorial content, FAQ, and risk disclaimer across PT/EN/ES
+  const forbiddenTerms = /\b(recharts|finnhub|awesomeapi|coingecko|brapi|yahoo\s*finance|vite|github|cloudflare)\b/i;
+  for (const lang of ['pt', 'en', 'es'] as const) {
+    const copy = FUTURES_EDUCATION_COPY[lang];
+    assert.equal(copy.sections.length, 4, `Expected 4 educational sections in ${lang}`);
+    assert.equal(copy.faqItems.length, 5, `Expected 5 FAQ items in ${lang}`);
+    assert.ok(copy.topWarningBody.length >= 80, `Top educational risk notice missing or too short in ${lang}`);
+    assert.ok(copy.footerDisclaimerBody.length >= 120, `Bottom disclaimer missing or too short in ${lang}`);
+    for (const sec of copy.sections) {
+      assert.ok(sec.title.length >= 15, `Futures section title too short in ${lang}`);
+      assert.ok(sec.body.join(' ').length >= 180, `Futures section content too short in ${lang}`);
+      assert.ok(!forbiddenTerms.test(sec.body.join(' ')), `Forbidden technical term in futures section (${lang})`);
+    }
+    for (const item of copy.faqItems) {
+      assert.ok(item.question.length >= 20, `Futures FAQ question too short in ${lang}`);
+      assert.ok(item.answer.length >= 80, `Futures FAQ answer too short in ${lang}`);
+      assert.ok(!forbiddenTerms.test(item.answer), `Forbidden technical term in futures FAQ (${lang})`);
+    }
+  }
+
+  assert.ok(!forbiddenTerms.test(dayTradeSource), 'DayTradeView.tsx must not expose technical providers or build tools');
+});

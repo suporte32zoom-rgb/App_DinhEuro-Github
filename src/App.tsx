@@ -34,14 +34,12 @@ import { LgpdConsentBanner } from './components/LgpdConsentBanner';
 
 const MainContent: React.FC = () => {
   const { activeTab } = useMarket();
-  const isTerminalMode = activeTab === 'daytrade' || activeTab === 'tape_reading';
+  const isTerminalMode = activeTab === 'tape_reading';
 
   return (
     <main
       className={`${
-        activeTab === 'daytrade'
-          ? 'w-full h-screen p-0 m-0 overflow-hidden flex flex-col max-w-none'
-          : isTerminalMode
+        isTerminalMode
           ? 'w-full max-w-[1920px] mx-auto px-0 sm:px-1 pt-0 pb-0 flex-1 flex flex-col min-h-0 h-[calc(100vh-66px)] overflow-hidden'
           : 'max-w-7xl mx-auto px-3 sm:px-6 pt-5 sm:pt-6 flex-1 w-full'
       }`}
@@ -71,7 +69,7 @@ const MainContent: React.FC = () => {
 const AppShell: React.FC = () => {
   const { theme, activeTab } = useMarket();
   const { lang } = useI18n();
-  const isTerminalMode = activeTab === 'daytrade' || activeTab === 'tape_reading';
+  const isTerminalMode = activeTab === 'tape_reading';
 
   const lastTrackedRouteRef = useRef<string | null>(null);
 
@@ -111,14 +109,14 @@ const AppShell: React.FC = () => {
         isTerminalMode ? 'h-screen overflow-hidden' : ''
       }`}
     >
-      {/* Real-time Top Marquee Ribbon (Hidden in Day Trade Pro to use its integrated continuous ticker bar) */}
+      {/* Real-time Top Marquee Ribbon */}
       <ErrorBoundary>
-        {activeTab !== 'daytrade' && <TickerTape />}
+        <TickerTape />
       </ErrorBoundary>
 
-      {/* Global Responsive Navigation Header (Hidden in Day Trade Pro to faithfully replicate the full-screen terminal header) */}
+      {/* Global Responsive Navigation Header */}
       <ErrorBoundary>
-        {activeTab !== 'daytrade' && <Header />}
+        <Header />
       </ErrorBoundary>
 
       {/* Dynamic Route View */}

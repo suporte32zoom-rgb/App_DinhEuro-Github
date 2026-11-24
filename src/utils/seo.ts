@@ -138,25 +138,25 @@ export const ROUTE_SEO_METADATA: Record<NavigationTab, Record<SupportedLanguage,
   },
   daytrade: {
     pt: {
-      title: 'Terminal Day Trade & Scalping, Mini-Índice, Mini-Dólar e S&P 500 ao Vivo | DinhEuro',
+      title: 'Mercados Futuros, Volatilidade e Gestão de Risco | DinhEuro',
       description:
-        'Ambiente de alta performance para leitura intraday de Mini-Índice (WIN), Mini-Dólar (WDO), S&P 500, fechamento Ibovespa hoje e pares globais.',
+        'Guia educativo e analítico sobre contratos futuros (Mini-Índice, Mini-Dólar e S&P 500), liquidez, horário de pregão, câmbio, juros e controle de risco.',
       keywords:
-        'terminal day trade, scalping b3, mini índice win, mini dólar wdo, dólar comercial hoje em tempo real, fechamento ibovespa hoje, s&p 500 ao vivo',
+        'mercados futuros educação, mini índice win, mini dólar wdo, s&p 500 volatilidade, gestão de risco financeiro, liquidez e horário de pregão, câmbio e juros futuros',
     },
     en: {
-      title: 'Day Trade & Scalping Terminal, Index Futures, FX & Intraday Flow | DinhEuro',
+      title: 'Futures Markets, Volatility & Risk Management | DinhEuro',
       description:
-        'High-precision intraday terminal for index futures, currency scalping, volatility tracking, and real-time order execution simulation.',
+        'Educational and analytical guide to futures contracts (Mini-Index, Mini-Dollar, and S&P 500), market liquidity, macro drivers, and capital risk management.',
       keywords:
-        'day trade terminal, scalping workstation, futures trading, intraday fx, USD BRL exchange rate today, s&p 500 live',
+        'futures markets education, volatility and liquidity, index futures s&p 500, fx futures, capital risk management, macro interest rate impact',
     },
     es: {
-      title: 'Terminal Day Trade & Scalping, Futuros de Índices y Divisas en Vivo | DinhEuro',
+      title: 'Mercados de Futuros, Volatilidad y Gestión de Riesgo | DinhEuro',
       description:
-        'Entorno de alta precisión para operativa intradía en futuros de índices, dólar comercial y pares de alta liquidez.',
+        'Guía educativa y analítica sobre contratos de futuros (Mini-Índice, Mini-Dólar y S&P 500), liquidez, horarios de sesión, divisas, tasas y control de riesgo.',
       keywords:
-        'terminal day trade, scalping en vivo, futuros de indices, intradia forex',
+        'mercados de futuros educación, volatilidad y liquidez, futuros s&p 500, divisas y tasas, gestión de riesgo financiero',
     },
   },
   tape_reading: {
@@ -561,7 +561,7 @@ export function buildStructuredDataSchemas(lang: SupportedLanguage = 'pt') {
     '@id': `${CANONICAL_ORIGIN}/#organization`,
     name: 'DinhEuro',
     url: CANONICAL_ORIGIN,
-    email: 'admin@dinheiro.com',
+    email: 'admin@dinheuro.com',
     logo: {
       '@type': 'ImageObject',
       url: `${CANONICAL_ORIGIN}/logo.png`,
