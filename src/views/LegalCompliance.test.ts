@@ -75,3 +75,15 @@ test('Footer Hub Navigation excludes removed Guia de Corretoras link', () => {
     'Footer.tsx must not render Guia de Corretoras'
   );
 });
+
+test('Terms of Use sets effective date to Vigência: Novembro/2026 and removes correspondente digital phrasing', async () => {
+  const { LEGAL_TRANSLATIONS } = await import('../i18n/legalTranslations.ts');
+
+  assert.equal(LEGAL_TRANSLATIONS.pt.terms.badge, 'Vigência: Novembro/2026');
+  assert.ok(!/correspondente digital/i.test(LEGAL_TRANSLATIONS.pt.terms.s1P2Before));
+  assert.ok(LEGAL_TRANSLATIONS.pt.terms.s1P2Before.includes('portal digital informativo e educacional'));
+  assert.ok(LEGAL_TRANSLATIONS.pt.terms.s1P2Before.includes('agregador de dados econômicos públicos'));
+  assert.ok(LEGAL_TRANSLATIONS.pt.terms.s1P2Before.includes('ferramentas analíticas'));
+  assert.ok(LEGAL_TRANSLATIONS.pt.terms.s1P2Before.includes('simuladores financeiros'));
+});
+

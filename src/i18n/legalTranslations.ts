@@ -111,7 +111,7 @@ export const LEGAL_TRANSLATIONS: Record<SupportedLanguage, LegalTranslations> = 
   pt: {
     backToHome: 'Voltar ao Início',
     terms: {
-      badge: 'Vigência: Março/2026 • Versão 2.4',
+      badge: 'Vigência: Novembro/2026',
       title: 'Termos de Uso e Serviço',
       subtitle:
         'Condições gerais de navegação, licença de uso da plataforma DinhEuro, propriedade intelectual e diretrizes regulatórias no mercado financeiro brasileiro e internacional.',
@@ -120,7 +120,7 @@ export const LEGAL_TRANSLATIONS: Record<SupportedLanguage, LegalTranslations> = 
       s1P1Mid: 'é um portal digital, agregador de dados econômicos públicos, provedor de ferramentas analíticas e simuladores financeiros de uso estritamente informativo e educacional.',
       s1P1After: '',
       s1P2Before:
-        'O DinhEuro atua exclusivamente como plataforma de tecnologia e inteligência de dados, operando sob o modelo de correspondente digital, canal de mídia econômica e parceiro de divulgação tecnológica. O DinhEuro',
+        'O DinhEuro atua exclusivamente como portal digital informativo e educacional, agregador de dados econômicos públicos, ferramentas analíticas, simuladores financeiros e canal de mídia econômica. O DinhEuro',
       s1P2Bold: 'NÃO',
       s1P2After:
         'é uma instituição financeira, não realiza intermediação de câmbio direta, não efetua custódia de recursos ou valores mobiliários, e não atua como corretora de valores credenciada pela CVM (Comissão de Valores Mobiliários) ou Banco Central do Brasil.',
@@ -331,7 +331,7 @@ export const LEGAL_TRANSLATIONS: Record<SupportedLanguage, LegalTranslations> = 
   en: {
     backToHome: 'Back to Home',
     terms: {
-      badge: 'Effective: March 2026 • Version 2.4',
+      badge: 'Effective: November/2026',
       title: 'Terms of Use and Service',
       subtitle:
         'General browsing terms, platform license conditions for DinhEuro, intellectual property, and regulatory guidelines across Brazilian and international financial markets.',
@@ -341,7 +341,7 @@ export const LEGAL_TRANSLATIONS: Record<SupportedLanguage, LegalTranslations> = 
         'is a digital portal, aggregator of public economic data, and provider of analytical tools and financial calculators strictly for informational and educational purposes.',
       s1P1After: '',
       s1P2Before:
-        'DinhEuro operates exclusively as a technology and data-intelligence platform, functioning as a digital information publisher and economic media channel. DinhEuro',
+        'DinhEuro operates exclusively as an informational and educational digital portal, aggregator of public economic data, analytical tools, financial calculators, and economic media channel. DinhEuro',
       s1P2Bold: 'IS NOT',
       s1P2After:
         'a financial institution, does not execute direct FX brokerage, does not hold custody of client funds or securities, and does not operate as a licensed broker-dealer under CVM or the Central Bank of Brazil.',
@@ -552,7 +552,7 @@ export const LEGAL_TRANSLATIONS: Record<SupportedLanguage, LegalTranslations> = 
   es: {
     backToHome: 'Volver al Inicio',
     terms: {
-      badge: 'Vigencia: Marzo/2026 • Versión 2.4',
+      badge: 'Vigencia: Noviembre/2026',
       title: 'Términos de Uso y Servicio',
       subtitle:
         'Condiciones generales de navegación, licencia de uso de la plataforma DinhEuro, propiedad intelectual y directrices regulatorias en el mercado financiero brasileño e internacional.',
@@ -562,7 +562,7 @@ export const LEGAL_TRANSLATIONS: Record<SupportedLanguage, LegalTranslations> = 
         'es un portal digital, agregador de datos económicos públicos y proveedor de herramientas analíticas y simuladores financieros de uso estrictamente informativo y educativo.',
       s1P1After: '',
       s1P2Before:
-        'DinhEuro actúa exclusivamente como plataforma tecnológica y de inteligencia de datos, operando como medio informativo económico. DinhEuro',
+        'DinhEuro actúa exclusivamente como portal digital informativo y educativo, agregador de datos económicos públicos, herramientas analíticas, simuladores financieros y medio informativo económico. DinhEuro',
       s1P2Bold: 'NO',
       s1P2After:
         'es una institución financiera, no realiza intermediación directa de divisas, no custodia fondos ni valores mobiliarios, y no opera como corredor regulado por la CVM ni por el Banco Central de Brasil.',
