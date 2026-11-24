@@ -800,4 +800,65 @@ test('Advanced Charts Terminal formats index support/resistance in pts, removes 
   assert.ok(!/D3 v7/.test(d3ChartSource), 'D3AdvancedChart.tsx must not contain visible D3 v7 text');
 });
 
+test('Simuladores e Ferramentas page renders 4-block EU-Mercosur editorial guide and 4-item FAQ across PT/EN/ES without altering tools or exposing providers', async () => {
+  const fs = await import('node:fs');
+  const path = await import('node:path');
+  const { TOOLS_GUIDE_TRANSLATIONS } = await import('../i18n/toolsGuideTranslations.ts');
+
+  const toolsViewSource = fs.readFileSync(
+    path.resolve(process.cwd(), 'src/views/ToolsView.tsx'),
+    'utf8'
+  );
+
+  assert.equal(
+    TOOLS_GUIDE_TRANSLATIONS.pt.guideTitle,
+    'Guia Prático de Câmbio, Juros, Inflação e Tributação'
+  );
+  assert.equal(
+    TOOLS_GUIDE_TRANSLATIONS.pt.faqTitle,
+    'Perguntas Frequentes sobre os Simuladores'
+  );
+
+  const expectedBlockTitlesPt = [
+    'Câmbio EUR/BRL, Moedas Globais e Eixo União Europeia – Mercosul',
+    'Spread Cambial, IOF e Custo Efetivo em Remessas',
+    'Juros Compostos, Renda Fixa e Poder de Compra (Inflação)',
+    'Apuração de Resultados e Imposto (DARF) com Responsabilidade',
+  ];
+  assert.deepEqual(
+    TOOLS_GUIDE_TRANSLATIONS.pt.blocks.map((b) => b.title),
+    expectedBlockTitlesPt
+  );
+
+  assert.ok(toolsViewSource.includes('<UniversalCurrencyCalculator'));
+  assert.ok(toolsViewSource.includes('calculateCompoundInterest'));
+  assert.ok(toolsViewSource.includes('calculateInflationImpact'));
+  assert.ok(toolsViewSource.includes('calculateProfitAndTax'));
+  assert.ok(toolsViewSource.includes('TOOLS_GUIDE_TRANSLATIONS[lang]'));
+
+  const forbiddenTerms =
+    /\b(d3\s*v7|recharts|finnhub|awesomeapi|coingecko|brapi|yahoo\s*finance|vite|github|cloudflare|localstorage)\b/i;
+
+  for (const lang of ['pt', 'en', 'es'] as const) {
+    const guide = TOOLS_GUIDE_TRANSLATIONS[lang];
+    assert.equal(guide.blocks.length, 4, `Expected 4 guide blocks in ${lang}`);
+    assert.equal(guide.faqItems.length, 4, `Expected 4 FAQ items in ${lang}`);
+    for (const block of guide.blocks) {
+      assert.ok(block.title.length >= 15, `Tools guide block title too short in ${lang}`);
+      assert.ok(block.body.length >= 160, `Tools guide block body too short in ${lang}`);
+    }
+    for (const faq of guide.faqItems) {
+      assert.ok(faq.question.length >= 20, `Tools FAQ question too short in ${lang}`);
+      assert.ok(faq.answer.length >= 80, `Tools FAQ answer too short in ${lang}`);
+    }
+    assert.ok(!forbiddenTerms.test(JSON.stringify(guide)), `Forbidden technical term in toolsGuide (${lang})`);
+  }
+
+  assert.ok(
+    !forbiddenTerms.test(toolsViewSource),
+    'ToolsView.tsx must not expose technical providers, chart libraries, or build tools'
+  );
+});
+
+
 

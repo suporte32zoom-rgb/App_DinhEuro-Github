@@ -215,26 +215,26 @@ export const ACADEMY_COURSES_EN: Record<
     ],
   },
   'cambio-dolar-protecao': {
-    title: 'FX Market, Dollar & International Protection',
-    shortTitle: 'FX, Dollar & Protection',
+    title: 'FX Markets, Euro (EUR/BRL), Dollar & Global Protection',
+    shortTitle: 'Global FX, EUR/BRL & Protection',
     duration: '1h 35min',
     description:
-      'Understand commercial FX, EUR/USD and USD/BRL cross pairs, spread and tax impacts, plus gradual hard-currency accumulation strategies.',
+      'Understand commercial FX with global scope and emphasis on the Euro (EUR/BRL), currency comparison across the European Union – Mercosur axis, tracking interest rates and inflation in the Eurozone (ECB), Brazil, and the US, plus operational costs and wealth protection.',
     shortDescription:
-      'Commercial vs tourist FX, EUR/USD & USD/BRL crosses, IOF tax, spreads, and gradual FX averaging.',
+      'Euro (EUR/BRL), EU–Mercosur axis, rates & inflation (ECB, Copom, Fed), spreads, IOF, and protection.',
     objective:
-      'Protect international purchasing power while cutting operational costs on remittances and currency conversions.',
+      'Protect international purchasing power by comparing EU–Mercosur axis currencies, global rates, and operational remittance costs.',
     modules: [
       {
         id: 'fx-m1',
         title: 'Commercial vs Tourist FX, Bank Spread, and IOF Tax',
         duration: '22 min',
         summary:
-          'Learn why over-the-counter cash costs far more than the interbank rate and how to compute Total Effective Value (VET).',
+          'Learn why over-the-counter cash costs far more than the interbank rate and how to compute Total Effective Value (VET) across EUR and USD wires.',
         paragraphs: [
-          'Foreign exchange markets distinguish between commercial FX (the interbank benchmark used for trade, wires, and global investing) and tourist FX (physical banknotes burdened by logistics, custody, and wider dealer markups).',
-          'Beyond the spot/PTAX benchmark quote, every retail conversion embeds two crucial cost layers: the institution’s spread (ranging from 0.3% at global brokers up to 5.5% at legacy banks) and applicable FX transaction taxes (IOF).',
-          'Consequently, the only valid metric for comparing providers is Total Effective Value (VET)—the exact all-in amount paid per Dollar or Euro after combining quote, spread, and taxes.',
+          'Foreign exchange markets distinguish between commercial FX (the interbank benchmark used in trade flows such as EU–Mercosur commerce and global investing) and tourist FX (physical banknotes burdened by logistics, custody, and wider dealer markups).',
+          'Beyond the spot/PTAX benchmark quote for Euro (EUR/BRL) or Dollar (USD/BRL), every retail conversion embeds two crucial cost layers: the institution’s spread and applicable FX transaction taxes (IOF).',
+          'Consequently, the objective metric for comparing providers is Total Effective Value (VET)—the exact all-in amount paid per Euro or Dollar after combining quote, spread, and taxes.',
         ],
         numericExample: {
           title: 'US$ 2,000.00 Wire Comparison: Legacy Bank vs Global Account',
@@ -271,14 +271,14 @@ export const ACADEMY_COURSES_EN: Record<
       },
       {
         id: 'fx-m2',
-        title: 'Cross Parities (EUR/USD, USD/BRL) and Interest Differentials',
+        title: 'Euro Parity (EUR/BRL), EU–Mercosur Axis & Global Rates (ECB, Copom, Fed)',
         duration: '25 min',
         summary:
-          'See how Euro vs Real reflects both global Dollar strength and local risk premia.',
+          'See how Euro vs Real (EUR/BRL) reflects EUR/USD, EU–Mercosur trade flows, and Eurozone interest rates and inflation (ECB) alongside Brazil and the US.',
         paragraphs: [
-          'The EUR/BRL exchange rate does not move in isolation: mathematically, it is the product of USD/BRL and the global EUR/USD parity.',
-          'Whenever US inflation or employment surprises strengthen the US Dollar globally, EUR/USD tends to fall while USD/BRL often climbs. Grasping this dual gear prevents misreading European currency moves.',
-          'Another structural driver is the interest rate differential (Carry Trade). When domestic rates offer a substantial premium above Fed Funds and ECB rates, foreign fixed-income inflows tend to cushion local currency depreciation.',
+          'The EUR/BRL exchange rate does not move in isolation: mathematically, it is the product of USD/BRL and the global EUR/USD parity. Across the European Union – Mercosur axis, comparing EUR/BRL, USD/BRL, and regional pairs such as ARS/BRL helps evaluate trade competitiveness and cross-border remittance costs.',
+          'Monitoring Eurozone monetary policy and inflation guided by the European Central Bank (ECB) alongside Brazil’s Copom and the US Federal Reserve is essential to read currency cycles. Policy rate decisions and inflation prints reshape real yield differentials across euro-, dollar-, and real-denominated assets.',
+          'This interest-rate differential influences capital flows and currency hedging costs: currencies backed by positive real yields tend to attract defensive allocation, while synchronized shifts between the ECB, Fed, and Central Bank of Brazil redefine medium- and long-term currency equilibrium.',
         ],
         numericExample: {
           title: 'Cross Decomposition of EUR/BRL via USD/BRL and EUR/USD',
@@ -316,14 +316,14 @@ export const ACADEMY_COURSES_EN: Record<
       },
       {
         id: 'fx-m3',
-        title: 'Gradual USD & EUR Allocation (Dollar Cost Averaging)',
+        title: 'Gradual EUR & USD Allocation (Dollar Cost Averaging)',
         duration: '24 min',
         summary:
-          'Replace guessing currency bottoms with recurring scheduled buys that smooth your average entry.',
+          'Replace guessing currency bottoms with recurring scheduled buys in Euro and Dollar that smooth your average entry.',
         paragraphs: [
-          'Trying to time the exact bottom of exchange rates often leads to paralysis: when FX falls, buyers wait for lower prints; when fiscal or geopolitical shocks hit, they panic-buy near peaks.',
-          'Institutional wealth managers rely on FX Dollar Cost Averaging (DCA): splitting planned capital into fixed periodic local-currency contributions (weekly or monthly). When USD or EUR dips, the same budget buys more hard currency; when it spikes, it buys less.',
-          'Beyond lowering weighted average entry cost over medium horizons, this discipline steadily builds hard-currency reserves for travel, education, or global retirement.',
+          'Trying to time the exact bottom of EUR/BRL or USD/BRL often leads to paralysis: when FX falls, buyers wait for lower prints; when fiscal or geopolitical shocks hit, they panic-buy near peaks.',
+          'Wealth planners use FX Dollar Cost Averaging (DCA): splitting planned capital into periodic local-currency contributions (weekly or monthly). When EUR or USD dips, the same budget buys more hard currency; when it rises, it buys less.',
+          'Beyond smoothing weighted average entry cost, this discipline steadily builds hard-currency wealth protection across Europe–Americas reserves for travel, education, or international diversification.',
         ],
         numericExample: {
           title: 'Monthly R$ 2,500.00 DCA Across 4 Volatile Months',
@@ -362,14 +362,14 @@ export const ACADEMY_COURSES_EN: Record<
       },
       {
         id: 'fx-m4',
-        title: 'Global Accounts, International Brokers, and Taxation',
+        title: 'Global Accounts, International Brokers, and Macro Monitoring',
         duration: '24 min',
         summary:
-          'Distinguish multi-currency spending accounts from regulated offshore brokers with SIPC custody protection.',
+          'Distinguish multi-currency Euro and Dollar accounts for remittances from regulated offshore brokers for wealth protection and external inflation tracking.',
         paragraphs: [
-          'Holding idle cash in an international checking account shields against domestic FX depreciation, yet leaves purchasing power exposed to US or European inflation (CPI). To preserve real value in USD or EUR, funds can be deployed into US Treasuries, accumulating Irish UCITS ETFs, or global equities.',
-          'When selecting international brokers, always verify regulatory oversight (SEC/FINRA in the US, FCA in the UK, BaFin or ECB supervision in the Eurozone) and investor protection regimes like SIPC (covering up to US$ 500k in US brokerage custody).',
-          'On the tax front for Brazilian residents investing abroad, realized capital gains and dividends follow annual assessment at a unified 15% rate on BRL-denominated profits (Law 14,754), making organized remittance and cost-basis logs essential.',
+          'Holding idle cash in an international account shields against domestic FX swings, yet leaves purchasing power exposed to Eurozone inflation (HICP tracked by the ECB) or US CPI. Educational planning distinguishes hard-currency liquidity for travel or trade from long-term productive allocation.',
+          'When evaluating institutions across the EU–Mercosur–US axis, always verify regulatory oversight (ECB/BaFin in the European Union, FCA in the UK, SEC/FINRA in the US, and Central Bank/CVM in Brazil), custody safeguards, and transparent operational fees.',
+          'On the tax front for cross-border holdings, realized gains and distributions require organized logs of remittances, acquisition costs, and FX rates for annual reporting under applicable laws.',
         ],
         numericExample: {
           title: 'External Inflation Erosion vs Short-Term US Treasury in USD',
@@ -458,7 +458,7 @@ export const ACADEMY_COURSES_EN: Record<
               'Calculating exact share quantity by dividing maximum acceptable dollar risk by stop-loss distance.',
           },
         ],
-        targetButtonLabel: 'Open D3 v7 Chart Terminal',
+        targetButtonLabel: 'Open Technical Charts Terminal',
         targetDescription:
           'Inspect candlesticks, highs, lows, and support zones across global catalog assets.',
       },
@@ -597,84 +597,84 @@ export const ACADEMY_COURSES_EN: Record<
     ],
   },
   'fluxo-futuros-opcoes': {
-    title: 'Order Flow (Tape Reading), Futures & Options',
-    shortTitle: 'Flow, Futures & Options',
+    title: 'Futures, Derivatives, Hedging & Market Liquidity',
+    shortTitle: 'Futures, Hedge & Options',
     duration: '1h 50min',
     description:
-      'Master Depth of Market (DOM) and Times & Trades aggression, futures leverage and daily settlement (WIN/WDO), plus options structures and Greeks.',
+      'Strictly educational and technical study of price formation and order-book liquidity, futures mechanics and notional exposure (WIN/WDO/S&P), derivatives hedging, option Greeks, and strict risk control.',
     shortDescription:
-      'Order book (DOM), institutional aggression, WIN/WDO futures contracts, and option Greeks.',
+      'Price formation, futures notional exposure, options hedging, Greeks, and strict risk management.',
     objective:
-      'Execute precise market-microstructure reads, manage futures leverage, and price derivatives hedging.',
+      'Understand market price formation technically, measure true futures notional exposure, and structure derivatives hedging with strict risk limits—without short-term speculative appeal.',
     modules: [
       {
         id: 'fl-m1',
-        title: 'Order Book (DOM), Times & Trades & Institutional Absorption',
+        title: 'Market Microstructure, Price Formation & Liquidity Absorption',
         duration: '28 min',
         summary:
-          'Distinguish passive resting limit orders in the Book from executed market aggression on the Tape.',
+          'Understand from a technical and educational perspective how resting order-book liquidity and executed prints shape price discovery.',
         paragraphs: [
-          'Asset prices do not move merely because large size sits in the Order Book (DOM — Depth of Market); prices move when buyers or sellers aggressively cross the spread and consume resting liquidity.',
-          'Tape Reading pairs two live views: the DOM, displaying passive limit intent at every price tick, and Times & Trades (the Tape), logging every executed print with timestamp, lot size, price, and aggressor broker.',
-          'A premier microstructure signal is Absorption: hundreds of contracts hit the bid aggressively at a key level, yet price refuses to break lower because an institutional player continuously reloads hidden passive bids (iceberg orders).',
+          'From a market-microstructure standpoint, prices do not move merely because large size sits in the Order Book (DOM — Depth of Market); prices adjust when participants execute market orders that consume resting liquidity across price levels.',
+          'Analytical liquidity study pairs two real-time records: the order book, displaying passive limit intent by price level, and the trade tape (Times & Trades), documenting executed price formation with timestamp, volume, and trade size.',
+          'A classic microstructure phenomenon is Liquidity Absorption: aggressive orders hit a price level repeatedly without breaking it because institutional counterparties continuously replenish passive liquidity (sliced or hedging orders). Studying this focuses on understanding liquidity and price formation—not short-term speculative shortcuts.',
         ],
         numericExample: {
-          title: 'Spotting Buyer Absorption on Mini-Dollar Futures (WDO)',
+          title: 'Analytical Study of Liquidity Absorption in a Currency Future',
           scenario:
-            'WDO trading at 5,585.00. Only 40 visible bid contracts sit at 5,584.50 while aggressive sell market orders pour in.',
+            'Illustrative currency future scenario at 5,585.00 points, showing 40 visible bid contracts at 5,584.50 amid incoming sell flow.',
           steps: [
-            'Times & Trades prints 480 contracts sold aggressively at 5,584.50 in 18 seconds',
-            'Despite selling volume 12× larger than the visible resting size, price fails to breach 5,584.00',
-            'The passive buyer instantly refreshes resting bids on every fill (iceberg execution)',
-            'Immediately after, 150 buy-aggressor contracts sweep 5,585.50 and 5,586.00 with zero resistance.',
+            'The trade tape logs 480 contracts executed on the sell side at 5,584.50 over 18 seconds',
+            'Despite volume exceeding visible resting size, the price holds above 5,584.00',
+            'Institutional participants refresh passive bids to execute large blocks with minimal market impact (iceberg execution)',
+            'Supply pressure subsides as demand balances out, shifting equilibrium price toward 5,586.00.',
           ],
           result:
-            'Seller exhaustion against institutional absorption shifts short-term supply/demand, offering a tight-stop long setup below 5,583.50.',
+            'This didactic example illustrates how institutional liquidity absorption temporarily shifts price formation and why derivatives require prudent sizing and strict risk caps rather than impulsive short-term bets.',
         },
         keyConcepts: [
           {
             term: 'DOM (Depth of Market)',
             explanation:
-              'Vertical price ladder displaying resting passive bid and ask quantities across price levels.',
+              'Vertical price ladder showing liquidity depth and accumulated passive bid and ask orders across price levels.',
           },
           {
-            term: 'Market Aggression',
+            term: 'Liquidity Consumption',
             explanation:
-              'Order executed immediately against the opposing best quote in the book, consuming resting liquidity.',
+              'Executed market order matching against the best resting opposite quote, directly participating in instant price discovery.',
           },
           {
-            term: 'Iceberg Order',
+            term: 'Iceberg Order (Sliced Block)',
             explanation:
-              'Sliced institutional order revealing only a small visible portion on the book to disguise true size.',
+              'Institutional order split into smaller visible tranches to minimize market impact during large executions.',
           },
         ],
-        targetButtonLabel: 'Observe Flow on DOM Terminal',
+        targetButtonLabel: 'Analyze Liquidity in Charts',
         targetDescription:
-          'Watch live order-book depth, aggression delta, and Times & Trades on DinhEuro.',
+          'Inspect historical range, financial volume, and educational technical indicators on DinhEuro.',
       },
       {
         id: 'fl-m2',
-        title: 'Futures Contracts (WIN, WDO, S&P): Margin, Tick & Settlement',
+        title: 'Futures Contracts (WIN, WDO, S&P): Notional, Hedging & Risk Control',
         duration: '28 min',
         summary:
-          'Master the real leverage math of B3 mini contracts and avoid the minimum-margin trap.',
+          'Master notional-exposure math, daily settlement, and margin rules in futures contracts with a focus on hedging and risk control.',
         paragraphs: [
-          'Index (WIN) and Dollar (WDO) futures on B3 settle via daily mark-to-market cash variation and require only a small collateral margin (cash, CDB, or Tesouro Selic) relative to notional size—amplifying both profits and losses.',
-          'On Mini-Index (WIN), each point equals R$ 0.20 per contract; on Mini-Dollar (WDO), each point equals R$ 10.00 per contract (0.5-point minimum tick = R$ 5.00). Ignoring true notional exposure is the #1 reason retail accounts blow up.',
-          'Consistent traders size contracts off total strategy capital rather than broker minimum intraday margin, leaving ample cushion to weather routine swings without forced risk liquidation.',
+          'Index, FX, and S&P 500 futures serve as hedging and risk-transfer instruments, settling daily via mark-to-market cash variation while requiring only a fraction of notional value as margin collateral. Because leverage magnifies adverse swings equally, disciplined risk math is essential.',
+          'In Brazilian mini contracts, each Mini-Index point equals R$ 0.20 and each Mini-Dollar point equals R$ 10.00. Confusing minimum exchange collateral with total contract notional exposure is a major risk-management mistake.',
+          'Under a sound technical approach, futures positions must always be sized by full notional exposure and explicit hedging or risk limits—maintaining ample collateral cushions and strict maximum loss controls instead of unbacked short-term leverage.',
         ],
         numericExample: {
-          title: 'Notional Value vs Required Margin on 2 WDO Contracts',
+          title: 'Didactic Calculation of Notional Exposure vs Safety Margin',
           scenario:
-            'WDO quoted at 5,584.00 points. Each mini contract represents US$ 10,000.00 (10% of the standard full contract).',
+            'Illustrative FX future at 5,584.00 points where each mini contract represents US$ 10,000.00 in notional exposure.',
           steps: [
-            'Notional value of 1 WDO contract: 10,000 × R$ 5.5840 = R$ 55,840.00',
-            'Total notional exposure for 2 WDO contracts: R$ 111,680.00',
-            'Adverse 12-point move (0.21% FX move): 2 contracts × 12 pts × R$ 10.00 = -R$ 240.00',
-            'To keep daily max risk ≤ 2% of capital, allocated equity should be at least R$ 12,000.00 (not merely R$ 300 minimum margin).',
+            'Notional value of 1 mini contract: 10,000 × R$ 5.5840 = R$ 55,840.00',
+            'Notional exposure of 2 contracts: R$ 111,680.00 (comparable to a commercial remittance)',
+            'Adverse 12-point move (0.21% FX move): 2 contracts × 12 pts × R$ 10.00 = R$ 240.00 daily settlement impact',
+            'To cap daily risk ≤ 2% of allocated capital, the structure requires at least R$ 12,000.00 in capital—never minimum operational margin alone.',
           ],
           result:
-            'Sizing contracts by notional exposure and financial stop distance prevents routine 0.2% ripples from wiping out undercapitalized accounts.',
+            'Sizing derivatives by full notional exposure and strict loss caps protects against excessive leverage and forced margin liquidation.',
         },
         keyConcepts: [
           {
@@ -693,9 +693,9 @@ export const ACADEMY_COURSES_EN: Record<
               'Posted assets (Tesouro Selic, CDB, or cash) held by the clearinghouse/broker to cover daily settlement obligations.',
           },
         ],
-        targetButtonLabel: 'Practice on Day Trade Pro',
+        targetButtonLabel: 'Explore Fixed Income & Derivatives',
         targetDescription:
-          'Test intraday charting, order tickets, and point-risk management in Day Trade & Scalping.',
+          'Explore yield curves, sovereign bonds, futures notional math, and option pricing in Fixed Income & Derivatives.',
       },
       {
         id: 'fl-m3',
@@ -803,7 +803,7 @@ export const ACADEMY_FAQ_EN: Record<string, Pick<AcademyFaqItem, 'question' | 'a
   'faq-3': {
     question: 'How is my module progress saved?',
     answer:
-      'Whenever you mark a lesson as completed, your progress is stored locally in your browser (via localStorage), keeping your track record intact across visits without sending personal data to external servers.',
+      'Whenever you mark a lesson as completed, your progress is stored locally on your own browser and device, keeping your track record intact across visits without sending personal data to external servers.',
   },
   'faq-4': {
     question: 'Which track should I choose if I am just starting out?',
@@ -813,7 +813,7 @@ export const ACADEMY_FAQ_EN: Record<string, Pick<AcademyFaqItem, 'question' | 'a
   'faq-5': {
     question: 'How can I practice the calculations taught in the modules?',
     answer:
-      'At the bottom of every module, a contextual shortcut opens the matching DinhEuro tool—including the real-time Universal FX Calculator, Compound Interest & Tax Simulators, D3 v7 Chart Terminal, Order Flow DOM, and Fixed Income & Derivatives.',
+      'At the bottom of every module, a contextual shortcut opens the matching DinhEuro tool—including the real-time Universal FX Calculator, FX & Remittance Guide, Monetary Policy & Rates, Compound Interest & Tax Simulators, Technical Charts Terminal, and Fixed Income & Derivatives.',
   },
   'faq-6': {
     question: 'Does the course material constitute buy or sell investment advice?',

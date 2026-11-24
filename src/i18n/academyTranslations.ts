@@ -334,6 +334,27 @@ const GLOSSARY_TERMS_BY_LANG: Record<SupportedLanguage, GlossaryTerm[]> = {
       definition:
         'Estratégia de proteção patrimonial utilizada para neutralizar o risco de variação abrupta de moedas estrangeiras sobre ativos ou passivos.',
     },
+    {
+      id: 'bce',
+      term: 'Banco Central Europeu (BCE)',
+      category: 'Macro',
+      definition:
+        'Autoridade monetária responsável pela política de juros, estabilidade de preços (inflação na Zona do Euro) e emissão do Euro nos países que integram a união monetária europeia.',
+    },
+    {
+      id: 'paridade-eur-brl',
+      term: 'Paridade EUR/BRL',
+      category: 'Câmbio',
+      definition:
+        'Relação cambial que expressa quantos Reais brasileiros são necessários para adquirir um Euro, refletindo conjuntamente o comportamento do câmbio local (USD/BRL) e da taxa internacional EUR/USD.',
+    },
+    {
+      id: 'comercio-ue-mercosul',
+      term: 'Comércio Exterior UE–Mercosul',
+      category: 'Macro',
+      definition:
+        'Fluxo bilateral de exportações, importações e acordos tarifários e regulatórios entre os países do Mercosul e a União Europeia, influenciando receitas cambiais, cadeias produtivas e contratos internacionais.',
+    },
   ],
   en: [
     {
@@ -406,6 +427,27 @@ const GLOSSARY_TERMS_BY_LANG: Record<SupportedLanguage, GlossaryTerm[]> = {
       definition:
         'Portfolio protection strategy used to neutralize the risk of abrupt foreign-exchange fluctuations on cross-border assets or liabilities.',
     },
+    {
+      id: 'bce',
+      term: 'European Central Bank (ECB)',
+      category: 'Macro',
+      definition:
+        'Monetary authority responsible for setting policy interest rates, safeguarding Eurozone price stability (inflation target), and managing the Euro across Eurozone member states.',
+    },
+    {
+      id: 'paridade-eur-brl',
+      term: 'EUR/BRL Exchange Parity',
+      category: 'Câmbio',
+      definition:
+        'Exchange rate expressing how many Brazilian Reais are required to buy one Euro, mathematically reflecting both local USD/BRL dynamics and the global EUR/USD cross rate.',
+    },
+    {
+      id: 'comercio-ue-mercosul',
+      term: 'EU–Mercosur Foreign Trade',
+      category: 'Macro',
+      definition:
+        'Bilateral exports, imports, and tariff/regulatory frameworks connecting Mercosur economies and the European Union, shaping FX inflows, supply chains, and cross-border contracts.',
+    },
   ],
   es: [
     {
@@ -477,6 +519,27 @@ const GLOSSARY_TERMS_BY_LANG: Record<SupportedLanguage, GlossaryTerm[]> = {
       category: 'Câmbio',
       definition:
         'Estrategia de protección patrimonial utilizada para neutralizar el riesgo de variaciones abruptas en divisas extranjeras sobre activos o pasivos.',
+    },
+    {
+      id: 'bce',
+      term: 'Banco Central Europeo (BCE)',
+      category: 'Macro',
+      definition:
+        'Autoridad monetaria encargada de definir las tasas de interés de política monetaria, velar por la estabilidad de precios (inflación de la Eurozona) y gestionar el Euro.',
+    },
+    {
+      id: 'paridade-eur-brl',
+      term: 'Paridad EUR/BRL',
+      category: 'Câmbio',
+      definition:
+        'Relación cambiaria que indica cuántos Reales brasileños se requieren para comprar un Euro, reflejando en conjunto el comportamiento de USD/BRL y la paridad global EUR/USD.',
+    },
+    {
+      id: 'comercio-ue-mercosul',
+      term: 'Comercio Exterior UE–Mercosur',
+      category: 'Macro',
+      definition:
+        'Intercambio bilateral de exportaciones, importaciones y marcos arancelarios y regulatorios entre el Mercosur y la Unión Europea, con impacto directo en flujos de divisas y contratos internacionales.',
     },
   ],
 };

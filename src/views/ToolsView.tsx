@@ -8,6 +8,10 @@ import {
   Sparkles,
   ArrowUpRight,
   PiggyBank,
+  BookOpen,
+  HelpCircle,
+  ChevronDown,
+  ShieldCheck,
 } from 'lucide-react';
 import {
   calculateCompoundInterest,
@@ -19,11 +23,18 @@ import { CompoundInterestChart } from '../components/CompoundInterestChart';
 import { UniversalCurrencyCalculator } from '../components/UniversalCurrencyCalculator';
 import { useI18n } from '../i18n/I18nContext';
 import { getNumberLocale } from '../i18n/translations';
+import { TOOLS_GUIDE_TRANSLATIONS } from '../i18n/toolsGuideTranslations';
 
 export const ToolsView: React.FC = () => {
   const { t, lang } = useI18n();
   const numberLocale = getNumberLocale(lang);
+  const tGuide = TOOLS_GUIDE_TRANSLATIONS[lang] ?? TOOLS_GUIDE_TRANSLATIONS.pt;
   const [activeTool, setActiveTool] = useState<'cambio' | 'juros' | 'inflacao' | 'darf'>('cambio');
+  const [openFaqIds, setOpenFaqIds] = useState<Record<string, boolean>>({ 'tools-faq-1': true });
+
+  const toggleFaq = (id: string) => {
+    setOpenFaqIds((prev) => ({ ...prev, [id]: !prev[id] }));
+  };
 
   // --- 2. Juros Compostos State ---
   const [initialPrincipal, setInitialPrincipal] = useState<number>(5000);
@@ -145,7 +156,7 @@ export const ToolsView: React.FC = () => {
         })}
       </div>
 
-      {/* --- TOOL 1: CALCULADORA DE CÂMBIO UNIVERSAL (AWESOMEAPI) --- */}
+      {/* --- TOOL 1: CALCULADORA DE CÂMBIO UNIVERSAL --- */}
       {activeTool === 'cambio' && (
         <UniversalCurrencyCalculator
           showRemittanceFeesDefault={true}
@@ -263,7 +274,7 @@ export const ToolsView: React.FC = () => {
                 </div>
               </div>
 
-              {/* Recharts Visual Component */}
+              {/* Compound Interest Chart */}
               <CompoundInterestChart
                 initialPrincipal={initialPrincipal}
                 monthlyContribution={monthlyContribution}
@@ -646,6 +657,109 @@ export const ToolsView: React.FC = () => {
           </div>
         </div>
       )}
+
+      {/* Editorial Support Guide (placed directly below Conversão Simultânea on the FX tab & accessible across tabs) */}
+      <section
+        aria-labelledby="tools-editorial-guide-heading"
+        className="rounded-2xl bg-[#FFFFFF] dark:bg-[#0d1627] border border-[#E2E8F0] dark:border-slate-800 p-5 sm:p-6 shadow-xl space-y-5"
+      >
+        <div className="border-b border-[#E2E8F0] dark:border-slate-800 pb-4 space-y-1.5">
+          <div className="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider text-[#006B52] dark:text-emerald-400">
+            <BookOpen className="w-3.5 h-3.5" />
+            <span>{tGuide.guideEyebrow}</span>
+          </div>
+          <h2
+            id="tools-editorial-guide-heading"
+            className="text-base sm:text-lg font-bold text-[#0F172A] dark:text-white tracking-tight"
+          >
+            {tGuide.guideTitle}
+          </h2>
+          <p className="text-xs text-[#475569] dark:text-slate-400 leading-relaxed max-w-4xl">
+            {tGuide.guideSubtitle}
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {tGuide.blocks.map((block, index) => (
+            <article
+              key={block.id}
+              className="rounded-xl bg-[#F4F7F9] dark:bg-[#070e1b] border border-[#E2E8F0] dark:border-slate-800/90 p-4 sm:p-5 space-y-2"
+            >
+              <div className="flex items-start gap-2.5">
+                <span className="inline-flex items-center justify-center w-6 h-6 rounded-lg bg-[#E6EEFF] text-[#003399] dark:bg-emerald-500/15 dark:text-emerald-400 text-[11px] font-bold font-mono-numbers flex-shrink-0 mt-0.5">
+                  {index + 1}
+                </span>
+                <h3 className="text-xs sm:text-sm font-bold text-[#0F172A] dark:text-white leading-snug">
+                  {block.title}
+                </h3>
+              </div>
+              <p className="text-xs text-[#334155] dark:text-slate-300 leading-relaxed">
+                {block.body}
+              </p>
+            </article>
+          ))}
+        </div>
+
+        <div className="flex items-start gap-2.5 rounded-xl bg-[#F8FAFC] dark:bg-slate-900/60 border border-[#E2E8F0] dark:border-slate-800 px-3.5 py-3 text-[11px] text-[#475569] dark:text-slate-400 leading-relaxed">
+          <ShieldCheck className="w-4 h-4 text-[#006B52] dark:text-emerald-400 flex-shrink-0 mt-0.5" />
+          <span>{tGuide.educationalDisclaimer}</span>
+        </div>
+      </section>
+
+      {/* Simulator FAQ Section */}
+      <section
+        aria-labelledby="tools-faq-heading"
+        className="rounded-2xl bg-[#FFFFFF] dark:bg-[#0d1627] border border-[#E2E8F0] dark:border-slate-800 p-5 sm:p-6 shadow-xl space-y-4"
+      >
+        <div className="border-b border-[#E2E8F0] dark:border-slate-800 pb-4 space-y-1">
+          <div className="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider text-[#003399] dark:text-cyan-400">
+            <HelpCircle className="w-3.5 h-3.5" />
+            <span>{tGuide.faqEyebrow}</span>
+          </div>
+          <h2
+            id="tools-faq-heading"
+            className="text-base sm:text-lg font-bold text-[#0F172A] dark:text-white tracking-tight"
+          >
+            {tGuide.faqTitle}
+          </h2>
+          <p className="text-xs text-[#475569] dark:text-slate-400">
+            {tGuide.faqSubtitle}
+          </p>
+        </div>
+
+        <div className="space-y-2.5">
+          {tGuide.faqItems.map((faq) => {
+            const isOpen = !!openFaqIds[faq.id];
+            return (
+              <div
+                key={faq.id}
+                className="rounded-xl bg-[#F4F7F9] dark:bg-[#070e1b] border border-[#E2E8F0] dark:border-slate-800/90 overflow-hidden"
+              >
+                <button
+                  type="button"
+                  aria-expanded={isOpen}
+                  onClick={() => toggleFaq(faq.id)}
+                  className="w-full px-4 py-3 text-left flex items-center justify-between gap-3 hover:bg-[#E6EEFF]/60 dark:hover:bg-slate-900/60 transition cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#003399] dark:focus-visible:ring-emerald-500"
+                >
+                  <span className="text-xs sm:text-sm font-bold text-[#0F172A] dark:text-white">
+                    {faq.question}
+                  </span>
+                  <ChevronDown
+                    className={`w-4 h-4 text-[#475569] dark:text-slate-400 flex-shrink-0 transition-transform duration-200 ${
+                      isOpen ? 'rotate-180 text-[#003399] dark:text-emerald-400' : ''
+                    }`}
+                  />
+                </button>
+                <div className={isOpen ? 'px-4 pb-3.5 pt-0.5 block' : 'hidden'}>
+                  <p className="text-xs text-[#334155] dark:text-slate-300 leading-relaxed">
+                    {faq.answer}
+                  </p>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </section>
     </div>
   );
 };

@@ -257,15 +257,15 @@ export const ACADEMY_COURSES: AcademyCourse[] = [
   {
     id: 'cambio-dolar-protecao',
     title: 'Mercado de Câmbio, Dólar & Proteção Internacional',
-    shortTitle: 'Câmbio, Dólar & Proteção',
+    shortTitle: 'Câmbio Global, EUR/BRL & Proteção',
     level: 'Intermediário',
     duration: '1h 35min',
     description:
-      'Entenda como funciona o câmbio comercial, paridades cruzadas EUR/USD e USD/BRL, impacto de spreads e IOF, além de estratégias graduais em moeda forte.',
+      'Entenda o câmbio comercial com foco global e destaque para o Euro (EUR/BRL), a comparação entre moedas do eixo União Europeia – Mercosul, o acompanhamento de juros e inflação na Zona do Euro (BCE), Brasil e EUA, além de custos operacionais e proteção patrimonial.',
     shortDescription:
-      'Câmbio comercial vs turismo, paridades EUR/USD e USD/BRL, IOF, spread e dolarização gradual.',
+      'Euro (EUR/BRL), eixo UE–Mercosul, juros e inflação (BCE, Copom e Fed), spread, IOF e proteção.',
     objective:
-      'Proteger poder de compra internacional reduzindo custos operacionais em remessas e conversões.',
+      'Proteger poder de compra internacional comparando moedas do eixo União Europeia – Mercosul, juros globais e custos operacionais em remessas.',
     targetTab: 'ferramentas',
     modules: [
       {
@@ -274,11 +274,11 @@ export const ACADEMY_COURSES: AcademyCourse[] = [
         title: 'Câmbio Comercial vs Turismo, Spread Bancário e IOF',
         duration: '22 min',
         summary:
-          'Descubra por que o câmbio de vitrine custa muito mais caro que a taxa interbancária e como calcular o VET.',
+          'Descubra por que o câmbio de vitrine custa muito mais caro que a taxa interbancária e como calcular o VET em remessas em Euro e Dólar.',
         paragraphs: [
-          'O mercado cambial distingue o câmbio comercial (referência interbancária utilizada em importações, exportações e investimentos internacionais) do câmbio turismo (moeda física em espécie sujeita a custos de logística, custódia e margens maiores).',
-          'Além da cotação comercial PTAX/Spot, toda operação de pessoa física embute dois componentes decisivos: o spread cobrado pela instituição (que varia de 0,3% em corretoras globais até 5,5% em bancos tradicionais) e o IOF cambial.',
-          'Por isso, o único critério válido para comparar plataformas é o Valor Efetivo Total (VET), que representa exatamente quantos reais você paga por unidade de dólar ou euro já somando cotação, spread e imposto.',
+          'O mercado cambial distingue o câmbio comercial (referência interbancária utilizada em importações, exportações entre blocos como União Europeia e Mercosul e investimentos internacionais) do câmbio turismo (moeda física em espécie sujeita a custos de logística, custódia e margens maiores).',
+          'Além da cotação comercial PTAX/Spot em Euro (EUR/BRL) ou Dólar (USD/BRL), toda operação de pessoa física embute dois componentes decisivos: o spread cobrado pela instituição e o IOF cambial incidente sobre a natureza da remessa.',
+          'Por isso, o critério objetivo para comparar bancos e corretoras é o Valor Efetivo Total (VET), que representa exatamente quantos reais são pagos por unidade de euro ou dólar já somando cotação, spread e tributo.',
         ],
         numericExample: {
           title: 'Comparação de Remessa de US$ 2.000,00 via Banco vs Conta Global',
@@ -317,14 +317,14 @@ export const ACADEMY_COURSES: AcademyCourse[] = [
       {
         id: 'fx-m2',
         number: 2,
-        title: 'Paridades Cruzadas (EUR/USD, USD/BRL) e Diferencial de Juros',
+        title: 'Paridades Euro (EUR/BRL), Eixo UE–Mercosul e Juros Globais (BCE, Copom e Fed)',
         duration: '25 min',
         summary:
-          'Entenda como o Euro em Reais reflete tanto a força global do Dólar quanto o prêmio de risco local.',
+          'Entenda como o Euro em Reais (EUR/BRL) reflete a relação EUR/USD, o comércio exterior UE–Mercosul e o acompanhamento de juros e inflação na Zona do Euro (BCE), Brasil e EUA.',
         paragraphs: [
-          'A cotação do Euro em Reais (EUR/BRL) não se move de forma independente: ela é matematicamente o produto entre a cotação do Dólar no Brasil (USD/BRL) e a paridade internacional entre Euro e Dólar (EUR/USD).',
-          'Quando dados de inflação ou emprego fortalecem o Dólar globalmente, o par EUR/USD cai e o USD/BRL costuma subir. Entender essa dupla engrenagem evita interpretações equivocadas ao acompanhar o mercado europeu.',
-          'Outro motor estrutural do câmbio é o diferencial de juros (Carry Trade). Quando a taxa Selic oferece prêmio substancial acima dos juros americanos (Fed Funds) e europeus (BCE), fluxos estrangeiros tendem a entrar no Brasil para capturar o carrego de renda fixa, ajudando a conter pressões cambiais.',
+          'A cotação do Euro em Reais (EUR/BRL) não se move de forma isolada: ela é matematicamente o produto entre a cotação do Dólar no Brasil (USD/BRL) e a paridade internacional entre Euro e Dólar (EUR/USD). Para quem acompanha o eixo comercial e financeiro União Europeia – Mercosul, comparar EUR/BRL, USD/BRL e moedas regionais como o Peso Argentino (ARS/BRL) permite avaliar competitividade comercial e custos de remessas.',
+          'Acompanhar a política monetária e a inflação da Zona do Euro sob condução do Banco Central Europeu (BCE) em paralelo ao Copom no Brasil e ao Federal Reserve nos Estados Unidos é essencial para compreender os movimentos cambiais. Decisões de juros e dados de inflação alteram o diferencial de rendimento entre ativos denominados em euro, dólar e real.',
+          'Esse diferencial de juros influencia o fluxo internacional de capitais e o custo de proteção patrimonial: moedas com juros reais elevados tendem a atrair alocação defensiva, enquanto mudanças sincronizadas entre BCE, Fed e Banco Central do Brasil redefinem o equilíbrio das paridades globais em horizontes médios e longos.',
         ],
         numericExample: {
           title: 'Decomposição Cruzada EUR/BRL via USD/BRL e EUR/USD',
@@ -364,14 +364,14 @@ export const ACADEMY_COURSES: AcademyCourse[] = [
       {
         id: 'fx-m3',
         number: 3,
-        title: 'Dolarização e Euroização Gradual (Preço Médio / DCA)',
+        title: 'Euroização e Dolarização Gradual (Preço Médio / DCA)',
         duration: '24 min',
         summary:
-          'Substitua tentativas de acertar o fundo do dólar por aportes recorrentes que suavizam o custo médio.',
+          'Substitua tentativas de acertar fundos cambiais por aportes recorrentes em Euro e Dólar que suavizam o custo médio.',
         paragraphs: [
-          'Tentar prever a mínima exata do câmbio no curto prazo leva frequentemente à paralisia: quando a moeda cai, o investidor espera cair mais; quando dispara em choques fiscais ou geopolíticos, acaba comprando no pico de pânico.',
-          'A abordagem adotada por gestores patrimoniais é o Dollar Cost Averaging (DCA cambial): dividir o valor planejado em aportes periódicos fixos em reais (semanais ou mensais). Quando o dólar ou o euro caem, o mesmo valor em reais compra mais moeda forte; quando sobem, compra menos.',
-          'Além de reduzir o preço médio ponderado no médio prazo, essa disciplina mantém o patrimônio dolarizado ou euroizado crescendo continuamente para objetivos de viagem, estudos ou aposentadoria internacional.',
+          'Tentar prever a mínima exata do Euro (EUR/BRL) ou do Dólar (USD/BRL) no curto prazo costuma gerar paralisia: quando a moeda cai, espera-se cair mais; quando dispara em momentos de estresse fiscal ou geopolítico, ocorre compra precipitada no pico.',
+          'A abordagem educativa adotada em planejamento patrimonial é o Dollar Cost Averaging (DCA cambial): dividir o valor planejado em aportes periódicos em moeda forte (semanais ou mensais). Quando o euro ou o dólar recuam, o mesmo orçamento em reais compra mais moeda estrangeira; quando sobem, compra menos.',
+          'Além de suavizar o custo médio ponderado, essa disciplina fortalece gradualmente a proteção patrimonial em moedas fortes do eixo Europa–América para objetivos de viagem, estudos, reservas internacionais ou diversificação.',
         ],
         numericExample: {
           title: 'DCA Mensal de R$ 2.500,00 durante 4 Meses de Volatilidade',
@@ -412,14 +412,14 @@ export const ACADEMY_COURSES: AcademyCourse[] = [
       {
         id: 'fx-m4',
         number: 4,
-        title: 'Contas Globais, Corretoras Internacionais e Tributação',
+        title: 'Contas Globais, Corretoras Internacionais e Monitoramento Macro',
         duration: '24 min',
         summary:
-          'Diferencie contas multimoedas para consumo de corretoras reguladas no exterior com proteção SIPC.',
+          'Diferencie contas multimoedas em Euro e Dólar para remessas de corretoras reguladas para proteção patrimonial e acompanhamento de inflação externa.',
         paragraphs: [
-          'Manter saldo parado em conta corrente internacional protege contra a desvalorização cambial, mas não protege contra a inflação americana ou europeia (CPI). Para preservar poder de compra real em dólares ou euros, os recursos podem ser alocados em Treasuries americanos, ETFs irlandeses de acumulação ou ações globais.',
-          'Ao escolher corretoras internacionais, verifique sempre a regulação (SEC/FINRA nos EUA, FCA no Reino Unido, BaFin ou Banco Central Europeu na Zona do Euro) e mecanismos de proteção como o SIPC (até US$ 500 mil em custódia nos EUA).',
-          'No aspecto tributário brasileiro para aplicações financeiras no exterior, os ganhos realizados e dividendos seguem apuração anual na Declaração de Ajuste Anual com alíquota unificada de 15% sobre o lucro apurado em reais (Lei 14.754), exigindo registro organizado de remessas e custos de aquisição.',
+          'Manter saldo parado em conta corrente internacional protege contra variações cambiais frente ao Real, mas não protege contra a inflação da Zona do Euro (HICP acompanhado pelo BCE) ou dos Estados Unidos (CPI). Por isso, o planejamento educativo distingue reserva de consumo/viagem em moeda forte de alocação produtiva de longo prazo.',
+          'Ao avaliar instituições no exterior e no eixo Europa–Mercosul–EUA, verifique sempre a supervisão regulatória (como BCE/BaFin na União Europeia, FCA no Reino Unido, SEC/FINRA nos EUA e Banco Central/CVM no Brasil), regras de custódia e custos operacionais transparentes.',
+          'No aspecto fiscal para residentes no Brasil com aplicações financeiras no exterior, ganhos realizados e rendimentos exigem registro organizado de remessas, custos de aquisição e câmbio para apuração periódica conforme a legislação vigente.',
         ],
         numericExample: {
           title: 'Impacto de Inflação Externa vs Treasury Short-Term em USD',
@@ -514,7 +514,7 @@ export const ACADEMY_COURSES: AcademyCourse[] = [
           },
         ],
         targetTab: 'graficos',
-        targetButtonLabel: 'Abrir Terminal Gráfico D3 v7',
+        targetButtonLabel: 'Abrir Terminal de Análise Gráfica',
         targetDescription:
           'Inspecione velas japonesas, máximas, mínimas e suportes nos ativos do catálogo global.',
       },
@@ -661,88 +661,88 @@ export const ACADEMY_COURSES: AcademyCourse[] = [
   {
     id: 'fluxo-futuros-opcoes',
     title: 'Fluxo (Tape Reading), Futuros & Opções',
-    shortTitle: 'Fluxo, Futuros & Opções',
+    shortTitle: 'Futuros, Hedge & Opções',
     level: 'Avançado',
     duration: '1h 50min',
     description:
-      'Domine a leitura de livro de ofertas (DOM) e agressões no Times & Trades, alavancagem e ajuste diário em contratos futuros (WIN/WDO) e estratégias com opções e gregas.',
+      'Estudo estritamente educativo e técnico sobre formação de preços e liquidez no livro de ofertas, mecânica e exposição nocional de contratos futuros, proteção (hedge) com derivativos, gregas de opções e controle rigoroso de risco.',
     shortDescription:
-      'Livro de ofertas (DOM), agressão institucional, contratos futuros WIN/WDO e gregas de opções.',
+      'Formação de preços, contratos futuros, hedge com opções, gregas e controle rigoroso de risco.',
     objective:
-      'Executar leituras precisas de microestrutura de mercado, gerenciar alavancagem futura e precificar proteção com derivativos.',
+      'Compreender tecnicamente a formação de preços, calcular exposição nocional real em futuros e aplicar derivativos para proteção (hedge) com controle estrito de risco.',
     targetTab: 'renda_fixa',
     modules: [
       {
         id: 'fl-m1',
         number: 1,
-        title: 'Livro de Ofertas (DOM), Times & Trades e Absorção Institucional',
+        title: 'Microestrutura, Formação de Preços e Absorção de Liquidez',
         duration: '28 min',
         summary:
-          'Distinga ordens passivas no Book de agressões reais executadas a mercado no Times & Trades.',
+          'Entenda sob ótica técnica e educativa como livro de ofertas e negócios executados influenciam a formação de preços e a liquidez.',
         paragraphs: [
-          'O preço de um ativo não se move simplesmente porque há muitos lotes no Livro de Ofertas (DOM — Depth of Market), mas sim quando compradores ou vendedores decidem agredir a contraparte consumindo a liquidez existente na fila.',
-          'O Tape Reading (leitura de fluxo) cruza duas telas em tempo real: o DOM, que exibe intenção passiva em cada nível de preço, e o Times & Trades (Histórico de Negócios), que registra todas as agressões efetivamente executadas, com horário, quantidade, preço e corretora agressora.',
-          'Um dos sinais mais relevantes da microestrutura é a Absorção: quando dezenas ou centenas de contratos são agredidos na venda em determinado nível de preço, mas o preço não consegue cair porque um player institucional renova ordens passivas ocultas (iceberg) na compra.',
+          'Do ponto de vista técnico de microestrutura de mercado, o preço de um ativo não se move apenas pela quantidade de ofertas passivas no Livro de Ofertas (DOM — Depth of Market), mas quando participantes executam ordens a mercado consumindo a liquidez disponível em cada nível.',
+          'A leitura analítica de fluxo cruza dois registros em tempo real: o livro de ofertas, que mostra intenção passiva em cada faixa de preço, e o histórico de negócios (Times & Trades), que documenta a formação efetiva de preços com horário, volume e quantidade negociada.',
+          'Um fenômeno clássico da formação de preços é a Absorção de Liquidez: ordens agressivas atingem determinado nível sem deslocar a cotação porque contrapartes institucionais mantêm liquidez passiva contínua (ordens fracionadas ou de proteção). O foco desse estudo é compreender liquidez e profundidade de mercado — nunca buscar atalhos especulativos de curto prazo.',
         ],
         numericExample: {
-          title: 'Detecção de Absorção Compradora no Mini-Dólar (WDO)',
+          title: 'Leitura Analítica de Absorção e Liquidez em Contrato Futuro',
           scenario:
-            'WDO negociando a 5.585,00. Book exibe apenas 40 contratos visíveis na compra a 5.584,50, enquanto entram agressões de venda consecutivas.',
+            'Exemplo didático em contrato futuro de câmbio cotado a 5.585,00 pontos, com 40 contratos visíveis na compra a 5.584,50 diante de fluxo vendedor.',
           steps: [
-            'Times & Trades registra 480 contratos agredidos na venda a 5.584,50 em 18 segundos',
-            'Apesar do volume vendedor 12 vezes maior que o lote aparente, a cotação não rompe 5.584,00',
-            'O comprador passivo renova imediatamente o lote a cada execução (ordem iceberg)',
-            'Na sequência, entram 150 contratos de agressão compradora consumindo 5.585,50 e 5.586,00 sem resistência.',
+            'O histórico de negócios registra 480 contratos executados na venda no nível de 5.584,50 em 18 segundos',
+            'Mesmo com volume superior ao lote inicialmente visível, o preço permanece sustentado acima de 5.584,00',
+            'Participantes institucionais renovam liquidez passiva no livro para executar lotes maiores sem impacto de preço (ordem iceberg)',
+            'Na sequência, o desequilíbrio entre oferta e demanda reduz a pressão vendedora e desloca a cotação para a faixa de 5.586,00.',
           ],
           result:
-            'A exaustão da venda diante da absorção institucional desloca o equilíbrio de curto prazo e cria ponto técnico de entrada com stop curto abaixo de 5.583,50.',
+            'O exemplo didático ilustra como a absorção institucional influencia a formação momentânea de preços e por que qualquer operação com derivativos exige dimensionamento prudente e limites rigorosos de risco, sem garantia de resultado no curto prazo.',
         },
         keyConcepts: [
           {
             term: 'DOM (Depth of Market)',
             explanation:
-              'Mapa vertical de preços mostrando o saldo de ofertas passivas de compra e venda acumuladas por nível de cotação.',
+              'Mapa vertical de preços mostrando a profundidade de liquidez e o saldo de ofertas passivas acumuladas por nível de cotação.',
           },
           {
-            term: 'Agressão de Mercado',
+            term: 'Consumo de Liquidez',
             explanation:
-              'Ordem executada imediatamente contra a melhor oferta contrária disponível no book, consumindo liquidez.',
+              'Ordem executada contra a melhor oferta contrária disponível no livro, participando diretamente da formação do preço instantâneo.',
           },
           {
-            term: 'Ordem Iceberg (Lote Escondido)',
+            term: 'Ordem Iceberg (Lote Fracionado)',
             explanation:
-              'Ordem institucional fracionada que exibe apenas pequena fração de seu tamanho total no book para não alertar o mercado.',
+              'Ordem institucional fracionada que exibe apenas pequena fração de seu tamanho total para reduzir impacto de mercado durante grandes execuções.',
           },
         ],
         targetTab: 'graficos',
         targetButtonLabel: 'Analisar Liquidez nos Gráficos',
         targetDescription:
-          'Acompanhe amplitude intraday, volume e leitura gráfica em tempo real no DinhEuro.',
+          'Acompanhe amplitude histórica, volume financeiro e leitura gráfica educativa no DinhEuro.',
       },
       {
         id: 'fl-m2',
         number: 2,
-        title: 'Contratos Futuros (WIN, WDO, S&P): Margem, Ponto e Ajuste Diário',
+        title: 'Contratos Futuros (WIN, WDO, S&P): Nocional, Hedge e Controle de Risco',
         duration: '28 min',
         summary:
-          'Domine a matemática real da alavancagem nos minicontratos da B3 e evite a armadilha da margem mínima.',
+          'Domine a matemática do valor nocional, ajuste diário e margem em contratos futuros com foco em proteção e gestão de risco.',
         paragraphs: [
-          'Contratos futuros de Índice (WIN) e Dólar (WDO) na B3 operam por ajuste diário financeiro e exigem apenas uma fração do valor nocional depositada como margem de garantia (em dinheiro, CDB ou Tesouro Selic). Essa característica multiplica tanto os ganhos quanto os prejuízos.',
-          'No Mini-Índice (WIN), cada ponto vale R$ 0,20 por contrato; já no Mini-Dólar (WDO), cada ponto equivale a R$ 10,00 por contrato (com variação mínima de 0,5 ponto = R$ 5,00). Ignorar o valor nocional real do contrato é a causa número um de quebra de contas de iniciantes.',
-          'Operadores consistentes calculam a alavancagem a partir do capital total alocado à estratégia, mantendo margem folgada para absorver oscilações normais sem sofrer encerramento compulsório pela corretora (zeragem de risco).',
+          'Contratos futuros de Índice, Câmbio e S&P 500 funcionam como instrumentos de proteção (hedge) e transferência de risco, operando por ajuste diário financeiro com depósito de margem de garantia (em dinheiro, CDB ou Tesouro Selic). Justamente por exigir apenas fração do valor nocional como colateral, a alavancagem amplia proporcionalmente oscilações adversas.',
+          'Em minicontratos brasileiros, cada ponto do Mini-Índice equivale a R$ 0,20 e cada ponto do Mini-Dólar equivale a R$ 10,00. Confundir a margem mínima exigida com o valor financeiro total do contrato é um dos principais erros de gestão de risco.',
+          'Em abordagem técnica responsável, contratos futuros devem ser dimensionados sempre pelo valor nocional total e pela finalidade de proteção ou exposição controlada — mantendo reserva ampla de margem e limites rígidos de perda máxima, evitando operações alavancadas de curto prazo sem lastro.',
         ],
         numericExample: {
-          title: 'Valor Nocional vs Margem Exigida em 2 Contratos de WDO',
+          title: 'Cálculo Didático de Exposição Nocional vs Margem de Segurança',
           scenario:
-            'WDO cotado a 5.584,00 pontos. Cada contrato representa US$ 10.000,00 (10% do contrato cheio).',
+            'Cenário ilustrativo com futuro cambial a 5.584,00 pontos, em que cada minicontrato representa US$ 10.000,00 de exposição nocional.',
           steps: [
-            'Valor nocional de 1 contrato WDO: 10.000 × R$ 5,5840 = R$ 55.840,00',
-            'Exposição nocional de 2 contratos WDO: R$ 111.680,00',
-            'Oscilação adversa de 12 pontos (0,21% no câmbio): 2 contratos × 12 pts × R$ 10,00 = -R$ 240,00',
-            'Para manter risco máximo diário ≤ 2% do capital, a conta alocada deve ter no mínimo R$ 12.000,00 (não apenas a margem mínima de R$ 300,00).',
+            'Valor nocional de 1 minicontrato: 10.000 × R$ 5,5840 = R$ 55.840,00',
+            'Exposição nocional de 2 contratos: R$ 111.680,00 (equivalente ao porte de uma remessa comercial)',
+            'Oscilação adversa de 12 pontos (0,21% no câmbio): 2 contratos × 12 pts × R$ 10,00 = impacto de R$ 240,00 no ajuste diário',
+            'Para respeitar limite rígido de risco ≤ 2% sobre o capital alocado, a estrutura exige capital compatível de pelo menos R$ 12.000,00 — jamais apenas margem mínima operacional.',
           ],
           result:
-            'Dimensionar contratos pelo nocional e stop financeiro evita que oscilações triviais de 0,2% destruam uma conta subcapitalizada.',
+            'Dimensionar derivativos pelo valor nocional real e pelo limite máximo de risco protege contra alavancagem excessiva e encerramentos compulsórios.',
         },
         keyConcepts: [
           {
@@ -879,7 +879,7 @@ export const ACADEMY_FAQ: AcademyFaqItem[] = [
     id: 'faq-3',
     question: 'Como meu progresso nos módulos é salvo?',
     answer:
-      'Quando você marca qualquer aula como concluída, o histórico fica armazenado localmente no navegador do seu dispositivo (via localStorage), mantendo sua evolução preservada entre visitas sem envio de dados pessoais a servidores.',
+      'Quando você marca qualquer aula como concluída, o histórico fica armazenado localmente apenas no navegador do seu próprio dispositivo, mantendo sua evolução preservada entre visitas sem envio de dados pessoais a servidores externos.',
   },
   {
     id: 'faq-4',
@@ -891,7 +891,7 @@ export const ACADEMY_FAQ: AcademyFaqItem[] = [
     id: 'faq-5',
     question: 'Como praticar os cálculos aprendidos nos módulos?',
     answer:
-      'Ao final de cada módulo existe um atalho contextual direto para a ferramenta correspondente do DinhEuro, incluindo a Calculadora de Câmbio Universal em tempo real, Guia de Câmbio & Remessas, Política Monetária & Juros, Simuladores de Juros Compostos/DARF, Terminal Gráfico D3 v7 e Renda Fixa & Derivativos.',
+      'Ao final de cada módulo existe um atalho contextual direto para a ferramenta correspondente do DinhEuro, incluindo a Calculadora de Câmbio Universal em tempo real, Guia de Câmbio & Remessas, Política Monetária & Juros, Simuladores de Juros Compostos/DARF, Terminal de Análise Gráfica e Renda Fixa & Derivativos.',
   },
   {
     id: 'faq-6',
