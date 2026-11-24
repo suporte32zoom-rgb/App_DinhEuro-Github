@@ -524,3 +524,54 @@ test('Portfolio page removes Recharts visible reference and renders complete mul
   assert.ok(!forbiddenTerms.test(portfolioViewSource), 'PortfolioView.tsx must not expose technical libraries or providers');
 });
 
+test('Brokers Guide renders comparative editorial guide and 4-item FAQ across PT/EN/ES with sober language and zero technical provider names', async () => {
+  const fs = await import('node:fs');
+  const path = await import('node:path');
+  const { BROKERS_UI } = await import('../i18n/brokersTranslations.ts');
+
+  assert.equal(
+    BROKERS_UI.pt.editorialGuide.title,
+    'Como Comparar Corretoras no Brasil, no Exterior e no Mercado Cripto'
+  );
+  assert.equal(
+    BROKERS_UI.pt.faq.title,
+    'Perguntas Frequentes sobre Corretoras e Contas Globais'
+  );
+
+  const forbiddenTerms = /\b(recharts|finnhub|awesomeapi|coingecko|brapi|yahoo\s*finance|vite|github|cloudflare|localstorage)\b/i;
+  const hypeSuperlatives = /\b(absoluta|do planeta|inquestionável|impecável|revolucionou|unmatched|on earth|impeccable|del planeta|absoluto)\b/i;
+
+  for (const lang of ['pt', 'en', 'es'] as const) {
+    const ui = BROKERS_UI[lang];
+    assert.equal(ui.editorialGuide.sections.length, 4, `Expected 4 broker guide blocks in ${lang}`);
+    assert.equal(ui.faq.items.length, 4, `Expected 4 broker FAQ items in ${lang}`);
+
+    for (const sec of ui.editorialGuide.sections) {
+      assert.ok(sec.title.length >= 15, `Broker guide block title too short in ${lang}`);
+      assert.ok(sec.body.length >= 150, `Broker guide block body too short in ${lang}`);
+      assert.ok(!forbiddenTerms.test(sec.body), `Forbidden technical name in brokers guide (${lang})`);
+      assert.ok(!hypeSuperlatives.test(sec.body), `Overly promotional superlative in brokers guide (${lang})`);
+    }
+    for (const item of ui.faq.items) {
+      assert.ok(item.question.length >= 20, `Broker FAQ question too short in ${lang}`);
+      assert.ok(item.answer.length >= 80, `Broker FAQ answer too short in ${lang}`);
+      assert.ok(!forbiddenTerms.test(item.answer), `Forbidden technical name in brokers FAQ (${lang})`);
+      assert.ok(!hypeSuperlatives.test(item.answer), `Overly promotional superlative in brokers FAQ (${lang})`);
+    }
+  }
+
+  const brokersViewSource = fs.readFileSync(
+    path.resolve(process.cwd(), 'src/views/BrokersView.tsx'),
+    'utf8'
+  );
+  const brokersTranslationsSource = fs.readFileSync(
+    path.resolve(process.cwd(), 'src/i18n/brokersTranslations.ts'),
+    'utf8'
+  );
+  assert.ok(brokersViewSource.includes('tBrokers.editorialGuide.title'));
+  assert.ok(brokersViewSource.includes('tBrokers.faq.title'));
+  assert.ok(!forbiddenTerms.test(brokersViewSource), 'BrokersView.tsx must not expose technical providers or build tools');
+  assert.ok(!hypeSuperlatives.test(brokersViewSource), 'BrokersView.tsx should avoid absolute promotional superlatives');
+  assert.ok(!hypeSuperlatives.test(brokersTranslationsSource), 'brokersTranslations.ts should avoid absolute promotional superlatives');
+});
+

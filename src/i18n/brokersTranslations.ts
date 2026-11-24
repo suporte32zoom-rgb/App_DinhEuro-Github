@@ -1,6 +1,17 @@
 import type { SupportedLanguage } from './translations';
 import type { BrokerInfo } from '../views/BrokersView';
 
+export interface BrokersEditorialSection {
+  id: string;
+  title: string;
+  body: string;
+}
+
+export interface BrokersFaqItem {
+  question: string;
+  answer: string;
+}
+
 export interface BrokersUiTranslations {
   title: string;
   subtitleBeforeCount: string;
@@ -23,23 +34,34 @@ export interface BrokersUiTranslations {
   specRegulation: string;
   officialSiteBtn: string;
   officialSiteTitlePrefix: string;
+  editorialGuide: {
+    eyebrow: string;
+    title: string;
+    intro: string;
+    sections: BrokersEditorialSection[];
+  };
+  faq: {
+    eyebrow: string;
+    title: string;
+    items: BrokersFaqItem[];
+  };
 }
 
 export const BROKERS_UI: Record<SupportedLanguage, BrokersUiTranslations> = {
   pt: {
     title: 'Guia Oficial de Corretoras do Brasil & do Mundo',
-    subtitleBeforeCount: 'Catálogo completo com',
+    subtitleBeforeCount: 'Catálogo informativo com',
     subtitleAfterCount:
-      'corretoras reguladas na B3, Wall Street, Europa e ecossistema Cripto. Compare taxas, spreads, plataformas e acesse os sites oficiais com segurança.',
+      'corretoras e plataformas que atuam na B3, nos Estados Unidos, na Europa e no ecossistema de ativos digitais. Compare estruturas de taxas, spreads cambiais e canais oficiais.',
     searchPlaceholder: 'Buscar por nome, país, taxa zero...',
     tabAllPrefix: 'Todas as Corretoras',
     tabBrasil: 'Brasil / B3 (12)',
     tabGlobal: 'Internacionais & Europa (12)',
     tabCrypto: 'Cripto & Web3 (7)',
     tabZero: 'Taxa Zero / Low Cost',
-    disclaimerBold: 'Transparência & Segurança Institucional:',
+    disclaimerBold: 'Transparência & Critério Informativo:',
     disclaimerText:
-      'Todas as instituições listadas pelo DinhEuro são autorizadas pelos órgãos competentes de suas jurisdições: CVM e Banco Central no Brasil, SEC e FINRA nos Estados Unidos (com proteção SIPC de até $500.000), BaFin, FCA e FINMA na Europa. Sempre verifique os termos diretamente no portal oficial da instituição.',
+      'Este guia reúne instituições com atuação regulada ou registrada junto a órgãos competentes em suas respectivas jurisdições (como CVM e Banco Central no Brasil, SEC e FINRA nos Estados Unidos, além de FCA, BaFin e FINMA na Europa), conforme o escopo de cada serviço. Confirme sempre as condições comerciais e a cobertura regulatória vigentes diretamente no portal oficial da instituição.',
     showingPrefix: 'Exibindo',
     showingSuffix: 'instituições encontradas',
     clearSearch: 'Limpar busca',
@@ -50,21 +72,79 @@ export const BROKERS_UI: Record<SupportedLanguage, BrokersUiTranslations> = {
     specRegulation: 'Regulação Oficial:',
     officialSiteBtn: 'Acessar Site Oficial',
     officialSiteTitlePrefix: 'Acessar portal oficial de',
+    editorialGuide: {
+      eyebrow: 'Educação Financeira & Análise Comparativa',
+      title: 'Como Comparar Corretoras no Brasil, no Exterior e no Mercado Cripto',
+      intro:
+        'A escolha de uma corretora envolve analisar não apenas tarifas promocionais de corretagem, mas também o arcabouço regulatório da jurisdição, as regras de custódia patrimonial, os custos cambiais embutidos e os mercados acessíveis em cada conta.',
+      sections: [
+        {
+          id: 'regulation-custody',
+          title: 'Regulação, Custódia e Proteção ao Investidor',
+          body:
+            'No Brasil, corretoras e bancos de investimento são fiscalizados pela CVM e pelo Banco Central, com ativos de renda variável registrados na B3 sob o CPF do titular e segregação patrimonial em relação ao caixa da instituição. Nos Estados Unidos, corretoras registradas na SEC e na FINRA contam com cobertura da SIPC (em geral até US$ 500 mil por titular, com limite de US$ 250 mil para saldo em espécie, conforme regras do programa) em caso de falência da corretora — sem cobrir oscilações de mercado. Na Europa, autoridades como FCA (Reino Unido), BaFin (Alemanha) e FINMA (Suíça) aplicam exigências específicas de capital, segregação de contas e transparência operacional.',
+        },
+        {
+          id: 'zero-brokerage-fx-spread',
+          title: 'Corretagem Zero, Custos Operacionais e Spread Cambial',
+          body:
+            'Mesmo quando a corretagem por ordem é zero, o custo efetivo de operar pode incluir emolumentos e taxas de liquidação cobrados pelas bolsas, assinatura de plataformas profissionais de negociação, tarifas de inatividade ou custódia e, principalmente, o spread cambial em remessas internacionais. Ao enviar recursos em reais para investir em dólar ou euro, uma diferença de 1% a 2% no spread sobre o câmbio comercial e a incidência de IOF conforme a natureza da operação impactam diretamente o ponto de equilíbrio financeiro do investimento.',
+        },
+        {
+          id: 'b3-global-crypto-access',
+          title: 'Acesso à B3, Bolsas Globais e Ativos Digitais',
+          body:
+            'Corretoras locais atendem investidores com foco em ações brasileiras, fundos imobiliários, Tesouro Direto e títulos de renda fixa emitidos no país. Para investir diretamente em ações americanas, ETFs europeus ou títulos internacionais na moeda de origem, contas globais e corretoras estrangeiras oferecem acesso direto às bolsas dos EUA e da Europa. Já as exchanges de criptoativos operam em infraestrutura própria de negociação contínua (24/7) para compra, venda e transferência on-chain de moedas digitais, seguindo regimes específicos de registro e custódia distintos do mercado tradicional de valores mobiliários.',
+        },
+        {
+          id: 'usage-direct-verification',
+          title: 'Critérios de Uso e Verificação Direta',
+          body:
+            'Políticas de isenção de corretagem, spreads cambiais, requisitos de depósito mínimo, faixas de IOF, disponibilidade para residentes no Brasil e cobertura de planos mudam periodicamente por decisão comercial ou regulatória. Utilize os filtros e fichas deste catálogo como ponto de partida comparativo e confirme todas as tabelas de tarifas, contratos de adesão e documentos regulatórios diretamente no site oficial de cada instituição antes de abrir conta ou realizar qualquer operação.',
+        },
+      ],
+    },
+    faq: {
+      eyebrow: 'Dúvidas Frequentes',
+      title: 'Perguntas Frequentes sobre Corretoras e Contas Globais',
+      items: [
+        {
+          question: 'O que significa conta internacional e investimento no exterior?',
+          answer:
+            'Uma conta internacional permite manter saldos em moedas estrangeiras, como dólar americano ou euro, e investir diretamente em ativos negociados em bolsas de outros países (ações, ETFs e títulos). Diferente da compra de BDRs na B3 em reais, o investimento direto ocorre na moeda e na jurisdição de origem, exigindo atenção às regras cambiais e à declaração fiscal anual.',
+        },
+        {
+          question: 'Como comparar o spread cambial em remessas e operações em moeda estrangeira?',
+          answer:
+            'Compare a taxa de câmbio final oferecida pela instituição com a cotação do câmbio comercial interbancário no mesmo instante. A diferença percentual representa o spread cambial. Some a esse percentual eventuais tarifas fixas de transferência (wire/remessa) e o IOF aplicável para enxergar o custo total efetivo (VET) da conversão.',
+        },
+        {
+          question: 'Qual a diferença entre corretora de valores mobiliários e exchange de criptoativos?',
+          answer:
+            'A corretora de valores mobiliários atua na intermediação de ativos tradicionais regulados — como ações, ETFs, fundos e títulos públicos ou privados — em bolsas como a B3, NYSE ou bolsas europeias, sob normas de custódia e proteção como CVM/B3 ou SEC/SIPC. Já a exchange de criptoativos intermedia a negociação de moedas digitais e tokens em livros de ofertas próprios, com regras específicas de liquidação, custódia e transferência em blockchain.',
+        },
+        {
+          question: 'O guia do DinhEuro constitui indicação ou recomendação de corretora ou investimento?',
+          answer:
+            'Não. O Guia de Corretoras do DinhEuro possui caráter estritamente informativo, educativo e comparativo. A presença de qualquer instituição no catálogo não representa recomendação de abertura de conta, endosso comercial nem aconselhamento financeiro personalizado.',
+        },
+      ],
+    },
   },
   en: {
     title: 'Official Guide to Brazilian & Global Brokers',
-    subtitleBeforeCount: 'Complete directory of',
+    subtitleBeforeCount: 'Informational directory featuring',
     subtitleAfterCount:
-      'regulated brokers across B3 (Brazil), Wall Street, Europe, and the Crypto ecosystem. Compare fees, spreads, platforms, and access official websites safely.',
+      'brokers and platforms operating across B3 (Brazil), the United States, Europe, and digital assets. Compare fee structures, FX spreads, and official institutional portals.',
     searchPlaceholder: 'Search by name, country, zero fee...',
     tabAllPrefix: 'All Brokers',
     tabBrasil: 'Brazil / B3 (12)',
     tabGlobal: 'International & Europe (12)',
     tabCrypto: 'Crypto & Web3 (7)',
     tabZero: 'Zero Fee / Low Cost',
-    disclaimerBold: 'Transparency & Institutional Security:',
+    disclaimerBold: 'Transparency & Informational Scope:',
     disclaimerText:
-      'All institutions listed by DinhEuro are authorized by competent regulators in their jurisdictions: CVM and Central Bank in Brazil, SEC and FINRA in the United States (with SIPC protection up to $500,000), and BaFin, FCA, and FINMA in Europe. Always verify terms directly on the institution’s official website.',
+      'This directory lists institutions operating under regulatory oversight or registration in their respective jurisdictions (such as CVM and the Central Bank in Brazil, SEC and FINRA in the United States, and FCA, BaFin, and FINMA in Europe), according to the scope of each service. Always verify current terms and regulatory coverage directly on each institution’s official portal.',
     showingPrefix: 'Showing',
     showingSuffix: 'institutions found',
     clearSearch: 'Clear search',
@@ -75,21 +155,79 @@ export const BROKERS_UI: Record<SupportedLanguage, BrokersUiTranslations> = {
     specRegulation: 'Official Regulation:',
     officialSiteBtn: 'Visit Official Website',
     officialSiteTitlePrefix: 'Open official website for',
+    editorialGuide: {
+      eyebrow: 'Financial Education & Comparative Framework',
+      title: 'How to Compare Brokers in Brazil, Abroad, and in Crypto Markets',
+      intro:
+        'Evaluating a brokerage requires looking beyond headline zero-commission offers to examine jurisdictional regulation, asset custody and segregation rules, embedded currency conversion spreads, and eligible market access.',
+      sections: [
+        {
+          id: 'regulation-custody',
+          title: 'Regulation, Custody, and Investor Protection',
+          body:
+            'In Brazil, broker-dealers and investment banks are supervised by the CVM and the Central Bank, with exchange-traded equities registered at B3 under the investor’s tax ID and segregated from the broker’s own balance sheet. In the United States, SEC- and FINRA-registered brokerages participate in SIPC protection (generally up to US$ 500,000 per customer, including a US$ 250,000 limit for cash, subject to program rules) against broker insolvency—not market losses. In Europe, regulators such as the FCA (UK), BaFin (Germany), and FINMA (Switzerland) enforce capital adequacy, client asset segregation, and operational transparency standards.',
+        },
+        {
+          id: 'zero-brokerage-fx-spread',
+          title: 'Zero Brokerage, Operational Fees, and FX Spread',
+          body:
+            'Even when headline order commissions are zero, total execution costs can include exchange and clearing fees, advanced trading platform subscriptions, inactivity or custody charges, and especially FX conversion spreads on cross-border funding. Converting BRL into USD or EUR with a 1% to 2% spread above the commercial interbank rate, plus applicable FX taxes (such as IOF), materially affects net portfolio breakeven and long-term compounding.',
+        },
+        {
+          id: 'b3-global-crypto-access',
+          title: 'Access to B3, Global Exchanges, and Digital Assets',
+          body:
+            'Domestic Brazilian brokerages focus on B3 equities, real estate funds (FIIs), Tesouro Direto sovereign bonds, and local fixed-income instruments. Accessing US or European stocks, UCITS/US ETFs, and hard-currency bonds directly requires international accounts or foreign brokerages connected to Wall Street and European venues. Digital asset exchanges operate continuous 24/7 order books for spot cryptocurrencies and on-chain transfers under distinct licensing and custody frameworks separate from traditional securities clearinghouses.',
+        },
+        {
+          id: 'usage-direct-verification',
+          title: 'Practical Usage and Direct Verification',
+          body:
+            'Fee waivers, FX spreads, minimum deposit thresholds, tax rules, account eligibility for non-residents, and platform terms evolve over time due to commercial or regulatory updates. Treat the profiles in this directory strictly as a structured starting point and verify current fee schedules, legal disclosures, and onboarding requirements directly on the institution’s official website prior to opening an account or placing trades.',
+        },
+      ],
+    },
+    faq: {
+      eyebrow: 'Frequently Asked Questions',
+      title: 'Frequently Asked Questions About Brokers and Global Accounts',
+      items: [
+        {
+          question: 'What does an international account and offshore investing mean?',
+          answer:
+            'An international account enables holding foreign-currency balances such as US Dollars or Euros and investing directly in overseas securities—such as US or European stocks, ETFs, and bonds—settled in their native currency and jurisdiction, unlike locally listed BDRs traded in BRL on B3.',
+        },
+        {
+          question: 'How should I compare FX spreads on cross-border transfers and currency conversions?',
+          answer:
+            'Compare the final exchange rate quoted by the provider against the live interbank commercial FX rate at the exact same moment. The percentage gap represents the FX spread; add any fixed wire fees and applicable transaction taxes (such as IOF) to determine the all-in effective conversion cost.',
+        },
+        {
+          question: 'What is the difference between a securities brokerage and a cryptocurrency exchange?',
+          answer:
+            'A securities brokerage intermediates regulated traditional financial assets—equities, ETFs, funds, and sovereign or corporate bonds—on regulated exchanges under investor custody frameworks such as CVM/B3 or SEC/SIPC. A crypto exchange runs order books for digital currencies and blockchain tokens with separate settlement, wallet custody, and on-chain transfer mechanics.',
+        },
+        {
+          question: 'Does the DinhEuro broker guide represent financial advice or an investment recommendation?',
+          answer:
+            'No. The DinhEuro Brokers Directory is strictly informational, educational, and comparative. Listing an institution does not constitute an endorsement, commercial solicitation, or personalized recommendation to open an account or trade any asset.',
+        },
+      ],
+    },
   },
   es: {
     title: 'Guía Oficial de Brókeres de Brasil & del Mundo',
-    subtitleBeforeCount: 'Catálogo completo con',
+    subtitleBeforeCount: 'Catálogo informativo con',
     subtitleAfterCount:
-      'brókeres regulados en B3, Wall Street, Europa y el ecosistema Cripto. Compare comisiones, spreads, plataformas y acceda a los sitios oficiales de forma segura.',
+      'brókeres y plataformas que operan en B3, Estados Unidos, Europa y el ecosistema de activos digitales. Compare comisiones, spreads cambiarios y portales oficiales.',
     searchPlaceholder: 'Buscar por nombre, país, comisión cero...',
     tabAllPrefix: 'Todos los Brókeres',
     tabBrasil: 'Brasil / B3 (12)',
     tabGlobal: 'Internacionales & Europa (12)',
     tabCrypto: 'Cripto & Web3 (7)',
     tabZero: 'Comisión Cero / Low Cost',
-    disclaimerBold: 'Transparencia & Seguridad Institucional:',
+    disclaimerBold: 'Transparencia & Criterio Informativo:',
     disclaimerText:
-      'Todas las instituciones listadas por DinhEuro están autorizadas por los reguladores competentes de sus jurisdicciones: CVM y Banco Central en Brasil, SEC y FINRA en Estados Unidos (con protección SIPC de hasta $500.000), BaFin, FCA y FINMA en Europa. Verifique siempre los términos directamente en el portal oficial de la institución.',
+      'Esta guía reúne instituciones con actuación regulada o registrada ante organismos competentes en sus jurisdicciones (como CVM y Banco Central en Brasil, SEC y FINRA en Estados Unidos, además de FCA, BaFin y FINMA en Europa), según el alcance específico de cada servicio. Confirme siempre las condiciones vigentes y la cobertura regulatoria directamente en el portal oficial de la institución.',
     showingPrefix: 'Mostrando',
     showingSuffix: 'instituciones encontradas',
     clearSearch: 'Limpiar búsqueda',
@@ -100,6 +238,64 @@ export const BROKERS_UI: Record<SupportedLanguage, BrokersUiTranslations> = {
     specRegulation: 'Regulación Oficial:',
     officialSiteBtn: 'Ir al Sitio Oficial',
     officialSiteTitlePrefix: 'Abrir portal oficial de',
+    editorialGuide: {
+      eyebrow: 'Educación Financiera & Análisis Comparativo',
+      title: 'Cómo Comparar Brókeres en Brasil, en el Exterior y en el Mercado Cripto',
+      intro:
+        'Elegir un bróker exige analizar más allá de la comisión cero promocional: conviene revisar el marco regulatorio de la jurisdicción, las reglas de custodia patrimonial, el spread cambiario implícito y los mercados accesibles desde cada cuenta.',
+      sections: [
+        {
+          id: 'regulation-custody',
+          title: 'Regulación, Custodia y Protección al Inversor',
+          body:
+            'En Brasil, las casas de bolsa y bancos de inversión son supervisados por la CVM y el Banco Central, con acciones registradas en B3 a nombre del titular y segregación patrimonial frente a la entidad. En Estados Unidos, los brókeres registrados ante la SEC y FINRA cuentan con cobertura SIPC (generalmente hasta US$ 500.000 por titular, con límite de US$ 250.000 para efectivo, según reglas del programa) ante insolvencia del intermediario, sin cubrir pérdidas de mercado. En Europa, organismos como FCA (Reino Unido), BaFin (Alemania) y FINMA (Suiza) exigen requisitos de capital y segregación de cuentas.',
+        },
+        {
+          id: 'zero-brokerage-fx-spread',
+          title: 'Comisión Cero, Costos Operativos y Spread Cambiario',
+          body:
+            'Incluso cuando el corretaje por orden es cero, el costo total operativo puede incluir derechos de bolsa y liquidación, suscripciones a plataformas avanzadas, cargos de inactividad o custodia y, especialmente, el spread cambiario al convertir moneda local a dólares o euros. Una diferencia del 1% al 2% sobre el tipo de cambio comercial interbancario, sumada a impuestos cambiarios aplicables como el IOF, incide de forma directa en la rentabilidad neta.',
+        },
+        {
+          id: 'b3-global-crypto-access',
+          title: 'Acceso a B3, Bolsas Globales y Activos Digitales',
+          body:
+            'Los brókeres locales están orientados a renta variable brasileña, FIIs, Tesouro Direto y renta fija doméstica. Para operar directamente acciones estadounidenses, ETFs europeos o bonos internacionales en moneda fuerte se requieren cuentas globales o brókeres extranjeros conectados a EE. UU. y Europa. Por su parte, las exchanges de criptoactivos funcionan de manera continua (24/7) para compraventa y transferencias en blockchain bajo esquemas regulatorios y de custodia propios.',
+        },
+        {
+          id: 'usage-direct-verification',
+          title: 'Criterios de Uso y Verificación Directa',
+          body:
+            'Las políticas de exención de comisiones, spreads cambiarios, depósitos mínimos, tributación aplicable y elegibilidad para residentes extranjeros cambian periódicamente por decisiones comerciales o normativas. Utilice estas fichas únicamente como referencia comparativa inicial y verifique siempre los tarifarios vigentes y contratos oficiales directamente en el sitio web de cada institución antes de abrir cuenta u operar.',
+        },
+      ],
+    },
+    faq: {
+      eyebrow: 'Preguntas Frecuentes',
+      title: 'Preguntas Frecuentes sobre Brókeres y Cuentas Globales',
+      items: [
+        {
+          question: '¿Qué significa tener una cuenta internacional e invertir en el exterior?',
+          answer:
+            'Una cuenta internacional permite mantener saldos en divisas extranjeras como Dólar o Euro e invertir directamente en activos listados en bolsas del exterior (acciones, ETFs y bonos) en su moneda y jurisdicción de origen, a diferencia de los certificados locales negociados en reales en B3.',
+        },
+        {
+          question: '¿Cómo comparar el spread cambiario en remesas y operaciones en moneda extranjera?',
+          answer:
+            'Compare la cotización final ofrecida por la plataforma frente al tipo de cambio comercial interbancario en ese mismo momento. La brecha porcentual corresponde al spread; sume eventuales tarifas fijas de envío e impuestos aplicables para conocer el costo efectivo total de conversión.',
+        },
+        {
+          question: '¿Cuál es la diferencia entre un bróker de valores mobiliarios y una exchange de criptoactivos?',
+          answer:
+            'Un bróker de valores intermedia instrumentos tradicionales regulados —acciones, ETFs, fondos y bonos— en bolsas como B3, NYSE o plazas europeas bajo marcos como CVM/B3 o SEC/SIPC. Una exchange cripto opera libros de órdenes para monedas digitales y tokens con custodia, liquidación y retiros en redes blockchain.',
+        },
+        {
+          question: '¿La guía de DinhEuro constituye asesoría o recomendación de inversión?',
+          answer:
+            'No. La Guía de Brókeres de DinhEuro tiene carácter estrictamente informativo, educativo y comparativo. La inclusión de cualquier institución no implica recomendación de apertura de cuenta, patrocinio ni asesoramiento financiero personalizado.',
+        },
+      ],
+    },
   },
 };
 
@@ -137,33 +333,33 @@ const BROKER_OVERRIDES: Record<'en' | 'es', Record<string, BrokerOverride>> = {
     },
     btg: {
       country: 'Brazil',
-      badge: 'Best Investment Bank',
+      badge: 'Institutional Investment Bank',
       description:
-        'Largest investment bank in Latin America. Premier fixed income shelf with proprietary issuance, structured credit, and full top-tier private banking.',
+        'Major investment bank in Latin America offering proprietary fixed income issuance, structured credit, and full-service wealth banking.',
       spreadCambio: '1.2% to 1.8%',
       brokerageFee: 'Zero on digital plans',
       regulation: 'CVM, Central Bank of Brazil, ANBIMA',
       minDeposit: 'R$ 0 (No minimum)',
       features: [
-        'Institutional strength and governance of a leading bank',
-        'Fixed income featuring top CDB and LCA yields in Brazil',
+        'Institutional strength and governance of an established investment bank',
+        'Broad shelf of fixed income securities including CDB and LCA options',
         'Modular Black card with cashback or Livelo miles',
       ],
     },
     nuinvest: {
       country: 'Brazil',
-      badge: 'Popular Super App',
+      badge: 'Integrated Super App',
       description:
-        'Full investment integration inside the Nubank app. Convenient for buying fractional B3 stocks, Tesouro Direto sovereign bonds, CDBs, and crypto in a few taps.',
+        'Investment functionality integrated directly inside the Nubank app for buying fractional B3 stocks, Tesouro Direto sovereign bonds, CDBs, and digital assets.',
       spreadCambio: '1.5% via international transfer',
-      brokerageFee: '100% Zero Fee for Stocks, FIIs & BDRs',
+      brokerageFee: 'Zero Fee for Stocks, FIIs & BDRs',
       regulation: 'CVM, Central Bank of Brazil',
       minDeposit: 'R$ 1 via PIX',
       platforms: ['Nubank App (iOS & Android)'],
       features: [
-        'Ultra-fast and intuitive mobile experience',
+        'Streamlined and intuitive mobile interface',
         'Fractional stock investing starting from R$ 1',
-        'Savings boxes yielding 100% of CDI immediately',
+        'Yield boxes tracking 100% of CDI',
       ],
     },
     rico: {
@@ -184,9 +380,9 @@ const BROKER_OVERRIDES: Record<'en' | 'es', Record<string, BrokerOverride>> = {
     },
     clear: {
       country: 'Brazil',
-      badge: 'Zero Day Trade Pioneer',
+      badge: 'Zero Day Trade Focus',
       description:
-        'The broker that revolutionized the Brazilian market by eliminating brokerage fees. Specialized in active mini-index, mini-dollar, stock, and swing traders with pro platforms.',
+        'Brazilian brokerage that adopted zero brokerage commissions early on, focused on active mini-index, mini-dollar, stock, and swing traders with professional platforms.',
       spreadCambio: 'N/A (B3 Focus)',
       brokerageFee: 'Zero Commission on all B3 trades',
       regulation: 'CVM, ANBIMA (XP Group)',
@@ -311,24 +507,24 @@ const BROKER_OVERRIDES: Record<'en' | 'es', Record<string, BrokerOverride>> = {
     },
     ibkr: {
       country: 'United States / Global',
-      badge: 'Absolute Global Leader',
+      badge: 'Global Multi-Exchange Access',
       description:
-        'The world’s most comprehensive international brokerage. Direct access to 150+ exchanges across 33 countries trading USD, EUR, GBP, and JPY at minimal margins.',
+        'Broad international brokerage providing direct access to 150+ exchanges across 33 countries trading USD, EUR, GBP, and JPY with institutional FX pricing.',
       spreadCambio: 'From 0.08% (institutional interbank rate)',
       brokerageFee: 'From $0.005 / share in US; €1.25 in Europe',
       regulation: 'SEC, FINRA, SIPC, FCA (UK), BaFin (Germany)',
       minDeposit: '$0 (No minimum deposit)',
       features: [
         'Direct trading on European exchanges (DAX, Euronext Paris, Amsterdam, London)',
-        'Competitive interest paid on uninvested USD and EUR cash balances',
-        'Lowest margin financing rates in the global market',
+        'Interest paid on eligible uninvested USD and EUR cash balances',
+        'Competitive margin financing rates across global markets',
       ],
     },
     avenue: {
       country: 'United States / Brazil',
-      badge: 'Top Choice for Brazilians',
+      badge: 'Portuguese-Language US Broker',
       description:
-        'US-founded brokerage built for cross-border Brazilian investors. Bilingual interface, local support, instant PIX funding, and ready-to-file tax reports.',
+        'US-registered brokerage built for cross-border Brazilian investors, featuring a Portuguese interface, local support, instant PIX funding, and structured tax reports.',
       spreadCambio: '1.4% to 2.0% (tiered by volume)',
       brokerageFee: 'Zero commission on selected plans',
       regulation: 'SEC, FINRA, SIPC (Protection up to $500k)',
@@ -336,8 +532,8 @@ const BROKER_OVERRIDES: Record<'en' | 'es', Record<string, BrokerOverride>> = {
       platforms: ['Avenue App (iOS & Android)', 'Web Portal'],
       features: [
         'Deposits via PIX with immediate conversion to US dollars',
-        'Automated income tax reporting (DARF/GCAP/Annual Filing)',
-        'Avenue Mastercard debit card accepted worldwide',
+        'Structured annual income tax reporting support (DARF/GCAP)',
+        'Avenue Mastercard debit card for international payments',
       ],
     },
     nomad: {
@@ -358,30 +554,30 @@ const BROKER_OVERRIDES: Record<'en' | 'es', Record<string, BrokerOverride>> = {
     },
     schwab: {
       country: 'United States',
-      badge: 'Largest US Broker',
+      badge: 'Major US Brokerage',
       description:
-        'One of the world’s largest wealth managers. Provides international investors with the renowned thinkorswim platform, Wall Street equity research, and unmatched reliability.',
+        'Major US wealth and brokerage firm providing international clients with the thinkorswim platform, equity research reports, and multi-decade market presence.',
       spreadCambio: 'Direct interbank',
       brokerageFee: '$0 on US-listed stocks and ETFs',
       regulation: 'SEC, FINRA, SIPC',
       minDeposit: '$25,000 for international accounts',
       features: [
-        'Cutting-edge thinkorswim platform for technical analysis and options',
-        'In-depth research and ratings from top Wall Street analysts',
-        'Checking account with unlimited global ATM fee rebates',
+        'thinkorswim platform for technical analysis and options trading',
+        'Equity research and market reports from Wall Street analysts',
+        'Checking account with global ATM fee rebates',
       ],
     },
     fidelity: {
       country: 'United States',
-      badge: 'Wall Street Giant',
+      badge: 'Wall Street Custodian',
       description:
-        'Cornerstone of US capital markets with trillions in assets under custody. Famous for ZERO expense ratio index funds and superior order price improvement.',
+        'Established US capital-markets institution managing large custodial assets, known for zero-expense-ratio index funds and competitive order execution.',
       spreadCambio: 'Market interbank',
       brokerageFee: '$0 for online US stocks and ETFs',
       regulation: 'SEC, FINRA, SIPC',
       minDeposit: '$0 for residents / upon inquiry for non-residents',
       features: [
-        'Industry-leading price improvement on trade execution',
+        'Order execution focused on competitive price improvement',
         'Fidelity ZERO index funds with 0.00% management fee',
         'Comprehensive retirement and wealth planning suite',
       ],
@@ -495,109 +691,109 @@ const BROKER_OVERRIDES: Record<'en' | 'es', Record<string, BrokerOverride>> = {
     },
     binance: {
       country: 'Global',
-      badge: 'World’s Largest by Volume',
+      badge: 'High Global Volume',
       description:
-        'The world’s largest digital asset exchange by daily trading volume. Trade Bitcoin, Ethereum, Solana, and hundreds of altcoins with instant PIX and SEPA rails.',
+        'High-volume digital asset exchange supporting Bitcoin, Ethereum, Solana, and broad altcoin pairs with PIX and SEPA transfer rails.',
       spreadCambio: 'Direct order book parity',
       brokerageFee: 'From 0.075% (with BNB fee discount)',
       regulation: 'Global compliance & authorizations across multiple countries',
       minDeposit: 'R$ 10 via instant PIX',
       features: [
-        'Instant deposits and withdrawals in BRL and Euros (EUR)',
+        'Fast deposits and withdrawals in BRL and Euros (EUR)',
         'Secure Asset Fund for Users (SAFU) emergency reserve',
         'Futures markets, yield Staking, and Launchpool rewards',
       ],
     },
     mercadobitcoin: {
       country: 'Brazil',
-      badge: 'Largest in LatAm',
+      badge: 'Brazilian Crypto Platform',
       description:
-        'Crypto pioneer in Brazil since 2013 and licensed as a Payment Institution by the Central Bank of Brazil. Excels in digital assets, tokenized fixed income, and custody.',
+        'Brazilian crypto exchange operating since 2013 and licensed as a Payment Institution by the Central Bank of Brazil, offering digital assets and tokenized fixed income.',
       spreadCambio: 'Direct BRL pairs',
       brokerageFee: '0.3% to 0.7% per trade',
       regulation: 'Central Bank of Brazil (PI License), ABcripto',
       minDeposit: 'R$ 1 via PIX',
       platforms: ['MB App', 'Pro Web Portal'],
       features: [
-        'Digital Fixed Income tokens with predictable yields above CDI',
+        'Digital Fixed Income tokens linked to private credit receivables',
         '24/7 customer support in Portuguese',
-        '100% Brazilian custody with institutional-grade governance',
+        'Domestic custody operations with local governance standards',
       ],
     },
     coinbase: {
       country: 'United States',
       badge: 'Nasdaq Listed (COIN)',
       description:
-        'The flagship publicly traded crypto exchange on Nasdaq (COIN). Highest standard of public financial auditing, regulatory compliance, and institutional ETF custody.',
+        'Publicly traded US crypto exchange listed on Nasdaq (COIN), subject to regular public financial audits, regulatory filings, and institutional custody services.',
       spreadCambio: 'Transparent official spread',
       brokerageFee: 'From 0.05% on Coinbase Advanced',
       regulation: 'SEC, FinCEN, FCA (UK), BaFin (Germany)',
       minDeposit: '$2 / R$ 10',
       features: [
-        'Public financial audits by a Big Four accounting firm',
-        'Official custodian for most US spot Bitcoin and Ethereum ETFs',
-        'Institutional-grade security guarantees for retail accounts',
+        'Public financial audits filed with US securities regulators',
+        'Custodian partner for multiple US spot Bitcoin and Ethereum ETFs',
+        'Segregated institutional custody controls alongside retail accounts',
       ],
     },
     kraken: {
       country: 'United States / Europe',
-      badge: 'Impeccable Security Track Record',
+      badge: 'Long-Standing Security Record',
       description:
-        'Founded in 2011, one of the oldest and most respected crypto exchanges on earth. Renowned for its clean security record and client-verifiable Proof of Reserves.',
+        'Founded in 2011, an established international crypto exchange noted for long-term operational continuity and periodic Proof of Reserves audits.',
       spreadCambio: 'Deep EUR and USD order books',
       brokerageFee: 'From 0.16% Maker / 0.26% Taker',
       regulation: 'FinCEN (US), FCA (UK), AUSTRAC',
       minDeposit: '€10 / $10',
       features: [
         'Cryptographic Proof of Reserves audit verifiable by clients',
-        'Deep liquidity in Euro (EUR) pairs with instant SEPA transfers',
-        'Futures and margin trading with competitive funding',
+        'Deep liquidity in Euro (EUR) pairs with SEPA transfers',
+        'Futures and margin trading with structured risk controls',
       ],
     },
     foxbit: {
       country: 'Brazil',
-      badge: 'Brazilian Pioneer',
+      badge: 'Brazilian Exchange',
       description:
-        'One of Brazil’s first Bitcoin exchanges. Fast trading interface, 24/7 PIX deposits and withdrawals, and commercial crypto payment gateway solutions.',
+        'Established Brazilian Bitcoin exchange offering 24/7 PIX deposits and withdrawals alongside crypto payment gateway solutions for merchants.',
       spreadCambio: 'BRL quoted pairs',
       brokerageFee: 'From 0.25%',
       regulation: 'ABcripto, Brazilian Federal Revenue (IN 1888)',
       minDeposit: 'R$ 10 via PIX',
       platforms: ['Foxbit App', 'Foxbit Pro Web'],
       features: [
-        'Automated 24/7 PIX settlement any time of day or night',
+        'Automated 24/7 PIX settlement',
         'Foxbit Pay to accept Bitcoin payments in retail businesses',
-        'Ready-to-export annual tax compliance reports',
+        'Exportable annual tax compliance reports',
       ],
     },
     okx: {
       country: 'Global',
-      badge: 'Web3 & DeFi Innovation',
+      badge: 'Web3 & Multi-Chain Tools',
       description:
-        'Second-largest global exchange by derivatives volume. Market leader in non-custodial Web3 wallets supporting 80+ blockchains alongside instant fiat rails.',
-      spreadCambio: 'Interbank screen pricing',
+        'Global derivatives and spot digital-asset exchange featuring a non-custodial Web3 wallet supporting 80+ blockchains and BRL PIX deposits.',
+      spreadCambio: 'Order book screen pricing',
       brokerageFee: 'From 0.08%',
       regulation: 'VARA (Dubai), Bahamas, Hong Kong',
       minDeposit: 'R$ 10 via PIX',
       platforms: ['OKX Web3 Wallet', 'OKX App', 'Integrated TradingView'],
       features: [
-        'Industry-leading non-custodial Web3 wallet across 80+ chains',
-        'Instant zero-fee BRL deposits via PIX',
-        'Native DEX aggregator and NFT/Ordinals marketplace integration',
+        'Non-custodial Web3 wallet compatible with 80+ blockchains',
+        'Fast BRL deposits via PIX',
+        'DEX aggregator and NFT/Ordinals marketplace integration',
       ],
     },
     bybit: {
       country: 'Global',
-      badge: 'High Frequency & Futures',
+      badge: 'Derivatives & Liquidity',
       description:
-        'High-liquidity platform favored by quantitative and derivatives traders. Ultra-low latency matching engine capable of 100,000 transactions per second.',
-      spreadCambio: 'Deep-liquidity order book',
+        'Digital-asset exchange widely used for perpetual futures and spot liquidity, offering automated trading tools and PIX funding support.',
+      spreadCambio: 'High-liquidity order book',
       brokerageFee: 'From 0.02% Maker / 0.055% Taker on futures',
       regulation: 'International licenses & regular Proof of Reserves',
       minDeposit: 'R$ 10 via PIX',
       platforms: ['Bybit App', 'Bybit Web Pro', 'High-Frequency API'],
       features: [
-        'Copy Trading for high-liquidity perpetual futures contracts',
+        'Copy Trading for perpetual futures contracts',
         'Built-in algorithmic trading bots (Grid Bots, DCA Bots)',
         'Support for PIX payments and international cards',
       ],
@@ -621,38 +817,38 @@ const BROKER_OVERRIDES: Record<'en' | 'es', Record<string, BrokerOverride>> = {
     },
     btg: {
       country: 'Brasil',
-      badge: 'Mejor Banco de Inversiones',
+      badge: 'Banco de Inversiones',
       description:
-        'Mayor banco de inversiones de América Latina. Catálogo premium de renta fija con emisión propia, crédito estructurado y banca privada de primer nivel.',
+        'Banco de inversiones latinoamericano con amplio catálogo de renta fija de emisión propia, crédito estructurado y banca patrimonial.',
       spreadCambio: '1,2% a 1,8%',
       brokerageFee: 'Cero en planes digitales',
       regulation: 'CVM, Banco Central de Brasil, ANBIMA',
       minDeposit: 'R$ 0 (Sin mínimo)',
       features: [
-        'Solidez institucional y gobernanza de banco líder',
-        'Renta fija con las mejores tasas de CDB y LCA del país',
+        'Solidez institucional y gobernanza bancaria consolidada',
+        'Amplia oferta de renta fija con opciones de CDB y LCA',
         'Tarjeta Black modular con cashback o millas Livelo',
       ],
     },
     nuinvest: {
       country: 'Brasil',
-      badge: 'Super App Popular',
+      badge: 'Super App Integrada',
       description:
-        'Integración total de inversiones dentro de la aplicación de Nubank. Práctico para comprar acciones fraccionarias en B3, Tesouro Direto, CDBs y cripto en pocos toques.',
+        'Funcionalidad de inversiones integrada dentro de la aplicación de Nubank para comprar acciones fraccionarias en B3, Tesouro Direto, CDBs y cripto.',
       spreadCambio: '1,5% vía transferencia internacional',
-      brokerageFee: '100% Comisión Cero en Acciones, FIIs y BDRs',
+      brokerageFee: 'Comisión Cero en Acciones, FIIs y BDRs',
       regulation: 'CVM, Banco Central de Brasil',
       minDeposit: 'R$ 1 vía PIX',
       platforms: ['App Nubank (iOS & Android)'],
       features: [
-        'Experiencia móvil ultrarrápida e intuitiva',
+        'Experiencia móvil ágil e intuitiva',
         'Inversión en fracciones de acciones desde R$ 1',
-        'Cajitas de ahorro con rendimiento del 100% del CDI inmediato',
+        'Cajitas de ahorro con rendimiento del 100% del CDI',
       ],
     },
     rico: {
       country: 'Brasil',
-      badge: 'Joven & Comisión Cero',
+      badge: 'Comisión Cero B3',
       description:
         'División del Grupo XP enfocada en inversores principiantes e intermedios. Comisión cero en activos principales, contenido educativo dinámico y carteras recomendadas.',
       spreadCambio: '1,5% a 2,0%',
@@ -668,9 +864,9 @@ const BROKER_OVERRIDES: Record<'en' | 'es', Record<string, BrokerOverride>> = {
     },
     clear: {
       country: 'Brasil',
-      badge: 'Pionera Day Trade Cero',
+      badge: 'Enfoque Day Trade Cero',
       description:
-        'El bróker que revolucionó el mercado brasileño al eliminar el corretaje. Especializado en traders activos de mini-índice, mini-dólar, acciones y swing trade con plataformas pro.',
+        'Bróker brasileño que eliminó el corretaje minorista, enfocado en operadores activos de mini-índice, mini-dólar, acciones y swing trade con plataformas especializadas.',
       spreadCambio: 'N/A (Foco en B3)',
       brokerageFee: 'Cero Comisión en todas las operaciones en B3',
       regulation: 'CVM, ANBIMA (Grupo XP)',
@@ -795,22 +991,22 @@ const BROKER_OVERRIDES: Record<'en' | 'es', Record<string, BrokerOverride>> = {
     },
     ibkr: {
       country: 'Estados Unidos / Global',
-      badge: 'Líder Mundial Absoluto',
+      badge: 'Acceso Multi-Bolsa Global',
       description:
-        'El bróker internacional más completo del planeta. Acceso directo a más de 150 bolsas en 33 países operando Dólar, Euro, Libra y Yen con los menores márgenes.',
+        'Bróker internacional con acceso directo a más de 150 bolsas en 33 países operando Dólar, Euro, Libra y Yen con márgenes institucionales competitivos.',
       spreadCambio: 'Desde 0,08% (tasa interbancaria institucional)',
       brokerageFee: 'Desde $0.005 / acción en EE. UU.; €1,25 en Europa',
       regulation: 'SEC, FINRA, SIPC, FCA (Reino Unido), BaFin (Alemania)',
       minDeposit: '$0 (Sin depósito mínimo)',
       features: [
         'Negociación en bolsas europeas (DAX, Euronext París, Ámsterdam, Londres)',
-        'Remuneración sobre saldo de efectivo en dólar y euro no invertido',
-        'Menores tasas de margen y apalancamiento del mercado global',
+        'Remuneración sobre saldo de efectivo elegible en dólar y euro no invertido',
+        'Tasas competitivas de margen y financiamiento en mercados globales',
       ],
     },
     avenue: {
       country: 'Estados Unidos / Brasil',
-      badge: 'Líder para Brasileños',
+      badge: 'Interfaz en Portugués EE. UU.',
       description:
         'Fundado en EE. UU. con foco en inversores latinoamericanos y brasileños. Interfaz accesible, soporte dedicado, fondeo rápido y reportes fiscales automatizados.',
       spreadCambio: '1,4% a 2,0% (decreciente por volumen)',
@@ -821,7 +1017,7 @@ const BROKER_OVERRIDES: Record<'en' | 'es', Record<string, BrokerOverride>> = {
       features: [
         'Depósitos vía PIX con conversión inmediata a dólares',
         'Informe fiscal automatizado para declaración anual',
-        'Tarjeta de débito Avenue Mastercard aceptada en todo el mundo',
+        'Tarjeta de débito Avenue Mastercard para pagos internacionales',
       ],
     },
     nomad: {
@@ -842,30 +1038,30 @@ const BROKER_OVERRIDES: Record<'en' | 'es', Record<string, BrokerOverride>> = {
     },
     schwab: {
       country: 'Estados Unidos',
-      badge: 'Mayor Bróker de EE. UU.',
+      badge: 'Bróker Consolidado EE. UU.',
       description:
-        'Una de las mayores gestoras de patrimonio del mundo. Brinda a inversores internacionales la renombrada plataforma thinkorswim, análisis de Wall Street y máxima solidez.',
+        'Firma estadounidense de gestión patrimonial y corretaje que brinda a inversores internacionales la plataforma thinkorswim, análisis de Wall Street y sólida trayectoria.',
       spreadCambio: 'Interbancario directo',
       brokerageFee: '$0 en acciones y ETFs listados en EE. UU.',
       regulation: 'SEC, FINRA, SIPC',
       minDeposit: '$25.000 para cuentas internacionales',
       features: [
-        'Plataforma thinkorswim de vanguardia para análisis técnico y opciones',
-        'Estudios y calificaciones de reconocidos analistas de Wall Street',
-        'Cuenta bancaria con reembolso ilimitado de comisiones en cajeros (ATMs)',
+        'Plataforma thinkorswim para análisis técnico y opciones',
+        'Estudios y calificaciones de analistas de Wall Street',
+        'Cuenta bancaria con reembolso de comisiones en cajeros (ATMs)',
       ],
     },
     fidelity: {
       country: 'Estados Unidos',
-      badge: 'Gigante de Wall Street',
+      badge: 'Custodia Wall Street',
       description:
-        'Pilar del mercado de capitales estadounidense con billones de dólares bajo custodia. Famosa por fondos indexados con comisión ZERO y ejecución superior de órdenes.',
+        'Institución consolidada del mercado de capitales estadounidense, conocida por fondos indexados sin comisión de gestión y ejecución competitiva de órdenes.',
       spreadCambio: 'Interbancario de mercado',
       brokerageFee: '$0 para acciones y ETFs estadounidenses online',
       regulation: 'SEC, FINRA, SIPC',
       minDeposit: '$0 para residentes / bajo consulta para no residentes',
       features: [
-        'Mejora de precio líder del mercado en la ejecución de órdenes',
+        'Ejecución enfocada en mejora de precios en órdenes',
         'Fondos Fidelity ZERO con 0,00% de comisión de gestión',
         'Herramientas integrales de planificación para el retiro',
       ],
@@ -979,55 +1175,55 @@ const BROKER_OVERRIDES: Record<'en' | 'es', Record<string, BrokerOverride>> = {
     },
     binance: {
       country: 'Global',
-      badge: 'Mayor del Mundo en Volumen',
+      badge: 'Alto Volumen Global',
       description:
-        'La mayor exchange de activos digitales del mundo por volumen diario. Negociación de Bitcoin, Ethereum, Solana y cientos de altcoins con depósitos inmediatos.',
+        'Exchange de activos digitales de alto volumen diario para operar Bitcoin, Ethereum, Solana y altcoins con depósitos y retiros rápidos.',
       spreadCambio: 'Paridad directa de libro de órdenes',
       brokerageFee: 'Desde 0,075% (con descuento pagando en BNB)',
-      regulation: 'Cumplimiento global y autorizaciones en decenas de países',
+      regulation: 'Cumplimiento global y autorizaciones en distintas jurisdicciones',
       minDeposit: 'R$ 10 vía PIX instantáneo',
       features: [
-        'Depósitos y retiros instantáneos en Reales (BRL) y Euros (EUR)',
+        'Depósitos y retiros rápidos en Reales (BRL) y Euros (EUR)',
         'Fondo de Garantía Seguro de Activos para Usuarios (SAFU)',
         'Mercado de Futuros, Staking con rendimientos y Launchpool',
       ],
     },
     mercadobitcoin: {
       country: 'Brasil',
-      badge: 'Mayor de América Latina',
+      badge: 'Plataforma Cripto Brasil',
       description:
-        'Pionera en criptomonedas en Brasil desde 2013 y licenciada como Institución de Pago por el Banco Central. Destaca en criptoactivos, tokens de renta fija y seguridad.',
+        'Exchange brasileña de criptomonedas activa desde 2013 y licenciada como Institución de Pago por el Banco Central, centrada en criptoactivos y tokens de renta fija.',
       spreadCambio: 'Pares directos en Reales',
       brokerageFee: '0,3% a 0,7% por operación',
       regulation: 'Banco Central de Brasil (Licencia IP), ABcripto',
       minDeposit: 'R$ 1 vía PIX',
       platforms: ['App MB', 'Portal Web Pro'],
       features: [
-        'Renta Fija Digital con rendimientos previsibles superiores al CDI',
-        'Soporte humanizado 24/7',
-        'Custodia 100% en Brasil con gobernanza institucional',
+        'Renta Fija Digital vinculada a derechos crediticios privados',
+        'Soporte al cliente 24/7',
+        'Custodia en Brasil con gobernanza institucional',
       ],
     },
     coinbase: {
       country: 'Estados Unidos',
       badge: 'Bolsa Nasdaq (COIN)',
       description:
-        'Exchange de criptoactivos cotizada públicamente en Nasdaq (COIN). Máximo estándar de auditoría contable, cumplimiento regulatorio y custodia para ETFs de Bitcoin.',
+        'Exchange de criptoactivos cotizada públicamente en Nasdaq (COIN), sujeta a auditorías contables públicas, cumplimiento regulatorio y servicios de custodia.',
       spreadCambio: 'Spread oficial transparente',
       brokerageFee: 'Desde 0,05% en Coinbase Advanced',
       regulation: 'SEC, FinCEN, FCA (Reino Unido), BaFin (Alemania)',
       minDeposit: '$2 / R$ 10',
       features: [
-        'Auditoría contable pública por firma Big Four',
-        'Custodio oficial de casi todos los ETFs de Bitcoin y Ethereum de EE. UU.',
-        'Garantía de seguridad institucional para clientes minoristas',
+        'Auditoría contable pública presentada ante reguladores de EE. UU.',
+        'Custodio institucional para varios ETFs de Bitcoin y Ethereum de EE. UU.',
+        'Controles segregados de custodia junto con cuentas minoristas',
       ],
     },
     kraken: {
       country: 'Estados Unidos / Europa',
-      badge: 'Seguridad Histórica Impecable',
+      badge: 'Trayectoria de Seguridad',
       description:
-        'Fundada en 2011, es una de las exchanges más antiguas y respetadas del planeta. Conocida por su historial impecable de seguridad y su Prueba de Reservas auditada.',
+        'Fundada en 2011, una de las exchanges internacionales consolidadas, conocida por su continuidad operativa y auditorías periódicas de Prueba de Reservas.',
       spreadCambio: 'Pares directos profundos en EUR y USD',
       brokerageFee: 'Desde 0,16% Maker / 0,26% Taker',
       regulation: 'FinCEN (EE. UU.), FCA (Reino Unido), AUSTRAC',
@@ -1035,14 +1231,14 @@ const BROKER_OVERRIDES: Record<'en' | 'es', Record<string, BrokerOverride>> = {
       features: [
         'Auditoría de Prueba de Reservas (Proof of Reserves) verificable por el cliente',
         'Liquidez profunda en pares de Euro (EUR) con transferencias SEPA',
-        'Trading de futuros con márgenes competitivos',
+        'Trading de futuros con controles de margen',
       ],
     },
     foxbit: {
       country: 'Brasil',
-      badge: 'Tradición Brasileña',
+      badge: 'Exchange Brasileña',
       description:
-        'Una de las primeras exchanges de Bitcoin creadas en Brasil. Plataforma rápida, depósitos y retiros 24 horas al día y soluciones de pasarela de pago para comercios.',
+        'Exchange brasileña de Bitcoin con depósitos y retiros vía PIX las 24 horas y soluciones de pasarela de pago para comercios.',
       spreadCambio: 'Cotización en Reales',
       brokerageFee: 'Desde 0,25%',
       regulation: 'ABcripto, Hacienda Federal de Brasil (IN 1888)',
@@ -1051,37 +1247,37 @@ const BROKER_OVERRIDES: Record<'en' | 'es', Record<string, BrokerOverride>> = {
       features: [
         'Liquidación PIX automática las 24 horas',
         'Foxbit Pay para aceptar pagos en Bitcoin en comercios',
-        'Informes listos para declaración fiscal anual',
+        'Informes exportables para declaración fiscal anual',
       ],
     },
     okx: {
       country: 'Global',
-      badge: 'Innovación Web3 & DeFi',
+      badge: 'Herramientas Web3 & Multired',
       description:
-        'Segunda mayor exchange mundial por volumen de derivados. Líder en billeteras Web3 sin custodia con soporte para más de 80 blockchains y depósitos rápidos.',
-      spreadCambio: 'Precio interbancario en pantalla',
+        'Exchange global de derivados y mercado al contado con billetera Web3 sin custodia compatible con más de 80 blockchains y depósitos en reales.',
+      spreadCambio: 'Precio de libro de órdenes en pantalla',
       brokerageFee: 'Desde 0,08%',
       regulation: 'VARA (Dubái), Bahamas, Hong Kong',
       minDeposit: 'R$ 10 vía PIX',
       platforms: ['OKX Web3 Wallet', 'OKX App', 'TradingView Integrado'],
       features: [
-        'Potente billetera Web3 sin custodia multired',
-        'Depósito instantáneo en Reales vía PIX sin comisiones',
-        'Integración nativa con DEXs y mercado NFT/Ordinals',
+        'Billetera Web3 sin custodia compatible con más de 80 blockchains',
+        'Depósito rápido en Reales vía PIX',
+        'Integración con DEXs y mercado NFT/Ordinals',
       ],
     },
     bybit: {
       country: 'Global',
-      badge: 'Alta Frecuencia & Futuros',
+      badge: 'Derivados & Liquidez',
       description:
-        'Plataforma de alta liquidez preferida por traders cuantitativos y profesionales de derivados. Motor de ejecución con capacidad de 100.000 transacciones por segundo.',
+        'Exchange de activos digitales enfocada en futuros perpetuos y liquidez al contado, con herramientas algorítmicas y soporte para depósitos vía PIX.',
       spreadCambio: 'Libro de órdenes de alta liquidez',
       brokerageFee: 'Desde 0,02% Maker / 0,055% Taker en futuros',
       regulation: 'Licencias internacionales y Prueba de Reservas periódica',
       minDeposit: 'R$ 10 vía PIX',
       platforms: ['Bybit App', 'Bybit Web Pro', 'API de Alta Frecuencia'],
       features: [
-        'Copy Trading de contratos futuros de alta liquidez',
+        'Copy Trading de contratos futuros perpetuos',
         'Bots algorítmicos integrados (Grid Bots, DCA Bots)',
         'Soporte para pagos vía PIX y tarjetas internacionales',
       ],

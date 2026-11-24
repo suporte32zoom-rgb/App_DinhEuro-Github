@@ -6,6 +6,11 @@ import {
   ExternalLink,
   CheckCircle,
   Search,
+  BookOpen,
+  Scale,
+  Coins,
+  Globe2,
+  HelpCircle,
 } from 'lucide-react';
 import { useI18n } from '../i18n/I18nContext';
 import { BROKERS_UI, getLocalizedBroker } from '../i18n/brokersTranslations';
@@ -41,10 +46,10 @@ export const BROKERS_CATALOG: BrokerInfo[] = [
     country: 'Brasil',
     flag: '🇧🇷',
     logoText: 'XP',
-    badge: 'Maior do Brasil',
+    badge: 'Amplo Ecossistema B3',
     rating: 4.9,
     description:
-      'Maior ecossistema financeiro independente do Brasil. Amplo portfólio de ações na B3, fundos imobiliários, renda fixa com títulos exclusivos e conta internacional integrada.',
+      'Plataforma financeira brasileira independente com amplo portfólio de ações na B3, fundos imobiliários, títulos de renda fixa e conta internacional integrada.',
     spreadCambio: '1,5% a 2,0%',
     brokerageFee: 'Zero para FIIs e Renda Fixa; R$ 0 online',
     regulation: 'CVM, ANBIMA, Banco Central do Brasil',
@@ -65,18 +70,18 @@ export const BROKERS_CATALOG: BrokerInfo[] = [
     country: 'Brasil',
     flag: '🇧🇷',
     logoText: 'BTG',
-    badge: 'Melhor Banco de Investimentos',
+    badge: 'Banco de Investimentos',
     rating: 4.9,
     description:
-      'Maior banco de investimentos da América Latina. Prateleira nobre de renda fixa com emissão própria, crédito estruturado e banking completo de primeira linha.',
+      'Banco de investimentos latino-americano com ampla prateleira de renda fixa de emissão própria, crédito estruturado e serviços bancários integrados.',
     spreadCambio: '1,2% a 1,8%',
     brokerageFee: 'Zero em planos digitais',
     regulation: 'CVM, Banco Central do Brasil, ANBIMA',
     minDeposit: 'R$ 0 (Sem mínimo)',
     platforms: ['BTG Banking & Invest', 'Profit Pro', 'Home Broker Web'],
     features: [
-      'Solidez institucional e governança de banco líder',
-      'Renda fixa com as melhores taxas de CDB e LCA do país',
+      'Solidez institucional e governança bancária consolidada',
+      'Ampla oferta de títulos de renda fixa (CDB, LCI e LCA)',
       'Cartão Black modular com cashback ou milhas Livelo',
     ],
     websiteUrl: 'https://www.btgpactual.com',
@@ -89,19 +94,19 @@ export const BROKERS_CATALOG: BrokerInfo[] = [
     country: 'Brasil',
     flag: '🇧🇷',
     logoText: 'NU',
-    badge: 'Super App Popular',
+    badge: 'Super App Integrado',
     rating: 4.8,
     description:
-      'Integração total dos investimentos dentro do aplicativo do Nubank. Prático para compra de ações fracionárias na B3, Tesouro Direto, CDBs e criptomoedas em poucos toques.',
+      'Integração de investimentos dentro do aplicativo do Nubank para negociação de ações fracionárias na B3, Tesouro Direto, CDBs e ativos digitais.',
     spreadCambio: '1,5% via remessa internacional',
-    brokerageFee: '100% Taxa Zero para Ações, FIIs e BDRs',
+    brokerageFee: 'Taxa Zero para Ações, FIIs e BDRs',
     regulation: 'CVM, Banco Central do Brasil',
     minDeposit: 'R$ 1 via PIX',
     platforms: ['App Nubank (iOS & Android)'],
     features: [
-      'Experiência móvel ultra rápida e intuitiva',
+      'Experiência móvel ágil e intuitiva',
       'Investimento em frações de ações a partir de R$ 1',
-      'Caixinhas de rendimento com 100% do CDI imediato',
+      'Caixinhas de rendimento atreladas a 100% do CDI',
     ],
     websiteUrl: 'https://nubank.com.br/investimentos',
     isZeroFee: true,
@@ -137,10 +142,10 @@ export const BROKERS_CATALOG: BrokerInfo[] = [
     country: 'Brasil',
     flag: '🇧🇷',
     logoText: 'Clear',
-    badge: 'Pioneira Day Trade Zero',
+    badge: 'Foco Day Trade Zero',
     rating: 4.6,
     description:
-      'A corretora que revolucionou o mercado brasileiro ao zerar a corretagem. Especializada em traders ativos de mini-índice, minidólar, ações e swing trade com plataformas profissionais.',
+      'Corretora brasileira que adotou a isenção de corretagem para pessoa física, especializada em traders ativos de mini-índice, minidólar, ações e swing trade.',
     spreadCambio: 'N/A (Foco em B3)',
     brokerageFee: 'Zero Corretagem em todas as operações na B3',
     regulation: 'CVM, ANBIMA (Grupo XP)',
@@ -284,7 +289,7 @@ export const BROKERS_CATALOG: BrokerInfo[] = [
     badge: 'Private & Tradição',
     rating: 4.8,
     description:
-      'Braço de investimentos do quarto maior banco privado do Brasil. Foco em alta renda, preservação patrimonial, crédito privado e fundos Safra de alta performance.',
+      'Braço de investimentos de banco privado brasileiro tradicional. Foco em alta renda, preservação patrimonial, crédito privado e fundos Safra.',
     spreadCambio: 'Negociável com mesa de câmbio',
     brokerageFee: 'Competitiva sob consulta',
     regulation: 'CVM, Banco Central, ANBIMA',
@@ -333,10 +338,10 @@ export const BROKERS_CATALOG: BrokerInfo[] = [
     country: 'Estados Unidos / Global',
     flag: '🇺🇸',
     logoText: 'IBKR',
-    badge: 'Líder Mundial Absoluta',
+    badge: 'Acesso Multi-Bolsa Global',
     rating: 4.9,
     description:
-      'A mais completa corretora internacional do planeta. Acesso direto a mais de 150 bolsas em 33 países com negociação em Dólar, Euro, Libra e Iene sob as menores margens.',
+      'Corretora internacional com acesso direto a mais de 150 bolsas em 33 países, permitindo negociação em Dólar, Euro, Libra e Iene com spreads institucionais reduzidos.',
     spreadCambio: 'A partir de 0,08% (taxa interbancária institucional)',
     brokerageFee: 'A partir de $0.005 / ação nos EUA; €1,25 na Europa',
     regulation: 'SEC, FINRA, SIPC, FCA (Reino Unido), BaFin (Alemanha)',
@@ -344,8 +349,8 @@ export const BROKERS_CATALOG: BrokerInfo[] = [
     platforms: ['Trader Workstation (TWS)', 'IBKR Desktop', 'IBKR Mobile', 'Client Portal Web'],
     features: [
       'Negociação em bolsas europeias (DAX, Euronext Paris, Amsterdam, Londres)',
-      'Remuneração sobre saldo de caixa em dólar e euro não investido',
-      'Menores taxas de margem e alavancagem do mercado global',
+      'Remuneração sobre saldo de caixa elegível em dólar e euro não investido',
+      'Taxas competitivas de margem e financiamento em mercados globais',
     ],
     websiteUrl: 'https://www.interactivebrokers.com',
     isZeroFee: false,
@@ -357,10 +362,10 @@ export const BROKERS_CATALOG: BrokerInfo[] = [
     country: 'Estados Unidos / Brasil',
     flag: '🇺🇸',
     logoText: 'Avenue',
-    badge: 'Líder para Brasileiros',
+    badge: 'Interface em Português (EUA)',
     rating: 4.8,
     description:
-      'Fundada nos EUA com foco total no investidor brasileiro. Aplicativo 100% em português, suporte local, integração bancária com PIX instantâneo e relatórios de IR mastigados.',
+      'Corretora sediada nos EUA voltada ao investidor brasileiro. Aplicativo em português, suporte local, integração bancária com PIX e relatórios organizados para declaração de IR.',
     spreadCambio: '1,4% a 2,0% (decrescente por volume)',
     brokerageFee: 'Zero corretagem em planos selecionados',
     regulation: 'SEC, FINRA, SIPC (Proteção até $500k)',
@@ -368,8 +373,8 @@ export const BROKERS_CATALOG: BrokerInfo[] = [
     platforms: ['App Avenue (iOS & Android)', 'Web Portal'],
     features: [
       'Depósitos via PIX com câmbio imediato para dólares',
-      'Relatório de Imposto de Renda automatizado (DARF/GCAP/Declaração)',
-      'Cartão de débito Avenue Mastercard aceito no mundo todo',
+      'Relatório de Imposto de Renda estruturado (DARF/GCAP/Declaração)',
+      'Cartão de débito Avenue Mastercard para pagamentos internacionais',
     ],
     websiteUrl: 'https://avenue.us',
     isZeroFee: true,
@@ -405,19 +410,19 @@ export const BROKERS_CATALOG: BrokerInfo[] = [
     country: 'Estados Unidos',
     flag: '🇺🇸',
     logoText: 'Schwab',
-    badge: 'Maior Corretora dos EUA',
+    badge: 'Corretora Tradicional dos EUA',
     rating: 4.9,
     description:
-      'Uma das maiores gestoras de patrimônio do mundo. Fornece aos investidores internacionais a renomada plataforma thinkorswim, relatórios de equity research e solidez inquestionável.',
+      'Gestora e corretora norte-americana consolidada que oferece a investidores internacionais a plataforma thinkorswim, relatórios de equity research e ampla estrutura institucional.',
     spreadCambio: 'Interbancário direto',
     brokerageFee: '$0 em ações e ETFs listados nos EUA',
     regulation: 'SEC, FINRA, SIPC',
     minDeposit: '$25.000 para contas internacionais',
     platforms: ['thinkorswim Desktop/Mobile', 'Schwab.com Web'],
     features: [
-      'Plataforma thinkorswim de ponta para análise técnica e opções',
-      'Pesquisa e recomendações de analistas renomados de Wall Street',
-      'Conta bancária com reembolso ilimitado de taxas de caixas eletrônicos (ATMs)',
+      'Plataforma thinkorswim para análise técnica e opções',
+      'Relatórios e cobertura de analistas de Wall Street',
+      'Conta bancária com reembolso de tarifas em caixas eletrônicos (ATMs)',
     ],
     websiteUrl: 'https://www.schwab.com',
     isZeroFee: true,
@@ -429,17 +434,17 @@ export const BROKERS_CATALOG: BrokerInfo[] = [
     country: 'Estados Unidos',
     flag: '🇺🇸',
     logoText: 'Fidelity',
-    badge: 'Gigante de Wall Street',
+    badge: 'Custodiante de Wall Street',
     rating: 4.9,
     description:
-      'Pilar do mercado de capitais norte-americano com trilhões de dólares sob custódia. Famosa por fundos mútuos de índice com taxa de administração ZERO e execução de ordens superior.',
+      'Instituição tradicional do mercado de capitais norte-americano, reconhecida por fundos de índice com taxa de administração zero e execução competitiva de ordens.',
     spreadCambio: 'Interbancário de mercado',
     brokerageFee: '$0 para ações e ETFs americanos online',
     regulation: 'SEC, FINRA, SIPC',
     minDeposit: '$0 para residentes / sob consulta para não-residentes',
     platforms: ['Active Trader Pro', 'Fidelity Mobile', 'Fidelity.com'],
     features: [
-      'Melhoria de preço líder de mercado na execução de ordens',
+      'Execução de ordens com foco em melhoria de preço',
       'Fundos Fidelity ZERO com 0,00% de taxa de administração',
       'Ferramentas abrangentes de planejamento de aposentadoria',
     ],
@@ -625,17 +630,17 @@ export const BROKERS_CATALOG: BrokerInfo[] = [
     country: 'Global',
     flag: '🌐',
     logoText: 'BNB',
-    badge: 'Maior do Mundo em Volume',
+    badge: 'Alto Volume Global',
     rating: 4.9,
     description:
-      'A maior corretora de ativos digitais do mundo por volume de negócios diário. Negociação de Bitcoin, Ethereum, Solana e centenas de altcoins com saques imediatos via PIX.',
+      'Plataforma global de ativos digitais com alto volume diário de negociação em Bitcoin, Ethereum, Solana e altcoins, com depósitos e saques via PIX.',
     spreadCambio: 'Paridade de livro de ofertas direto',
     brokerageFee: 'A partir de 0,075% (com desconto pagando em BNB)',
-    regulation: 'Conformidade global e autorizações em dezenas de países',
+    regulation: 'Conformidade e autorizações em diferentes jurisdições',
     minDeposit: 'R$ 10 via PIX instantâneo',
     platforms: ['Binance Pro Mobile', 'Binance Desktop App', 'Web'],
     features: [
-      'Depósitos e saques instantâneos em Reais (BRL) e Euros (EUR)',
+      'Depósitos e saques rápidos em Reais (BRL) e Euros (EUR)',
       'Fundo de Garantia Seguro de Ativos para Usuários (SAFU)',
       'Mercado de Futuros, Staking com rendimentos e Launchpool',
     ],
@@ -649,19 +654,19 @@ export const BROKERS_CATALOG: BrokerInfo[] = [
     country: 'Brasil',
     flag: '🇧🇷',
     logoText: 'MB',
-    badge: 'Maior da América Latina',
+    badge: 'Plataforma Cripto Brasil',
     rating: 4.8,
     description:
-      'Pioneira em criptomoedas no Brasil desde 2013 e licenciada como Instituição de Pagamento pelo Banco Central. Destaca-se por criptoativos, tokens de renda fixa e segurança.',
+      'Corretora de criptoativos em operação no Brasil desde 2013 e licenciada como Instituição de Pagamento pelo Banco Central, com foco em cripto e tokens de renda fixa.',
     spreadCambio: 'Paridade em Reais direto',
     brokerageFee: '0,3% a 0,7% por negociação',
     regulation: 'Banco Central do Brasil (Licença de IP), ABcripto',
     minDeposit: 'R$ 1 via PIX',
     platforms: ['App MB', 'Portal Web Pro'],
     features: [
-      'Renda Fixa Digital com rendimentos previsíveis superiores ao CDI',
-      'Suporte humanizado em português 24/7',
-      'Custódia 100% no Brasil com governança institucional',
+      'Renda Fixa Digital vinculada a recebíveis e crédito privado',
+      'Suporte em português 24/7',
+      'Custódia no Brasil com governança institucional',
     ],
     websiteUrl: 'https://www.mercadobitcoin.com.br',
     isZeroFee: false,
@@ -676,16 +681,16 @@ export const BROKERS_CATALOG: BrokerInfo[] = [
     badge: 'Bolsa Nasdaq (COIN)',
     rating: 4.8,
     description:
-      'Única exchange de criptoativos listada publicamente na Bolsa de Nova York (Nasdaq: COIN). Máximo padrão de auditoria, conformidade com a SEC e custódia para os ETFs de Bitcoin.',
+      'Exchange de criptoativos listada na Nasdaq (COIN), sujeita a auditorias contábeis públicas, exigências regulatórias da SEC e serviços de custódia institucional.',
     spreadCambio: 'Spread oficial transparente',
     brokerageFee: 'A partir de 0,05% no Coinbase Advanced',
     regulation: 'SEC, FinCEN, FCA (Reino Unido), BaFin (Alemanha)',
     minDeposit: '$2 / R$ 10',
     platforms: ['Coinbase App', 'Coinbase Advanced Trader', 'Coinbase Wallet'],
     features: [
-      'Auditoria contábil pública das quatro maiores firmas (Big Four)',
-      'Custodiante oficial de quase todos os ETFs de Bitcoin e Ethereum dos EUA',
-      'Garantia de segurança institucional para clientes pessoas físicas',
+      'Demonstrações financeiras auditadas e divulgadas ao mercado',
+      'Custodiante institucional de diversos ETFs de Bitcoin e Ethereum nos EUA',
+      'Controles de custódia segregada para contas institucionais e varejo',
     ],
     websiteUrl: 'https://www.coinbase.com',
     isZeroFee: false,
@@ -697,10 +702,10 @@ export const BROKERS_CATALOG: BrokerInfo[] = [
     country: 'Estados Unidos / Europa',
     flag: '🇺🇸',
     logoText: 'Kraken',
-    badge: 'Segurança Histórica Impecável',
+    badge: 'Histórico Consolidado',
     rating: 4.8,
     description:
-      'Fundada em 2011, é uma das mais antigas e respeitadas exchanges do planeta. Notória por seu histórico impecável de nunca ter sofrido hacks e por sua Prova de Reservas auditada.',
+      'Fundada em 2011, uma das exchanges internacionais mais antigas em atividade, reconhecida pela continuidade operacional e por auditorias periódicas de Prova de Reservas.',
     spreadCambio: 'Pares diretos em EUR e USD',
     brokerageFee: 'A partir de 0,16% Maker / 0,26% Taker',
     regulation: 'FinCEN (EUA), FCA (Reino Unido), AUSTRAC',
@@ -709,7 +714,7 @@ export const BROKERS_CATALOG: BrokerInfo[] = [
     features: [
       'Auditoria de Prova de Reservas (Proof of Reserves) verificável pelo cliente',
       'Liquidez profunda em pares de Euro (EUR) com transferências SEPA',
-      'Trading de futuros com margens reduzidas',
+      'Trading de futuros com controles de margem',
     ],
     websiteUrl: 'https://www.kraken.com',
     isZeroFee: false,
@@ -721,10 +726,10 @@ export const BROKERS_CATALOG: BrokerInfo[] = [
     country: 'Brasil',
     flag: '🇧🇷',
     logoText: 'Fox',
-    badge: 'Tradição Brasileira',
+    badge: 'Exchange Brasileira',
     rating: 4.6,
     description:
-      'Uma das primeiras corretoras de Bitcoin criadas no Brasil. Plataforma rápida, depósitos e saques em PIX 24 horas por dia e soluções de gateway para empresas.',
+      'Corretora brasileira de Bitcoin com depósitos e saques em PIX 24 horas por dia e soluções de gateway de pagamento para empresas.',
     spreadCambio: 'Cotação em Reais',
     brokerageFee: 'A partir de 0,25%',
     regulation: 'ABcripto, Receita Federal (IN 1888)',
@@ -733,7 +738,7 @@ export const BROKERS_CATALOG: BrokerInfo[] = [
     features: [
       'PIX automático em qualquer horário do dia ou da noite',
       'Foxbit Pay para aceitar pagamentos em Bitcoin no comércio',
-      'Relatórios prontos para declaração de imposto de renda anual',
+      'Relatórios exportáveis para declaração de imposto de renda anual',
     ],
     websiteUrl: 'https://foxbit.com.br',
     isZeroFee: false,
@@ -745,19 +750,19 @@ export const BROKERS_CATALOG: BrokerInfo[] = [
     country: 'Global',
     flag: '🌐',
     logoText: 'OKX',
-    badge: 'Inovação Web3 & DeFi',
+    badge: 'Ecossistema Web3 & Multi-Rede',
     rating: 4.8,
     description:
-      'Segunda maior exchange mundial em volume de derivativos. Líder absoluta em carteiras Web3 descentralizadas com suporte a mais de 80 blockchains e depósitos em BRL.',
-    spreadCambio: 'Preço de tela interbancário',
+      'Exchange global de derivativos e mercado à vista com carteira Web3 não-custodial compatível com mais de 80 blockchains e depósitos em reais via PIX.',
+    spreadCambio: 'Preço de livro de ofertas',
     brokerageFee: 'A partir de 0,08%',
     regulation: 'VARA (Dubai), Bahamas, Hong Kong',
     minDeposit: 'R$ 10 via PIX',
     platforms: ['OKX Web3 Wallet', 'OKX App', 'TradingView Integrado'],
     features: [
-      'Carteira Web3 não-custodial mais poderosa do mercado cripto',
-      'Depósito instantâneo em Reais via PIX sem taxas',
-      'Integração nativa com DEXs e mercado de ordens NFT/Inscriptions',
+      'Carteira Web3 não-custodial compatível com mais de 80 redes',
+      'Depósito rápido em Reais via PIX',
+      'Integração com agregadores DEX e mercado de ativos digitais',
     ],
     websiteUrl: 'https://www.okx.com',
     isZeroFee: false,
@@ -1014,6 +1019,79 @@ export const BrokersView: React.FC = () => {
           </div>
         ))}
       </div>
+
+      {/* Editorial Comparative Guide & FAQ */}
+      <section
+        aria-labelledby="brokers-editorial-guide-heading"
+        className="rounded-2xl bg-[#FFFFFF] dark:bg-[#0d1627] border border-[#E2E8F0] dark:border-slate-800/90 p-5 sm:p-6 shadow-xl space-y-6"
+      >
+        <div className="border-b border-[#E2E8F0] dark:border-slate-800/80 pb-4 space-y-2">
+          <span className="inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-[#003399] dark:text-emerald-400">
+            <BookOpen className="w-3.5 h-3.5" aria-hidden="true" />
+            <span>{tBrokers.editorialGuide.eyebrow}</span>
+          </span>
+          <h2
+            id="brokers-editorial-guide-heading"
+            className="text-base sm:text-lg font-extrabold text-[#0F172A] dark:text-white tracking-tight"
+          >
+            {tBrokers.editorialGuide.title}
+          </h2>
+          <p className="text-xs sm:text-[13px] text-[#1E293B] dark:text-slate-300 leading-relaxed max-w-4xl">
+            {tBrokers.editorialGuide.intro}
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {tBrokers.editorialGuide.sections.map((section, idx) => {
+            const SectionIcon = [Scale, Coins, Globe2, ShieldCheck][idx] || BookOpen;
+            return (
+              <article
+                key={section.id}
+                className="rounded-xl bg-[#F4F7F9] dark:bg-[#070e1b] border border-[#E2E8F0] dark:border-slate-800/80 p-4 space-y-2"
+              >
+                <h3 className="text-xs sm:text-sm font-bold text-[#002266] dark:text-white leading-snug flex items-start gap-2">
+                  <SectionIcon
+                    className="w-4 h-4 text-[#003399] dark:text-emerald-400 flex-shrink-0 mt-0.5"
+                    aria-hidden="true"
+                  />
+                  <span>{section.title}</span>
+                </h3>
+                <p className="text-[11px] sm:text-xs text-[#1E293B] dark:text-slate-300 leading-relaxed">
+                  {section.body}
+                </p>
+              </article>
+            );
+          })}
+        </div>
+
+        <div className="border-t border-[#E2E8F0] dark:border-slate-800/80 pt-5 space-y-3">
+          <div className="space-y-1">
+            <span className="inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-[#003399] dark:text-emerald-400">
+              <HelpCircle className="w-3.5 h-3.5" aria-hidden="true" />
+              <span>{tBrokers.faq.eyebrow}</span>
+            </span>
+            <h2 className="text-base sm:text-lg font-extrabold text-[#0F172A] dark:text-white tracking-tight">
+              {tBrokers.faq.title}
+            </h2>
+          </div>
+
+          <dl className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {tBrokers.faq.items.map((item) => (
+              <div
+                key={item.question}
+                className="rounded-xl bg-[#F4F7F9] dark:bg-[#070e1b] border border-[#E2E8F0] dark:border-slate-800/80 p-4 space-y-2"
+              >
+                <dt className="text-xs sm:text-sm font-bold text-[#002266] dark:text-white leading-snug">
+                  {item.question}
+                </dt>
+                <dd className="text-[11px] sm:text-xs text-[#1E293B] dark:text-slate-300 leading-relaxed">
+                  {item.answer}
+                </dd>
+              </div>
+            ))}
+          </dl>
+        </div>
+      </section>
     </div>
   );
 };
