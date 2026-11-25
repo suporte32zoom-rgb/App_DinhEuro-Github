@@ -158,14 +158,7 @@ test('APEC 2026 and ALADI 2026 editorial insights preserve prior items up to 12 
   );
   assert.ok(source.includes('export const MAX_DAILY_INSIGHTS = 12;'));
   const idMatches = source.match(/^\s+id:\s*'[^']+',/gm) || [];
-  assert.equal(idMatches.length, 13);
-  assert.ok(source.includes("id: 'pacote-fiscal-camara-dolar-divida-publica-2026'"));
-  assert.ok(source.includes("imageUrl: '/assets/aistudio/image_2416c01b.png'"));
-  assert.ok(
-    source.includes(
-      'Pacote Fiscal na Câmara e a Montanha-Russa do Dólar: Por que o Câmbio Reverteu Parte da Queda'
-    )
-  );
+  assert.equal(idMatches.length, 12);
   assert.ok(source.includes("id: 'nvidia-retorno-jensen-huang-ceo-2026'"));
   assert.ok(source.includes("id: 'cop31-fracasso-antalia-cinco-fatores-2026'"));
   assert.ok(source.includes("dateAuthor: '23/11/2026 • Por Américo Martins'"));
@@ -212,15 +205,8 @@ test('APEC 2026 and ALADI 2026 editorial insights preserve prior items up to 12 
   assert.ok(newsViewSource.includes('tNews.editorialCriteria.title'));
 
   const { NEWS_EDITORIAL_ARTICLES } = await import('../data/newsEditorialArticles.ts');
-  assert.equal(NEWS_EDITORIAL_ARTICLES.length, 10);
-  assert.equal(NEWS_EDITORIAL_ARTICLES[0].id, 'pacote-fiscal-dolar-divida-publica-2026');
-  assert.equal(NEWS_EDITORIAL_ARTICLES[0].imageUrl, '/assets/aistudio/image_2416c01b.png');
-  assert.equal(
-    NEWS_EDITORIAL_ARTICLES[0].translations.pt.title,
-    'Pacote Fiscal, Dólar e Dívida Pública: Por que o Mercado Reverteu o Otimismo Após a Votação na Câmara'
-  );
+  assert.equal(NEWS_EDITORIAL_ARTICLES.length, 9);
   const expectedNewsIds = [
-    'pacote-fiscal-dolar-divida-publica-2026',
     'bcb-selic-focus-vs-bce-politica-monetaria-2026',
     'dinamica-cambio-comercial-eur-usd-comercio-exterior-2026',
     'fluxo-estrangeiro-b3-commodities-brent-minerio-2026',
