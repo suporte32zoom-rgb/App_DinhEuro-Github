@@ -967,7 +967,32 @@ test('public/sitemap.xml lists strictly the active canonical routes from TAB_ROU
   }
 });
 
+test('static postbuild script, _redirects, and /guia-cambio-remessas canonical URL align with sitemap.xml', async () => {
+  const fs = await import('node:fs');
+  const path = await import('node:path');
+  const { syncRouteHeadMetadata } = await import('./seo.ts');
 
+  const redirectsContent = fs.readFileSync(
+    path.resolve(process.cwd(), 'public/_redirects'),
+    'utf8'
+  );
+  assert.equal(redirectsContent.trim(), '/* /index.html 200');
 
+  const postbuildScript = fs.readFileSync(
+    path.resolve(process.cwd(), 'scripts/postbuild-gh-pages.mjs'),
+    'utf8'
+  );
+  assert.ok(postbuildScript.includes("'guia-cambio-remessas'"));
+  assert.ok(postbuildScript.includes("'politica-monetaria-juros'"));
+  assert.ok(postbuildScript.includes("'graficos'"));
+  assert.ok(postbuildScript.includes("'noticias'"));
+  assert.ok(postbuildScript.includes("fs.copyFileSync(indexHtmlPath, path.join(distDir, '404.html'))"));
+  assert.ok(!postbuildScript.includes("'day-trade'"));
+  assert.ok(!postbuildScript.includes("'fluxo-tape-reading'"));
 
+  const guiaCanonical = buildCanonicalUrl('/guia-cambio-remessas/');
+  assert.equal(guiaCanonical, 'https://dinheuro.com/guia-cambio-remessas');
 
+  const metaResult = syncRouteHeadMetadata('guia_cambio', 'pt', undefined);
+  assert.equal(metaResult.canonicalUrl, 'https://dinheuro.com/guia-cambio-remessas');
+});
