@@ -158,7 +158,9 @@ test('APEC 2026 and ALADI 2026 editorial insights preserve prior items up to 12 
   );
   assert.ok(source.includes('export const MAX_DAILY_INSIGHTS = 12;'));
   const idMatches = source.match(/^\s+id:\s*'[^']+',/gm) || [];
-  assert.equal(idMatches.length, 13);
+  assert.equal(idMatches.length, 14);
+  assert.ok(source.includes("id: 'eua-tarifas-embraer-acucar-secao-301-2026'"));
+  assert.ok(source.includes("imageUrl: '/assets/aistudio/image_100b355f.png'"));
   assert.ok(source.includes("id: 'pacote-fiscal-camara-dolar-divida-2026'"));
   assert.ok(source.includes("imageUrl: '/assets/aistudio/image_459c4fc4.png'"));
   assert.ok(source.includes("id: 'nvidia-retorno-jensen-huang-ceo-2026'"));
@@ -207,8 +209,9 @@ test('APEC 2026 and ALADI 2026 editorial insights preserve prior items up to 12 
   assert.ok(newsViewSource.includes('tNews.editorialCriteria.title'));
 
   const { NEWS_EDITORIAL_ARTICLES } = await import('../data/newsEditorialArticles.ts');
-  assert.equal(NEWS_EDITORIAL_ARTICLES.length, 10);
+  assert.equal(NEWS_EDITORIAL_ARTICLES.length, 11);
   const expectedNewsIds = [
+    'eua-tarifas-embraer-acucar-secao-301-2026',
     'pacote-fiscal-camara-dolar-divida-2026',
     'bcb-selic-focus-vs-bce-politica-monetaria-2026',
     'dinamica-cambio-comercial-eur-usd-comercio-exterior-2026',

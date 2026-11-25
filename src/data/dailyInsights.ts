@@ -60,6 +60,94 @@ export const DAILY_INSIGHTS_UI_COPY: Record<
 
 export const DAILY_INSIGHTS_ITEMS: DailyInsightItem[] = [
   {
+    id: 'eua-tarifas-embraer-acucar-secao-301-2026',
+    isoDate: '2026-11-25',
+    imageUrl: '/assets/aistudio/image_100b355f.png',
+    translations: {
+      pt: {
+        tag: 'Comércio Exterior & Tarifas',
+        title:
+          'E.U.A. Anunciam Novas Tarifas Sobre Embraer e Açúcar Brasileiro; Tensão Comercial Aumenta',
+        summary:
+          'Síntese DinhEuro: O USTR propôs tarifa de 10% sobre aeronaves prontas e restrições a cotas de açúcar bruto e orgânico via Seção 301, ampliando a volatilidade em Embraer (EMBR3) e no câmbio após bloqueio de painel na OMC.',
+        dateAuthor: '25/11/2026 • São Paulo/Washington • Redação DinhEuro',
+        source:
+          'Referências institucionais: USTR (Seção 301), Organização Mundial do Comércio (OMC) e balança comercial Brasil–EUA',
+        readingTime: '4 min',
+        keywords: [
+          'tarifas eua embraer embr3',
+          'acucar brasileiro cotas ustr',
+          'secao 301 lei de comercio 1974',
+          'omc brasil estados unidos tarifas',
+          'tensao comercial brasil eua pix',
+        ],
+        imageAlt:
+          'Gráficos de impacto tarifário sobre Embraer (EMBR3) e açúcar bruto brasileiro diante da investigação da Seção 301 entre Estados Unidos e Brasil',
+        fullContent: [
+          'Síntese DinhEuro (São Paulo/Washington • 25/11/2026 às 11:21): o Escritório do Representante Comercial dos Estados Unidos (USTR) formalizou nesta quarta-feira (25) uma proposta de novas tarifas sobre importações brasileiras com base na Seção 301 da Lei de Comércio de 1974, incluindo alíquota de 10% sobre aeronaves prontas e alterações nas cotas para açúcar bruto e orgânico fora da cota estabelecida.',
+          '## Impacto direto em Embraer (EMBR3) e setor sucroenergético',
+          'Atualmente isentas, as aeronaves prontas figuram como o quarto maior item das exportações brasileiras aos EUA, colocando pressão competitiva e logística imediata sobre a Embraer (EMBR3) na B3. No agronegócio, a proposta para o açúcar busca impedir o ingresso via terceiros países e adiciona prêmio de risco às usinas exportadoras.',
+          '## OMC, Seção 301 e leitura de risco cambial',
+          'A escalada ocorre após os EUA bloquearem na terça-feira (24) o pedido brasileiro de painel na OMC contra as tarifas de 25% aplicadas em julho, em meio a acusações da Casa Branca envolvendo desde desmatamento até o sistema Pix. Com o Brasil também avaliando medidas retaliatórias, mesas de câmbio monitoram o impacto sobre o saldo bilateral e a taxa USD/BRL.',
+        ],
+      },
+      en: {
+        tag: 'Foreign Trade & Tariffs',
+        title:
+          'U.S. Announces New Tariffs on Embraer and Brazilian Sugar as Trade Tensions Escalate',
+        summary:
+          'DinhEuro Synthesis: The USTR proposed a 10% tariff on finished aircraft and tighter out-of-quota sugar rules under Section 301, heightening volatility in Embraer (EMBR3) shares and USD/BRL after Washington blocked a WTO panel.',
+        dateAuthor: 'Nov 25, 2026 • São Paulo/Washington • DinhEuro Editorial',
+        source:
+          'Institutional references: USTR (Section 301), World Trade Organization (WTO), and Brazil–U.S. Trade Desk',
+        readingTime: '4 min read',
+        keywords: [
+          'us tariffs embraer embr3',
+          'brazilian sugar quotas ustr',
+          'section 301 trade act 1974',
+          'wto brazil us trade dispute',
+          'brazil us tariffs pix',
+        ],
+        imageAlt:
+          'Market impact charts for Embraer (EMBR3) and raw Brazilian sugar amid the U.S.–Brazil Section 301 tariff investigation',
+        fullContent: [
+          'DinhEuro Synthesis (São Paulo/Washington • Nov 25, 2026, 11:21): the Office of the United States Trade Representative (USTR) formalized a proposal on Wednesday (25) to impose new tariffs on Brazilian imports under Section 301 of the Trade Act of 1974, including a 10% duty on finished aircraft and stricter quota rules for raw and organic sugar.',
+          '## Direct pressure on Embraer (EMBR3) and sugar exporters',
+          'Currently duty-free, finished aircraft are Brazil’s fourth-largest export item to the United States, exposing B3-listed Embraer (EMBR3) to fresh competitive and logistical headwinds. In agribusiness, tighter out-of-quota sugar duties aim to prevent third-country transshipment.',
+          '## WTO friction and FX spillover',
+          'The move follows Tuesday’s U.S. block of Brazil’s WTO dispute panel request over July’s 25% tariffs, amid White House allegations ranging from deforestation to Brazil’s Pix instant payment system. With Brasília considering retaliatory Section 301 steps, FX desks are tracking potential pressure on bilateral export flows and USD/BRL.',
+        ],
+      },
+      es: {
+        tag: 'Comercio Exterior y Aranceles',
+        title:
+          'EE. UU. Anuncia Nuevos Aranceles Sobre Embraer y Azúcar Brasileño; Crece la Tensión Comercial',
+        summary:
+          'Síntesis DinhEuro: La USTR propuso un arancel del 10% a aeronaves terminadas y cambios de cuotas para el azúcar bajo la Sección 301, elevando la volatilidad en Embraer (EMBR3) y el tipo de cambio tras el bloqueo en la OMC.',
+        dateAuthor: '25/11/2026 • São Paulo/Washington • Redacción DinhEuro',
+        source:
+          'Referencias institucionales: USTR (Sección 301), Organización Mundial del Comercio (OMC) y balanza Brasil–EE. UU.',
+        readingTime: '4 min',
+        keywords: [
+          'aranceles eeuu embraer embr3',
+          'azucar brasileno cuotas ustr',
+          'seccion 301 ley comercio 1974',
+          'omc brasil estados unidos disputa',
+          'tension comercial brasil eeuu pix',
+        ],
+        imageAlt:
+          'Gráficos de impacto arancelario sobre Embraer (EMBR3) y azúcar crudo brasileño ante la investigación de la Sección 301 entre EE. UU. y Brasil',
+        fullContent: [
+          'Síntesis DinhEuro (São Paulo/Washington • 25/11/2026 a las 11:21): la Oficina del Representante Comercial de Estados Unidos (USTR) formalizó este miércoles (25) una propuesta de nuevos aranceles contra importaciones brasileñas bajo la Sección 301 de la Ley de Comercio de 1974, incluida una tasa del 10% sobre aeronaves terminadas y ajustes de cuotas para azúcar crudo y orgánico.',
+          '## Impacto en Embraer (EMBR3) y el sector sucroenergético',
+          'Actualmente exentas, las aeronaves constituyen el cuarto mayor rubro exportador de Brasil hacia EE. UU., sumando presión competitiva sobre Embraer (EMBR3) en la B3. En el agronegocio, el ajuste al azúcar fuera de cuota busca evitar triangulaciones mediante terceros países.',
+          '## Fricción en la OMC y lectura cambiaria',
+          'La medida llega tras el bloqueo estadounidense del martes (24) al pedido brasileño de panel en la OMC por los aranceles del 25% de julio, en medio de críticas de la Casa Blanca que abarcan desde deforestación hasta el sistema Pix. Con posibles represalias en evaluación por Brasilia, las mesas cambiarias vigilan el efecto sobre el saldo externo y USD/BRL.',
+        ],
+      },
+    },
+  },
+  {
     id: 'pacote-fiscal-camara-dolar-divida-2026',
     isoDate: '2026-11-25',
     imageUrl: '/assets/aistudio/image_459c4fc4.png',
