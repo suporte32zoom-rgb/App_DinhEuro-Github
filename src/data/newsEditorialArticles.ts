@@ -13,6 +13,116 @@ export interface NewsEditorialArticle extends DailyInsightItem {
 
 export const NEWS_EDITORIAL_ARTICLES: NewsEditorialArticle[] = [
   {
+    id: 'pacote-fiscal-camara-dolar-divida-2026',
+    isoDate: '2026-11-25',
+    imageUrl: '/assets/aistudio/image_459c4fc4.png',
+    categories: ['Política & Fiscal', 'Macro & Câmbio', 'Mercados & B3'],
+    translations: {
+      pt: {
+        tag: 'Política Fiscal & Câmbio',
+        title:
+          'Pacote Fiscal, Dólar e Dívida Pública: Por que o Mercado Reverteu o Otimismo Após a Votação na Câmara',
+        summary:
+          'Aprovação do texto por 353 votos a 128 derrubou o dólar para perto de R$ 5,80 pela manhã, mas moeda devolveu parte da queda e fechou a R$ 5,91 no encerramento.',
+        dateAuthor: '25/11/2026 • Redação DinhEuro',
+        source:
+          'Fontes de referência: Câmara dos Deputados, Tesouro Nacional, Instituição Fiscal Independente (IFI/Senado) e Boletim Prisma Fiscal',
+        readingTime: '6 min',
+        keywords: [
+          'pacote fiscal camara 353 votos',
+          'dolar 5 91 fechamento ibovespa',
+          'divida bruta 82 9 pib tesouro',
+          'pec despesas obrigatorias 2027',
+          'conta de juros 1 2 trilhao',
+        ],
+        imageAlt:
+          'Plenário da Câmara dos Deputados em Brasília durante sessão de votação do pacote de ajuste fiscal com painel eletrônico de apuração',
+        fullContent: [
+          'A sessão desta terça-feira (24) expôs com clareza a distância entre o alívio político de curto prazo e a exigência estrutural das contas públicas brasileiras. Horas depois de a Câmara dos Deputados aprovar o pacote de ajuste fiscal por 353 votos a 128 — mantendo integralmente o texto vindo do Senado —, o mercado financeiro iniciou o pregão em forte movimento de correção positiva. O dólar comercial, que havia superado a barreira psicológica recente nas sessões anteriores, recuou para perto de R$ 5,80 pela manhã, enquanto o Ibovespa avançava mais de 1% após três sessões consecutivas de perdas.',
+          'No período da tarde, porém, os agentes financeiros reavaliaram o alcance efetivo das medidas aprovadas. O dólar devolveu boa parte do recuo intradiário e encerrou o dia em leve baixa de 0,3%, cotado a R$ 5,91. Na B3, o Ibovespa perdeu fôlego, virou para o campo negativo e fechou em queda, pressionado pelo desempenho de papéis de peso como Vale e Petrobras.',
+          '## O tamanho do pacote frente ao déficit e ao Orçamento',
+          'Pelos cálculos de casas de análise e da relatoria no Congresso, o pacote aprovado representa um alívio fiscal estimado em até R$ 56 bilhões para 2027 — valor inferior a meio ponto percentual do Produto Interno Bruto (PIB). O objetivo oficial da equipe econômica é viabilizar um superávit primário de R$ 52 bilhões para o exercício atual.',
+          'Embora a votação expressiva tenha afastado o receio de que o texto fosse desidratado na reta final da Legislatura, economistas e gestores apontam que o esforço permanece concentrado no curto prazo e depende fortemente de medidas de arrecadação e revisão de renúncias fiscais, em vez de atacar o núcleo de crescimento automático das despesas. Hoje, cerca de 92% dos gastos do Orçamento federal são obrigatórios, o que reduz drasticamente a margem de manobra fiscal do governo.',
+          '## A próxima etapa: PEC das despesas obrigatórias e Banco Central',
+          'Durante o pregão, os investidores também digeriram as articulações em Brasília para uma segunda rodada de medidas ainda antes do recesso parlamentar. A equipe econômica trabalha na formatação de uma Proposta de Emenda à Constituição (PEC) voltada à contenção de despesas obrigatórias — envolvendo regras ligadas a saúde, educação e emendas parlamentares — com impacto adicional estimado em R$ 20 bilhões para o Orçamento de 2027. Como uma PEC exige aprovação de pelo menos 308 deputados em dois turnos, o governo busca aproveitar a atual composição da Câmara antes da posse da próxima Legislatura.',
+          'Em paralelo, o mercado monitora os sinais vindos da política monetária. Com duas cadeiras vagas na diretoria do Banco Central desde janeiro e a possibilidade de indicação de seis dos nove diretores até o fim de 2027, a sinalização de nomes técnicos de carreira da própria autarquia é vista como fator decisivo para ancorar as expectativas de inflação e conter prêmios de risco na curva de juros futuros.',
+          '## O peso dos juros e a trajetória da dívida bruta até 2036',
+          'O principal ponto de cautela entre analistas segue sendo a dinâmica da dívida bruta do governo geral, que atingiu 82,9% do PIB em setembro — o equivalente a R$ 11,1 trilhões, maior patamar desde março de 2021. As próprias projeções do Tesouro Nacional indicam que o endividamento deve encerrar 2026 em 83,7% do PIB, avançando para 86,5% em 2027, 88,4% em 2028 e atingindo o pico de 89,7% em 2030, antes de iniciar uma trajetória gradual de recuo até 86,3% em 2036.',
+          'Estimativas de mercado são ainda mais conservadoras: a mediana do boletim Prisma Fiscal aponta dívida de 87,31% do PIB ao fim de 2027, enquanto a Instituição Fiscal Independente (IFI) do Senado projeta cenários que podem levar a dívida a 97,8% do PIB em 2030 (com probabilidade superior a 81% de ultrapassar a marca de 90% até o fim da década), caso o juro real permaneça elevado.',
+          'O fator determinante dessa equação é o custo financeiro da dívida: nos últimos doze meses, a conta de juros somou R$ 1,2 trilhão, acrescentando em média 8,4 pontos percentuais do PIB ao estoque do endividamento segundo o Tesouro. Para operadores de câmbio e investidores, a aprovação do pacote inicial evita um cenário de ruptura imediata, mas a queda consistente do dólar e das taxas de juros futuras dependerá da continuidade das reformas estruturais sobre os gastos obrigatórios e da credibilidade fiscal ao longo de 2027.',
+        ],
+      },
+      en: {
+        tag: 'Fiscal Policy & FX',
+        title:
+          'Fiscal Package, the Dollar, and Public Debt: Why Markets Reversed Early Optimism After the Lower House Vote',
+        summary:
+          'Passage of the fiscal bill by 353 votes to 128 initially sent the dollar down toward R$ 5.80 before the currency pared gains to close at R$ 5.91.',
+        dateAuthor: 'Nov 25, 2026 • DinhEuro Editorial',
+        source:
+          'Reference sources: Chamber of Deputies, National Treasury, Independent Fiscal Institution (IFI/Senate), and Prisma Fiscal Survey',
+        readingTime: '6 min read',
+        keywords: [
+          'brazil fiscal package chamber vote',
+          'usd brl 5 91 close ibovespa',
+          'brazil gross debt 82 9 gdp',
+          'mandatory spending pec 2027',
+          'debt interest bill 1 2 trillion',
+        ],
+        imageAlt:
+          'Chamber of Deputies plenary floor in Brasília during the fiscal adjustment vote with electronic voting totals displayed',
+        fullContent: [
+          'Tuesday’s trading session (24) highlighted the gap between short-term political relief in Brasília and the structural demands facing Brazil’s public finances. Hours after the Chamber of Deputies approved the fiscal adjustment package by 353 votes to 128—retaining the Senate text intact—financial markets opened in a strong positive correction. The commercial U.S. dollar, which had breached recent psychological resistance in prior sessions, dropped toward R$ 5.80 during morning trading while the Ibovespa equity benchmark rallied more than 1% after three consecutive daily losses.',
+          'By the afternoon session, however, institutional investors and currency desks reassessed the actual structural reach of the approved measures. The dollar gave back most of its intraday decline and finished down just 0.3% at R$ 5.91. On Brazil’s B3 exchange, the Ibovespa lost momentum, flipped into negative territory, and ended the day lower under pressure from heavyweight commodity exporters Vale and Petrobras.',
+          '## Package scale relative to the budget deficit and federal outlays',
+          'According to brokerage estimates and congressional rapporteur calculations, the approved fiscal bill delivers estimated budget relief of up to R$ 56 billion for 2027—an amount equal to less than half a percentage point of Gross Domestic Product (GDP). The economic team’s stated target is to enable a primary budget surplus of R$ 52 billion in the current fiscal year.',
+          'Although the wide 353–128 margin averted fears that lawmakers might water down the proposal in the final stretch of the legislative term, economists and asset managers note that the adjustment remains concentrated in the short term and leans heavily on revenue collection and tax-expenditure reviews rather than tackling automatic expenditure growth. Today, roughly 92% of federal budget outlays are mandatory, severely narrowing the government’s fiscal room for maneuver.',
+          '## The next stage: mandatory-spending PEC and Central Bank appointments',
+          'Throughout the session, market participants also digested negotiations in Brasília over a second wave of fiscal measures before the parliamentary recess. The economic team is drafting a Proposed Constitutional Amendment (PEC) aimed at curbing mandatory outlays—covering rules tied to health, education, and parliamentary budget amendments—with an estimated additional impact of R$ 20 billion for the 2027 budget. Because a constitutional amendment requires at least 308 votes in two rounds in the lower house, the administration seeks to leverage the current Chamber composition before the incoming legislature takes office.',
+          'In parallel, fixed-income and FX desks are closely tracking monetary-policy signals. With two seats vacant on the Central Bank’s board since January and the prospect of appointing up to six of nine directors through the end of 2027, signaling career technical officials from within the monetary authority is viewed as a decisive factor to anchor inflation expectations and compress risk premia along the interest-rate futures curve.',
+          '## Debt-service burden and gross public debt trajectory through 2036',
+          'The central point of caution among analysts remains the trajectory of Brazil’s general government gross debt, which reached 82.9% of GDP in September—equivalent to R$ 11.1 trillion, its highest reading since March 2021. Official National Treasury projections indicate public debt should end 2026 at 83.7% of GDP, climbing to 86.5% in 2027 and 88.4% in 2028 before peaking at 89.7% in 2030 and gradually easing back toward 86.3% by 2036.',
+          'Independent market projections remain even more conservative: the median forecast in the Finance Ministry’s Prisma Fiscal survey places gross debt at 87.31% of GDP by end-2027, while the Senate’s Independent Fiscal Institution (IFI) models scenarios in which debt could reach 97.8% of GDP in 2030—assigning more than an 81% probability of exceeding 90% by decade’s end—should real interest rates remain elevated.',
+          'The decisive variable in this equation is the financial cost of sovereign borrowing: over the past twelve months, interest expenses totaled R$ 1.2 trillion, adding an average of 8.4 percentage points of GDP to the debt stock according to Treasury figures. For FX operators and institutional investors, passage of the initial bill avoids an immediate confidence rupture, but sustained declines in the dollar and long-term yields will depend on follow-through on mandatory-spending reforms and fiscal credibility throughout 2027.',
+        ],
+      },
+      es: {
+        tag: 'Política Fiscal y Divisas',
+        title:
+          'Paquete Fiscal, Dólar y Deuda Pública: Por qué el Mercado Revirtió el Optimismo Tras la Votación en Diputados',
+        summary:
+          'La aprobación por 353 votos contra 128 llevó el dólar cerca de R$ 5,80 por la mañana, pero la divisa cedió parte de la baja y cerró en R$ 5,91.',
+        dateAuthor: '25/11/2026 • Redacción DinhEuro',
+        source:
+          'Fuentes de referencia: Cámara de Diputados, Tesoro Nacional, Institución Fiscal Independiente (IFI/Senado) y Boletín Prisma Fiscal',
+        readingTime: '6 min',
+        keywords: [
+          'paquete fiscal diputados brasil',
+          'dolar 5 91 cierre ibovespa',
+          'deuda bruta 82 9 pib tesoro',
+          'pec gastos obligatorios 2027',
+          'cuenta de intereses 1 2 billones',
+        ],
+        imageAlt:
+          'Plenario de la Cámara de Diputados en Brasilia durante la sesión de votación del paquete de ajuste fiscal',
+        fullContent: [
+          'La jornada del martes (24) expuso con nitidez la distancia entre el alivio político de corto plazo en Brasilia y las exigencias estructurales de las cuentas públicas brasileñas. Horas después de que la Cámara de Diputados aprobara el paquete de ajuste fiscal por 353 votos contra 128 —manteniendo íntegramente el texto remitido por el Senado—, el mercado financiero inició la rueda con una marcada corrección positiva. El dólar comercial, que había superado la barrera psicológica reciente en sesiones previas, retrocedió hasta las cercanías de R$ 5,80 por la mañana, mientras el índice Ibovespa avanzaba más de 1% tras tres caídas consecutivas.',
+          'Sin embargo, durante la tarde los operadores reevaluaron el alcance efectivo de las medidas sancionadas. El dólar devolvió gran parte del descenso intradiario y finalizó con una leve baja del 0,3%, cotizado a R$ 5,91. En la bolsa B3, el Ibovespa perdió impulso, pasó a terreno negativo y cerró en descenso, presionado por el desempeño de acciones de gran ponderación como Vale y Petrobras.',
+          '## La magnitud del paquete frente al déficit y al Presupuesto',
+          'Según estimaciones de firmas de análisis y de la relatoría parlamentaria, el paquete aprobado representa un alivio fiscal calculado en hasta R$ 56 mil millones para 2027, una cifra inferior a medio punto porcentual del Producto Interno Bruto (PIB). La meta oficial del equipo económico consiste en viabilizar un superávit primario de R$ 52 mil millones para el ejercicio vigente.',
+          'Aunque la holgada votación disipó el temor a un recorte del proyecto en la recta final de la Legislatura, economistas y gestores advierten que el esfuerzo sigue concentrado en el corto plazo y depende en gran medida de medidas recaudatorias y revisión de exenciones tributarias, sin atacar el núcleo de expansión automática del gasto. Actualmente, cerca del 92% del Presupuesto federal corresponde a gastos obligatorios, lo que estrecha severamente el margen de maniobra fiscal.',
+          '## La próxima etapa: PEC de gastos obligatorios y Banco Central',
+          'A lo largo de la sesión, los inversores también analizaron las gestiones en Brasilia para impulsar una segunda ronda de medidas antes del receso legislativo. El equipo económico trabaja en el diseño de una Propuesta de Enmienda a la Constitución (PEC) orientada a contener gastos obligatorios —incluidas reglas vinculadas a salud, educación y enmiendas parlamentarias— con un impacto adicional estimado en R$ 20 mil millones para el Presupuesto de 2027. Dado que una PEC exige al menos 308 votos en dos vueltas en Diputados, el Gobierno procura aprovechar la actual composición antes del recambio parlamentario.',
+          'En paralelo, el mercado sigue de cerca las señales de política monetaria. Con dos vacantes abiertas en el directorio del Banco Central desde enero y la posibilidad de designar a seis de los nueve directores hacia fines de 2027, la nominación de cuadros técnicos de carrera de la propia entidad se considera decisiva para anclar las expectativas de inflación y contener las primas de riesgo en la curva de tasas futuras.',
+          '## El peso de los intereses y la trayectoria de la deuda bruta hacia 2036',
+          'El principal foco de cautela entre analistas continúa siendo la dinámica de la deuda bruta del gobierno general, que alcanzó el 82,9% del PIB en septiembre —equivalente a R$ 11,1 billones, el nivel más elevado desde marzo de 2021—. Las propias proyecciones del Tesoro Nacional anticipan que el endeudamiento cerrará 2026 en 83,7% del PIB, subirá al 86,5% en 2027 y al 88,4% en 2028 hasta tocar un pico del 89,7% en 2030, antes de iniciar un descenso gradual hacia el 86,3% en 2036.',
+          'Las estimaciones privadas resultan aún más conservadoras: la mediana del boletín Prisma Fiscal proyecta una deuda del 87,31% del PIB al término de 2027, mientras la Institución Fiscal Independiente (IFI) del Senado plantea escenarios que podrían llevarla al 97,8% del PIB en 2030 —con una probabilidad superior al 81% de superar el umbral del 90% antes del fin de la década— si la tasa real de interés permanece elevada.',
+          'El factor determinante de esta ecuación es el costo financiero del endeudamiento: en los últimos doce meses, la cuenta de intereses sumó R$ 1,2 billones, añadiendo en promedio 8,4 puntos porcentuales del PIB al acervo de deuda según el Tesoro. Para operadores cambiarios e inversores institucionales, la aprobación del paquete inicial evita una ruptura inmediata, pero un descenso sostenido del dólar y de las tasas futuras dependerá de reformas estructurales sobre los gastos obligatorios y de la credibilidad fiscal a lo largo de 2027.',
+        ],
+      },
+    },
+  },
+  {
     id: 'bcb-selic-focus-vs-bce-politica-monetaria-2026',
     isoDate: '2026-11-23',
     imageUrl: '/assets/aistudio/selic_bce_policy.jpg',

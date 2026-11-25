@@ -60,6 +60,94 @@ export const DAILY_INSIGHTS_UI_COPY: Record<
 
 export const DAILY_INSIGHTS_ITEMS: DailyInsightItem[] = [
   {
+    id: 'pacote-fiscal-camara-dolar-divida-2026',
+    isoDate: '2026-11-25',
+    imageUrl: '/assets/aistudio/image_459c4fc4.png',
+    translations: {
+      pt: {
+        tag: 'Política Fiscal & Câmbio',
+        title:
+          'Pacote Fiscal na Câmara e a Montanha-Russa do Dólar: Por que o Câmbio Reverteu Parte da Queda',
+        summary:
+          'Após a aprovação do ajuste fiscal por 353 votos a 128, o dólar recuou até R$ 5,80 pela manhã, fechou a R$ 5,91 e o Ibovespa virou para o negativo. Entenda o impacto real do alívio de até R$ 56 bilhões frente à conta de R$ 1,2 trilhão em juros.',
+        dateAuthor: '25/11/2026 • Redação DinhEuro',
+        source:
+          'Referências institucionais: Câmara dos Deputados, Tesouro Nacional, IFI/Senado e Boletim Prisma Fiscal',
+        readingTime: '4 min',
+        keywords: [
+          'pacote fiscal camara 353 votos',
+          'dolar 5 91 ibovespa hoje',
+          'divida bruta pib tesouro nacional',
+          'pec despesas obrigatorias 2027',
+          'conta de juros 1 2 trilhao',
+        ],
+        imageAlt:
+          'Plenário da Câmara dos Deputados em Brasília durante sessão de votação do pacote de ajuste fiscal com painel eletrônico exibindo apuração',
+        fullContent: [
+          'Síntese DinhEuro sobre a sessão legislativa e a reação dos mercados: a aprovação do pacote de ajuste fiscal na Câmara dos Deputados por 353 votos a 128 — mantendo integralmente o texto vindo do Senado — provocou forte alívio inicial na abertura do pregão de terça-feira (24), levando o dólar comercial para perto de R$ 5,80 pela manhã e impulsionando o Ibovespa em mais de 1%.',
+          '## Por que o dólar devolveu parte da queda e o Ibovespa virou',
+          'Ao longo da tarde, porém, mesas institucionais recalcularam o alcance estrutural do projeto. Com impacto estimado em até R$ 56 bilhões para 2027 — menos de 0,5% do PIB — e forte peso em receitas e revisão de renúncias, enquanto cerca de 92% do Orçamento segue engessado em gastos obrigatórios, o dólar devolveu parte do recuo e fechou a R$ 5,91 (-0,3%), ao passo que o Ibovespa perdeu tração e encerrou no negativo pressionado por Vale e Petrobras.',
+          '## PEC dos gastos obrigatórios e peso da conta de juros',
+          'Os agentes financeiros passaram a condicionar uma melhora sustentável da curva de juros e do câmbio ao avanço da próxima etapa em Brasília — uma PEC voltada a despesas obrigatórias com economia adicional estimada em R$ 20 bilhões para 2027 —, às indicações técnicas para o Banco Central e à trajetória da dívida bruta (82,9% do PIB, ou R$ 11,1 trilhões), pressionada por uma conta de juros de R$ 1,2 trilhão em doze meses.',
+        ],
+      },
+      en: {
+        tag: 'Fiscal Policy & FX',
+        title:
+          'Fiscal Package in Brazil’s Lower House and the Dollar Rollercoaster: Why FX Reversed Part of Its Drop',
+        summary:
+          'DinhEuro Synthesis: Following a 353–128 vote passing the fiscal bill, the U.S. dollar fell toward R$ 5.80 in the morning before rebounding to close at R$ 5.91 as the Ibovespa turned negative. See how up to R$ 56 billion in 2027 savings compares with a R$ 1.2 trillion interest bill.',
+        dateAuthor: 'Nov 25, 2026 • DinhEuro Editorial',
+        source:
+          'Institutional references: Chamber of Deputies, National Treasury, Senate IFI, and Prisma Fiscal Survey',
+        readingTime: '4 min read',
+        keywords: [
+          'brazil fiscal package chamber vote',
+          'usd brl 5 91 ibovespa reversal',
+          'brazil gross debt gdp treasury',
+          'mandatory spending pec 2027',
+          'brazil debt interest cost',
+        ],
+        imageAlt:
+          'Chamber of Deputies plenary floor in Brasília during the fiscal package vote with the electronic tally board displayed',
+        fullContent: [
+          'DinhEuro synthesis of the legislative vote and market reaction: after Brazil’s Chamber of Deputies passed the fiscal adjustment package by 353 votes to 128—preserving the Senate text unchanged—Tuesday’s session (24) opened with sharp risk relief, pushing USD/BRL down toward R$ 5.80 in morning trading while lifting the Ibovespa over 1%.',
+          '## Why USD/BRL trimmed losses and the Ibovespa turned negative',
+          'During afternoon trading, institutional desks reassessed the structural reach of the bill. With 2027 fiscal relief estimated at up to R$ 56 billion—under 0.5% of GDP—and relying heavily on revenue measures while roughly 92% of federal spending remains mandatory, the U.S. dollar pared intraday losses to close at R$ 5.91 (-0.3%) and the Ibovespa reversed into the red amid declines in Vale and Petrobras.',
+          '## Mandatory-spending PEC and the R$ 1.2 trillion interest burden',
+          'Investors now tie durable curve and currency compression to a follow-up constitutional amendment targeting mandatory outlays (estimated at R$ 20 billion for 2027), technical Central Bank board nominations, and gross public debt dynamics (82.9% of GDP, or R$ 11.1 trillion) weighed down by R$ 1.2 trillion in 12-month debt-service costs.',
+        ],
+      },
+      es: {
+        tag: 'Política Fiscal y Divisas',
+        title:
+          'Paquete Fiscal en Diputados y la Montaña Rusa del Dólar: Por qué el Tipo de Cambio Revirtió Parte de la Caída',
+        summary:
+          'Síntesis DinhEuro: Tras aprobarse el ajuste por 353 votos contra 128, el dólar retrocedió hasta R$ 5,80 por la mañana, cerró en R$ 5,91 y el Ibovespa pasó a terreno negativo. Claves del alivio de hasta R$ 56 mil millones frente a R$ 1,2 billones en intereses.',
+        dateAuthor: '25/11/2026 • Redacción DinhEuro',
+        source:
+          'Referencias institucionales: Cámara de Diputados, Tesoro Nacional, IFI/Senado y Boletín Prisma Fiscal',
+        readingTime: '4 min',
+        keywords: [
+          'paquete fiscal diputados brasil',
+          'dolar 5 91 ibovespa cierre',
+          'deuda bruta pib tesoro nacional',
+          'pec gastos obligatorios 2027',
+          'costo intereses deuda brasil',
+        ],
+        imageAlt:
+          'Plenario de la Cámara de Diputados en Brasilia durante la votación del paquete fiscal con el tablero electrónico de resultados',
+        fullContent: [
+          'Síntesis de DinhEuro sobre la votación parlamentaria y el ajuste de mercado: la aprobación del paquete fiscal en la Cámara de Diputados por 353 votos a 128 —manteniendo íntegro el texto del Senado— generó un alivio inicial en la apertura del martes (24), llevando al dólar cerca de R$ 5,80 por la mañana y al Ibovespa a subir más de 1%.',
+          '## Por qué el dólar moderó la baja y el Ibovespa retrocedió',
+          'Por la tarde, los operadores recalibraron el alcance estructural de las medidas. Con un alivio estimado en hasta R$ 56 mil millones para 2027 —menos de 0,5% del PIB— apoyado principalmente en recaudación y revisión de beneficios fiscales mientras el 92% del presupuesto es obligatorio, el dólar cerró en R$ 5,91 (-0,3%) y el Ibovespa terminó en negativo presionado por Vale y Petrobras.',
+          '## Próxima PEC de gastos obligatorios y el peso de los intereses',
+          'El mercado condiciona una caída sostenida del dólar y las tasas futuras al avance de una nueva PEC sobre gastos obligatorios (estimada en R$ 20 mil millones para 2027), a designaciones técnicas en el Banco Central y al control de la deuda bruta (82,9% del PIB o R$ 11,1 billones) ante un costo financiero anual de R$ 1,2 billones.',
+        ],
+      },
+    },
+  },
+  {
     id: 'nvidia-retorno-jensen-huang-ceo-2026',
     isoDate: '2026-11-23',
     imageUrl: '/assets/aistudio/image_41c94597.png',

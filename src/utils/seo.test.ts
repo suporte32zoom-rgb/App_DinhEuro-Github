@@ -158,7 +158,9 @@ test('APEC 2026 and ALADI 2026 editorial insights preserve prior items up to 12 
   );
   assert.ok(source.includes('export const MAX_DAILY_INSIGHTS = 12;'));
   const idMatches = source.match(/^\s+id:\s*'[^']+',/gm) || [];
-  assert.equal(idMatches.length, 12);
+  assert.equal(idMatches.length, 13);
+  assert.ok(source.includes("id: 'pacote-fiscal-camara-dolar-divida-2026'"));
+  assert.ok(source.includes("imageUrl: '/assets/aistudio/image_459c4fc4.png'"));
   assert.ok(source.includes("id: 'nvidia-retorno-jensen-huang-ceo-2026'"));
   assert.ok(source.includes("id: 'cop31-fracasso-antalia-cinco-fatores-2026'"));
   assert.ok(source.includes("dateAuthor: '23/11/2026 • Por Américo Martins'"));
@@ -205,8 +207,9 @@ test('APEC 2026 and ALADI 2026 editorial insights preserve prior items up to 12 
   assert.ok(newsViewSource.includes('tNews.editorialCriteria.title'));
 
   const { NEWS_EDITORIAL_ARTICLES } = await import('../data/newsEditorialArticles.ts');
-  assert.equal(NEWS_EDITORIAL_ARTICLES.length, 9);
+  assert.equal(NEWS_EDITORIAL_ARTICLES.length, 10);
   const expectedNewsIds = [
+    'pacote-fiscal-camara-dolar-divida-2026',
     'bcb-selic-focus-vs-bce-politica-monetaria-2026',
     'dinamica-cambio-comercial-eur-usd-comercio-exterior-2026',
     'fluxo-estrangeiro-b3-commodities-brent-minerio-2026',
