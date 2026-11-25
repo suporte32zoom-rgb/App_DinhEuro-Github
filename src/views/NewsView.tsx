@@ -7,9 +7,11 @@ import {
   BookOpen,
   ShieldCheck,
   FileText,
+  Calendar,
 } from 'lucide-react';
 import { useMarket } from '../context/MarketContext';
 import { useI18n } from '../i18n/I18nContext';
+import type { SupportedLanguage } from '../i18n/translations';
 import { VIEWS_TRANSLATIONS } from '../i18n/viewsTranslations';
 import { DAILY_INSIGHTS_UI_COPY, type DailyInsightItem } from '../data/dailyInsights';
 import {
@@ -22,6 +24,65 @@ import {
   getInstitutionalDossiersSchemaInputs,
   syncEditorialArticlesSchema,
 } from '../utils/seo';
+import fiscalVolatilityChartImg from '../assets/images/fiscal_volatility_chart_1795620665511.jpg';
+
+const FEATURED_FISCAL_EDITORIAL_NOTE: Record<
+  SupportedLanguage,
+  {
+    badge: string;
+    dateLabel: string;
+    title: string;
+    chartAlt: string;
+    chartCaption: string;
+    paragraphs: [string, string, string];
+  }
+> = {
+  pt: {
+    badge: 'Nota Editorial • Política & Fiscal',
+    dateLabel: '25/11/2026 • Redação DinhEuro',
+    title:
+      'Pacote Fiscal, Dólar e Dívida Pública: Por que o Câmbio Oscilou Após a Votação na Câmara',
+    chartAlt:
+      'Gráfico de Volatilidade Fiscal e Câmbio USD/BRL em 24/11/2026 mostrando recuo para R$ 5,80 pela manhã após votação de 353 a 128 e fechamento a R$ 5,91',
+    chartCaption:
+      'Gráfico de Volatilidade Fiscal • USD/BRL intradiário (24/11/2026) e indicadores fiscais de referência',
+    paragraphs: [
+      'O mercado financeiro brasileiro viveu uma sessão de forte volatilidade nesta terça-feira (24) após a aprovação, na Câmara dos Deputados, do texto do pacote de ajuste fiscal por 353 votos a 128. Na abertura dos negócios, o alívio político impulsionou o Ibovespa e levou o dólar comercial a recuar para perto de R$ 5,80 — após ter superado a marca de R$ 6,00 na véspera. Ao longo da tarde, porém, os agentes financeiros reavaliaram o alcance estrutural das medidas: a moeda norte-americana encerrou o pregão em leve queda de 0,3%, cotada a R$ 5,91, enquanto o principal índice da B3 devolveu os ganhos e fechou no campo negativo.',
+      'Do ponto de vista quantitativo, o plano aprovado projeta uma economia estimada entre R$ 38 bilhões e R$ 56 bilhões para 2027, buscando viabilizar um superávit primário de R$ 18,7 bilhões após um déficit previsto de R$ 52 bilhões neste ano. No radar fiscal, o mercado também acompanha a articulação de uma Proposta de Emenda à Constituição (PEC) voltada às despesas obrigatórias — que hoje consomem cerca de 92% do Orçamento federal — com potencial de impacto adicional de R$ 20 bilhões em 2027, além das próximas indicações para a diretoria do Banco Central.',
+      'Para investidores e operadores de câmbio, o foco central permanece na trajetória da dívida bruta do governo geral, que atingiu 82,9% do PIB (R$ 11,1 trilhões) e tem projeção oficial de alcançar 83,7% ao fim de 2026 e 86,5% em 2027, pressionada pelo custo elevado dos juros (R$ 1,2 trilhão acumulados em 12 meses). Enquanto o alívio imediato reduz o temor de paralisia fiscal no curto prazo, a consolidação de uma queda sustentável no dólar e nas taxas de juros futuras dependerá da continuidade das reformas estruturais e da previsibilidade na condução da política monetária.',
+    ],
+  },
+  en: {
+    badge: 'Editorial Note • Policy & Fiscal',
+    dateLabel: 'Nov 25, 2026 • DinhEuro Editorial',
+    title:
+      'Fiscal Package, Dollar, and Public Debt: Why FX Swung After the Lower House Vote',
+    chartAlt:
+      'Fiscal volatility and USD/BRL chart for Nov 24, 2026 illustrating the morning drop to R$ 5.80 after the 353–128 vote and the R$ 5.91 close',
+    chartCaption:
+      'Fiscal Volatility Chart • Intraday USD/BRL (Nov 24, 2026) and benchmark fiscal metrics',
+    paragraphs: [
+      'Brazilian financial markets experienced heightened volatility on Tuesday (24) following the Chamber of Deputies’ 353–128 approval of the fiscal adjustment package. At the open, political relief lifted the Ibovespa and pushed commercial USD/BRL down toward R$ 5.80 after breaking above R$ 6.00 the prior session. During the afternoon, however, investors reassessed the structural scope of the measures: the U.S. dollar finished down just 0.3% at R$ 5.91, while Brazil’s benchmark B3 equity index erased gains to close in negative territory.',
+      'Quantitatively, the approved plan projects savings between R$ 38 billion and R$ 56 billion in 2027, aiming to enable a R$ 18.7 billion primary surplus after an expected R$ 52 billion deficit this year. Markets are also tracking a proposed Constitutional Amendment (PEC) addressing mandatory spending—currently around 92% of the federal budget—that could add R$ 20 billion in 2027 savings, alongside upcoming Central Bank board nominations.',
+      'For investors and FX desks, the core anchor remains gross general government debt, which reached 82.9% of GDP (R$ 11.1 trillion) and is officially projected to hit 83.7% by end-2026 and 86.5% in 2027 amid R$ 1.2 trillion in trailing 12-month interest costs. While immediate passage eases short-term gridlock fears, sustaining lower dollar levels and forward yields depends on continued structural reforms and monetary predictability.',
+    ],
+  },
+  es: {
+    badge: 'Nota Editorial • Política y Fiscal',
+    dateLabel: '25/11/2026 • Redacción DinhEuro',
+    title:
+      'Paquete Fiscal, Dólar y Deuda Pública: Por qué Osciló el Cambio Tras la Votación en la Cámara',
+    chartAlt:
+      'Gráfico de volatilidad fiscal y USD/BRL del 24/11/2026 mostrando el retroceso matutino a R$ 5,80 tras la votación 353 a 128 y el cierre en R$ 5,91',
+    chartCaption:
+      'Gráfico de Volatilidad Fiscal • USD/BRL intradiario (24/11/2026) e indicadores fiscales de referencia',
+    paragraphs: [
+      'El mercado financiero brasileño vivió una sesión de fuerte volatilidad este martes (24) tras aprobarse en la Cámara de Diputados el paquete de ajuste fiscal por 353 votos frente a 128. En la apertura, el alivio político impulsó al Ibovespa y llevó al dólar comercial cerca de R$ 5,80 luego de haber superado los R$ 6,00 la víspera. Durante la tarde, los operadores reevaluaron el alcance estructural de las medidas: la divisa cerró con leve baja del 0,3% en R$ 5,91 y el índice de B3 terminó en terreno negativo.',
+      'En términos cuantitativos, el plan proyecta un ahorro estimado de entre R$ 38.000 millones y R$ 56.000 millones para 2027, apuntando a un superávit primario de R$ 18.700 millones tras el déficit previsto de R$ 52.000 millones este año, junto con la discusión de una PEC sobre gastos obligatorios —cercanos al 92% del presupuesto federal— con potencial de R$ 20.000 millones adicionales en 2027 y futuras designaciones para el Banco Central.',
+      'El foco central sigue puesto en la trayectoria de la deuda bruta del gobierno general, que alcanzó el 82,9% del PIB (R$ 11,1 billones) con proyección oficial del 83,7% al cierre de 2026 y del 86,5% en 2027 ante costos financieros de R$ 1,2 billón en 12 meses. Aunque la votación reduce temores inmediatos de parálisis, consolidar un descenso sostenido del dólar y de las tasas futuras dependerá de nuevas reformas y previsibilidad monetaria.',
+    ],
+  },
+};
 
 export const NewsView: React.FC = () => {
   const { refreshData } = useMarket();
@@ -84,7 +145,27 @@ export const NewsView: React.FC = () => {
     setTimeout(() => setIsRefreshing(false), 600);
   };
 
-  const totalCount = filteredEditorialArticles.length;
+  const featuredFiscalNote = FEATURED_FISCAL_EDITORIAL_NOTE[lang];
+
+  const showFeaturedFiscalNote = useMemo(() => {
+    const matchesCategory =
+      filterCategory === 'all' ||
+      filterCategory === 'Macro & Câmbio' ||
+      filterCategory === 'Política & Fiscal';
+    if (!matchesCategory) return false;
+    const searchLower = newsSearch.trim().toLowerCase();
+    if (!searchLower) return true;
+    const ptNote = FEATURED_FISCAL_EDITORIAL_NOTE.pt;
+    return (
+      featuredFiscalNote.title.toLowerCase().includes(searchLower) ||
+      featuredFiscalNote.paragraphs.some((p) => p.toLowerCase().includes(searchLower)) ||
+      featuredFiscalNote.dateLabel.toLowerCase().includes(searchLower) ||
+      ptNote.title.toLowerCase().includes(searchLower) ||
+      ptNote.paragraphs.some((p) => p.toLowerCase().includes(searchLower))
+    );
+  }, [filterCategory, newsSearch, featuredFiscalNote]);
+
+  const totalCount = filteredEditorialArticles.length + (showFeaturedFiscalNote ? 1 : 0);
 
   return (
     <div className="space-y-6 pb-12 animate-in fade-in duration-300">
@@ -171,8 +252,51 @@ export const NewsView: React.FC = () => {
         )}
       </div>
 
+      {/* Nota Editorial em Destaque (25/11/2026) no Topo da Lista */}
+      {showFeaturedFiscalNote && (
+        <article
+          aria-labelledby="featured-fiscal-note-title"
+          className="rounded-2xl bg-[#FFFFFF] dark:bg-[#0d1627] border border-[#003399]/25 dark:border-emerald-500/30 p-5 sm:p-6 shadow-md dark:shadow-xl space-y-4"
+        >
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <span className="inline-flex items-center gap-1.5 text-[10px] uppercase font-bold tracking-wider px-2.5 py-1 rounded-md bg-[#E6EEFF] dark:bg-emerald-500/15 text-[#003399] dark:text-emerald-300 border border-[#003399]/20 dark:border-emerald-500/30">
+              {featuredFiscalNote.badge}
+            </span>
+            <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#475569] dark:text-slate-400">
+              <Calendar className="w-3.5 h-3.5 text-[#009B77] dark:text-emerald-400" />
+              <span>{featuredFiscalNote.dateLabel}</span>
+            </span>
+          </div>
+
+          <h2
+            id="featured-fiscal-note-title"
+            className="text-base sm:text-xl font-extrabold text-[#0F172A] dark:text-white leading-snug tracking-tight"
+          >
+            {featuredFiscalNote.title}
+          </h2>
+
+          <figure className="rounded-xl border border-[#E2E8F0] dark:border-slate-700/80 bg-[#FFFFFF] overflow-hidden p-3 sm:p-4">
+            <img
+              src={fiscalVolatilityChartImg}
+              alt={featuredFiscalNote.chartAlt}
+              referrerPolicy="no-referrer"
+              className="w-full max-w-3xl mx-auto h-auto object-contain bg-white rounded-lg"
+            />
+            <figcaption className="mt-2 pt-2 border-t border-[#E2E8F0] text-[11px] font-medium text-[#475569] text-center">
+              {featuredFiscalNote.chartCaption}
+            </figcaption>
+          </figure>
+
+          <div className="space-y-3 text-xs sm:text-sm text-[#334155] dark:text-slate-300 leading-relaxed">
+            {featuredFiscalNote.paragraphs.map((paragraph, idx) => (
+              <p key={idx}>{paragraph}</p>
+            ))}
+          </div>
+        </article>
+      )}
+
       {/* Original Editorial Analyses Grid */}
-      {filteredEditorialArticles.length > 0 ? (
+      {filteredEditorialArticles.length > 0 || showFeaturedFiscalNote ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
           {filteredEditorialArticles.map((editorial) => {
             const loc = editorial.translations[lang];
