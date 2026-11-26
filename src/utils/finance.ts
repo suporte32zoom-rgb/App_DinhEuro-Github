@@ -17,58 +17,23 @@ export function convertCurrency(
   rates?: CurrencyRates
 ): number {
   if (amount <= 0 || isNaN(amount)) return 0;
-  if (fromCurrency === toCurrency) return amount;
-
-  const fallbackRates: Record<string, number> = {
-    USD: 1.0,
-    BRL: 5.584,
-    EUR: 0.8958,
-    GBP: 0.7432,
-    JPY: 154.2,
-    CHF: 0.8845,
-    CAD: 1.392,
-    AUD: 1.518,
-    CNY: 7.235,
-    HKD: 7.846,
-    TWD: 32.95,
-    KRW: 1337.5,
-    SGD: 1.2894,
-    INR: 93.51,
-    NZD: 1.8232,
-    MXN: 18.515,
-    CLP: 997.3,
-    COP: 3324.3,
-    PEN: 3.4156,
-    ZAR: 16.984,
-    EGP: 53.72,
-    NGN: 1348.9,
-    MAD: 9.98,
-    NOK: 9.632,
-    SEK: 10.14,
-    DKK: 6.813,
-    PLN: 4.014,
-    TRY: 50.42,
-    AED: 3.6727,
-    SAR: 3.755,
-    ILS: 3.247,
-    ARS: 1040.0,
-    BTC: 0.0000137,
-    ETH: 0.000496,
-    SOL: 0.0122,
-  };
-
   const from = (fromCurrency || 'USD').toUpperCase();
   const to = (toCurrency || 'BRL').toUpperCase();
+  if (from === to) return amount;
 
-  const fromRate = rates?.[from] || fallbackRates[from] || 1.0;
-  const toRate = rates?.[to] || fallbackRates[to] || 1.0;
+  const fromRate = rates?.[from] ?? (from === 'USD' ? 1.0 : 0);
+  const toRate = rates?.[to] ?? (to === 'USD' ? 1.0 : 0);
+
+  if (!Number.isFinite(fromRate) || fromRate <= 0 || !Number.isFinite(toRate) || toRate <= 0) {
+    return 0;
+  }
 
   try {
     const amountInUSD = amount / fromRate;
     const result = amountInUSD * toRate;
     return Number(result.toFixed(4));
   } catch {
-    return amount;
+    return 0;
   }
 }
 
@@ -447,7 +412,7 @@ function getConvertedDecimals(value: number): number {
 export function getDualCurrencyDisplay(
   price: number,
   currency: string = 'USD',
-  rates: CurrencyRates = { USD: 1.0, BRL: 5.584, EUR: 0.8958 },
+  rates: CurrencyRates = { USD: 1.0 },
   isIndex?: boolean,
   locale: string = 'pt-BR',
   category?: string
@@ -474,14 +439,19 @@ export function getDualCurrencyDisplay(
     };
   }
 
-  const brlRate = rates['BRL'] && rates['BRL'] > 0 ? rates['BRL'] : 5.584;
-  const eurRate = rates['EUR'] && rates['EUR'] > 0 ? rates['EUR'] : 0.8958;
-  const curRate = rates[normCur] && rates[normCur] > 0 ? rates[normCur] : 1.0;
+  const brlRate = rates['BRL'] && rates['BRL'] > 0 ? rates['BRL'] : 0;
+  const eurRate = rates['EUR'] && rates['EUR'] > 0 ? rates['EUR'] : 0;
+  const curRate = rates[normCur] && rates[normCur] > 0 ? rates[normCur] : (normCur === 'USD' ? 1.0 : 0);
 
-  // Convert to USD base first
-  const valueInUSD = normCur === 'USD' ? price : normCur === 'BRL' ? price / brlRate : normCur === 'EUR' ? price / eurRate : price / curRate;
-  const valueInBRL = valueInUSD * brlRate;
-  const valueInEUR = valueInUSD * eurRate;
+  // Convert to USD base first without fabricating static FX multipliers
+  const valueInUSD =
+    normCur === 'USD'
+      ? price
+      : curRate > 0
+      ? price / curRate
+      : 0;
+  const valueInBRL = normCur === 'BRL' ? price : (valueInUSD > 0 && brlRate > 0 ? valueInUSD * brlRate : 0);
+  const valueInEUR = normCur === 'EUR' ? price : (valueInUSD > 0 && eurRate > 0 ? valueInUSD * eurRate : 0);
 
   const decimals = getAssetPriceDecimals(price, normCur, category);
   const primaryFormatted = formatCurrencyValue(price, normCur, decimals, locale);
@@ -573,15 +543,11 @@ export function resolveUsdBrlRate(
   rates?: CurrencyRates
 ): number {
   const usdBrlAsset = assets.find((a) => a.id === 'usd_brl' || a.symbol === 'USD/BRL');
-  if (
-    usdBrlAsset?.price &&
-    usdBrlAsset.price >= 5.55 &&
-    Math.abs(usdBrlAsset.price - 5.5122) > 0.001
-  ) {
+  if (usdBrlAsset?.price && Number.isFinite(usdBrlAsset.price) && usdBrlAsset.price > 0) {
     return usdBrlAsset.price;
   }
   const brl = rates?.BRL ?? 0;
-  return brl >= 5.55 && Math.abs(brl - 5.5122) > 0.001 ? brl : 5.584;
+  return Number.isFinite(brl) && brl > 0 ? brl : 0;
 }
 
 export function resolveEurBrlRate(
@@ -589,17 +555,15 @@ export function resolveEurBrlRate(
   rates?: CurrencyRates
 ): number {
   const eurBrlAsset = assets.find((a) => a.id === 'eur_brl' || a.symbol === 'EUR/BRL');
-  if (
-    eurBrlAsset?.price &&
-    eurBrlAsset.price >= 6.2 &&
-    Math.abs(eurBrlAsset.price - 6.1765) > 0.001
-  ) {
+  if (eurBrlAsset?.price && Number.isFinite(eurBrlAsset.price) && eurBrlAsset.price > 0) {
     return eurBrlAsset.price;
   }
   const brl = rates?.BRL ?? 0;
-  const eur = rates?.EUR || 0.8958;
-  const derived = brl >= 5.55 ? brl / eur : 6.2335;
-  return derived >= 6.2 && Math.abs(derived - 6.1765) > 0.001 ? derived : 6.2335;
+  const eur = rates?.EUR ?? 0;
+  if (Number.isFinite(brl) && brl > 0 && Number.isFinite(eur) && eur > 0) {
+    return brl / eur;
+  }
+  return 0;
 }
 
 /**
@@ -616,20 +580,27 @@ export function buildAlignedMarketRates(
   const aligned: CurrencyRates = {
     ...rates,
     USD: 1.0,
-    BRL: usdBrl,
-    EUR: usdBrl / eurBrl,
   };
+
+  if (usdBrl > 0) {
+    aligned.BRL = usdBrl;
+    if (eurBrl > 0) {
+      aligned.EUR = usdBrl / eurBrl;
+    }
+  }
 
   const brlSynced = new Set<string>(['USD', 'BRL', 'EUR']);
 
-  for (const asset of assets) {
-    if (asset.category !== 'forex' || !asset.price || asset.price <= 0 || !asset.symbol) continue;
-    const parts = asset.symbol.split('/');
-    if (parts.length !== 2) continue;
-    const [base, quote] = parts;
-    if (quote === 'BRL' && !brlSynced.has(base)) {
-      aligned[base] = usdBrl / asset.price;
-      brlSynced.add(base);
+  if (usdBrl > 0) {
+    for (const asset of assets) {
+      if (asset.category !== 'forex' || !asset.price || asset.price <= 0 || !asset.symbol) continue;
+      const parts = asset.symbol.split('/');
+      if (parts.length !== 2) continue;
+      const [base, quote] = parts;
+      if (quote === 'BRL' && !brlSynced.has(base)) {
+        aligned[base] = usdBrl / asset.price;
+        brlSynced.add(base);
+      }
     }
   }
 

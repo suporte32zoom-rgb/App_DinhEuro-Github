@@ -60,6 +60,191 @@ export const DAILY_INSIGHTS_UI_COPY: Record<
 
 export const DAILY_INSIGHTS_ITEMS: DailyInsightItem[] = [
   {
+    id: 'politica-fiscal-monetaria-brasil-equilibrio-credito-2026',
+    isoDate: '2026-11-26',
+    imageUrl: '/assets/aistudio/image_3adf5ec5.png',
+    translations: {
+      pt: {
+        tag: 'Política Fiscal & Juros',
+        title:
+          'Política fiscal e monetária no Brasil: o equilíbrio entre ancoragem das expectativas e custo do crédito',
+        summary:
+          'A condução da política fiscal e a trajetória da taxa básica de juros seguem como os principais vetores de formação de preços na curva de juros doméstica, no custo do crédito e na atratividade da renda fixa e ações brasileiras.',
+        dateAuthor: '26/11/2026 • Redação DinhEuro',
+        source:
+          'Referências institucionais: Banco Central do Brasil (Copom/Focus), Tesouro Nacional e curva DI futuro',
+        readingTime: '4 min',
+        keywords: [
+          'politica fiscal e monetaria brasil',
+          'ancoragem das expectativas inflacao',
+          'curva de juros futuros custo credito',
+          'renda fixa retorno real brasil',
+          'premios de risco fiscal divida',
+        ],
+        imageAlt:
+          'Balança institucional de equilíbrio sobre mesa executiva com documentos econômicos representando o balanço entre política fiscal, juros e custo do crédito no Brasil',
+        fullContent: [
+          'A condução da política fiscal e a trajetória da taxa básica de juros seguem como os principais vetores de formação de preços na curva de juros doméstica e na tomada de decisão de famílias e empresas.',
+          'No Brasil, a leitura macroeconômica passa diariamente pela interação entre a disciplina fiscal e a política monetária conduzida pelo Banco Central. A forma como o mercado percebe a trajetória da dívida pública, a execução orçamentária e o cumprimento de metas fiscais influencia diretamente a inclinação da curva de juros futuros — um termômetro central para o custo do crédito, para o desconto de fluxos de caixa empresariais e para a atratividade da renda fixa local.',
+          '## Ancoragem institucional, prêmios de risco e seletividade',
+          'Quando há maior previsibilidade na gestão das contas públicas e coerência na comunicação econômica, diminui o prêmio de risco exigido pelos investidores, abrindo espaço para uma leitura mais construtiva sobre inflação e juros no horizonte relevante. Por outro lado, dúvidas sobre sustentabilidade fiscal ou pressões em componentes de preços tendem a manter a curva pressionada e a exigir maior seletividade na carteira.',
+          '## O que observar e impacto prático',
+          'O que observar: Comunicação oficial sobre metas fiscais, dinâmica da inflação de serviços e expectativas e precificação na curva de juros futuros.',
+          'Impacto prático: Custo de capital das empresas, retorno real na renda fixa e sensibilidade de ações domésticas aos juros.',
+        ],
+      },
+      en: {
+        tag: 'Fiscal Policy & Rates',
+        title:
+          'Fiscal and Monetary Policy in Brazil: Balancing Anchored Expectations and Credit Costs',
+        summary:
+          'Fiscal execution and the benchmark policy rate path remain the primary drivers of Brazil’s domestic yield curve, corporate credit costs, real fixed-income returns, and equity valuation multiples.',
+        dateAuthor: 'Nov 26, 2026 • DinhEuro Editorial',
+        source:
+          'Institutional references: Central Bank of Brazil (Copom/Focus), National Treasury, and DI Futures Curve',
+        readingTime: '4 min read',
+        keywords: [
+          'brazil fiscal monetary policy',
+          'anchored inflation expectations',
+          'yield curve credit cost brazil',
+          'real return fixed income',
+          'fiscal risk premium public debt',
+        ],
+        imageAlt:
+          'Institutional brass balance scale on an executive table with economic briefs representing equilibrium between fiscal discipline, interest rates, and credit costs in Brazil',
+        fullContent: [
+          'The conduct of fiscal policy and the trajectory of the benchmark interest rate remain the main pricing drivers across Brazil’s domestic yield curve and household and corporate financial decisions.',
+          'In Brazil, daily macroeconomic interpretation revolves around the interaction between fiscal discipline and monetary policy steered by the Central Bank. How markets perceive public debt dynamics, budget execution, and compliance with fiscal targets directly shapes the slope of the forward interest-rate curve—a central gauge for borrowing costs, corporate cash-flow discounting, and the appeal of local fixed income.',
+          '## Institutional anchoring, risk premia, and portfolio selectivity',
+          'When fiscal management delivers greater predictability alongside coherent policy communication, the risk premium demanded by investors narrows, creating room for a more constructive outlook on inflation and interest rates over the relevant horizon. Conversely, doubts over fiscal sustainability or sticky price components keep the yield curve under pressure and call for sharper portfolio selectivity.',
+          '## What to watch and practical impact',
+          'What to watch: Official communication on fiscal targets, services inflation momentum, and forward yield-curve expectations.',
+          'Practical impact: Corporate cost of capital, real fixed-income yields, and rate sensitivity across domestic equities.',
+        ],
+      },
+      es: {
+        tag: 'Política Fiscal y Tasas',
+        title:
+          'Política fiscal y monetaria en Brasil: el equilibrio entre anclaje de expectativas y costo del crédito',
+        summary:
+          'La conducción fiscal y la trayectoria de la tasa básica de interés continúan como los principales vectores de la curva de tasas doméstica, el costo del crédito, el retorno real en renta fija y la valuación bursátil.',
+        dateAuthor: '26/11/2026 • Redacción DinhEuro',
+        source:
+          'Referencias institucionales: Banco Central de Brasil (Copom/Focus), Tesoro Nacional y curva DI futura',
+        readingTime: '4 min',
+        keywords: [
+          'politica fiscal monetaria brasil',
+          'anclaje expectativas inflacion',
+          'curva tasas futuros costo credito',
+          'retorno real renta fija',
+          'prima de riesgo fiscal deuda',
+        ],
+        imageAlt:
+          'Balanza institucional de equilibrio sobre mesa ejecutiva con documentos económicos representando el balance entre política fiscal, tasas de interés y costo del crédito en Brasil',
+        fullContent: [
+          'La conducción de la política fiscal y la trayectoria de la tasa básica de interés continúan siendo los principales vectores de formación de precios en la curva de tasas doméstica y en las decisiones de familias y empresas.',
+          'En Brasil, la lectura macroeconómica pasa diariamente por la interacción entre la disciplina fiscal y la política monetaria ejecutada por el Banco Central. La manera en que el mercado percibe la trayectoria de la deuda pública, la ejecución presupuestaria y el cumplimiento de metas fiscales incide directamente en la pendiente de la curva de tasas futuras —un termómetro central para el costo del crédito, el descuento de flujos empresariales y el atractivo de la renta fija local.',
+          '## Anclaje institucional, primas de riesgo y selectividad',
+          'Cuando existe mayor previsibilidad en la gestión de las cuentas públicas y coherencia en la comunicación económica, se reduce la prima de riesgo exigida por los inversores y se abre espacio para una lectura más constructiva sobre inflación y tasas en el horizonte relevante. Por el contrario, dudas sobre la sostenibilidad fiscal o presiones en precios mantienen la curva tensionada y exigen mayor selectividad en las carteras.',
+          '## Qué observar e impacto práctico',
+          'Qué observar: Comunicación oficial sobre metas fiscales, dinámica de la inflación de servicios y expectativas y precios en la curva de tasas futuras.',
+          'Impacto práctico: Costo de capital de las empresas, retorno real en renta fija y sensibilidad de las acciones domésticas a las tasas.',
+        ],
+      },
+    },
+  },
+  {
+    id: 'corredor-ue-mercosul-comercio-regulacao-cambio-2026',
+    isoDate: '2026-11-26',
+    imageUrl: '/assets/aistudio/image_c9f634e6.png',
+    translations: {
+      pt: {
+        tag: 'Comércio Exterior & Câmbio',
+        title: 'Corredor União Europeia–Mercosul: comércio, regulação e impacto no câmbio regional',
+        summary:
+          'As negociações e agendas regulatórias entre a União Europeia e o Mercosul continuam no radar de empresas e investidores, moldando expectativas sobre cadeias de suprimentos, regras ambientais e fluxos comerciais entre os blocos — com impacto direto no par EUR/BRL.',
+        dateAuthor: '26/11/2026 • Redação DinhEuro',
+        source:
+          'Referências institucionais: Comissão Europeia, Secretaria do Mercosul, MDIC e mesas de câmbio EUR/BRL',
+        readingTime: '4 min',
+        keywords: [
+          'corredor uniao europeia mercosul',
+          'regras ambientais comercio exterior',
+          'cambio regional eur brl',
+          'cadeias de suprimentos mercosul ue',
+          'hedge cambial e remessas internacionais',
+        ],
+        imageAlt:
+          'Infográfico ilustrativo do corredor comercial entre União Europeia e Mercosul conectando navios porta-contêineres, ferrovias logísticas, instituição financeira central e cotações em Euro e Real',
+        fullContent: [
+          'As negociações e agendas regulatórias entre a União Europeia e o Mercosul continuam no radar de empresas e investidores, moldando expectativas sobre cadeias de suprimentos, regras ambientais e fluxos comerciais entre os blocos.',
+          'A relação econômica entre a União Europeia e o Mercosul ultrapassa a dimensão puramente tarifária e passa a influenciar decisões estratégicas de alocação de capital, logística e câmbio. Para companhias exportadoras, importadoras e investidores que acompanham o par EUR/BRL, o avanço ou os entraves em exigências técnicas, normas de sustentabilidade e cronogramas de implementação regulatória alteram a previsibilidade dos fluxos comerciais de médio e longo prazo.',
+          '## Equilíbrio doméstico, prêmios setoriais e proteção cambial',
+          'No ambiente doméstico, o equilíbrio entre o câmbio, o custo de financiamento e a competitividade industrial define o ritmo em que setores ligados ao agronegócio, indústria de transformação e serviços se adaptam às exigências internacionais. Quando o mercado avalia maior clareza institucional e abertura comercial, tende a reprecificar prêmios de risco setoriais; quando surgem ruídos políticos ou condicionantes adicionais, o foco volta-se para a proteção cambial e o custo de transação.',
+          '## O que observar e impacto prático',
+          'O que observar: Sinais diplomáticos e técnicos entre Bruxelas e os países do Mercosul, além do comportamento do câmbio em momentos de maior sensibilidade externa.',
+          'Impacto prático: Planejamento de remessas, hedge cambial e leitura de setores expostos ao comércio exterior.',
+        ],
+      },
+      en: {
+        tag: 'Foreign Trade & FX',
+        title: 'EU–Mercosur Corridor: Trade, Regulation, and Impact on Regional Exchange Rates',
+        summary:
+          'Negotiations and regulatory agendas between the European Union and Mercosur remain on the radar of businesses and investors, shaping supply-chain expectations, environmental rules, and cross-bloc trade flows with direct relevance for EUR/BRL.',
+        dateAuthor: 'Nov 26, 2026 • DinhEuro Editorial',
+        source:
+          'Institutional references: European Commission, Mercosur Secretariat, MDIC, and EUR/BRL FX Desks',
+        readingTime: '4 min read',
+        keywords: [
+          'eu mercosur trade corridor',
+          'environmental rules foreign trade',
+          'eur brl regional exchange rate',
+          'supply chains mercosur eu',
+          'fx hedging and international remittances',
+        ],
+        imageAlt:
+          'Illustrative infographic of the EU–Mercosur trade corridor linking container ships, rail logistics, a central financial institution, and Euro–Real FX flows',
+        fullContent: [
+          'Negotiations and regulatory agendas between the European Union and Mercosur remain firmly on the radar of corporates and investors, shaping expectations around supply chains, environmental standards, and commercial flows between the two blocs.',
+          'The economic relationship between the European Union and Mercosur extends beyond pure tariff reductions to influence strategic decisions on capital allocation, logistics, and foreign exchange. For exporting and importing companies as well as investors tracking EUR/BRL, progress or bottlenecks in technical standards, sustainability mandates, and regulatory implementation timelines alter the medium- and long-term predictability of trade flows.',
+          '## Domestic balance, sector risk premia, and currency hedging',
+          'Domestically, the interplay between exchange rates, financing costs, and industrial competitiveness determines how quickly agribusiness, manufacturing, and service sectors adapt to international compliance requirements. When markets price in greater institutional clarity and trade openness, sector risk premia tend to recalibrate; when political noise or additional conditions surface, attention shifts back toward currency hedging and transaction costs.',
+          '## What to watch and practical impact',
+          'What to watch: Diplomatic and technical signals between Brussels and Mercosur member states, alongside exchange-rate behavior during episodes of heightened external sensitivity.',
+          'Practical impact: Remittance planning, FX hedging strategies, and assessing sectors exposed to international trade.',
+        ],
+      },
+      es: {
+        tag: 'Comercio Exterior y Divisas',
+        title: 'Corredor Unión Europea–Mercosur: comercio, regulación e impacto en el cambio regional',
+        summary:
+          'Las negociaciones y agendas regulatorias entre la Unión Europea y el Mercosur siguen en el radar de empresas e inversores, moldeando expectativas sobre cadenas de suministro, reglas ambientales y flujos comerciales con impacto en el par EUR/BRL.',
+        dateAuthor: '26/11/2026 • Redacción DinhEuro',
+        source:
+          'Referencias institucionales: Comisión Europea, Secretaría del Mercosur, MDIC y mesas cambiarias EUR/BRL',
+        readingTime: '4 min',
+        keywords: [
+          'corredor union europea mercosur',
+          'reglas ambientales comercio exterior',
+          'cambio regional eur brl',
+          'cadenas de suministro mercosur ue',
+          'cobertura cambiaria y remesas',
+        ],
+        imageAlt:
+          'Infografía ilustrativa del corredor comercial entre la Unión Europea y Mercosur que conecta buques portacontenedores, logística ferroviaria, institución financiera central y cotizaciones en Euro y Real',
+        fullContent: [
+          'Las negociaciones y agendas regulatorias entre la Unión Europea y el Mercosur continúan en el radar de empresas e inversores, moldeando expectativas sobre cadenas de suministro, normas ambientales y flujos comerciales entre ambos bloques.',
+          'La relación económica entre la Unión Europea y el Mercosur trasciende la dimensión puramente arancelaria y pasa a influir en decisiones estratégicas de asignación de capital, logística y divisas. Para compañías exportadoras, importadoras e inversores que siguen el par EUR/BRL, los avances o trabas en exigencias técnicas, estándares de sostenibilidad y cronogramas regulatorios alteran la previsibilidad comercial de mediano y largo plazo.',
+          '## Equilibrio doméstico, primas sectoriales y protección cambiaria',
+          'En el plano doméstico, el equilibrio entre el tipo de cambio, el costo de financiamiento y la competitividad industrial define el ritmo al que el agronegocio, la industria manufacturera y los servicios se adaptan a las exigencias internacionales. Cuando el mercado percibe mayor claridad institucional y apertura comercial, tiende a revalorar primas de riesgo sectoriales; cuando surgen ruidos políticos o condicionantes adicionales, el foco vuelve hacia la cobertura cambiaria y el costo de transacción.',
+          '## Qué observar e impacto práctico',
+          'Qué observar: Señales diplomáticas y técnicas entre Bruselas y los países del Mercosur, además del comportamiento del tipo de cambio en momentos de mayor sensibilidad externa.',
+          'Impacto práctico: Planificación de remesas, cobertura cambiaria y lectura de sectores expuestos al comercio exterior.',
+        ],
+      },
+    },
+  },
+  {
     id: 'eua-tarifas-embraer-acucar-secao-301-2026',
     isoDate: '2026-11-25',
     imageUrl: '/assets/aistudio/image_100b355f.png',
