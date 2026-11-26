@@ -362,7 +362,7 @@ export const Header: React.FC = () => {
               className="text-[#475569] dark:text-slate-400 hover:text-[#003399] dark:hover:text-emerald-300 transition cursor-pointer flex items-center gap-1 font-mono-numbers bg-[#FFFFFF] dark:bg-slate-900/60 px-2 py-0.5 rounded border border-[#E2E8F0] dark:border-slate-800"
               title={t.header.syncTooltip}
             >
-              <span>{lastUpdated ? lastUpdated.toLocaleTimeString(getNumberLocale(lang), { hour: '2-digit', minute: '2-digit', second: '2-digit' }) : '--:--:--'}</span>
+              <span>{lastUpdated.toLocaleTimeString(getNumberLocale(lang), { hour: '2-digit', minute: '2-digit', second: '2-digit' })}</span>
             </button>
           </div>
         </div>

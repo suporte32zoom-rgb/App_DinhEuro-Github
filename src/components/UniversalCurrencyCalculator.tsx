@@ -40,7 +40,7 @@ export const UniversalCurrencyCalculator: React.FC<UniversalCurrencyCalculatorPr
   defaultTo = 'BRL',
   defaultAmount = 1,
 }) => {
-  const { assets, universalRates, lastUpdated: marketLastUpdated } = useMarket();
+  const { assets, universalRates } = useMarket();
   const { t, lang } = useI18n();
   const numberLocale = getNumberLocale(lang);
 
@@ -55,12 +55,12 @@ export const UniversalCurrencyCalculator: React.FC<UniversalCurrencyCalculatorPr
   const [quoteMode, setQuoteMode] = useState<AwesomeQuoteMode>('bid');
 
   const [quotes, setQuotes] = useState<AwesomeQuotesMap>(() =>
-    buildFallbackAwesomeQuotes(alignedRates, assets)
+    buildFallbackAwesomeQuotes(alignedRates)
   );
-  const [dataSource, setDataSource] = useState<'live' | 'fallback'>('fallback');
+  const [dataSource, setDataSource] = useState<'awesomeapi' | 'fallback'>('fallback');
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
-  const [lastSyncDate, setLastSyncDate] = useState<Date | null>(marketLastUpdated);
+  const [lastSyncDate, setLastSyncDate] = useState<Date | null>(null);
   const [apiTimestamp, setApiTimestamp] = useState<string | undefined>(undefined);
   const [syncError, setSyncError] = useState<string | null>(null);
 
@@ -71,13 +71,9 @@ export const UniversalCurrencyCalculator: React.FC<UniversalCurrencyCalculatorPr
 
   const alignedRatesRef = React.useRef(alignedRates);
   alignedRatesRef.current = alignedRates;
-  const assetsRef = React.useRef(assets);
-  assetsRef.current = assets;
-  const marketLastUpdatedRef = React.useRef(marketLastUpdated);
-  marketLastUpdatedRef.current = marketLastUpdated;
   const hasSyncedOnceRef = React.useRef(false);
 
-  const syncLiveQuotes = useCallback(async (manual = false) => {
+  const syncFromAwesomeApi = useCallback(async (manual = false) => {
     if (manual) {
       setIsRefreshing(true);
     } else if (!hasSyncedOnceRef.current) {
@@ -86,50 +82,33 @@ export const UniversalCurrencyCalculator: React.FC<UniversalCurrencyCalculatorPr
 
     const result = await fetchAwesomeApiQuotes(alignedRatesRef.current);
     hasSyncedOnceRef.current = true;
-
-    if (result.source === 'live' && result.fetchedAt) {
-      setQuotes(result.quotes);
-      setDataSource('live');
-      setLastSyncDate(result.fetchedAt);
-      setApiTimestamp(result.apiTimestamp);
-      setSyncError(null);
-    } else if (alignedRatesRef.current.BRL > 0 && marketLastUpdatedRef.current) {
-      setQuotes(buildFallbackAwesomeQuotes(alignedRatesRef.current, assetsRef.current));
-      setDataSource('live');
-      setLastSyncDate(marketLastUpdatedRef.current);
-      setApiTimestamp(undefined);
-      setSyncError(null);
-    } else {
-      setQuotes(buildFallbackAwesomeQuotes(alignedRatesRef.current, assetsRef.current));
-      setDataSource('fallback');
-      setApiTimestamp(undefined);
-      setSyncError(result.errorMessage || '__CACHED__');
-    }
+    setQuotes(result.quotes);
+    setDataSource(result.source);
+    setLastSyncDate(result.fetchedAt);
+    setApiTimestamp(result.apiTimestamp);
+    setSyncError(
+      result.source === 'fallback' ? result.errorMessage || '__CACHED__' : null
+    );
 
     setIsLoading(false);
     setIsRefreshing(false);
   }, []);
 
   useEffect(() => {
-    syncLiveQuotes(false);
+    syncFromAwesomeApi(false);
     const interval = setInterval(() => {
-      syncLiveQuotes(false);
+      syncFromAwesomeApi(false);
     }, AUTO_REFRESH_INTERVAL_MS);
 
     return () => clearInterval(interval);
-  }, [syncLiveQuotes]);
+  }, [syncFromAwesomeApi]);
 
-  // Keeps calculator quotes and timestamp synchronized with MarketContext rates when updated
+  // Keeps fallback synchronized if market rates update while offline
   useEffect(() => {
-    if (alignedRates.BRL > 0 && marketLastUpdated && dataSource === 'fallback') {
-      setQuotes(buildFallbackAwesomeQuotes(alignedRates, assets));
-      setDataSource('live');
-      setLastSyncDate(marketLastUpdated);
-      setSyncError(null);
-    } else if (dataSource === 'fallback') {
-      setQuotes(buildFallbackAwesomeQuotes(alignedRates, assets));
+    if (dataSource === 'fallback') {
+      setQuotes(buildFallbackAwesomeQuotes(alignedRates));
     }
-  }, [alignedRates, assets, dataSource, marketLastUpdated]);
+  }, [alignedRates, dataSource]);
 
   const numericAmount = useMemo(() => {
     const normalized = amountInput.replace(',', '.');
@@ -218,8 +197,8 @@ export const UniversalCurrencyCalculator: React.FC<UniversalCurrencyCalculatorPr
           <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-[#475569] dark:text-slate-400">
             <span>
               {t.calculator.sourceLabel ? `${t.calculator.sourceLabel} ` : ''}
-              <strong className={dataSource === 'live' ? 'text-[#006B52] dark:text-emerald-400' : 'text-[#D99B00] dark:text-amber-400'}>
-                {dataSource === 'live' ? t.calculator.sourceLive : t.calculator.sourceFallback}
+              <strong className={dataSource === 'awesomeapi' ? 'text-[#006B52] dark:text-emerald-400' : 'text-[#D99B00] dark:text-amber-400'}>
+                {dataSource === 'awesomeapi' ? t.calculator.sourceLive : t.calculator.sourceFallback}
               </strong>
             </span>
             <span aria-hidden="true">·</span>
@@ -281,7 +260,7 @@ export const UniversalCurrencyCalculator: React.FC<UniversalCurrencyCalculatorPr
 
           <button
             type="button"
-            onClick={() => syncLiveQuotes(true)}
+            onClick={() => syncFromAwesomeApi(true)}
             disabled={isRefreshing}
             className="min-h-[40px] inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-[#F4F7F9] dark:bg-slate-900 hover:bg-[#E6EEFF] dark:hover:bg-slate-800 border border-[#E2E8F0] dark:border-slate-700/80 hover:border-[#003399]/40 dark:hover:border-emerald-500/40 text-xs font-semibold text-[#1E293B] dark:text-slate-200 transition cursor-pointer whitespace-nowrap shrink-0 disabled:opacity-60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#003399] dark:focus-visible:ring-emerald-400"
             title={t.calculator.refresh}
@@ -292,7 +271,7 @@ export const UniversalCurrencyCalculator: React.FC<UniversalCurrencyCalculatorPr
         </div>
       </div>
 
-      {/* Fallback Warning when live FX endpoints are temporarily unreachable */}
+      {/* Fallback Warning (when AwesomeAPI times out or returns HTTP error) */}
       {syncError && (
         <div
           role="status"
@@ -306,7 +285,7 @@ export const UniversalCurrencyCalculator: React.FC<UniversalCurrencyCalculatorPr
           </div>
           <button
             type="button"
-            onClick={() => syncLiveQuotes(true)}
+            onClick={() => syncFromAwesomeApi(true)}
             className="text-xs font-semibold underline hover:text-[#002266] dark:hover:text-amber-200 cursor-pointer self-start sm:self-auto whitespace-nowrap shrink-0"
           >
             {t.calculator.retry}
