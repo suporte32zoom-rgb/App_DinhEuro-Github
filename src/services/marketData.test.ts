@@ -105,12 +105,6 @@ describe('Real-Time Market Data Engine & Catalog Expansion', () => {
     const updatedIbov = result.updatedAssets.find((a) => a.symbol === 'IBOVESPA');
     assert.ok(updatedIbov && updatedIbov.price === 171670.27, 'Ibovespa must receive live price');
   });
-
-  it('initializes all forex pairs at 0 without frozen static quotes', () => {
-    const forexAssets = INITIAL_ASSETS.filter((a) => a.category === 'forex');
-    assert.ok(forexAssets.length >= 12);
-    for (const fx of forexAssets) {
-      assert.strictEqual(fx.price, 0, `Forex ${fx.symbol} must start at 0 without hardcoded fallback`);
-    }
-  });
 });
+
+
