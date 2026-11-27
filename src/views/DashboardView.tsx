@@ -71,8 +71,8 @@ export const DashboardView: React.FC = () => {
 
   const resolvedEurBrl = resolveEurBrlRate(assets, universalRates);
   const resolvedUsdBrl = resolveUsdBrlRate(assets, universalRates);
-  const eurBrlFormatted = formatCurrencyValue(resolvedEurBrl, 'BRL', 4, numberLocale);
-  const usdBrlFormatted = formatCurrencyValue(resolvedUsdBrl, 'BRL', 4, numberLocale);
+  const eurBrlFormatted = resolvedEurBrl > 0 ? formatCurrencyValue(resolvedEurBrl, 'BRL', 4, numberLocale) : '--';
+  const usdBrlFormatted = resolvedUsdBrl > 0 ? formatCurrencyValue(resolvedUsdBrl, 'BRL', 4, numberLocale) : '--';
 
   const marketSentiment = riskAppetite;
 
@@ -332,7 +332,9 @@ export const DashboardView: React.FC = () => {
                 <span>{t.dashboard.quickSimulator}</span>
               </span>
               <span className="text-[10px] text-[#475569] dark:text-slate-400 font-mono">
-                1 {calcFrom} = {(alignedRates[calcTo] / alignedRates[calcFrom]).toLocaleString(numberLocale, { minimumFractionDigits: 4, maximumFractionDigits: 4 })} {calcTo}
+                {alignedRates[calcFrom] > 0 && alignedRates[calcTo] > 0
+                  ? `1 ${calcFrom} = ${(alignedRates[calcTo] / alignedRates[calcFrom]).toLocaleString(numberLocale, { minimumFractionDigits: 4, maximumFractionDigits: 4 })} ${calcTo}`
+                  : `1 ${calcFrom} = -- ${calcTo}`}
               </span>
             </div>
 
@@ -388,7 +390,9 @@ export const DashboardView: React.FC = () => {
             <div className="pt-1 flex items-center justify-between text-xs">
               <span className="text-[#475569] dark:text-slate-400 text-[11px]">{t.dashboard.convertedResult}</span>
               <span className="font-bold font-mono-numbers text-[#006B52] dark:text-emerald-400 text-sm">
-                {formatCurrencyValue(convertedValue, calcTo, calcTo === 'JPY' ? 0 : 2, numberLocale)}
+                {alignedRates[calcFrom] > 0 && alignedRates[calcTo] > 0
+                  ? formatCurrencyValue(convertedValue, calcTo, calcTo === 'JPY' ? 0 : 2, numberLocale)
+                  : '--'}
               </span>
             </div>
           </div>
@@ -405,7 +409,7 @@ export const DashboardView: React.FC = () => {
             </h2>
           </div>
           <span className="text-[11px] text-[#475569] dark:text-slate-400">
-            {t.dashboard.updatedAt} {lastUpdated.toLocaleTimeString(getNumberLocale(lang), { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
+            {t.dashboard.updatedAt} {lastUpdated ? lastUpdated.toLocaleTimeString(getNumberLocale(lang), { hour: '2-digit', minute: '2-digit', second: '2-digit' }) : '--:--:--'}
           </span>
         </div>
 
@@ -452,7 +456,7 @@ export const DashboardView: React.FC = () => {
         </div>
       </section>
 
-      {/* Calculadora de Câmbio Universal (Tempo Real via AwesomeAPI) */}
+      {/* Calculadora de Câmbio Universal (Tempo Real Multi-Fonte) */}
       <UniversalCurrencyCalculator defaultFrom="EUR" defaultTo="BRL" defaultAmount={1} />
 
       {/* Main Split: Stocks Heatmap & Universal Currency Hub */}

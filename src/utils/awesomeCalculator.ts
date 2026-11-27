@@ -1,4 +1,4 @@
-import type { UniversalRates } from '../services/marketData';
+import { getEnvVar, type MarketAsset, type UniversalRates } from '../services/marketData';
 
 export interface AwesomeCurrencyOption {
   code: string;
@@ -27,7 +27,7 @@ export const AWESOME_API_ENDPOINT =
   'https://economia.awesomeapi.com.br/last/USD-BRL,EUR-BRL,GBP-BRL,CAD-BRL,AUD-BRL,CHF-BRL,JPY-BRL,CNY-BRL,ARS-BRL,BTC-BRL,ETH-BRL';
 
 /**
- * Principais moedas e criptoativos listados no DinhEuro compatíveis com AwesomeAPI.
+ * Principais moedas e criptoativos listados no DinhEuro.
  */
 export const DINHEURO_CALCULATOR_CURRENCIES: AwesomeCurrencyOption[] = [
   { code: 'BRL', name: 'Real Brasileiro', symbol: 'R$', flag: '🇧🇷', decimals: 2 },
@@ -57,10 +57,14 @@ export interface AwesomeRawTicker {
 }
 
 /**
- * Constrói o mapa de cotações ancoradas em BRL a partir das taxas globais de fallback.
+ * Constrói o mapa de cotações ancoradas em BRL a partir das taxas globais e ativos sincronizados.
+ * Não fabrica cotações estáticas quando a taxa BRL ainda não foi recebida.
  */
-export function buildFallbackAwesomeQuotes(rates: UniversalRates): AwesomeQuotesMap {
-  const brlPerUsd = rates.BRL && rates.BRL > 0 ? rates.BRL : 5.584;
+export function buildFallbackAwesomeQuotes(
+  rates: UniversalRates,
+  assets?: Pick<MarketAsset, 'id' | 'symbol' | 'price' | 'high24h' | 'low24h' | 'change24h' | 'changeValue' | 'category'>[]
+): AwesomeQuotesMap {
+  const brlPerUsd = rates.BRL && Number.isFinite(rates.BRL) && rates.BRL > 0 ? rates.BRL : 0;
 
   const map: AwesomeQuotesMap = {
     BRL: {
@@ -76,20 +80,72 @@ export function buildFallbackAwesomeQuotes(rates: UniversalRates): AwesomeQuotes
 
   for (const currency of DINHEURO_CALCULATOR_CURRENCIES) {
     if (currency.code === 'BRL') continue;
+
+    const matchingAsset = assets?.find((a) => {
+      const sym = a.symbol.toUpperCase();
+      if (currency.code === 'BTC' || currency.code === 'ETH') {
+        return sym === `${currency.code}/USD` || a.id === `${currency.code.toLowerCase()}_usd`;
+      }
+      return sym === `${currency.code}/BRL` || a.id === `${currency.code.toLowerCase()}_brl`;
+    });
+
+    if (matchingAsset && matchingAsset.price > 0 && (currency.code !== 'BTC' && currency.code !== 'ETH')) {
+      const p = matchingAsset.price;
+      map[currency.code] = {
+        code: currency.code,
+        bidBrl: p,
+        askBrl: p * 1.0005,
+        highBrl: matchingAsset.high24h > 0 ? Math.max(p, matchingAsset.high24h) : p,
+        lowBrl: matchingAsset.low24h > 0 ? Math.min(p, matchingAsset.low24h) : p,
+        pctChange: Number.isFinite(matchingAsset.change24h) ? matchingAsset.change24h : 0,
+        varBid: Number.isFinite(matchingAsset.changeValue) ? matchingAsset.changeValue : 0,
+      };
+      continue;
+    }
+
+    if (brlPerUsd <= 0) {
+      map[currency.code] = {
+        code: currency.code,
+        bidBrl: 0,
+        askBrl: 0,
+        highBrl: 0,
+        lowBrl: 0,
+        pctChange: 0,
+        varBid: 0,
+      };
+      continue;
+    }
+
+    if (matchingAsset && matchingAsset.price > 0 && (currency.code === 'BTC' || currency.code === 'ETH')) {
+      const brlValue = matchingAsset.price * brlPerUsd;
+      const highBrl = matchingAsset.high24h > 0 ? matchingAsset.high24h * brlPerUsd : brlValue;
+      const lowBrl = matchingAsset.low24h > 0 ? matchingAsset.low24h * brlPerUsd : brlValue;
+      map[currency.code] = {
+        code: currency.code,
+        bidBrl: brlValue,
+        askBrl: brlValue * 1.001,
+        highBrl: Math.max(brlValue, highBrl),
+        lowBrl: Math.min(brlValue, lowBrl),
+        pctChange: Number.isFinite(matchingAsset.change24h) ? matchingAsset.change24h : 0,
+        varBid: 0,
+      };
+      continue;
+    }
+
     const unitsPerUsd = rates[currency.code];
     const brlValue =
       currency.code === 'USD'
         ? brlPerUsd
         : unitsPerUsd && unitsPerUsd > 0
         ? brlPerUsd / unitsPerUsd
-        : brlPerUsd;
+        : 0;
 
     map[currency.code] = {
       code: currency.code,
       bidBrl: brlValue,
-      askBrl: brlValue * 1.0005,
-      highBrl: brlValue * 1.005,
-      lowBrl: brlValue * 0.995,
+      askBrl: brlValue > 0 ? brlValue * 1.0005 : 0,
+      highBrl: brlValue > 0 ? brlValue * 1.005 : 0,
+      lowBrl: brlValue > 0 ? brlValue * 0.995 : 0,
       pctChange: 0,
       varBid: 0,
     };
@@ -99,7 +155,7 @@ export function buildFallbackAwesomeQuotes(rates: UniversalRates): AwesomeQuotes
 }
 
 /**
- * Faz o parse defensivo da resposta JSON oficial da AwesomeAPI (/last/...).
+ * Faz o parse defensivo da resposta JSON de câmbio em BRL (/last/...).
  */
 export function parseAwesomeApiResponse(
   payload: Record<string, AwesomeRawTicker> | null | undefined,
@@ -162,57 +218,115 @@ export function parseAwesomeApiResponse(
 
 export interface AwesomeFetchResult {
   quotes: AwesomeQuotesMap;
-  source: 'awesomeapi' | 'fallback';
-  fetchedAt: Date;
+  source: 'live' | 'fallback';
+  fetchedAt: Date | null;
   apiTimestamp?: string;
   errorMessage?: string;
 }
 
+async function fetchJsonSafely(url: string, timeoutMs: number): Promise<any> {
+  const controller = typeof AbortController !== 'undefined' ? new AbortController() : null;
+  const timer = controller ? setTimeout(() => controller.abort(), timeoutMs) : null;
+  try {
+    const response = await fetch(url, {
+      method: 'GET',
+      cache: 'no-store',
+      signal: controller?.signal,
+    });
+    if (!response.ok) return null;
+    return await response.json();
+  } catch {
+    return null;
+  } finally {
+    if (timer) clearTimeout(timer);
+  }
+}
+
 /**
- * Consulta cotações em tempo real diretamente na AwesomeAPI com timeout e fallback resiliente.
+ * Consulta cotações em tempo real com fallback automático multi-fonte (inclui proxies CORS e feeds globais).
+ * O carimbo fetchedAt só é definido quando cotações reais são efetivamente recebidas.
  */
 export async function fetchAwesomeApiQuotes(
   fallbackRates: UniversalRates,
   timeoutMs = 5000
 ): Promise<AwesomeFetchResult> {
   const fallbackQuotes = buildFallbackAwesomeQuotes(fallbackRates);
-  const controller = typeof AbortController !== 'undefined' ? new AbortController() : null;
-  const timer = controller ? setTimeout(() => controller.abort(), timeoutMs) : null;
+  const configuredFxUrl = getEnvVar('VITE_AWESOME_ECONOMY_URL') || AWESOME_API_ENDPOINT;
 
-  try {
-    const response = await fetch(AWESOME_API_ENDPOINT, {
-      method: 'GET',
-      cache: 'no-store',
-      signal: controller?.signal,
-    });
+  // 1. Endpoint primário configurado (direto e via proxies CORS caso bloqueado no browser)
+  const fxCandidates = [
+    configuredFxUrl,
+    `https://corsproxy.io/?url=${encodeURIComponent(configuredFxUrl)}`,
+    `https://api.allorigins.win/raw?url=${encodeURIComponent(configuredFxUrl)}`,
+  ];
 
-    if (!response.ok) {
-      throw new Error(`HTTP ${response.status}`);
-    }
-
-    const data = (await response.json()) as Record<string, AwesomeRawTicker>;
+  for (const url of fxCandidates) {
+    const data = (await fetchJsonSafely(url, timeoutMs)) as Record<string, AwesomeRawTicker> | null;
     const parsed = parseAwesomeApiResponse(data, fallbackQuotes);
-
-    if (parsed.matchedCount === 0) {
-      throw new Error('Resposta sem pares cambiais válidos');
+    if (parsed.matchedCount > 0) {
+      return {
+        quotes: parsed.quotes,
+        source: 'live',
+        fetchedAt: new Date(),
+        apiTimestamp: parsed.latestTimestamp,
+      };
     }
-
-    return {
-      quotes: parsed.quotes,
-      source: 'awesomeapi',
-      fetchedAt: new Date(),
-      apiTimestamp: parsed.latestTimestamp,
-    };
-  } catch (err) {
-    return {
-      quotes: fallbackQuotes,
-      source: 'fallback',
-      fetchedAt: new Date(),
-      errorMessage: err instanceof Error ? err.message : 'Instabilidade temporária de conexão',
-    };
-  } finally {
-    if (timer) clearTimeout(timer);
   }
+
+  // 2. Fallback automático para feeds cambiais globais (BCE/Frankfurter, Coinbase, Alpha Vantage configurado)
+  const mergedRates: UniversalRates = { USD: 1.0 };
+  const [frankData, coinbaseData] = await Promise.all([
+    fetchJsonSafely('https://api.frankfurter.dev/v1/latest?base=USD', 3200),
+    fetchJsonSafely('https://api.coinbase.com/v2/exchange-rates?currency=USD', 3200),
+  ]);
+
+  if (frankData?.rates && typeof frankData.rates === 'object') {
+    for (const [k, v] of Object.entries(frankData.rates)) {
+      if (typeof v === 'number' && Number.isFinite(v) && v > 0) {
+        mergedRates[k] = v;
+      }
+    }
+  }
+
+  const cbRates = coinbaseData?.data?.rates;
+  if (cbRates && typeof cbRates === 'object') {
+    for (const [k, rawVal] of Object.entries(cbRates)) {
+      const parsedVal = parseFloat(String(rawVal));
+      if (Number.isFinite(parsedVal) && parsedVal > 0 && !mergedRates[k]) {
+        mergedRates[k] = parsedVal;
+      }
+    }
+  }
+
+  if (!mergedRates.BRL || mergedRates.BRL <= 0) {
+    const avKey = getEnvVar('VITE_ALPHA_VANTAGE_KEY') || getEnvVar('ALPHA_VANTAGE_KEY');
+    if (avKey) {
+      const avUsd = await fetchJsonSafely(
+        `https://www.alphavantage.co/query?function=CURRENCY_EXCHANGE_RATE&from_currency=USD&to_currency=BRL&apikey=${encodeURIComponent(avKey)}`,
+        3200
+      );
+      const avRate = parseFloat(avUsd?.['Realtime Currency Exchange Rate']?.['5. Exchange Rate']);
+      if (Number.isFinite(avRate) && avRate > 0) {
+        mergedRates.BRL = avRate;
+      }
+    }
+  }
+
+  if (mergedRates.BRL && mergedRates.BRL > 0) {
+    const liveCrossQuotes = buildFallbackAwesomeQuotes(mergedRates);
+    return {
+      quotes: liveCrossQuotes,
+      source: 'live',
+      fetchedAt: new Date(),
+    };
+  }
+
+  return {
+    quotes: fallbackQuotes,
+    source: 'fallback',
+    fetchedAt: null,
+    errorMessage: '__CACHED__',
+  };
 }
 
 export interface AwesomeConversionResult {

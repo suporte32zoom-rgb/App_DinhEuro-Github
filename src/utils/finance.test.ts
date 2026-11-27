@@ -303,5 +303,21 @@ test('calculateMarketSentimentIndex falls back to 50 neutral and reacts dynamica
   assert.ok(shiftedBenchmarks.score > bearish.score + 50);
 });
 
+test('FX helpers accept real rates below legacy floors and avoid fabricating static values', () => {
+  const lowFxAssets = [
+    { id: 'usd_brl', symbol: 'USD/BRL', price: 5.1842, category: 'forex' },
+    { id: 'eur_brl', symbol: 'EUR/BRL', price: 5.8915, category: 'forex' },
+  ];
+  const rates: CurrencyRates = { USD: 1.0, BRL: 5.1842, EUR: 0.8799 };
 
+  assert.equal(resolveUsdBrlRate(lowFxAssets, rates), 5.1842);
+  assert.equal(resolveEurBrlRate(lowFxAssets, rates), 5.8915);
+
+  const aligned = buildAlignedMarketRates(lowFxAssets, rates);
+  assert.equal(aligned.BRL, 5.1842);
+  assert.ok(Math.abs(aligned.BRL / aligned.EUR - 5.8915) < 1e-9);
+
+  // Without a loaded BRL rate, convertCurrency returns 0 rather than inventing a frozen value
+  assert.equal(convertCurrency(100, 'USD', 'BRL', { USD: 1.0 }), 0);
+});
 

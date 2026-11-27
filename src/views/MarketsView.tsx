@@ -222,7 +222,7 @@ export const MarketsView: React.FC = () => {
             <span>•</span>
             <span className="text-[#0F172A] dark:text-slate-300 font-medium">{getLocalizedApiSourceSummary(apiSourceSummary, lang)}</span>
             <span>•</span>
-            <span>{t.dashboard.updatedAt} {lastUpdated.toLocaleTimeString(getNumberLocale(lang), { hour: '2-digit', minute: '2-digit', second: '2-digit' })}</span>
+            <span>{t.dashboard.updatedAt} {lastUpdated ? lastUpdated.toLocaleTimeString(getNumberLocale(lang), { hour: '2-digit', minute: '2-digit', second: '2-digit' }) : '--:--:--'}</span>
           </p>
         </div>
 

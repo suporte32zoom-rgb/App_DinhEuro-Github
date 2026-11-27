@@ -5,12 +5,9 @@ import {
   UniversalRates,
   INITIAL_ASSETS,
   INITIAL_NEWS,
-  DEFAULT_UNIVERSAL_RATES,
-  fetchLiveExchangeRates,
   fetchCompleteLiveMarketData,
   getStoredFinnhubKey,
   setStoredFinnhubKey,
-  obterCotacaoFinnhub,
 } from '../services/marketData';
 import { normalizeRoutePath, syncCanonicalLink } from '../utils/seo';
 import {
@@ -139,7 +136,7 @@ interface MarketContextType {
   isLiveUpdating: boolean;
   isSyncing: boolean;
   syncStatus: 'syncing' | 'live' | 'offline';
-  lastUpdated: Date;
+  lastUpdated: Date | null;
   refreshData: () => Promise<void>;
   displayCurrency: 'BRL' | 'EUR' | 'USD';
   setDisplayCurrency: (currency: 'BRL' | 'EUR' | 'USD') => void;
@@ -153,7 +150,8 @@ interface MarketContextType {
 const MarketContext = createContext<MarketContextType | undefined>(undefined);
 
 const PORTFOLIO_STORAGE_KEY = 'dinheuro_user_portfolio_v2';
-const THEME_STORAGE_KEY = 'dinheuro_theme';
+const RATES_STORAGE_KEY = 'dinheuro_universal_rates';
+const LAST_SYNCED_STORAGE_KEY = 'dinheuro_last_synced_at';
 
 // A carteira inicia 100% zerada para que o usuário monte e gerencie suas próprias posições
 const INITIAL_DEMO_PORTFOLIO: PortfolioPosition[] = [];
@@ -166,21 +164,16 @@ export const MarketProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       if (cached) {
         const parsed = JSON.parse(cached);
         if (Array.isArray(parsed) && parsed.length > 0 && parsed.some((a) => a.price > 0)) {
-          // Sanitização ativa: substitui dados corrompidos, volume inválido em FX e garante Mín <= Preço <= Máx
+          // Sanitização ativa: normaliza decimais, volume de FX e garante Mín <= Preço <= Máx sem valores estáticos
           return parsed.map((item: MarketAsset) => {
-            if ((item.id === 'usd_brl' || item.symbol === 'USD/BRL') && (item.price < 5.55 || Math.abs(item.price - 5.5122) < 0.01)) {
-              return { ...item, price: 5.5840, high24h: Math.max(item.high24h || 0, 5.61), low24h: Math.min(item.low24h || 5.58, 5.51), volume: '--' };
-            }
-            if ((item.id === 'eur_brl' || item.symbol === 'EUR/BRL') && (item.price < 6.20 || Math.abs(item.price - 6.1765) < 0.01)) {
-              return { ...item, price: 6.2335, high24h: Math.max(item.high24h || 0, 6.26), low24h: Math.min(item.low24h || 6.23, 6.17), volume: '--' };
-            }
-            const dec = getAssetPriceDecimals(item.price, item.currency, item.category);
-            const bounds = normalizePriceBounds(item.price, item.high24h, item.low24h, dec);
+            const safePrice = typeof item.price === 'number' && Number.isFinite(item.price) && item.price > 0 ? item.price : 0;
+            const dec = getAssetPriceDecimals(safePrice, item.currency, item.category);
+            const bounds = normalizePriceBounds(safePrice, item.high24h, item.low24h, dec);
             return {
               ...item,
-              price: bounds.price > 0 ? bounds.price : item.price,
-              high24h: bounds.high > 0 ? bounds.high : item.high24h,
-              low24h: bounds.low > 0 ? bounds.low : item.low24h,
+              price: bounds.price > 0 ? bounds.price : safePrice,
+              high24h: bounds.high > 0 ? bounds.high : safePrice,
+              low24h: bounds.low > 0 ? bounds.low : safePrice,
               changeValue: roundToDecimals(item.changeValue || 0, dec),
               change24h: roundToDecimals(item.change24h || 0, 2),
               volume: item.category === 'forex' ? '--' : (item.volume && item.volume !== 'N/A' ? item.volume : '--'),
@@ -194,21 +187,19 @@ export const MarketProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     return INITIAL_ASSETS;
   });
   const [universalRates, setUniversalRates] = useState<UniversalRates>(() => {
-    if (typeof window === 'undefined') return DEFAULT_UNIVERSAL_RATES;
+    if (typeof window === 'undefined') return { USD: 1.0 };
     try {
-      const cached = localStorage.getItem('dinheuro_universal_rates');
+      const cached = localStorage.getItem(RATES_STORAGE_KEY);
       if (cached) {
         const parsed = JSON.parse(cached);
-        if (parsed && typeof parsed.BRL === 'number') {
-          if (parsed.BRL < 5.55 || Math.abs(parsed.BRL - 5.5122) < 0.01) parsed.BRL = 5.5840;
-          if (!parsed.EUR || parsed.EUR < 0.85 || parsed.EUR > 0.95) parsed.EUR = 0.8958;
-          return { ...DEFAULT_UNIVERSAL_RATES, ...parsed };
+        if (parsed && typeof parsed.BRL === 'number' && Number.isFinite(parsed.BRL) && parsed.BRL > 0) {
+          return { USD: 1.0, ...parsed };
         }
       }
     } catch {
       // fallback
     }
-    return DEFAULT_UNIVERSAL_RATES;
+    return { USD: 1.0 };
   });
   const [news, setNews] = useState<NewsItem[]>(INITIAL_NEWS);
   // Active Tab State with URL routing support
@@ -233,7 +224,27 @@ export const MarketProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   const [isLiveUpdating, setIsLiveUpdating] = useState<boolean>(true);
   const [isSyncing, setIsSyncing] = useState<boolean>(true);
   const [syncStatus, setSyncStatus] = useState<'syncing' | 'live' | 'offline'>('syncing');
-  const [lastUpdated, setLastUpdated] = useState<Date>(new Date());
+  const [lastUpdated, setLastUpdated] = useState<Date | null>(() => {
+    if (typeof window === 'undefined') return null;
+    try {
+      const savedTs = localStorage.getItem(LAST_SYNCED_STORAGE_KEY);
+      const cachedAssets = localStorage.getItem('dinheuro_live_assets_cache');
+      if (savedTs && cachedAssets) {
+        const parsedAssets = JSON.parse(cachedAssets);
+        const parsedDate = new Date(savedTs);
+        if (
+          Array.isArray(parsedAssets) &&
+          parsedAssets.some((a) => a.price > 0) &&
+          !Number.isNaN(parsedDate.getTime())
+        ) {
+          return parsedDate;
+        }
+      }
+    } catch {
+      // ignore
+    }
+    return null;
+  });
   const [displayCurrency, setDisplayCurrency] = useState<'BRL' | 'EUR' | 'USD'>('BRL');
   const [apiSourceSummary, setApiSourceSummary] = useState<string>('Bolsas Mundiais • Câmbio Interbancário • Criptoativos Globais');
 
@@ -391,13 +402,23 @@ export const MarketProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     setStoredFinnhubKey(key);
   }, []);
 
-  // Fetch live market data across all integrated APIs (Awesome API, Finnhub, BCE, Coinbase, CoinGecko)
+  // Fetch live market data across configured multi-source feeds
   const refreshData = useCallback(async () => {
     setIsSyncing(true);
     try {
       const snapshot = await fetchCompleteLiveMarketData(assetsRef.current);
-      if (snapshot.rates) {
-        setUniversalRates(snapshot.rates);
+      if (snapshot.rates && Object.keys(snapshot.rates).length > 1) {
+        setUniversalRates((prev) => {
+          const next = { ...prev, ...snapshot.rates };
+          if (typeof window !== 'undefined' && snapshot.hasLiveData) {
+            try {
+              localStorage.setItem(RATES_STORAGE_KEY, JSON.stringify(next));
+            } catch {
+              // ignore
+            }
+          }
+          return next;
+        });
       }
       if (snapshot.updatedAssets && snapshot.updatedAssets.length > 0) {
         setAssets(snapshot.updatedAssets);
@@ -408,8 +429,22 @@ export const MarketProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       if (snapshot.sourceSummary) {
         setApiSourceSummary(snapshot.sourceSummary);
       }
-      setLastUpdated(new Date());
-      setSyncStatus('live');
+      if (snapshot.hasLiveData && snapshot.syncedAt) {
+        const syncedDate = new Date(snapshot.syncedAt);
+        if (!Number.isNaN(syncedDate.getTime())) {
+          setLastUpdated(syncedDate);
+          if (typeof window !== 'undefined') {
+            try {
+              localStorage.setItem(LAST_SYNCED_STORAGE_KEY, syncedDate.toISOString());
+            } catch {
+              // ignore
+            }
+          }
+        }
+        setSyncStatus('live');
+      } else {
+        setSyncStatus('offline');
+      }
     } catch (err) {
       console.warn('[DinhEuro] Erro ao sincronizar mercado em tempo real:', err);
       setSyncStatus('offline');

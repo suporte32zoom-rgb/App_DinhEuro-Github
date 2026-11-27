@@ -158,7 +158,9 @@ test('APEC 2026 and ALADI 2026 editorial insights preserve prior items up to 12 
   );
   assert.ok(source.includes('export const MAX_DAILY_INSIGHTS = 12;'));
   const idMatches = source.match(/^\s+id:\s*'[^']+',/gm) || [];
-  assert.equal(idMatches.length, 14);
+  assert.equal(idMatches.length, 15);
+  assert.ok(source.includes("id: 'politica-fiscal-monetaria-brasil-equilibrio-credito-2026'"));
+  assert.ok(source.includes("imageUrl: '/assets/aistudio/image_3adf5ec5.png'"));
   assert.ok(source.includes("id: 'eua-tarifas-embraer-acucar-secao-301-2026'"));
   assert.ok(source.includes("imageUrl: '/assets/aistudio/image_100b355f.png'"));
   assert.ok(source.includes("id: 'pacote-fiscal-camara-dolar-divida-2026'"));
@@ -209,8 +211,9 @@ test('APEC 2026 and ALADI 2026 editorial insights preserve prior items up to 12 
   assert.ok(newsViewSource.includes('tNews.editorialCriteria.title'));
 
   const { NEWS_EDITORIAL_ARTICLES } = await import('../data/newsEditorialArticles.ts');
-  assert.equal(NEWS_EDITORIAL_ARTICLES.length, 11);
+  assert.equal(NEWS_EDITORIAL_ARTICLES.length, 12);
   const expectedNewsIds = [
+    'politica-fiscal-monetaria-brasil-equilibrio-credito-2026',
     'eua-tarifas-embraer-acucar-secao-301-2026',
     'pacote-fiscal-camara-dolar-divida-2026',
     'bcb-selic-focus-vs-bce-politica-monetaria-2026',
@@ -967,7 +970,32 @@ test('public/sitemap.xml lists strictly the active canonical routes from TAB_ROU
   }
 });
 
+test('static postbuild script, _redirects, and /guia-cambio-remessas canonical URL align with sitemap.xml', async () => {
+  const fs = await import('node:fs');
+  const path = await import('node:path');
+  const { syncRouteHeadMetadata } = await import('./seo.ts');
 
+  const redirectsContent = fs.readFileSync(
+    path.resolve(process.cwd(), 'public/_redirects'),
+    'utf8'
+  );
+  assert.equal(redirectsContent.trim(), '/* /index.html 200');
 
+  const postbuildScript = fs.readFileSync(
+    path.resolve(process.cwd(), 'scripts/postbuild-gh-pages.mjs'),
+    'utf8'
+  );
+  assert.ok(postbuildScript.includes("'guia-cambio-remessas'"));
+  assert.ok(postbuildScript.includes("'politica-monetaria-juros'"));
+  assert.ok(postbuildScript.includes("'graficos'"));
+  assert.ok(postbuildScript.includes("'noticias'"));
+  assert.ok(postbuildScript.includes("fs.copyFileSync(indexHtmlPath, path.join(distDir, '404.html'))"));
+  assert.ok(!postbuildScript.includes("'day-trade'"));
+  assert.ok(!postbuildScript.includes("'fluxo-tape-reading'"));
 
+  const guiaCanonical = buildCanonicalUrl('/guia-cambio-remessas/');
+  assert.equal(guiaCanonical, 'https://dinheuro.com/guia-cambio-remessas');
 
+  const metaResult = syncRouteHeadMetadata('guia_cambio', 'pt', undefined);
+  assert.equal(metaResult.canonicalUrl, 'https://dinheuro.com/guia-cambio-remessas');
+});

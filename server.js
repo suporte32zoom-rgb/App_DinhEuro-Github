@@ -1631,9 +1631,15 @@ async function startServer() {
     });
     app.use(vite.middlewares);
   } else {
+    const fs = await import("node:fs");
     const distPath = path.resolve(__dirname, "dist");
-    app.use(express.static(distPath));
-    app.get("*", (_req, res) => {
+    app.use(express.static(distPath, { redirect: false }));
+    app.get("*", (req, res) => {
+      const cleanPath = (req.path || "/").replace(/^\/+|\/+$/g, "");
+      const routeIndex = cleanPath ? path.resolve(distPath, cleanPath, "index.html") : "";
+      if (routeIndex && fs.existsSync(routeIndex)) {
+        return res.sendFile(routeIndex);
+      }
       res.sendFile(path.resolve(distPath, "index.html"));
     });
   }

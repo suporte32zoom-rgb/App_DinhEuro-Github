@@ -13,6 +13,113 @@ export interface NewsEditorialArticle extends DailyInsightItem {
 
 export const NEWS_EDITORIAL_ARTICLES: NewsEditorialArticle[] = [
   {
+    id: 'politica-fiscal-monetaria-brasil-equilibrio-credito-2026',
+    isoDate: '2026-11-26',
+    imageUrl: '/assets/aistudio/image_3adf5ec5.png',
+    categories: ['Macro & Bancos Centrais', 'Política & Fiscal', 'Macro & Câmbio', 'Mercados & B3'],
+    translations: {
+      pt: {
+        tag: 'Política Fiscal & Monetária',
+        title:
+          'Política fiscal e monetária no Brasil: o equilíbrio entre ancoragem das expectativas e custo do crédito',
+        summary:
+          'A recalibração das expectativas sobre as taxas de juros nas principais economias desenvolvidas e o comportamento dos títulos soberanos continuam ditando o apetite global ao risco e os fluxos para mercados emergentes.',
+        dateAuthor: '26/11/2026 • Redação DinhEuro',
+        source:
+          'Fontes de referência: Banco Central do Brasil (Copom e Relatório de Mercado), Tesouro Nacional e mercados globais de títulos soberanos',
+        readingTime: '6 min',
+        keywords: [
+          'politica fiscal e monetaria brasil',
+          'ancoragem das expectativas selic',
+          'curva de juros futuros custo do credito',
+          'inflacao de servicos metas fiscais',
+          'mercados globais titulos soberanos',
+        ],
+        imageAlt:
+          'Balança dourada em equilíbrio sobre mesa institucional com documentos econômicos, representando a coordenação entre política fiscal e monetária no Brasil',
+        fullContent: [
+          'A condução da política fiscal e a trajetória da taxa básica de juros seguem como os principais vetores de formação de preços na curva de juros doméstica e na tomada de decisão de famílias e empresas. No Brasil, a leitura macroeconômica passa diariamente pela interação entre a disciplina fiscal e a política monetária conduzida pelo Banco Central.',
+          'A forma como o mercado percebe a trajetória da dívida pública, a execução orçamentária e o cumprimento de metas fiscais influencia diretamente a inclinação da curva de juros futuros — um termômetro central para o custo do crédito, para o desconto de fluxos de caixa empresariais e para a atratividade da renda fixa local.',
+          '## Previsibilidade fiscal, prêmio de risco e ancoragem das expectativas',
+          'Quando há maior previsibilidade na gestão das contas públicas e coerência na comunicação econômica, diminui o prêmio de risco exigido pelos investidores, abrindo espaço para uma leitura mais construtiva sobre inflação e juros no horizonte relevante. Em um ambiente de credibilidade fiscal, o Banco Central obtém maior tração na ancoragem das expectativas inflacionárias sem precisar sustentar condições financeiras excessivamente restritivas por períodos prolongados.',
+          'Por outro lado, dúvidas sobre sustentabilidade fiscal ou pressões em componentes de preços tendem a manter a curva pressionada e a exigir maior seletividade na carteira. Nessas fases, os vértices intermediários e longos dos contratos futuros de Depósito Interfinanceiro (DI) incorporam prêmios adicionais de incerteza, encarecendo o refinanciamento de companhias abertas, restringindo linhas de crédito bancário de médio prazo e postergando decisões de investimento produtivo na economia real.',
+          '## O que observar e impacto prático na alocação',
+          'O que observar: Comunicação oficial sobre metas fiscais, dinâmica da inflação de serviços e expectativas e precificação na curva de juros futuros. Enquanto preços monitorados e bens industriais costumam responder com maior rapidez ao câmbio e às commodities, a inflação de serviços reflete com mais intensidade o mercado de trabalho aquecido, os reajustes salariais e o grau de inércia da economia doméstica.',
+          'Impacto prático: Custo de capital das empresas, retorno real na renda fixa e sensibilidade de ações domésticas aos juros. Companhias dos setores de varejo, construção civil, concessões e tecnologia listadas na B3 apresentam elevada sensibilidade às taxas longas reais, uma vez que juros de desconto mais altos reduzem o valor presente de lucros futuros. Na renda fixa, títulos indexados à inflação e papéis pós-fixados passam a exigir avaliação criteriosa de duration, liquidez e qualidade de crédito emissor.',
+          '## Mercados globais: juros centrais, rendimentos de títulos soberanos e apetite ao risco',
+          'A recalibração das expectativas sobre as taxas de juros nas principais economias desenvolvidas e o comportamento dos títulos soberanos continuam ditando o apetite global ao risco e os fluxos para mercados emergentes. Oscilações nos rendimentos dos títulos do Tesouro dos Estados Unidos e da dívida soberana europeia alteram imediatamente o diferencial de juros internacional e o custo de oportunidade do capital global.',
+          'Quando os rendimentos soberanos nas economias centrais recuam de forma ordenada, abre-se espaço para maior alocação em moedas e bolsas emergentes, aliviando pressões sobre o real e sobre o dólar comercial. Em contrapartida, revisões altistas para as taxas externas reforçam a busca por ativos defensivos em dólar e euro, exigindo dos países emergentes fundamentos fiscais ainda mais sólidos para preservar estabilidade cambial e acesso competitivo a financiamento internacional.',
+        ],
+      },
+      en: {
+        tag: 'Fiscal & Monetary Policy',
+        title:
+          'Fiscal and Monetary Policy in Brazil: Balancing Anchored Expectations and Credit Costs',
+        summary:
+          'The recalibration of interest-rate expectations across major developed economies and sovereign bond yield dynamics continue to dictate global risk appetite and capital flows into emerging markets.',
+        dateAuthor: 'Nov 26, 2026 • DinhEuro Editorial',
+        source:
+          'Reference sources: Central Bank of Brazil (Copom and Market Readout), National Treasury, and global sovereign bond markets',
+        readingTime: '6 min read',
+        keywords: [
+          'brazil fiscal and monetary policy',
+          'anchoring expectations selic rate',
+          'yield curve cost of credit',
+          'services inflation fiscal targets',
+          'global sovereign bond yields risk appetite',
+        ],
+        imageAlt:
+          'Balanced brass scale resting on an institutional table with financial briefs, representing the equilibrium between fiscal and monetary policy in Brazil',
+        fullContent: [
+          'The conduct of fiscal policy and the trajectory of the benchmark interest rate remain the primary drivers of price formation along Brazil’s domestic yield curve and decision-making for both households and corporations. In Brazil, daily macroeconomic pricing is shaped continuously by the interaction between fiscal discipline and monetary policy conducted by the Central Bank.',
+          'How financial markets assess public debt dynamics, federal budget execution, and compliance with fiscal targets directly shapes the slope of the interest-rate futures curve—a central barometer for bank credit costs, corporate cash-flow discounting, and the relative attractiveness of local fixed-income instruments.',
+          '## Fiscal predictability, risk premia, and expectation anchoring',
+          'When public finances show greater predictability and economic communication remains coherent, the risk premium demanded by institutional investors narrows, creating room for a more constructive outlook on inflation and interest rates over the relevant policy horizon. Under credible fiscal anchoring, the Central Bank achieves stronger transmission in stabilizing inflation expectations without having to maintain overly restrictive financial conditions for extended cycles.',
+          'Conversely, doubts regarding long-term fiscal sustainability or persistent pressures across price sub-indices keep the forward yield curve elevated and require heightened portfolio selectivity. During those episodes, intermediate and long-dated interbank futures contracts price in extra uncertainty premia, raising corporate refinancing expenses, tightening medium-term credit supply, and delaying capital expenditure across the real economy.',
+          '## What to watch and practical portfolio impact',
+          'What to watch: official communication regarding fiscal targets, services inflation momentum, and forward yield-curve expectations and pricing. While regulated prices and tradable goods react faster to exchange-rate shifts and global commodities, services inflation closely mirrors labor-market tightness, wage indexing, and domestic demand resilience.',
+          'Practical impact: corporate cost of capital, real returns in fixed income, and the interest-rate sensitivity of domestic equities. Brazilian B3-listed companies across retail, homebuilding, infrastructure concessions, and growth technology exhibit pronounced sensitivity to real long-term yields because higher discount rates compress the present value of future earnings. Within fixed income, inflation-linked sovereign notes and floating-rate securities demand disciplined evaluation of duration, liquidity, and issuer credit quality.',
+          '## Global markets: core central-bank rates, sovereign yields, and risk appetite',
+          'The recalibration of interest-rate expectations across major developed economies and sovereign bond yield dynamics continue to dictate global risk appetite and capital flows into emerging markets. Swings in U.S. Treasury yields and core European sovereign benchmarks rapidly reshape cross-border interest-rate differentials and the opportunity cost of global capital.',
+          'When sovereign yields in developed markets ease in an orderly fashion, international investors expand allocations toward emerging-market currencies and equities, relieving pressure on the Brazilian real and commercial exchange rates. By contrast, upward repricing of external policy paths reinforces defensive flows into U.S. dollar and euro assets, requiring emerging economies to uphold even stronger fiscal fundamentals to safeguard currency stability and competitive access to international funding.',
+        ],
+      },
+      es: {
+        tag: 'Política Fiscal y Monetaria',
+        title:
+          'Política fiscal y monetaria en Brasil: el equilibrio entre anclaje de expectativas y costo del crédito',
+        summary:
+          'La recalibración de expectativas sobre tasas de interés en las principales economías desarrolladas y el comportamiento de los bonos soberanos siguen dictando el apetito global por riesgo y los flujos hacia mercados emergentes.',
+        dateAuthor: '26/11/2026 • Redacción DinhEuro',
+        source:
+          'Fuentes de referencia: Banco Central de Brasil (Copom e Informe de Mercado), Tesoro Nacional y mercados globales de deuda soberana',
+        readingTime: '6 min',
+        keywords: [
+          'politica fiscal y monetaria brasil',
+          'anclaje expectativas tasa selic',
+          'curva de tasas costo del credito',
+          'inflacion de servicios metas fiscales',
+          'mercados globales bonos soberanos',
+        ],
+        imageAlt:
+          'Balanza dorada equilibrada sobre mesa institucional con documentos financieros, simbolizando la coordinación entre política fiscal y monetaria en Brasil',
+        fullContent: [
+          'La conducción de la política fiscal y la trayectoria de la tasa básica de interés continúan siendo los principales vectores en la formación de precios de la curva de tasas doméstica y en la toma de decisiones de familias y empresas. En Brasil, la lectura macroeconómica pasa diariamente por la interacción entre la disciplina fiscal y la política monetaria ejecutada por el Banco Central.',
+          'La percepción del mercado sobre la evolución de la deuda pública, la ejecución presupuestaria y el cumplimiento de metas fiscales influye de manera directa en la pendiente de la curva de tasas futuras, un termómetro central para el costo del crédito, el descuento de flujos de caja empresariales y el atractivo de la renta fija local.',
+          '## Previsibilidad fiscal, prima de riesgo y anclaje de expectativas',
+          'Cuando existe mayor previsibilidad en la gestión de las cuentas públicas y coherencia en la comunicación económica, disminuye la prima de riesgo exigida por los inversores, abriendo espacio para una lectura más constructiva sobre inflación y tasas de interés en el horizonte relevante. Con anclaje fiscal creíble, el Banco Central logra mayor eficacia para estabilizar expectativas sin sostener condiciones financieras restrictivas en exceso.',
+          'Por otro lado, las dudas sobre la sostenibilidad fiscal o presiones persistentes en distintos componentes de precios tienden a mantener la curva tensionada y a exigir mayor selectividad en las carteras. En esos escenarios, los tramos intermedios y largos de los contratos futuros incorporan primas adicionales de incertidumbre, encareciendo la refinanciación corporativa, moderando el crédito bancario y postergando proyectos de inversión productiva.',
+          '## Qué observar e impacto práctico en la cartera',
+          'Qué observar: comunicación oficial sobre metas fiscales, dinámica de la inflación de servicios y expectativas y precios en la curva de tasas futuras. Mientras los precios regulados y bienes industriales responden más rápido al tipo de cambio y las materias primas, la inflación de servicios refleja con mayor intensidad la dinámica salarial, el empleo y la inercia de la demanda interna.',
+          'Impacto práctico: costo de capital de las empresas, retorno real en renta fija y sensibilidad de las acciones domésticas a las tasas de interés. Compañías de comercio minorista, construcción, concesiones e innovación tecnológica listadas en B3 muestran alta sensibilidad a las tasas reales de largo plazo, ya que tasas de descuento más altas reducen el valor presente de sus utilidades futuras. En renta fija, los bonos indexados a la inflación y los instrumentos posfijados requieren evaluar con rigor duración, liquidez y calidad crediticia.',
+          '## Mercados globales: tasas centrales, bonos soberanos y apetito por riesgo',
+          'La recalibración de expectativas sobre las tasas de interés en las principales economías desarrolladas y el comportamiento de los títulos soberanos siguen dictando el apetito global por riesgo y los flujos hacia mercados emergentes. Las oscilaciones en los rendimientos del Tesoro estadounidense y de la deuda soberana europea modifican de inmediato el diferencial internacional de tasas y el costo de oportunidad del capital.',
+          'Cuando los rendimientos soberanos en las economías centrales retroceden de forma ordenada, se amplía el margen para asignaciones hacia divisas y bolsas emergentes, aliviando presiones sobre el real brasileño y el tipo de cambio comercial. Por el contrario, revisiones alcistas de tasas externas fortalecen la búsqueda de activos defensivos en dólares y euros, exigiendo fundamentos fiscales sólidos en los países emergentes para preservar estabilidad cambiaria y financiamiento competitivo.',
+        ],
+      },
+    },
+  },
+  {
     id: 'eua-tarifas-embraer-acucar-secao-301-2026',
     isoDate: '2026-11-25',
     imageUrl: '/assets/aistudio/image_100b355f.png',
