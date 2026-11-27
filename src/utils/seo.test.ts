@@ -934,9 +934,10 @@ test('About DinhEuro page highlights EU-Mercosur global vision, LGPD & non-advis
   );
 });
 
-test('public/sitemap.xml lists strictly the active canonical routes from TAB_ROUTE_MAP with valid lastmod dates and no redirect/error paths', async () => {
+test('public/sitemap.xml lists strictly the active canonical routes from TAB_ROUTE_MAP and dedicated /noticias/:slug pages with valid lastmod dates and no redirect/error paths', async () => {
   const fs = await import('node:fs');
   const path = await import('node:path');
+  const { PUBLISHED_ARTICLE_SLUGS } = await import('../data/newsArticleDirectory.ts');
 
   const sitemapXml = fs.readFileSync(
     path.resolve(process.cwd(), 'public/sitemap.xml'),
@@ -946,9 +947,10 @@ test('public/sitemap.xml lists strictly the active canonical routes from TAB_ROU
   const locs = [...sitemapXml.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1]);
   const lastmods = [...sitemapXml.matchAll(/<lastmod>([^<]+)<\/lastmod>/g)].map((m) => m[1]);
 
-  const expectedCanonicalUrls = Object.values(TAB_ROUTE_MAP)
-    .map((route) => buildCanonicalUrl(route))
-    .sort();
+  const expectedCanonicalUrls = [
+    ...Object.values(TAB_ROUTE_MAP).map((route) => buildCanonicalUrl(route)),
+    ...PUBLISHED_ARTICLE_SLUGS.map((slug) => buildCanonicalUrl(`/noticias/${slug}`)),
+  ].sort();
 
   assert.equal(locs.length, expectedCanonicalUrls.length);
   assert.equal(lastmods.length, expectedCanonicalUrls.length);
@@ -1001,4 +1003,82 @@ test('static postbuild script, _redirects, and /guia-cambio-remessas canonical U
 
   const metaResult = syncRouteHeadMetadata('guia_cambio', 'pt', undefined);
   assert.equal(metaResult.canonicalUrl, 'https://dinheuro.com/guia-cambio-remessas');
+});
+
+test('dedicated /noticias/:slug article pages replace modal triggers with full-page routing, FAQs, related articles, and SEO metadata', async () => {
+  const fs = await import('node:fs');
+  const path = await import('node:path');
+  const {
+    PUBLISHED_ARTICLES,
+    getPublishedArticleBySlug,
+    getRelatedArticles,
+    getArticleFaqs,
+  } = await import('../data/newsArticleDirectory.ts');
+  const { extractNewsArticleSlug } = await import('../context/MarketContext.tsx');
+  const { syncArticleHeadMetadata } = await import('./seo.ts');
+
+  assert.equal(PUBLISHED_ARTICLES.length, 20);
+  assert.equal(
+    extractNewsArticleSlug('/noticias/luiz-trabuco-novo-ministro-fazenda-lula-4-2026/'),
+    'luiz-trabuco-novo-ministro-fazenda-lula-4-2026'
+  );
+  assert.equal(
+    extractNewsArticleSlug('/noticias/nvidia-retorno-jensen-huang-ceo-2026'),
+    'nvidia-retorno-jensen-huang-ceo-2026'
+  );
+  assert.equal(extractNewsArticleSlug('/noticias'), null);
+  assert.equal(extractNewsArticleSlug('/noticias/slug-inexistente'), null);
+
+  const forbiddenTerms =
+    /\b(finnhub|awesomeapi|coingecko|brapi|yahoo\s*finance|vite|github|cloudflare|recharts|workbox|localstorage)\b/i;
+
+  for (const article of PUBLISHED_ARTICLES) {
+    assert.equal(getPublishedArticleBySlug(article.id)?.id, article.id);
+    const related = getRelatedArticles(article.id, 'pt', 3);
+    assert.equal(related.length, 3);
+    assert.ok(related.every((rel) => rel.id !== article.id));
+
+    for (const lang of ['pt', 'en', 'es'] as const) {
+      const faqs = getArticleFaqs(article, lang);
+      assert.equal(faqs.length, 4, `Article ${article.id} (${lang}) should have 4 FAQ items`);
+      for (const faq of faqs) {
+        assert.ok(faq.question.length >= 15);
+        assert.ok(faq.answer.length >= 50);
+        assert.ok(!forbiddenTerms.test(`${faq.question} ${faq.answer}`));
+      }
+    }
+  }
+
+  const sampleArticle = getPublishedArticleBySlug('luiz-trabuco-novo-ministro-fazenda-lula-4-2026');
+  assert.ok(sampleArticle);
+  const articleSeo = syncArticleHeadMetadata(sampleArticle, 'pt', undefined);
+  assert.equal(
+    articleSeo.canonicalUrl,
+    'https://dinheuro.com/noticias/luiz-trabuco-novo-ministro-fazenda-lula-4-2026'
+  );
+  assert.ok(articleSeo.title.includes(sampleArticle.translations.pt.title));
+
+  const sidebarSource = fs.readFileSync(
+    path.resolve(process.cwd(), 'src/components/DailyInsightsSidebar.tsx'),
+    'utf8'
+  );
+  assert.ok(!sidebarSource.includes('EditorialInsightModal'));
+  assert.ok(sidebarSource.includes('openArticle('));
+
+  const newsViewSource = fs.readFileSync(
+    path.resolve(process.cwd(), 'src/views/NewsView.tsx'),
+    'utf8'
+  );
+  assert.ok(!newsViewSource.includes('EditorialInsightModal'));
+  assert.ok(newsViewSource.includes('openArticle('));
+
+  const detailViewSource = fs.readFileSync(
+    path.resolve(process.cwd(), 'src/views/NewsArticleDetailView.tsx'),
+    'utf8'
+  );
+  assert.ok(detailViewSource.includes('Voltar para Notícias e Macros'));
+  assert.ok(detailViewSource.includes('Perguntas Frequentes (FAQ)'));
+  assert.ok(detailViewSource.includes('Assuntos e Notícias Relacionadas'));
+  assert.ok(detailViewSource.includes('tNews.editorialCriteria'));
+  assert.ok(!forbiddenTerms.test(detailViewSource));
 });

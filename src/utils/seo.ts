@@ -1,5 +1,6 @@
 import { TAB_ROUTE_MAP, type NavigationTab } from '../context/MarketContext';
 import type { SupportedLanguage } from '../i18n/translations';
+import type { DailyInsightItem } from '../data/dailyInsights';
 
 export const CANONICAL_ORIGIN = 'https://dinheuro.com';
 export const GA_MEASUREMENT_ID = 'G-XS3S97LWQC';
@@ -912,6 +913,56 @@ export function syncRouteHeadMetadata(
   upsertMetaTag(doc, 'name', 'twitter:description', entry.description);
   upsertMetaTag(doc, 'name', 'twitter:url', canonicalUrl);
   upsertMetaTag(doc, 'name', 'twitter:image', `${CANONICAL_ORIGIN}/logo.png`);
+
+  const { organizationSchema, websiteSchema, financialServiceSchema } =
+    buildStructuredDataSchemas(lang);
+  upsertJsonLdScript(doc, 'organization', organizationSchema);
+  upsertJsonLdScript(doc, 'website', websiteSchema);
+  upsertJsonLdScript(doc, 'financial-service', financialServiceSchema);
+
+  return { ...entry, canonicalUrl };
+}
+
+export function syncArticleHeadMetadata(
+  article: DailyInsightItem,
+  lang: SupportedLanguage = 'pt',
+  doc: Document | undefined = typeof document !== 'undefined' ? document : undefined
+): RouteSeoEntry & { canonicalUrl: string } {
+  const routePath = `/noticias/${article.id}`;
+  const canonicalUrl = syncCanonicalLink(routePath, doc);
+  syncHreflangLinks(routePath, doc);
+
+  const loc = article.translations[lang] || article.translations.pt;
+  const entry: RouteSeoEntry = {
+    title: `${loc.title} | DinhEuro`,
+    description: loc.summary,
+    keywords: (loc.keywords && loc.keywords.length > 0 ? loc.keywords : [loc.tag, 'DinhEuro']).join(', '),
+  };
+
+  if (!doc || !doc.head) {
+    return { ...entry, canonicalUrl };
+  }
+
+  const imageUrl = resolveAbsoluteImageUrl(article.imageUrl);
+
+  doc.title = entry.title;
+
+  upsertMetaTag(doc, 'name', 'description', entry.description);
+  upsertMetaTag(doc, 'name', 'keywords', entry.keywords);
+
+  upsertMetaTag(doc, 'property', 'og:type', 'article');
+  upsertMetaTag(doc, 'property', 'og:site_name', 'DinhEuro');
+  upsertMetaTag(doc, 'property', 'og:locale', OG_LOCALE_MAP[lang]);
+  upsertMetaTag(doc, 'property', 'og:title', entry.title);
+  upsertMetaTag(doc, 'property', 'og:description', entry.description);
+  upsertMetaTag(doc, 'property', 'og:url', canonicalUrl);
+  upsertMetaTag(doc, 'property', 'og:image', imageUrl);
+
+  upsertMetaTag(doc, 'name', 'twitter:card', 'summary_large_image');
+  upsertMetaTag(doc, 'name', 'twitter:title', entry.title);
+  upsertMetaTag(doc, 'name', 'twitter:description', entry.description);
+  upsertMetaTag(doc, 'name', 'twitter:url', canonicalUrl);
+  upsertMetaTag(doc, 'name', 'twitter:image', imageUrl);
 
   const { organizationSchema, websiteSchema, financialServiceSchema } =
     buildStructuredDataSchemas(lang);

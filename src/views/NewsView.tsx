@@ -13,12 +13,11 @@ import { useMarket } from '../context/MarketContext';
 import { useI18n } from '../i18n/I18nContext';
 import type { SupportedLanguage } from '../i18n/translations';
 import { VIEWS_TRANSLATIONS } from '../i18n/viewsTranslations';
-import { DAILY_INSIGHTS_UI_COPY, type DailyInsightItem } from '../data/dailyInsights';
+import { DAILY_INSIGHTS_UI_COPY } from '../data/dailyInsights';
 import {
   NEWS_EDITORIAL_ARTICLES,
   type NewsEditorialCategory,
 } from '../data/newsEditorialArticles';
-import { EditorialInsightModal } from '../components/EditorialInsightModal';
 import { toInsightSchemaInput } from '../components/DailyInsightsSidebar';
 import {
   getInstitutionalDossiersSchemaInputs,
@@ -85,14 +84,13 @@ const FEATURED_FISCAL_EDITORIAL_NOTE: Record<
 };
 
 export const NewsView: React.FC = () => {
-  const { refreshData } = useMarket();
+  const { refreshData, openArticle } = useMarket();
   const { lang } = useI18n();
   const tNews = VIEWS_TRANSLATIONS[lang].news;
   const insightsCopy = DAILY_INSIGHTS_UI_COPY[lang];
   const [filterCategory, setFilterCategory] = useState<string>('all');
   const [newsSearch, setNewsSearch] = useState<string>('');
   const [isRefreshing, setIsRefreshing] = useState(false);
-  const [selectedEditorial, setSelectedEditorial] = useState<DailyInsightItem | null>(null);
 
   const categories = [
     { id: 'all', label: tNews.allNews },
@@ -130,14 +128,11 @@ export const NewsView: React.FC = () => {
 
   useEffect(() => {
     const editorialSchemas = filteredEditorialArticles.map((item) =>
-      toInsightSchemaInput(item, lang, '/noticias#insight-')
+      toInsightSchemaInput(item, lang, '/noticias/')
     );
     const dossierSchemas = getInstitutionalDossiersSchemaInputs(lang);
-    const focused = selectedEditorial
-      ? toInsightSchemaInput(selectedEditorial, lang, '/noticias#insight-')
-      : null;
-    syncEditorialArticlesSchema(lang, [...editorialSchemas, ...dossierSchemas], focused);
-  }, [filteredEditorialArticles, lang, selectedEditorial]);
+    syncEditorialArticlesSchema(lang, [...editorialSchemas, ...dossierSchemas], null);
+  }, [filteredEditorialArticles, lang]);
 
   const handleManualRefresh = async () => {
     setIsRefreshing(true);
@@ -303,7 +298,7 @@ export const NewsView: React.FC = () => {
             return (
               <article
                 key={editorial.id}
-                onClick={() => setSelectedEditorial(editorial)}
+                onClick={() => openArticle(editorial.id)}
                 className="rounded-2xl bg-[#FFFFFF] dark:bg-[#0d1627] border border-[#E2E8F0] dark:border-slate-800 hover:border-[#003399]/40 dark:hover:border-emerald-500/40 overflow-hidden shadow-xl transition flex flex-col justify-between group cursor-pointer"
               >
                 {/* Capa institucional com object-cover */}
@@ -355,18 +350,19 @@ export const NewsView: React.FC = () => {
                       </span>
                     </div>
 
-                    <button
-                      type="button"
+                    <a
+                      href={`/noticias/${editorial.id}`}
                       data-on-dark="true"
                       onClick={(e) => {
+                        e.preventDefault();
                         e.stopPropagation();
-                        setSelectedEditorial(editorial);
+                        openArticle(editorial.id);
                       }}
                       className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#003399] hover:bg-[#002266] dark:bg-gradient-to-r dark:from-emerald-600 dark:to-teal-600 dark:hover:from-emerald-500 dark:hover:to-teal-500 text-xs font-bold text-white shadow-sm transition active:scale-95 cursor-pointer flex-shrink-0"
                     >
                       <span>{insightsCopy.readMoreLabel}</span>
                       <BookOpen className="w-3.5 h-3.5" />
-                    </button>
+                    </a>
                   </div>
                 </div>
               </article>
@@ -434,13 +430,6 @@ export const NewsView: React.FC = () => {
           {tNews.editorialCriteria.disclaimer}
         </div>
       </section>
-
-      {/* Modal de Leitura do Artigo Editorial */}
-      <EditorialInsightModal
-        item={selectedEditorial}
-        lang={lang}
-        onClose={() => setSelectedEditorial(null)}
-      />
     </div>
   );
 };

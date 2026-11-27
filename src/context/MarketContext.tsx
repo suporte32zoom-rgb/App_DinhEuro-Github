@@ -17,6 +17,20 @@ import {
   MarketSentimentResult,
 } from '../utils/finance';
 import { normalizePriceBounds } from '../utils/marketParsing';
+import { getPublishedArticleBySlug } from '../data/newsArticleDirectory';
+
+export function extractNewsArticleSlug(pathname: string): string | null {
+  const normalized = normalizeRoutePath(pathname);
+  if (!normalized.startsWith('/noticias/')) return null;
+  const rawSlug = normalized.slice('/noticias/'.length).split('/')[0];
+  if (!rawSlug) return null;
+  try {
+    const decoded = decodeURIComponent(rawSlug).trim();
+    return getPublishedArticleBySlug(decoded)?.id ?? null;
+  } catch {
+    return getPublishedArticleBySlug(rawSlug)?.id ?? null;
+  }
+}
 
 export interface PortfolioPosition {
   id: string;
@@ -120,6 +134,8 @@ interface MarketContextType {
   news: NewsItem[];
   activeTab: NavigationTab;
   setActiveTab: (tab: NavigationTab) => void;
+  activeArticleSlug: string | null;
+  openArticle: (slug: string) => void;
   selectedMarketCategory: MarketCategoryFilter;
   setSelectedMarketCategory: (category: MarketCategoryFilter) => void;
   selectedAcademyTarget: { courseId: string; moduleIndex?: number } | null;
@@ -202,10 +218,18 @@ export const MarketProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     return { USD: 1.0 };
   });
   const [news, setNews] = useState<NewsItem[]>(INITIAL_NEWS);
-  // Active Tab State with URL routing support
+  // Active Tab & Article Slug State with URL routing support
+  const [activeArticleSlug, setActiveArticleSlug] = useState<string | null>(() => {
+    if (typeof window === 'undefined') return null;
+    return extractNewsArticleSlug(window.location.pathname);
+  });
+
   const [activeTab, setActiveTabState] = useState<NavigationTab>(() => {
     if (typeof window === 'undefined') return 'dashboard';
     const path = normalizeRoutePath(window.location.pathname);
+    if (extractNewsArticleSlug(path) || path.startsWith('/noticias/')) {
+      return 'noticias';
+    }
     if (ROUTE_TAB_MAP[path]) {
       return ROUTE_TAB_MAP[path];
     }
@@ -304,7 +328,10 @@ export const MarketProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 
   // Dynamically synchronize <link rel="canonical"> in <head> and redirect legacy paths whenever route changes
   useEffect(() => {
-    const routePath = TAB_ROUTE_MAP[activeTab] || '/';
+    const routePath =
+      activeTab === 'noticias' && activeArticleSlug
+        ? `/noticias/${activeArticleSlug}`
+        : TAB_ROUTE_MAP[activeTab] || '/';
     syncCanonicalLink(routePath);
     if (typeof window !== 'undefined') {
       const currentPath = normalizeRoutePath(window.location.pathname);
@@ -317,7 +344,7 @@ export const MarketProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         }
       }
     }
-  }, [activeTab]);
+  }, [activeTab, activeArticleSlug]);
 
   // Listen to popstate for browser back/forward buttons
   useEffect(() => {
@@ -331,8 +358,20 @@ export const MarketProvider: React.FC<{ children: React.ReactNode }> = ({ childr
           // ignore
         }
       }
+      const matchedArticleSlug = extractNewsArticleSlug(path);
+      if (matchedArticleSlug) {
+        setActiveTabState('noticias');
+        setActiveArticleSlug(matchedArticleSlug);
+        return;
+      }
+      if (path.startsWith('/noticias/')) {
+        setActiveTabState('noticias');
+        setActiveArticleSlug(null);
+        return;
+      }
       if (ROUTE_TAB_MAP[path]) {
         setActiveTabState(ROUTE_TAB_MAP[path]);
+        setActiveArticleSlug(null);
       } else {
         const hash = normalizeRoutePath('/' + window.location.hash.replace('#', ''));
         if (hash && ROUTE_TAB_MAP[hash]) {
@@ -345,6 +384,7 @@ export const MarketProvider: React.FC<{ children: React.ReactNode }> = ({ childr
             }
           }
           setActiveTabState(ROUTE_TAB_MAP[hash]);
+          setActiveArticleSlug(null);
         }
       }
     };
@@ -354,6 +394,7 @@ export const MarketProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   }, []);
 
   const setActiveTab = useCallback((tab: NavigationTab) => {
+    setActiveArticleSlug(null);
     setActiveTabState(tab);
     if (typeof window !== 'undefined') {
       const targetRoute = TAB_ROUTE_MAP[tab] || '/';
@@ -365,7 +406,28 @@ export const MarketProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         }
       }
     }
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    if (typeof window !== 'undefined') {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }, []);
+
+  const openArticle = useCallback((slug: string) => {
+    const matched = getPublishedArticleBySlug(slug);
+    const resolvedSlug = matched?.id ?? slug.trim();
+    if (!resolvedSlug) return;
+    setActiveTabState('noticias');
+    setActiveArticleSlug(resolvedSlug);
+    if (typeof window !== 'undefined') {
+      const targetRoute = `/noticias/${resolvedSlug}`;
+      if (normalizeRoutePath(window.location.pathname) !== targetRoute || window.location.pathname !== targetRoute) {
+        try {
+          window.history.pushState(null, '', targetRoute);
+        } catch {
+          // ignore in environments with restricted history
+        }
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
   }, []);
 
   const openAcademyCourse = useCallback(
@@ -479,6 +541,8 @@ export const MarketProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         news,
         activeTab,
         setActiveTab,
+        activeArticleSlug,
+        openArticle,
         selectedMarketCategory,
         setSelectedMarketCategory,
         selectedAcademyTarget,

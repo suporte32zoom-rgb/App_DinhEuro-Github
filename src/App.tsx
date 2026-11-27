@@ -6,7 +6,12 @@
 import React, { useEffect, useRef } from 'react';
 import { MarketProvider, TAB_ROUTE_MAP, useMarket } from './context/MarketContext';
 import { I18nProvider, useI18n } from './i18n/I18nContext';
-import { syncRouteHeadMetadata, trackAnalyticsPageView } from './utils/seo';
+import { getPublishedArticleBySlug } from './data/newsArticleDirectory';
+import {
+  syncArticleHeadMetadata,
+  syncRouteHeadMetadata,
+  trackAnalyticsPageView,
+} from './utils/seo';
 import { Header } from './components/Header';
 import { TickerTape } from './components/TickerTape';
 import { Footer } from './components/Footer';
@@ -21,6 +26,7 @@ import { FxRemittanceGuideView } from './views/FxRemittanceGuideView';
 import { MonetaryPolicyView } from './views/MonetaryPolicyView';
 import { FixedIncomeDerivativesView } from './views/FixedIncomeDerivativesView';
 import { NewsView } from './views/NewsView';
+import { NewsArticleDetailView } from './views/NewsArticleDetailView';
 import { BrokersView } from './views/BrokersView';
 import { AdvancedChartsView } from './views/AdvancedChartsView';
 import { ToolsView } from './views/ToolsView';
@@ -33,7 +39,7 @@ import { DisclaimerView } from './views/DisclaimerView';
 import { LgpdConsentBanner } from './components/LgpdConsentBanner';
 
 const MainContent: React.FC = () => {
-  const { activeTab } = useMarket();
+  const { activeTab, activeArticleSlug } = useMarket();
 
   return (
     <main className="max-w-7xl mx-auto px-3 sm:px-6 pt-5 sm:pt-6 flex-1 w-full">
@@ -44,7 +50,12 @@ const MainContent: React.FC = () => {
         {activeTab === 'guia_cambio' && <FxRemittanceGuideView />}
         {activeTab === 'politica_monetaria' && <MonetaryPolicyView />}
         {activeTab === 'renda_fixa' && <FixedIncomeDerivativesView />}
-        {activeTab === 'noticias' && <NewsView />}
+        {activeTab === 'noticias' &&
+          (activeArticleSlug ? (
+            <NewsArticleDetailView slug={activeArticleSlug} />
+          ) : (
+            <NewsView />
+          ))}
         {activeTab === 'corretoras' && <BrokersView />}
         {activeTab === 'graficos' && <AdvancedChartsView />}
         {activeTab === 'ferramentas' && <ToolsView />}
@@ -60,14 +71,24 @@ const MainContent: React.FC = () => {
 };
 
 const AppShell: React.FC = () => {
-  const { theme, activeTab } = useMarket();
+  const { theme, activeTab, activeArticleSlug } = useMarket();
   const { lang } = useI18n();
 
   const lastTrackedRouteRef = useRef<string | null>(null);
 
   useEffect(() => {
-    const seoMeta = syncRouteHeadMetadata(activeTab, lang);
-    const routePath = TAB_ROUTE_MAP[activeTab] || '/';
+    const activeArticle =
+      activeTab === 'noticias' && activeArticleSlug
+        ? getPublishedArticleBySlug(activeArticleSlug)
+        : null;
+
+    const seoMeta = activeArticle
+      ? syncArticleHeadMetadata(activeArticle, lang)
+      : syncRouteHeadMetadata(activeTab, lang);
+    const routePath = activeArticle
+      ? `/noticias/${activeArticle.id}`
+      : TAB_ROUTE_MAP[activeTab] || '/';
+
     if (lastTrackedRouteRef.current === null) {
       lastTrackedRouteRef.current = routePath;
       return;
@@ -76,7 +97,7 @@ const AppShell: React.FC = () => {
       lastTrackedRouteRef.current = routePath;
       trackAnalyticsPageView(routePath, seoMeta.title, seoMeta.canonicalUrl);
     }
-  }, [activeTab, lang]);
+  }, [activeTab, activeArticleSlug, lang]);
 
   // Quando o React montar a interface no DOM com sucesso, dissolve o splash screen suavemente
   useEffect(() => {
