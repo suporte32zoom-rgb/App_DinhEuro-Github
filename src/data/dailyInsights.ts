@@ -60,6 +60,94 @@ export const DAILY_INSIGHTS_UI_COPY: Record<
 
 export const DAILY_INSIGHTS_ITEMS: DailyInsightItem[] = [
   {
+    id: 'luiz-trabuco-novo-ministro-fazenda-lula-4-2026',
+    isoDate: '2026-11-26',
+    imageUrl: '/assets/aistudio/image_e784f533.png',
+    translations: {
+      pt: {
+        tag: 'Política Econômica & Câmbio',
+        title: 'Quem é Luiz Trabuco? Conheça o novo ministro da Fazenda de Lula 4',
+        summary:
+          'Presidente do Conselho do Bradesco aceitou o convite após reuniões em Brasília (23 e 26 de novembro); sinalização de perfil técnico e pró-mercado aliviou o dólar após superar R$ 6,00 e impulsionou a Bolsa.',
+        dateAuthor: '26/11/2026 • Redação DinhEuro',
+        source:
+          'Apuração CNN Brasil e registros institucionais (Bradesco, CNF, Febraban, MBC e Conselhão)',
+        readingTime: '4 min',
+        keywords: [
+          'luiz trabuco ministro da fazenda',
+          'lula 4 equipe economica bradesco',
+          'dolar abaixo de 6 reais bolsa',
+          'movimento brasil competitivo mbc',
+          'previsibilidade fiscal politica economica',
+        ],
+        imageAlt:
+          'Luiz Carlos Trabuco Cappi, presidente do Conselho de Administração do Bradesco e novo ministro da Fazenda',
+        fullContent: [
+          'O presidente Luiz Inácio Lula da Silva definiu o comando da equipe econômica para o seu próximo mandato: Luiz Carlos Trabuco Cappi, atual presidente do Conselho de Administração do Bradesco, aceitou o convite para assumir o Ministério da Fazenda. Segundo apuração divulgada pela CNN Brasil, a confirmação consolida uma aproximação estratégica entre o Palácio do Planalto e o setor financeiro em um momento decisivo para a economia nacional.',
+          'As tratativas ganharam tração após uma reunião fora da agenda oficial em Brasília, realizada na segunda-feira (23 de novembro), culminando em um novo encontro nesta quinta-feira (26). A sinalização de um nome com perfil técnico e pró-mercado teve recepção imediata: após o dólar comercial superar R$ 6,00 em dias de forte volatilidade, o câmbio recuou e a Bolsa de Valores engatou sequência de altas diante da expectativa de maior previsibilidade fiscal.',
+          '## Trajetória no setor financeiro e liderança institucional',
+          'Nascido em Marília (SP) em 6 de outubro de 1951 e formado em Filosofia pela USP, Trabuco iniciou no Bradesco aos 17 anos como escriturário em 1969, liderou a Bradesco Seguros, assumiu a presidência executiva do banco (2009–2018) — conduzindo a aquisição do HSBC Brasil em 2015 — e passou a presidir o Conselho de Administração. Também presidiu a CNF e o conselho diretor da Febraban até o início deste ano, assumindo em novembro de 2026 o Conselho Superior do Movimento Brasil Competitivo (MBC).',
+          '## Visão econômica e diálogo com o Planalto',
+          'Defensor da redução do custo de capital para destravar investimentos produtivos e o consumo das famílias, o futuro ministro classificou o pacote fiscal como "um bom começo" e projetou 2027 como "um ano para ser conquistado" com renovação da confiança. Membro do Conselhão desde maio de 2023 e com diálogo com Lula desde o segundo mandato, Trabuco deixa o conselho empresarial para assumir a principal cadeira da política econômica brasileira.',
+        ],
+      },
+      en: {
+        tag: 'Economic Policy & FX',
+        title: 'Who Is Luiz Trabuco? Meet the Incoming Finance Minister for Lula’s Fourth Term',
+        summary:
+          'Bradesco’s board chair accepted the Finance Ministry role following meetings in Brasília (Nov 23 and 26); the pro-market technical signal pulled USD/BRL back after topping R$ 6.00 and lifted Brazilian equities.',
+        dateAuthor: 'Nov 26, 2026 • DinhEuro Editorial',
+        source:
+          'Reporting by CNN Brasil and institutional records (Bradesco, CNF, Febraban, MBC, and Conselhão)',
+        readingTime: '4 min read',
+        keywords: [
+          'luiz trabuco brazil finance minister',
+          'lula fourth term economic team',
+          'usd brl 6 reais b3 rally',
+          'bradesco chairman finance ministry',
+          'brazil fiscal predictability',
+        ],
+        imageAlt:
+          'Luiz Carlos Trabuco Cappi, Chairman of Bradesco and Brazil’s incoming Minister of Finance',
+        fullContent: [
+          'President Luiz Inácio Lula da Silva has chosen the leader of his economic team for the next term: Luiz Carlos Trabuco Cappi, current chairman of Bradesco’s Board of Directors, has accepted the invitation to serve as Finance Minister. According to reporting by CNN Brasil, the decision cements a strategic bridge between the Planalto Palace and Brazil’s financial sector at a pivotal moment for the economy.',
+          'Talks accelerated after an off-schedule meeting in Brasília on Monday (Nov 23) and concluded with a follow-up session on Thursday (Nov 26). Markets responded immediately to the technical, market-friendly appointment: after commercial USD/BRL briefly broke above R$ 6.00 amid intense volatility, the currency retreated and Brazilian equities rallied on expectations of greater fiscal predictability.',
+          '## Five decades at Bradesco and institutional leadership',
+          'Born in Marília (São Paulo) on October 6, 1951 and holding a Philosophy degree from USP, Trabuco joined Bradesco in 1969 at age 17 as a bank clerk, rose through marketing and Bradesco Seguros, served as CEO (2009–2018)—overseeing the 2015 acquisition of HSBC’s Brazilian operations—and became board chairman. He previously chaired CNF and Febraban’s board until early this year, and in November 2026 became chairman of the Movimento Brasil Competitivo (MBC).',
+          '## Economic outlook and long-standing dialogue with Lula',
+          'Stressing that Brazil’s high cost of capital constrains both household consumption and corporate investment, Trabuco called the recent fiscal package “a good start” and projected 2027 as “a year to be won” through renewed business confidence. A member of the Economic and Social Development Council (Conselhão) since May 2023 with ties to Lula dating back to his second term, he now steps into Brazil’s top economic policymaking post.',
+        ],
+      },
+      es: {
+        tag: 'Política Económica y Divisas',
+        title: '¿Quién es Luiz Trabuco? Conoce al nuevo ministro de Hacienda de Lula 4',
+        summary:
+          'El presidente del Consejo de Bradesco aceptó el cargo tras reuniones en Brasilia (23 y 26 de noviembre); la señal técnica y promercado hizo retroceder al dólar tras superar R$ 6,00 e impulsó la Bolsa.',
+        dateAuthor: '26/11/2026 • Redacción DinhEuro',
+        source:
+          'Información de CNN Brasil y registros institucionales (Bradesco, CNF, Febraban, MBC y Conselhão)',
+        readingTime: '4 min',
+        keywords: [
+          'luiz trabuco ministro hacienda brasil',
+          'lula cuarto mandato equipo economico',
+          'dolar 6 reales bolsa b3',
+          'bradesco presidencia hacienda',
+          'previsibilidad fiscal brasil',
+        ],
+        imageAlt:
+          'Luiz Carlos Trabuco Cappi, presidente del Consejo de Administración de Bradesco y próximo ministro de Hacienda de Brasil',
+        fullContent: [
+          'El presidente Luiz Inácio Lula da Silva definió la conducción del equipo económico para su próximo mandato: Luiz Carlos Trabuco Cappi, actual presidente del Consejo de Administración de Bradesco, aceptó la invitación para asumir el Ministerio de Hacienda. Según informó CNN Brasil, la designación consolida un acercamiento estratégico entre el Palacio del Planalto y el sector financiero en un momento decisivo para la economía.',
+          'Las conversaciones cobraron fuerza tras una reunión fuera de agenda oficial en Brasilia el lunes (23 de noviembre) y culminaron con un nuevo encuentro este jueves (26). La recepción de los mercados ante un perfil técnico y promercado fue inmediata: tras días de fuerte volatilidad con el dólar comercial superando la barrera de R$ 6,00, el tipo de cambio retrocedió y la Bolsa encadenó subidas ante la expectativa de mayor previsibilidad fiscal.',
+          '## Trayectoria en Bradesco y liderazgo institucional',
+          'Nacido en Marília (São Paulo) el 6 de octubre de 1951 y graduado en Filosofía por la USP, Trabuco ingresó a Bradesco en 1969 a los 17 años como auxiliar, dirigió Bradesco Seguros, ejerció la presidencia ejecutiva del banco (2009–2018) —liderando la compra de HSBC Brasil en 2015— y pasó a presidir el Consejo de Administración. También encabezó la CNF y el consejo directivo de Febraban hasta inicios de este año, y en noviembre de 2026 asumió la presidencia del Consejo Superior del Movimiento Brasil Competitivo (MBC).',
+          '## Visión económica y diálogo histórico con el Planalto',
+          'Crítico del elevado costo de capital como cuello de botella para el crecimiento productivo y el consumo familiar, el futuro ministro calificó el paquete fiscal como «un buen comienzo» y proyectó 2027 como «un año por conquistar» mediante la renovación de la confianza empresarial. Miembro del Conselhão desde mayo de 2023 y con diálogo con Lula desde su segundo mandato, asume ahora la principal cartera económica de Brasil.',
+        ],
+      },
+    },
+  },
+  {
     id: 'politica-fiscal-monetaria-brasil-equilibrio-credito-2026',
     isoDate: '2026-11-26',
     imageUrl: '/assets/aistudio/image_3adf5ec5.png',

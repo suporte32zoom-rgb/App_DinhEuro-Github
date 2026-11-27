@@ -158,7 +158,9 @@ test('APEC 2026 and ALADI 2026 editorial insights preserve prior items up to 12 
   );
   assert.ok(source.includes('export const MAX_DAILY_INSIGHTS = 12;'));
   const idMatches = source.match(/^\s+id:\s*'[^']+',/gm) || [];
-  assert.equal(idMatches.length, 15);
+  assert.equal(idMatches.length, 16);
+  assert.ok(source.includes("id: 'luiz-trabuco-novo-ministro-fazenda-lula-4-2026'"));
+  assert.ok(source.includes("imageUrl: '/assets/aistudio/image_e784f533.png'"));
   assert.ok(source.includes("id: 'politica-fiscal-monetaria-brasil-equilibrio-credito-2026'"));
   assert.ok(source.includes("imageUrl: '/assets/aistudio/image_3adf5ec5.png'"));
   assert.ok(source.includes("id: 'eua-tarifas-embraer-acucar-secao-301-2026'"));
@@ -211,8 +213,9 @@ test('APEC 2026 and ALADI 2026 editorial insights preserve prior items up to 12 
   assert.ok(newsViewSource.includes('tNews.editorialCriteria.title'));
 
   const { NEWS_EDITORIAL_ARTICLES } = await import('../data/newsEditorialArticles.ts');
-  assert.equal(NEWS_EDITORIAL_ARTICLES.length, 12);
+  assert.equal(NEWS_EDITORIAL_ARTICLES.length, 13);
   const expectedNewsIds = [
+    'luiz-trabuco-novo-ministro-fazenda-lula-4-2026',
     'politica-fiscal-monetaria-brasil-equilibrio-credito-2026',
     'eua-tarifas-embraer-acucar-secao-301-2026',
     'pacote-fiscal-camara-dolar-divida-2026',
@@ -232,7 +235,7 @@ test('APEC 2026 and ALADI 2026 editorial insights preserve prior items up to 12 
       `Missing expected news editorial article: ${expectedId}`
     );
   }
-  const forbiddenTechTerms = /finnhub|awesomeapi|coingecko|brapi|yahoo\s*finance|vite|github|cloudflare|recharts/i;
+  const forbiddenTechTerms = /\b(finnhub|awesomeapi|coingecko|brapi|yahoo\s*finance|vite|github|cloudflare|recharts)\b/i;
   for (const article of NEWS_EDITORIAL_ARTICLES) {
     for (const locale of ['pt', 'en', 'es'] as const) {
       const content = article.translations[locale];
