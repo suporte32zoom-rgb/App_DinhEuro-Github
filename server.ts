@@ -128,16 +128,10 @@ async function startServer() {
     });
     app.use(vite.middlewares);
   } else {
-    // Serve static compiled assets in production with immediate 200 OK for both /route and /route/
-    const fs = await import('node:fs');
+    // Serve static compiled assets in production
     const distPath = path.resolve(__dirname, 'dist');
-    app.use(express.static(distPath, { redirect: false }));
-    app.get('*', (req: Request, res: Response) => {
-      const cleanPath = (req.path || '/').replace(/^\/+|\/+$/g, '');
-      const routeIndex = cleanPath ? path.resolve(distPath, cleanPath, 'index.html') : '';
-      if (routeIndex && fs.existsSync(routeIndex)) {
-        return res.sendFile(routeIndex);
-      }
+    app.use(express.static(distPath));
+    app.get('*', (_req: Request, res: Response) => {
       res.sendFile(path.resolve(distPath, 'index.html'));
     });
   }
