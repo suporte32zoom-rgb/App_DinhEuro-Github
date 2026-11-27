@@ -95,6 +95,7 @@ async function fetchJsonWithAbortTimeout(
   try {
     const res = await fetch(url, {
       ...options,
+      cache: options?.cache ?? 'no-store',
       signal: AbortSignal.timeout(timeoutMs),
     });
     if (!res.ok) return null;
@@ -102,6 +103,15 @@ async function fetchJsonWithAbortTimeout(
   } catch {
     return null;
   }
+}
+
+function parseAwesomeCreateDateMs(createDate?: string): number | undefined {
+  if (!createDate || typeof createDate !== 'string') return undefined;
+  const normalized = createDate.includes('T')
+    ? createDate
+    : `${createDate.trim().replace(' ', 'T')}-03:00`;
+  const ms = Date.parse(normalized);
+  return Number.isFinite(ms) ? ms : undefined;
 }
 
 // In-memory cache to guarantee fast response (< 30ms) while keeping data 100% fresh
@@ -312,6 +322,7 @@ async function fetchRealTimeMarketData(customFinnhubKey?: string): Promise<LiveM
 
     const pairs: Record<string, LiveRatePair> = {};
     const quotes: Record<string, LiveMarketQuote> = {};
+    const awesomeTimestampsMs: Record<string, number> = {};
 
     // 1. Fetch live currency and crypto rates directly from Awesome API
     try {
@@ -357,6 +368,11 @@ async function fetchRealTimeMarketData(customFinnhubKey?: string): Promise<LiveM
                 timestamp: item.create_date || new Date().toISOString(),
               };
 
+              const awesomeTs = parseAwesomeCreateDateMs(item.create_date);
+              if (awesomeTs) {
+                awesomeTimestampsMs[dinhSym] = awesomeTs;
+              }
+
               quotes[dinhSym] = {
                 symbol: dinhSym,
                 price: bounds.price,
@@ -390,46 +406,41 @@ async function fetchRealTimeMarketData(customFinnhubKey?: string): Promise<LiveM
       // Continue gracefully if Awesome API rate-limits
     }
 
-    // 2. Fetch live currency rates from Frankfurter / European Central Bank
-    try {
-      const frankData = await fetchJsonWithAbortTimeout('https://api.frankfurter.dev/v1/latest?base=USD', 3200);
-      if (frankData && frankData.rates) {
-        sourcesStatus.ecb = true;
-        if (frankData.rates.BRL && rates.BRL <= 0) rates.BRL = Number(frankData.rates.BRL);
-        if (frankData.rates.EUR && rates.EUR <= 0) rates.EUR = Number(frankData.rates.EUR);
-        if (frankData.rates.GBP && rates.GBP <= 0) rates.GBP = Number(frankData.rates.GBP);
-        if (frankData.rates.JPY && rates.JPY <= 0) rates.JPY = Number(frankData.rates.JPY);
-        if (frankData.rates.CHF && rates.CHF <= 0) rates.CHF = Number(frankData.rates.CHF);
-        if (frankData.rates.CAD && rates.CAD <= 0) rates.CAD = Number(frankData.rates.CAD);
-        if (frankData.rates.AUD && rates.AUD <= 0) rates.AUD = Number(frankData.rates.AUD);
-        if (frankData.rates.CNY && rates.CNY <= 0) rates.CNY = Number(frankData.rates.CNY);
-      }
-    } catch {
-      // Continue to next provider
+    // 2. Fetch real-time spot exchange rates from Coinbase FIRST, using Frankfurter/ECB only as fallback
+    const [cbSettled, frankSettled] = await Promise.allSettled([
+      fetchJsonWithAbortTimeout('https://api.coinbase.com/v2/exchange-rates?currency=USD', 3200, {
+        headers: { 'User-Agent': 'DinhEuro/2.0' },
+      }),
+      fetchJsonWithAbortTimeout('https://api.frankfurter.dev/v1/latest?base=USD', 3200),
+    ]);
+
+    if (cbSettled.status === 'fulfilled' && cbSettled.value?.data?.rates) {
+      sourcesStatus.coinbase = true;
+      const r = cbSettled.value.data.rates;
+      if (rates.BRL <= 0 && r.BRL) rates.BRL = parseFloat(r.BRL) || rates.BRL;
+      if (rates.EUR <= 0 && r.EUR) rates.EUR = parseFloat(r.EUR) || rates.EUR;
+      if (rates.GBP <= 0 && r.GBP) rates.GBP = parseFloat(r.GBP) || rates.GBP;
+      if (rates.JPY <= 0 && r.JPY) rates.JPY = parseFloat(r.JPY) || rates.JPY;
+      if (rates.CHF <= 0 && r.CHF) rates.CHF = parseFloat(r.CHF) || rates.CHF;
+      if (rates.CAD <= 0 && r.CAD) rates.CAD = parseFloat(r.CAD) || rates.CAD;
+      if (rates.AUD <= 0 && r.AUD) rates.AUD = parseFloat(r.AUD) || rates.AUD;
+      if (rates.CNY <= 0 && r.CNY) rates.CNY = parseFloat(r.CNY) || rates.CNY;
+      if (r.BTC) rates.BTC = parseFloat(r.BTC) || rates.BTC;
+      if (r.ETH) rates.ETH = parseFloat(r.ETH) || rates.ETH;
+      if (r.SOL) rates.SOL = parseFloat(r.SOL) || rates.SOL;
     }
 
-    // 2b. Supplement with Coinbase Public Exchange Rates
-    try {
-      const cbData = await fetchJsonWithAbortTimeout('https://api.coinbase.com/v2/exchange-rates?currency=USD', 3200, {
-        headers: { 'User-Agent': 'DinhEuro/2.0' },
-      });
-      if (cbData?.data?.rates) {
-        sourcesStatus.coinbase = true;
-        const r = cbData.data.rates;
-        if (rates.BRL <= 0 && r.BRL) rates.BRL = parseFloat(r.BRL) || rates.BRL;
-        if (rates.EUR <= 0 && r.EUR) rates.EUR = parseFloat(r.EUR) || rates.EUR;
-        if (rates.GBP <= 0 && r.GBP) rates.GBP = parseFloat(r.GBP) || rates.GBP;
-        if (rates.JPY <= 0 && r.JPY) rates.JPY = parseFloat(r.JPY) || rates.JPY;
-        if (rates.CHF <= 0 && r.CHF) rates.CHF = parseFloat(r.CHF) || rates.CHF;
-        if (rates.CAD <= 0 && r.CAD) rates.CAD = parseFloat(r.CAD) || rates.CAD;
-        if (rates.AUD <= 0 && r.AUD) rates.AUD = parseFloat(r.AUD) || rates.AUD;
-        if (rates.CNY <= 0 && r.CNY) rates.CNY = parseFloat(r.CNY) || rates.CNY;
-        if (r.BTC) rates.BTC = parseFloat(r.BTC) || rates.BTC;
-        if (r.ETH) rates.ETH = parseFloat(r.ETH) || rates.ETH;
-        if (r.SOL) rates.SOL = parseFloat(r.SOL) || rates.SOL;
-      }
-    } catch {
-      // Continue
+    if (frankSettled.status === 'fulfilled' && frankSettled.value?.rates) {
+      sourcesStatus.ecb = true;
+      const fr = frankSettled.value.rates;
+      if (fr.BRL && rates.BRL <= 0) rates.BRL = Number(fr.BRL);
+      if (fr.EUR && rates.EUR <= 0) rates.EUR = Number(fr.EUR);
+      if (fr.GBP && rates.GBP <= 0) rates.GBP = Number(fr.GBP);
+      if (fr.JPY && rates.JPY <= 0) rates.JPY = Number(fr.JPY);
+      if (fr.CHF && rates.CHF <= 0) rates.CHF = Number(fr.CHF);
+      if (fr.CAD && rates.CAD <= 0) rates.CAD = Number(fr.CAD);
+      if (fr.AUD && rates.AUD <= 0) rates.AUD = Number(fr.AUD);
+      if (fr.CNY && rates.CNY <= 0) rates.CNY = Number(fr.CNY);
     }
 
     // 3. Fetch Live Crypto Spot Prices & 24h Volume / Change from CoinGecko
@@ -633,6 +644,15 @@ async function fetchRealTimeMarketData(customFinnhubKey?: string): Promise<LiveM
 
               if (parsed) {
                 sourcesStatus.yahooFinance = true;
+
+                // Preserve strictly fresher or equal AwesomeAPI FX quote when available
+                if (meta.category === 'forex' && quotes[dinhSymbol]?.source === 'awesome_api_live') {
+                  const awesomeTs = awesomeTimestampsMs[dinhSymbol];
+                  if (awesomeTs && (!parsed.marketTimeMs || awesomeTs >= parsed.marketTimeMs)) {
+                    return;
+                  }
+                }
+
                 const currentPrice = parsed.price;
                 const prevClose = parsed.previousClose;
                 const changeVal = parsed.change;
@@ -656,72 +676,37 @@ async function fetchRealTimeMarketData(customFinnhubKey?: string): Promise<LiveM
                   source: 'yahoo_finance_live',
                 };
 
-                // Sync core currency pairs with real Yahoo Forex variations
-                if (dinhSymbol === 'USD/BRL') {
-                  rates.BRL = currentPrice;
-                  pairs['USDBRL'] = {
-                    code: 'USD',
+                // Sync core currency pairs & rates with exact Yahoo Forex market quotes
+                const pairMetaMap: Record<string, { pairKey: string; code: string; name: string }> = {
+                  'USD/BRL': { pairKey: 'USDBRL', code: 'USD', name: 'Dólar Comercial' },
+                  'EUR/BRL': { pairKey: 'EURBRL', code: 'EUR', name: 'Euro Comercial' },
+                  'GBP/BRL': { pairKey: 'GBPBRL', code: 'GBP', name: 'Libra Esterlina' },
+                  'CHF/BRL': { pairKey: 'CHFBRL', code: 'CHF', name: 'Franco Suíço' },
+                  'JPY/BRL': { pairKey: 'JPYBRL', code: 'JPY', name: 'Iene Japonês' },
+                  'CAD/BRL': { pairKey: 'CADBRL', code: 'CAD', name: 'Dólar Canadense' },
+                  'AUD/BRL': { pairKey: 'AUDBRL', code: 'AUD', name: 'Dólar Australiano' },
+                  'CNY/BRL': { pairKey: 'CNYBRL', code: 'CNY', name: 'Yuan Chinês' },
+                  'ARS/BRL': { pairKey: 'ARSBRL', code: 'ARS', name: 'Peso Argentino' },
+                };
+
+                const pMeta = pairMetaMap[dinhSymbol];
+                if (pMeta) {
+                  if (dinhSymbol === 'USD/BRL') {
+                    rates.BRL = currentPrice;
+                  }
+                  pairs[pMeta.pairKey] = {
+                    code: pMeta.code,
                     codein: 'BRL',
-                    name: 'Dólar Comercial',
-                    high: highVal,
-                    low: lowVal,
-                    bid: currentPrice,
-                    ask: Number((currentPrice + 0.002).toFixed(4)),
-                    varBid: changeVal,
-                    pctChange: changePct,
-                    timestamp: new Date().toISOString(),
-                  };
-                } else if (dinhSymbol === 'EUR/BRL') {
-                  pairs['EURBRL'] = {
-                    code: 'EUR',
-                    codein: 'BRL',
-                    name: 'Euro Comercial',
-                    high: highVal,
-                    low: lowVal,
-                    bid: currentPrice,
-                    ask: Number((currentPrice + 0.003).toFixed(4)),
-                    varBid: changeVal,
-                    pctChange: changePct,
-                    timestamp: new Date().toISOString(),
-                  };
-                } else if (dinhSymbol === 'GBP/BRL') {
-                  pairs['GBPBRL'] = {
-                    code: 'GBP',
-                    codein: 'BRL',
-                    name: 'Libra Esterlina',
-                    high: highVal,
-                    low: lowVal,
-                    bid: currentPrice,
-                    ask: Number((currentPrice + 0.004).toFixed(4)),
-                    varBid: changeVal,
-                    pctChange: changePct,
-                    timestamp: new Date().toISOString(),
-                  };
-                } else if (dinhSymbol === 'CHF/BRL') {
-                  pairs['CHFBRL'] = {
-                    code: 'CHF',
-                    codein: 'BRL',
-                    name: 'Franco Suíço',
-                    high: highVal,
-                    low: lowVal,
-                    bid: currentPrice,
-                    ask: Number((currentPrice + 0.003).toFixed(4)),
-                    varBid: changeVal,
-                    pctChange: changePct,
-                    timestamp: new Date().toISOString(),
-                  };
-                } else if (dinhSymbol === 'JPY/BRL') {
-                  pairs['JPYBRL'] = {
-                    code: 'JPY',
-                    codein: 'BRL',
-                    name: 'Iene Japonês',
+                    name: pMeta.name,
                     high: highVal,
                     low: lowVal,
                     bid: currentPrice,
                     ask: currentPrice,
                     varBid: changeVal,
                     pctChange: changePct,
-                    timestamp: new Date().toISOString(),
+                    timestamp: parsed.marketTimeMs
+                      ? new Date(parsed.marketTimeMs).toISOString()
+                      : new Date().toISOString(),
                   };
                 }
               }
@@ -1175,6 +1160,26 @@ async function fetchRealTimeMarketData(customFinnhubKey?: string): Promise<LiveM
           source: 'finnhub_webhook_live',
         };
         sourcesStatus.finnhub = true;
+      }
+    }
+
+    // Synchronize USD-based rates with live FX quotes so rates match displayed XXX/BRL & XXX/USD pairs
+    if (quotes['USD/BRL']?.price > 0) {
+      rates.BRL = quotes['USD/BRL'].price;
+    }
+    const rateCurrencies: Array<'EUR' | 'GBP' | 'CHF' | 'JPY' | 'CAD' | 'AUD' | 'CNY'> = [
+      'EUR', 'GBP', 'CHF', 'JPY', 'CAD', 'AUD', 'CNY',
+    ];
+    for (const cur of rateCurrencies) {
+      const brlQuote = quotes[`${cur}/BRL`];
+      const usdQuote = quotes[`USD/${cur}`];
+      const baseUsdQuote = quotes[`${cur}/USD`];
+      if (rates.BRL > 0 && brlQuote?.price > 0) {
+        rates[cur] = Number((rates.BRL / brlQuote.price).toFixed(6));
+      } else if (usdQuote?.price > 0) {
+        rates[cur] = usdQuote.price;
+      } else if (baseUsdQuote?.price > 0) {
+        rates[cur] = Number((1 / baseUsdQuote.price).toFixed(6));
       }
     }
 

@@ -165,5 +165,45 @@ describe('Market Parsing, Spot Metals Parity & Split Sanity Audit', () => {
     assert.ok(parsed.low <= parsed.price && parsed.price <= parsed.high);
     assert.strictEqual(parsed.marketTimeMs, 1700172800 * 1000);
   });
+
+  it('keeps live regularMarketPrice on FX payloads when UTC-midnight bar timestamp is slightly ahead of regularMarketTime', () => {
+    const regularMarketTimeSec = Math.floor(Date.parse('2026-11-26T22:32:45Z') / 1000);
+    const midnightBarTsSec = Math.floor(Date.parse('2026-11-27T00:00:00Z') / 1000);
+
+    const eurBrlPayload = {
+      chart: {
+        result: [
+          {
+            meta: {
+              currency: 'BRL',
+              symbol: 'EURBRL=X',
+              regularMarketPrice: 6.2008,
+              regularMarketTime: regularMarketTimeSec,
+              previousClose: 6.2981,
+              regularMarketDayHigh: 6.3946,
+              regularMarketDayLow: 6.1874,
+            },
+            timestamp: [midnightBarTsSec],
+            indicators: {
+              quote: [
+                {
+                  open: [6.2981],
+                  high: [6.3946],
+                  low: [6.1874],
+                  close: [6.3946],
+                },
+              ],
+            },
+          },
+        ],
+      },
+    };
+
+    const parsed = extractYahooChartOHLCV(eurBrlPayload, 4);
+    assert.ok(parsed);
+    assert.strictEqual(parsed.price, 6.2008);
+    assert.strictEqual(parsed.high, 6.3946);
+    assert.strictEqual(parsed.low, 6.1874);
+  });
 });
 

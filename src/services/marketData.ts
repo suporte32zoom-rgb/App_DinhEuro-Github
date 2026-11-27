@@ -13,7 +13,7 @@
  */
 
 import { extractYahooChartOHLCV, reconcileSilverSpotParity, normalizePriceBounds } from '../utils/marketParsing';
-import { getAssetPriceDecimals, roundToDecimals } from '../utils/finance';
+import { getAssetPriceDecimals, roundToDecimals, buildAlignedMarketRates } from '../utils/finance';
 
 export interface MarketAsset {
   id: string;
@@ -739,6 +739,7 @@ export async function fetchJsonWithTimeout(
   try {
     const res = await fetch(url, {
       ...options,
+      cache: options?.cache ?? 'no-store',
       signal: controller.signal,
       headers: {
         Accept: 'application/json',
@@ -889,7 +890,7 @@ export async function fetchLiveMarketDataFromAPIs(
               const eurBrl = parseFloat(awesomeData.EURBRL.bid);
               if (eurBrl > 0) {
                 const eurUsd = Number((eurBrl / usdToBrl).toFixed(4));
-                const bounds = normalizePriceBounds(eurUsd, eurUsd * 1.005, eurUsd * 0.995, 4);
+                const bounds = normalizePriceBounds(eurUsd, eurUsd, eurUsd, 4);
                 const q = { price: bounds.price, change: 0, changePercent: parseFloat(awesomeData.EURBRL.pctChange) || 0, high: bounds.high, low: bounds.low, volume: '--', source: 'awesome_api_cross' };
                 rawQuotes['EUR/USD'] = q;
                 saveLastValidQuote('EUR/USD', q);
@@ -899,7 +900,7 @@ export async function fetchLiveMarketDataFromAPIs(
               const gbpBrl = parseFloat(awesomeData.GBPBRL.bid);
               if (gbpBrl > 0) {
                 const gbpUsd = Number((gbpBrl / usdToBrl).toFixed(4));
-                const bounds = normalizePriceBounds(gbpUsd, gbpUsd * 1.005, gbpUsd * 0.995, 4);
+                const bounds = normalizePriceBounds(gbpUsd, gbpUsd, gbpUsd, 4);
                 const q = { price: bounds.price, change: 0, changePercent: parseFloat(awesomeData.GBPBRL.pctChange) || 0, high: bounds.high, low: bounds.low, volume: '--', source: 'awesome_api_cross' };
                 rawQuotes['GBP/USD'] = q;
                 saveLastValidQuote('GBP/USD', q);
@@ -909,7 +910,7 @@ export async function fetchLiveMarketDataFromAPIs(
               const jpyBrl = parseFloat(awesomeData.JPYBRL.bid);
               if (jpyBrl > 0) {
                 const usdJpy = Number((usdToBrl / jpyBrl).toFixed(2));
-                const bounds = normalizePriceBounds(usdJpy, usdJpy * 1.005, usdJpy * 0.995, 2);
+                const bounds = normalizePriceBounds(usdJpy, usdJpy, usdJpy, 2);
                 const q = { price: bounds.price, change: 0, changePercent: 0, high: bounds.high, low: bounds.low, volume: '--', source: 'awesome_api_cross' };
                 rawQuotes['USD/JPY'] = q;
                 saveLastValidQuote('USD/JPY', q);
@@ -919,7 +920,7 @@ export async function fetchLiveMarketDataFromAPIs(
               const chfBrl = parseFloat(awesomeData.CHFBRL.bid);
               if (chfBrl > 0) {
                 const usdChf = Number((usdToBrl / chfBrl).toFixed(4));
-                const bounds = normalizePriceBounds(usdChf, usdChf * 1.005, usdChf * 0.995, 4);
+                const bounds = normalizePriceBounds(usdChf, usdChf, usdChf, 4);
                 const q = { price: bounds.price, change: 0, changePercent: 0, high: bounds.high, low: bounds.low, volume: '--', source: 'awesome_api_cross' };
                 rawQuotes['USD/CHF'] = q;
                 saveLastValidQuote('USD/CHF', q);
@@ -929,7 +930,7 @@ export async function fetchLiveMarketDataFromAPIs(
               const audBrl = parseFloat(awesomeData.AUDBRL.bid);
               if (audBrl > 0) {
                 const audUsd = Number((audBrl / usdToBrl).toFixed(4));
-                const bounds = normalizePriceBounds(audUsd, audUsd * 1.005, audUsd * 0.995, 4);
+                const bounds = normalizePriceBounds(audUsd, audUsd, audUsd, 4);
                 const q = { price: bounds.price, change: 0, changePercent: 0, high: bounds.high, low: bounds.low, volume: '--', source: 'awesome_api_cross' };
                 rawQuotes['AUD/USD'] = q;
                 saveLastValidQuote('AUD/USD', q);
@@ -939,7 +940,7 @@ export async function fetchLiveMarketDataFromAPIs(
               const cadBrl = parseFloat(awesomeData.CADBRL.bid);
               if (cadBrl > 0) {
                 const usdCad = Number((usdToBrl / cadBrl).toFixed(4));
-                const bounds = normalizePriceBounds(usdCad, usdCad * 1.005, usdCad * 0.995, 4);
+                const bounds = normalizePriceBounds(usdCad, usdCad, usdCad, 4);
                 const q = { price: bounds.price, change: 0, changePercent: 0, high: bounds.high, low: bounds.low, volume: '--', source: 'awesome_api_cross' };
                 rawQuotes['USD/CAD'] = q;
                 saveLastValidQuote('USD/CAD', q);
@@ -948,40 +949,41 @@ export async function fetchLiveMarketDataFromAPIs(
           }
         }
 
-        // Fallback automático multi-fonte para câmbio (Frankfurter/ECB -> Coinbase -> Alpha Vantage) se a primeira fonte falhar
+        // Fallback automático multi-fonte em tempo real: Coinbase spot primeiro, depois Frankfurter/ECB apenas para moedas faltantes
         if (!rawQuotes['USD/BRL']?.price) {
           let fallbackUsdBrl = 0;
-          let fallbackRatesMap: Record<string, number> = {};
+          const fallbackRatesMap: Record<string, number> = {};
 
-          try {
-            const frankData = await fetchJsonWithTimeout('https://api.frankfurter.dev/v1/latest?base=USD', 3000);
-            if (frankData?.rates && typeof frankData.rates.BRL === 'number' && frankData.rates.BRL > 0) {
-              fallbackUsdBrl = frankData.rates.BRL;
-              for (const [k, v] of Object.entries(frankData.rates)) {
-                if (typeof v === 'number' && v > 0) fallbackRatesMap[k] = v;
-              }
-            }
-          } catch {
-            // continue to Coinbase
-          }
+          const [cbRes, frankRes] = await Promise.allSettled([
+            fetchJsonWithTimeout('https://api.coinbase.com/v2/exchange-rates?currency=USD', 3000),
+            fetchJsonWithTimeout('https://api.frankfurter.dev/v1/latest?base=USD', 3000),
+          ]);
 
-          try {
-            const cbData = await fetchJsonWithTimeout('https://api.coinbase.com/v2/exchange-rates?currency=USD', 3000);
-            const cbRates = cbData?.data?.rates;
+          if (cbRes.status === 'fulfilled') {
+            const cbRates = cbRes.value?.data?.rates;
             if (cbRates && typeof cbRates === 'object') {
               const cbBrl = parseFloat(cbRates.BRL);
-              if (fallbackUsdBrl <= 0 && Number.isFinite(cbBrl) && cbBrl > 0) {
+              if (Number.isFinite(cbBrl) && cbBrl > 0) {
                 fallbackUsdBrl = cbBrl;
               }
               for (const [k, v] of Object.entries(cbRates)) {
                 const num = parseFloat(String(v));
-                if (Number.isFinite(num) && num > 0 && !fallbackRatesMap[k]) {
+                if (Number.isFinite(num) && num > 0) {
                   fallbackRatesMap[k] = num;
                 }
               }
             }
-          } catch {
-            // continue to Alpha Vantage if configured
+          }
+
+          if (frankRes.status === 'fulfilled' && frankRes.value?.rates) {
+            if (fallbackUsdBrl <= 0 && typeof frankRes.value.rates.BRL === 'number' && frankRes.value.rates.BRL > 0) {
+              fallbackUsdBrl = frankRes.value.rates.BRL;
+            }
+            for (const [k, v] of Object.entries(frankRes.value.rates)) {
+              if (typeof v === 'number' && v > 0 && !fallbackRatesMap[k]) {
+                fallbackRatesMap[k] = v;
+              }
+            }
           }
 
           if (fallbackUsdBrl <= 0) {
@@ -1007,7 +1009,7 @@ export async function fetchLiveMarketDataFromAPIs(
             liveRatesReceived = true;
             liveUpdatesCount += 1;
 
-            const usdBounds = normalizePriceBounds(liveRates.BRL, liveRates.BRL * 1.005, liveRates.BRL * 0.995, 4);
+            const usdBounds = normalizePriceBounds(liveRates.BRL, liveRates.BRL, liveRates.BRL, 4);
             const qUsd = { price: usdBounds.price, change: 0, changePercent: 0, high: usdBounds.high, low: usdBounds.low, volume: '--', source: 'interbank_fx_live' };
             rawQuotes['USD/BRL'] = qUsd;
             rawQuotes['USDBRL'] = qUsd;
@@ -1018,7 +1020,7 @@ export async function fetchLiveMarketDataFromAPIs(
               if (!Number.isFinite(rawRate) || rawRate <= 0) return;
               liveRates[code] = rawRate;
               const p = Number((fallbackUsdBrl / rawRate).toFixed(dec));
-              const b = normalizePriceBounds(p, p * 1.005, p * 0.995, dec);
+              const b = normalizePriceBounds(p, p, p, dec);
               const q = { price: b.price, change: 0, changePercent: 0, high: b.high, low: b.low, volume: '--', source: 'interbank_fx_live' };
               rawQuotes[pairSym] = q;
               saveLastValidQuote(pairSym, q);
@@ -1031,10 +1033,11 @@ export async function fetchLiveMarketDataFromAPIs(
             assignCrossFromRate('CHF', 'CHF/BRL', 4);
             assignCrossFromRate('JPY', 'JPY/BRL', 4);
             assignCrossFromRate('CNY', 'CNY/BRL', 4);
+            assignCrossFromRate('ARS', 'ARS/BRL', 5);
 
             if (fallbackRatesMap.EUR > 0) {
               const eurUsdVal = Number((1 / fallbackRatesMap.EUR).toFixed(4));
-              const eurUsdBounds = normalizePriceBounds(eurUsdVal, eurUsdVal * 1.005, eurUsdVal * 0.995, 4);
+              const eurUsdBounds = normalizePriceBounds(eurUsdVal, eurUsdVal, eurUsdVal, 4);
               const qEurUsd = { price: eurUsdBounds.price, change: 0, changePercent: 0, high: eurUsdBounds.high, low: eurUsdBounds.low, volume: '--', source: 'interbank_fx_live' };
               rawQuotes['EUR/USD'] = qEurUsd;
               saveLastValidQuote('EUR/USD', qEurUsd);
@@ -1287,7 +1290,16 @@ export async function fetchLiveMarketDataFromAPIs(
     ['SOJA', 'ZS=F'],
     ['CAFÉ', 'KC=F'],
 
-    // Câmbio & Forex principais (garante Máx/Mín e Variação reais do mesmo feed)
+    // Câmbio & Forex completos (garante cotação exata, Máx/Mín e Variação reais em tempo real)
+    ['USD/BRL', 'BRL=X'],
+    ['EUR/BRL', 'EURBRL=X'],
+    ['GBP/BRL', 'GBPBRL=X'],
+    ['CHF/BRL', 'CHFBRL=X'],
+    ['JPY/BRL', 'JPYBRL=X'],
+    ['CAD/BRL', 'CADBRL=X'],
+    ['AUD/BRL', 'AUDBRL=X'],
+    ['CNY/BRL', 'CNYBRL=X'],
+    ['ARS/BRL', 'ARSBRL=X'],
     ['EUR/USD', 'EURUSD=X'],
     ['GBP/USD', 'GBPUSD=X'],
     ['USD/JPY', 'USDJPY=X'],
@@ -1299,13 +1311,16 @@ export async function fetchLiveMarketDataFromAPIs(
   tasks.push(
     (async () => {
       const yahooApiKey = getYahooFinanceKey();
-      const indexAndFxCount = 20;
-      const priorityFirst = priorityYahooList.slice(0, indexAndFxCount);
-      const secondaryRest = priorityYahooList.slice(indexAndFxCount);
+      // Índices (0..13) + Câmbio/Forex (75..) têm prioridade máxima; Ações EUA (14..38), B3 (39..63) e Commodities (64..74) vêm em seguida
+      const priorityFirst = [...priorityYahooList.slice(0, 14), ...priorityYahooList.slice(75)];
+      const secondaryRest = priorityYahooList.slice(14, 75);
 
       const processSymbol = async ([dinhSym, ySym]: [string, string]) => {
         const existing = rawQuotes[dinhSym];
-        const isCrossFallback = existing?.source === 'awesome_api_cross' || existing?.source === 'interbank_fx_live';
+        const isCrossFallback =
+          existing?.source === 'awesome_api_cross' ||
+          existing?.source === 'interbank_fx_live' ||
+          existing?.source === 'fx_rate_cross_live';
         const isB3OrBvsp = ySym.endsWith('.SA') || ySym === '%5EBVSP';
         if (
           !isCrossFallback &&
@@ -1349,6 +1364,20 @@ export async function fetchLiveMarketDataFromAPIs(
             rawQuotes[dinhSym] = quoteObj;
             rawQuotes[dinhSym.toLowerCase()] = quoteObj;
             saveLastValidQuote(dinhSym, quoteObj);
+
+            if (dinhSym.includes('/')) {
+              liveRatesReceived = true;
+              const [baseC, quoteC] = dinhSym.split('/');
+              if (dinhSym === 'USD/BRL') {
+                liveRates.BRL = parsed.price;
+              } else if (quoteC === 'BRL' && baseC && liveRates.BRL && liveRates.BRL > 0) {
+                liveRates[baseC] = Number((liveRates.BRL / parsed.price).toFixed(6));
+              } else if (baseC === 'USD' && quoteC) {
+                liveRates[quoteC] = parsed.price;
+              } else if (quoteC === 'USD' && baseC) {
+                liveRates[baseC] = Number((1 / parsed.price).toFixed(6));
+              }
+            }
           }
         } catch {
           // Em caso de falha de rede, mantém último dado real válido em cache se existir (sem falsos positivos)
@@ -1629,7 +1658,8 @@ export async function fetchLiveMarketDataFromAPIs(
     return asset.category === 'forex' && asset.volume !== '--' ? { ...asset, volume: '--' } : asset;
   });
 
-  return { rates: liveRates, updatedAssets, hasLiveData: liveUpdatesCount > 0, liveRatesReceived };
+  const syncedRates = buildAlignedMarketRates(updatedAssets, liveRates);
+  return { rates: syncedRates, updatedAssets, hasLiveData: liveUpdatesCount > 0, liveRatesReceived };
 }
 
 /**
@@ -1677,6 +1707,7 @@ export async function fetchCompleteLiveMarketData(
   }
 
   const updatedAssets = directResult.updatedAssets;
+  const alignedLiveRates = buildAlignedMarketRates(updatedAssets, liveRates);
   const hasLiveData = proxyHasLiveData || directResult.hasLiveData;
   const syncedAt = directResult.hasLiveData
     ? new Date().toISOString()
@@ -1694,7 +1725,7 @@ export async function fetchCompleteLiveMarketData(
   }
 
   return {
-    rates: liveRates,
+    rates: alignedLiveRates,
     updatedAssets,
     news: fetchedNews.length > 0 ? fetchedNews : INITIAL_NEWS,
     rawPairs,
@@ -1735,32 +1766,31 @@ export async function fetchLiveExchangeRates(): Promise<UniversalRates> {
     // continue
   }
 
-  // 2. Fallback via BCE / Frankfurter + Coinbase Exchange Rates
+  // 2. Fallback em tempo real: Coinbase spot primeiro, Frankfurter/ECB apenas para moedas faltantes
   const merged: UniversalRates = { USD: 1.0 };
-  try {
-    const frankData = await fetchJsonWithTimeout('https://api.frankfurter.dev/v1/latest?base=USD', 2800);
-    if (frankData?.rates) {
-      for (const [k, v] of Object.entries(frankData.rates)) {
-        if (typeof v === 'number' && v > 0) merged[k] = v;
-      }
-    }
-  } catch {
-    // continue
-  }
+  const [cbRes, frankRes] = await Promise.allSettled([
+    fetchJsonWithTimeout('https://api.coinbase.com/v2/exchange-rates?currency=USD', 2800),
+    fetchJsonWithTimeout('https://api.frankfurter.dev/v1/latest?base=USD', 2800),
+  ]);
 
-  try {
-    const cbData = await fetchJsonWithTimeout('https://api.coinbase.com/v2/exchange-rates?currency=USD', 2800);
-    const cbRates = cbData?.data?.rates;
+  if (cbRes.status === 'fulfilled') {
+    const cbRates = cbRes.value?.data?.rates;
     if (cbRates && typeof cbRates === 'object') {
       for (const [code, rawVal] of Object.entries(cbRates)) {
         const parsed = parseFloat(String(rawVal));
-        if (Number.isFinite(parsed) && parsed > 0 && !merged[code]) {
+        if (Number.isFinite(parsed) && parsed > 0) {
           merged[code] = parsed;
         }
       }
     }
-  } catch {
-    // continue
+  }
+
+  if (frankRes.status === 'fulfilled' && frankRes.value?.rates) {
+    for (const [k, v] of Object.entries(frankRes.value.rates)) {
+      if (typeof v === 'number' && v > 0 && !merged[k]) {
+        merged[k] = v;
+      }
+    }
   }
 
   return merged;
@@ -2171,7 +2201,7 @@ export async function fetchExtendedMarketsAssets(
         const cleanPrice = roundToDecimals(derivedPrice, decimals);
         const pct = usdLegQuote?.changePercent !== undefined ? roundToDecimals(-usdLegQuote.changePercent, 2) : asset.change24h;
         const chg = roundToDecimals((cleanPrice * pct) / 100, decimals);
-        const bounds = normalizePriceBounds(cleanPrice, cleanPrice * 1.006, cleanPrice * 0.994, decimals);
+        const bounds = normalizePriceBounds(cleanPrice, cleanPrice, cleanPrice, decimals);
         match = {
           price: bounds.price,
           change: chg,
@@ -2184,7 +2214,7 @@ export async function fetchExtendedMarketsAssets(
       } else if (baseCur === 'USD' && quoteCur && extendedRates[quoteCur] > 0) {
         const decimals = getAssetPriceDecimals(extendedRates[quoteCur], asset.currency, asset.category);
         const cleanPrice = roundToDecimals(extendedRates[quoteCur], decimals);
-        const bounds = normalizePriceBounds(cleanPrice, cleanPrice * 1.006, cleanPrice * 0.994, decimals);
+        const bounds = normalizePriceBounds(cleanPrice, cleanPrice, cleanPrice, decimals);
         match = {
           price: bounds.price,
           change: 0,
@@ -2198,7 +2228,7 @@ export async function fetchExtendedMarketsAssets(
         const derived = 1 / extendedRates[baseCur];
         const decimals = getAssetPriceDecimals(derived, asset.currency, asset.category);
         const cleanPrice = roundToDecimals(derived, decimals);
-        const bounds = normalizePriceBounds(cleanPrice, cleanPrice * 1.006, cleanPrice * 0.994, decimals);
+        const bounds = normalizePriceBounds(cleanPrice, cleanPrice, cleanPrice, decimals);
         match = {
           price: bounds.price,
           change: 0,

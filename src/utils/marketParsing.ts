@@ -112,7 +112,7 @@ export function extractYahooChartOHLCV(
   const metaMarketTimeMs = isPositiveFinite(m.regularMarketTime) ? (m.regularMarketTime as number) * 1000 : undefined;
 
   const barIsNewerThanMeta = Boolean(
-    latestBar?.ts && metaMarketTimeMs && latestBar.ts > metaMarketTimeMs + 3600 * 1000
+    latestBar?.ts && metaMarketTimeMs && latestBar.ts > metaMarketTimeMs + 12 * 3600 * 1000
   );
 
   const rawPrice =

@@ -22,6 +22,7 @@ import {
   getAssetPriceDecimals,
   formatSignedCurrencyChange,
   formatSignedPercentChange,
+  buildAlignedMarketRates,
 } from '../utils/finance';
 import { getAssetMetadata } from '../utils/assetProfiles';
 import { D3AdvancedChart } from './D3AdvancedChart';
@@ -61,17 +62,19 @@ export const UnifiedAssetDetailView: React.FC<UnifiedAssetDetailViewProps> = ({
   const isPositive = !pctInfo.isNegative;
 
   // Dual Currency calculations
-  const dual = getDualCurrencyDisplay(asset.price, asset.currency, universalRates, isIndex, locale, asset.category);
-  const usdBrlFormatted = universalRates.BRL.toLocaleString(locale, {
+  const alignedRates = buildAlignedMarketRates(assets, universalRates);
+  const dual = getDualCurrencyDisplay(asset.price, asset.currency, alignedRates, isIndex, locale, asset.category);
+  const usdBrlFormatted = alignedRates.BRL.toLocaleString(locale, {
     minimumFractionDigits: 4,
     maximumFractionDigits: 4,
   });
-  const eurBrlFormatted = (universalRates.BRL / (universalRates.EUR || 0.8958)).toLocaleString(locale, {
+  const eurRate = alignedRates.EUR && alignedRates.EUR > 0 ? alignedRates.EUR : 0;
+  const eurBrlFormatted = (eurRate > 0 ? alignedRates.BRL / eurRate : 0).toLocaleString(locale, {
     minimumFractionDigits: 4,
     maximumFractionDigits: 4,
   });
   const normAssetCur = (asset.currency || 'USD').toUpperCase();
-  const curRate = universalRates[normAssetCur];
+  const curRate = alignedRates[normAssetCur];
   const refRate = isIndex
     ? tDetail.indexParityNote
     : normAssetCur === 'USD' || normAssetCur === 'BRL'
@@ -79,7 +82,7 @@ export const UnifiedAssetDetailView: React.FC<UnifiedAssetDetailViewProps> = ({
     : normAssetCur === 'EUR'
     ? `1 EUR = R$ ${eurBrlFormatted}`
     : curRate && curRate > 0
-    ? `1 ${normAssetCur} = R$ ${(universalRates.BRL / curRate).toLocaleString(locale, {
+    ? `1 ${normAssetCur} = R$ ${(alignedRates.BRL / curRate).toLocaleString(locale, {
         minimumFractionDigits: 4,
         maximumFractionDigits: 4,
       })}`
@@ -98,7 +101,7 @@ export const UnifiedAssetDetailView: React.FC<UnifiedAssetDetailViewProps> = ({
   };
 
   const formatSecondaryStatPrice = (val: number) => {
-    const statDual = getDualCurrencyDisplay(val, asset.currency, universalRates, isIndex, locale, asset.category);
+    const statDual = getDualCurrencyDisplay(val, asset.currency, alignedRates, isIndex, locale, asset.category);
     return statDual.secondaryFormatted ? `≈ ${statDual.secondaryFormatted}` : '';
   };
 

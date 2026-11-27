@@ -1,4 +1,5 @@
-import { getEnvVar, type MarketAsset, type UniversalRates } from '../services/marketData';
+import { getEnvVar, fetchYahooQuoteDefensive, type MarketAsset, type UniversalRates } from '../services/marketData';
+import { extractYahooChartOHLCV } from './marketParsing';
 
 export interface AwesomeCurrencyOption {
   code: string;
@@ -94,7 +95,7 @@ export function buildFallbackAwesomeQuotes(
       map[currency.code] = {
         code: currency.code,
         bidBrl: p,
-        askBrl: p * 1.0005,
+        askBrl: p,
         highBrl: matchingAsset.high24h > 0 ? Math.max(p, matchingAsset.high24h) : p,
         lowBrl: matchingAsset.low24h > 0 ? Math.min(p, matchingAsset.low24h) : p,
         pctChange: Number.isFinite(matchingAsset.change24h) ? matchingAsset.change24h : 0,
@@ -123,7 +124,7 @@ export function buildFallbackAwesomeQuotes(
       map[currency.code] = {
         code: currency.code,
         bidBrl: brlValue,
-        askBrl: brlValue * 1.001,
+        askBrl: brlValue,
         highBrl: Math.max(brlValue, highBrl),
         lowBrl: Math.min(brlValue, lowBrl),
         pctChange: Number.isFinite(matchingAsset.change24h) ? matchingAsset.change24h : 0,
@@ -143,9 +144,9 @@ export function buildFallbackAwesomeQuotes(
     map[currency.code] = {
       code: currency.code,
       bidBrl: brlValue,
-      askBrl: brlValue > 0 ? brlValue * 1.0005 : 0,
-      highBrl: brlValue > 0 ? brlValue * 1.005 : 0,
-      lowBrl: brlValue > 0 ? brlValue * 0.995 : 0,
+      askBrl: brlValue,
+      highBrl: brlValue,
+      lowBrl: brlValue,
       pctChange: 0,
       varBid: 0,
     };
@@ -243,7 +244,129 @@ async function fetchJsonSafely(url: string, timeoutMs: number): Promise<any> {
 }
 
 /**
- * Consulta cotações em tempo real com fallback automático multi-fonte (inclui proxies CORS e feeds globais).
+ * Mescla taxas cambiais priorizando cotações spot em tempo real (Coinbase) sobre fixações diárias (Frankfurter/BCE).
+ */
+export function mergeCrossExchangeRates(params: {
+  coinbaseRates?: Record<string, string | number> | null;
+  frankfurterRates?: Record<string, string | number> | null;
+}): UniversalRates {
+  const merged: UniversalRates = { USD: 1.0 };
+
+  if (params.coinbaseRates && typeof params.coinbaseRates === 'object') {
+    for (const [k, rawVal] of Object.entries(params.coinbaseRates)) {
+      const parsedVal = parseFloat(String(rawVal));
+      if (Number.isFinite(parsedVal) && parsedVal > 0) {
+        merged[k] = parsedVal;
+      }
+    }
+  }
+
+  if (params.frankfurterRates && typeof params.frankfurterRates === 'object') {
+    for (const [k, rawVal] of Object.entries(params.frankfurterRates)) {
+      const parsedVal = parseFloat(String(rawVal));
+      if (Number.isFinite(parsedVal) && parsedVal > 0 && !merged[k]) {
+        merged[k] = parsedVal;
+      }
+    }
+  }
+
+  return merged;
+}
+
+/**
+ * Converte resposta de /api/market/live para AwesomeQuotesMap sem alterar valores reais recebidos.
+ */
+export function buildAwesomeQuotesFromMarketLive(
+  proxyData: {
+    rates?: UniversalRates;
+    pairs?: Record<string, { bid?: number; ask?: number; high?: number; low?: number; pctChange?: number; varBid?: number; timestamp?: string }>;
+    quotes?: Record<string, { price?: number; high?: number; low?: number; changePercent?: number; change?: number }>;
+  } | null | undefined,
+  fallbackRates: UniversalRates
+): { quotes: AwesomeQuotesMap; matchedCount: number } {
+  if (!proxyData || typeof proxyData !== 'object') {
+    return { quotes: buildFallbackAwesomeQuotes(fallbackRates), matchedCount: 0 };
+  }
+
+  const baseRates: UniversalRates = {
+    ...fallbackRates,
+    ...(proxyData.rates || {}),
+    USD: 1.0,
+  };
+  const quotes = buildFallbackAwesomeQuotes(baseRates);
+  let matchedCount = 0;
+
+  const usdBrl =
+    proxyData.pairs?.USDBRL?.bid ||
+    proxyData.quotes?.['USD/BRL']?.price ||
+    baseRates.BRL ||
+    0;
+
+  for (const currency of DINHEURO_CALCULATOR_CURRENCIES) {
+    if (currency.code === 'BRL') continue;
+    const pairKey = `${currency.code}BRL`;
+    const pair = proxyData.pairs?.[pairKey];
+    const directQuote = proxyData.quotes?.[`${currency.code}/BRL`];
+
+    if (pair && typeof pair.bid === 'number' && pair.bid > 0) {
+      quotes[currency.code] = {
+        code: currency.code,
+        bidBrl: pair.bid,
+        askBrl: typeof pair.ask === 'number' && pair.ask > 0 ? pair.ask : pair.bid,
+        highBrl: typeof pair.high === 'number' && pair.high > 0 ? Math.max(pair.bid, pair.high) : pair.bid,
+        lowBrl: typeof pair.low === 'number' && pair.low > 0 ? Math.min(pair.bid, pair.low) : pair.bid,
+        pctChange: typeof pair.pctChange === 'number' && Number.isFinite(pair.pctChange) ? pair.pctChange : 0,
+        varBid: typeof pair.varBid === 'number' && Number.isFinite(pair.varBid) ? pair.varBid : 0,
+        createDate: pair.timestamp,
+      };
+      matchedCount += 1;
+    } else if (directQuote && typeof directQuote.price === 'number' && directQuote.price > 0) {
+      const p = directQuote.price;
+      quotes[currency.code] = {
+        code: currency.code,
+        bidBrl: p,
+        askBrl: p,
+        highBrl: typeof directQuote.high === 'number' && directQuote.high > 0 ? Math.max(p, directQuote.high) : p,
+        lowBrl: typeof directQuote.low === 'number' && directQuote.low > 0 ? Math.min(p, directQuote.low) : p,
+        pctChange: typeof directQuote.changePercent === 'number' && Number.isFinite(directQuote.changePercent) ? directQuote.changePercent : 0,
+        varBid: typeof directQuote.change === 'number' && Number.isFinite(directQuote.change) ? directQuote.change : 0,
+      };
+      matchedCount += 1;
+    } else if ((currency.code === 'BTC' || currency.code === 'ETH') && usdBrl > 0) {
+      const cryptoQuote = proxyData.quotes?.[`${currency.code}/USD`];
+      if (cryptoQuote && typeof cryptoQuote.price === 'number' && cryptoQuote.price > 0) {
+        const brlVal = cryptoQuote.price * usdBrl;
+        quotes[currency.code] = {
+          code: currency.code,
+          bidBrl: brlVal,
+          askBrl: brlVal,
+          highBrl: typeof cryptoQuote.high === 'number' && cryptoQuote.high > 0 ? Math.max(brlVal, cryptoQuote.high * usdBrl) : brlVal,
+          lowBrl: typeof cryptoQuote.low === 'number' && cryptoQuote.low > 0 ? Math.min(brlVal, cryptoQuote.low * usdBrl) : brlVal,
+          pctChange: typeof cryptoQuote.changePercent === 'number' && Number.isFinite(cryptoQuote.changePercent) ? cryptoQuote.changePercent : 0,
+          varBid: 0,
+        };
+        matchedCount += 1;
+      }
+    }
+  }
+
+  return { quotes, matchedCount };
+}
+
+const YAHOO_FX_CALCULATOR_PAIRS: Array<{ code: string; yahoo: string; decimals: number }> = [
+  { code: 'USD', yahoo: 'BRL=X', decimals: 4 },
+  { code: 'EUR', yahoo: 'EURBRL=X', decimals: 4 },
+  { code: 'GBP', yahoo: 'GBPBRL=X', decimals: 4 },
+  { code: 'CAD', yahoo: 'CADBRL=X', decimals: 4 },
+  { code: 'AUD', yahoo: 'AUDBRL=X', decimals: 4 },
+  { code: 'CHF', yahoo: 'CHFBRL=X', decimals: 4 },
+  { code: 'JPY', yahoo: 'JPYBRL=X', decimals: 4 },
+  { code: 'CNY', yahoo: 'CNYBRL=X', decimals: 4 },
+  { code: 'ARS', yahoo: 'ARSBRL=X', decimals: 5 },
+];
+
+/**
+ * Consulta cotações em tempo real com fallback automático multi-fonte (inclui proxies locais/CORS e feeds globais).
  * O carimbo fetchedAt só é definido quando cotações reais são efetivamente recebidas.
  */
 export async function fetchAwesomeApiQuotes(
@@ -252,10 +375,12 @@ export async function fetchAwesomeApiQuotes(
 ): Promise<AwesomeFetchResult> {
   const fallbackQuotes = buildFallbackAwesomeQuotes(fallbackRates);
   const configuredFxUrl = getEnvVar('VITE_AWESOME_ECONOMY_URL') || AWESOME_API_ENDPOINT;
+  const isBrowserHttp = typeof window !== 'undefined' && window.location?.protocol?.startsWith('http');
 
-  // 1. Endpoint primário configurado (direto e via proxies CORS caso bloqueado no browser)
+  // 1. Endpoint primário configurado (direto, proxy local e proxies CORS caso bloqueado no browser)
   const fxCandidates = [
     configuredFxUrl,
+    ...(isBrowserHttp ? ['/api/awesomeapi/last'] : []),
     `https://corsproxy.io/?url=${encodeURIComponent(configuredFxUrl)}`,
     `https://api.allorigins.win/raw?url=${encodeURIComponent(configuredFxUrl)}`,
   ];
@@ -273,28 +398,42 @@ export async function fetchAwesomeApiQuotes(
     }
   }
 
-  // 2. Fallback automático para feeds cambiais globais (BCE/Frankfurter, Coinbase, Alpha Vantage configurado)
-  const mergedRates: UniversalRates = { USD: 1.0 };
-  const [frankData, coinbaseData] = await Promise.all([
-    fetchJsonSafely('https://api.frankfurter.dev/v1/latest?base=USD', 3200),
-    fetchJsonSafely('https://api.coinbase.com/v2/exchange-rates?currency=USD', 3200),
-  ]);
-
-  if (frankData?.rates && typeof frankData.rates === 'object') {
-    for (const [k, v] of Object.entries(frankData.rates)) {
-      if (typeof v === 'number' && Number.isFinite(v) && v > 0) {
-        mergedRates[k] = v;
-      }
+  // 1b. Proxy agregado em tempo real do servidor (/api/market/live) quando disponível
+  if (isBrowserHttp) {
+    const proxyData = await fetchJsonSafely('/api/market/live', timeoutMs);
+    const fromProxy = buildAwesomeQuotesFromMarketLive(proxyData, fallbackRates);
+    if (fromProxy.matchedCount > 0 && fromProxy.quotes.USD?.bidBrl > 0) {
+      return {
+        quotes: fromProxy.quotes,
+        source: 'live',
+        fetchedAt: new Date(),
+      };
     }
   }
 
-  const cbRates = coinbaseData?.data?.rates;
-  if (cbRates && typeof cbRates === 'object') {
-    for (const [k, rawVal] of Object.entries(cbRates)) {
-      const parsedVal = parseFloat(String(rawVal));
-      if (Number.isFinite(parsedVal) && parsedVal > 0 && !mergedRates[k]) {
-        mergedRates[k] = parsedVal;
-      }
+  // 2. Fallback automático em tempo real: Coinbase spot + Yahoo Finance FX primeiro; Frankfurter/ECB apenas como último recurso
+  const [coinbaseData, frankData, yahooFxResults] = await Promise.all([
+    fetchJsonSafely('https://api.coinbase.com/v2/exchange-rates?currency=USD', 3200),
+    fetchJsonSafely('https://api.frankfurter.dev/v1/latest?base=USD', 3200),
+    Promise.allSettled(
+      YAHOO_FX_CALCULATOR_PAIRS.map(async (item) => {
+        const yData = await fetchYahooQuoteDefensive(item.yahoo);
+        const parsed = extractYahooChartOHLCV(yData, item.decimals);
+        return { ...item, parsed };
+      })
+    ),
+  ]);
+
+  const mergedRates = mergeCrossExchangeRates({
+    coinbaseRates: coinbaseData?.data?.rates,
+    frankfurterRates: frankData?.rates,
+  });
+
+  // Atualiza USD/BRL com cotação direta de mercado se disponível antes de montar os cruzamentos
+  for (const entry of yahooFxResults) {
+    if (entry.status === 'fulfilled' && entry.value.code === 'USD' && entry.value.parsed?.price && entry.value.parsed.price > 0) {
+      mergedRates.BRL = entry.value.parsed.price;
+      break;
     }
   }
 
@@ -312,8 +451,26 @@ export async function fetchAwesomeApiQuotes(
     }
   }
 
-  if (mergedRates.BRL && mergedRates.BRL > 0) {
-    const liveCrossQuotes = buildFallbackAwesomeQuotes(mergedRates);
+  const liveCrossQuotes = buildFallbackAwesomeQuotes(mergedRates);
+  let hasYahooFx = false;
+
+  for (const entry of yahooFxResults) {
+    if (entry.status === 'fulfilled' && entry.value.parsed && entry.value.parsed.price > 0) {
+      const { code, parsed } = entry.value;
+      hasYahooFx = true;
+      liveCrossQuotes[code] = {
+        code,
+        bidBrl: parsed.price,
+        askBrl: parsed.price,
+        highBrl: parsed.high,
+        lowBrl: parsed.low,
+        pctChange: parsed.changePercent,
+        varBid: parsed.change,
+      };
+    }
+  }
+
+  if (hasYahooFx || (mergedRates.BRL && mergedRates.BRL > 0)) {
     return {
       quotes: liveCrossQuotes,
       source: 'live',
